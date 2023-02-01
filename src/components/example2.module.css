@@ -47,14 +47,17 @@ input::-webkit-inner-spin-button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: 16px;
 }
 
 .iptext{
+    flex: 1 1 20%;
     font-weight: bold;
 }
 
 .iptag1{
-    width: 299px;
+
+    flex: 1 1 80%;
     height: 36px;
     font-size: 12px;
     border-radius: 5px;
@@ -67,7 +70,7 @@ input::-webkit-inner-spin-button {
 }
 
 .iptag2{
-    width: 149px;
+    flex: 1 1 40%;
     height: 36px;
     font-size: 12px;
     border-radius: 5px;
@@ -92,6 +95,8 @@ input::-webkit-inner-spin-button {
     text-align: left;
     color: #a6a6a6;
 }
+
+
 
 .bottom{
     

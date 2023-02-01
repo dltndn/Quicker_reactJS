@@ -7,24 +7,6 @@ function ExampleComponent() {
 
     return (
         <>
-        <section className={styles.header1}>
-            <div>
-                <span className={styles.logo}>Quicker</span>
-            </div>
-            <div>
-            <button className={styles.button}>
-                <Icon link name='bell outline' />     
-            </button>
-            </div>
-        </section>
-
-        <section>
-            <div className={styles.main}>안녕하세요!</div>
-            <div className={styles.main2}>접속을 환영합니다. 
-                <button className={styles.button}><Icon link name = 'angle right'/></button>
-            </div>
-        </section>
-
         <section className={styles.info}>
             <div>
                 <li className={styles.infotext1}>가다나라마바사</li>

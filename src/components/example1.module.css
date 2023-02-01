@@ -27,40 +27,6 @@
 }
 
 
-/*header*/
-.header1{
-    display: flex;
-    justify-content: space-between;
-    padding:  var(--padding);
-    background-color: var(--white-color);
-    color: var(--black-color);
-}
-
-.logo{
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.button{
-    border: none;
-    box-shadow: none;
-    outline: none;
-    background-color: #FFFFFF
-}
-
-.main{
-    padding: var(--padding);
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.main2{
-    padding-left: 16px;
-    padding-bottom: 16px;
-    font-size: 20px;
-    font-weight: bold;
-}
-
 .info{
     display: flex;
     padding: var(--padding);
