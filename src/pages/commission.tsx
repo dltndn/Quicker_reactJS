@@ -1,45 +1,14 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
-import {SK_API_KEY} from "../keys/apikeys"
 
-class InputScript {
-    setScriptURL = (url : string, APIkey? : string ) => {
-        let script =  document.createElement("script")
-        script.src = `${url}+${SK_API_KEY}`
-        document.head.appendChild(script);
-    }
-    setInnerScript = (innerScriptCode : string) => {
-        const script =  document.createElement("script");
-        script.innerHTML = `${innerScriptCode}`         
-        script.type = "text/javascript";
-        document.head.appendChild(script);
-    }
-}
-
+// @ts-ignore
+const {Tmapv3} = window;
+// @ts-ignore
+const {daum} = window;
 
 export default function CommissionPage() {
     const [loading, setLoading] = useState(true);
-
   useEffect( () => {
-    // V2   
-    // let script_TMAP =  document.createElement("script")
-    // script_TMAP.src = `https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=${SK_API_KEY}`
-    // document.head.appendChild(script_TMAP);
-
-    const innerScriptCode = `         
-    // const options = {
-    //     method: 'GET',
-    //     headers: {
-    //       accept: 'application/json',
-    //       'content-type': 'application/json',
-    //       appKey: 'l7xx846db5f3bc1e48d29b7275a745d501c8'
-    //     }
-    //   };
-      
-    //   fetch('https://apis.openapi.sk.com/tmap/geo/geocoding?version=1&city_do=%EC%84%9C%EC%9A%B8&gu_gun=%EC%A4%91%EA%B5%AC&dong=%EC%9D%84%EC%A7%80%EB%A1%9C&addressFlag=F02&coordType=WGS84GEO', options)
-    //     .then(response => response.json())
-    //     .then(response => console.log(response))
-    //     .catch(err => console.error(err));
 
     function initTmap(){
 		// map 생성
@@ -55,17 +24,17 @@ export default function CommissionPage() {
 					var lat = position.coords.latitude;
 					var lon = position.coords.longitude;
 						
-					marker = new Tmapv3.Marker({
+					new Tmapv3.Marker({
 						position : new Tmapv3.LatLng(lat,lon),
 						map : map
-					});
+			 		});
 
-                    marker = new Tmapv3.Marker({
+                    new Tmapv3.Marker({
 						position : new Tmapv3.LatLng(lat,lon+0.005),
 						map : map
 					});
 
-                    marker = new Tmapv3.Marker({
+                    new Tmapv3.Marker({
 						position : new Tmapv3.LatLng(lat,lon-0.005),
 						map : map
 					});
@@ -76,14 +45,12 @@ export default function CommissionPage() {
             );
 		}
 	}
-    initTmap();`;
-
-    let TMAP = new InputScript;
-    TMAP.setInnerScript(innerScriptCode);
+    initTmap();
     setLoading(false)
 
-    const innerDaumScriptCode = `// 우편번호 찾기 찾기 화면을 넣을 element
-    var element_wrap = document.getElementById('wrap');
+    // 우편번호 찾기 찾기 화면을 넣을 element
+    var element_wrap = document.getElementById('wrap')!;
+    var geocoder = new daum.maps.services.Geocoder();
 
     function foldDaumPostcode() {
         // iframe을 넣은 element를 안보이게 한다.
@@ -94,7 +61,10 @@ export default function CommissionPage() {
         // 현재 scroll 위치를 저장해놓는다.
         var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
         new daum.Postcode({
-            oncomplete: function(data) {
+            oncomplete: function(data :any) {
+                console.log(typeof(data))
+                console.log(data)
+                
                 // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
@@ -125,17 +95,17 @@ export default function CommissionPage() {
                         extraAddr = ' (' + extraAddr + ')';
                     }
                     // 조합된 참고항목을 해당 필드에 넣는다.
-                    document.getElementById("sample3_extraAddress").value = extraAddr;
+                    (document.getElementById("sample3_extraAddress")as HTMLInputElement).value = extraAddr;
                 
                 } else {
-                    document.getElementById("sample3_extraAddress").value = '';
+                    (document.getElementById("sample3_extraAddress")as HTMLInputElement).value = '';
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample3_postcode').value = data.zonecode;
-                document.getElementById("sample3_address").value = addr;
+                (document.getElementById('sample3_postcode')as HTMLInputElement).value = data.zonecode;
+                (document.getElementById("sample3_address")as HTMLInputElement).value = addr;
                 // 커서를 상세주소 필드로 이동한다.
-                document.getElementById("sample3_detailAddress").focus();
+                document.getElementById("sample3_detailAddress")!.focus();
 
                 // iframe을 넣은 element를 안보이게 한다.
                 // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
@@ -143,9 +113,25 @@ export default function CommissionPage() {
 
                 // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
                 document.body.scrollTop = currentScroll;
+                
+                geocoder.addressSearch(data.address, function(results : any, status : any) {
+                    
+                    console.log(typeof(results))
+                    console.log(typeof(status))
+                    // 정상적으로 검색이 완료됐으면
+                    if (status === daum.maps.services.Status.OK) {
+
+                        var result = results[0]; //첫번째 결과의 값을 활용
+                        console.log(results);
+                        document.getElementById("TMapApp")!.style.display = "block"
+                    }
+                });
+                
             },
             // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
-            onresize : function(size) {
+            onresize : function(size : any) {
+                console.log(typeof(size))
+                console.log(size)
                 element_wrap.style.height = size.height+'px';
             },
             width : '300px',
@@ -153,32 +139,49 @@ export default function CommissionPage() {
         }).embed(element_wrap);
 
         // iframe을 넣은 element를 보이게 한다.
-        element_wrap.style.display = 'block';
+        element_wrap.style.display = 'block';        
     }
     
-    `
+    let sample3_postcode = document.getElementById("sample3_postcode")!
+    sample3_postcode.onfocus = function(){
+        sample3_execDaumPostcode()
+        document.getElementById("TMapApp")!.style.display="none"
+    };
 
-    const DaumRoad = new InputScript();
-    DaumRoad.setInnerScript(innerDaumScriptCode)
+    setLoading(false);
   }, []);
+
   return (
-    <div><div
-      id="TMapApp"
-      style={{
-        height: "300px",
-        width: "300px",
-      }}
-    />
-    출발지<br></br>
-    <input type="text" id="sample3_postcode" placeholder="우편번호"></input>
-    {/* <input type="button" onclick="sample3_execDaumPostcode()" value="우편번호 찾기"></input><br></br> */}
-    <input type="text" id="sample3_address"  placeholder="주소"></input><br></br>
-    <input type="text" id="sample3_detailAddress" placeholder="상세주소"></input>
-    <input type="text" id="sample3_extraAddress" placeholder="참고항목"></input>
+      <div>
+        <div
+              id="TMapApp"
+              style={{
+                  height: "300px",
+                  width: "300px",
+              }}
+          />
+          
+          <div id="wrap" style={{display:"none", border:"1px solid", width:"300px", height:"300px", margin:"0", position:"relative"}}>
+          {/* <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap"  onclick="foldDaumPostcode()" style={{cursor:"pointer", position:"absolute", right:"0px", top:-"1px", z-index:1}} alt="접기 버튼" /> */}
+          </div>
+          <div id="wrap" ></div>
 
-    <div id="wrap" ></div>
-    <button>다음단계</button>
+<div>
+        <strong>출발지</strong><br></br>
 
-    </div>
+          <input type="text" id="sample3_postcode" placeholder="우편번호" />
+          <input type="text" id="sample3_address" placeholder="주소" /><br />
+          <input type="text" id="sample3_detailAddress" placeholder="상세주소" />
+          <input type="text" id="sample3_extraAddress" placeholder="참고항목" /><br />
+</div>
+
+
+
+          
+          
+        <button>다음단계</button>
+
+          
+      </div>
   );
 }
