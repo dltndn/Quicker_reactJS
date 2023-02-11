@@ -1,0 +1,19 @@
+.check{
+    position: fixed;
+    bottom: 62px;
+    width: 98%;
+    height: 50px;
+    font-size: var(--font-md);
+    border-radius: 5px;
+    border: 0px;
+    outline: #efefef;
+    background-color: #0D6EFD;
+    color: var(--white-color);
+    margin-bottom: 5px;
+}
+
+.ipsect{
+    padding: calc(var(--padding) / 2) var(--padding);
+    display: flex;
+    justify-content: center;
+}

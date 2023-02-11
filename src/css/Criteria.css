@@ -26,3 +26,9 @@
     box-sizing: border-box;
     font-family: 'Inter';
 }
+
+.ipsect{
+    padding: calc(var(--padding) / 2) var(--padding);
+    display: flex;
+    justify-content: center;
+}

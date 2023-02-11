@@ -1,24 +1,24 @@
-@import url('Criteria.css');
 
-.maintab{
+.header{
     display: flex;
     justify-content: space-between;
-    padding: var(--padding);
+    padding:  var(--padding);
     background-color: var(--white-color);
     color: var(--black-color);
     height: 62px;
 }
 
-.Quicker{
+.button{
     padding-top: 4px;
-    font-size: var(--font-Quicker);
-    font-weight: bold;
-}
-
-.bellbutton{
     border: none;
     box-shadow: none;
     outline: none;
-    background-color: var(--white-color);
-    font-size: var(--font-large);
+    background-color: #FFFFFF;
+    font-size: var(--font-md);
 }
+
+.headertext{
+    font-size: var(--font-md);
+    font-weight: bold;
+}
+

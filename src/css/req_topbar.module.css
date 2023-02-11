@@ -1,24 +1,26 @@
-@import url('Criteria.css');
-
-.maintab{
+.topdiv{
     display: flex;
-    justify-content: space-between;
     padding: var(--padding);
     background-color: var(--white-color);
     color: var(--black-color);
     height: 62px;
 }
 
-.Quicker{
-    padding-top: 4px;
-    font-size: var(--font-Quicker);
-    font-weight: bold;
-}
-
-.bellbutton{
+.topdiv button{
     border: none;
     box-shadow: none;
     outline: none;
     background-color: var(--white-color);
     font-size: var(--font-large);
+}
+
+.leftbt{
+    justify-content: left;
+    width: 22px;
+    font-weight: bold;
+}
+
+.homebt{
+    margin-left: auto;
+    margin-right: 10px;
 }
