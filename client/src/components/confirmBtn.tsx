@@ -1,14 +1,18 @@
 import styles from "../css/check.module.css"
 
-function Check(){
+interface Props {
+    content: string;
+  }
+
+function ConfirmBtn({ content }: Props){
     return(
         <section className={styles.ipsect}>
                 <button className={styles.check}>
-                    확인
+                    {content}
                 </button>
         </section>
     );
 }
 
 
-export default Check;
+export default ConfirmBtn;

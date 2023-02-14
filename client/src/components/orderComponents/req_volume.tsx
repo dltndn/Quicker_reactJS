@@ -1,4 +1,4 @@
-import styles from "../css/req_volume.module.css"
+import styles from "../../css/req_volume.module.css"
 
 function Req_volume() {
     return (
@@ -16,12 +16,12 @@ function Req_volume() {
                                     <span className={styles.sppa1}>cm</span>
                                 </li>
                                 <li>
-                                    <span className={styles.sppa0}>가로</span>
+                                    <span className={styles.sppa0}>세로</span>
                                     <input type="number" className={styles.ipval} placeholder=""/>
                                     <span className={styles.sppa1}>cm</span>
                                 </li>
                                 <li>
-                                    <span className={styles.sppa0}>가로</span>
+                                    <span className={styles.sppa0}>높이</span>
                                     <input type="number" className={styles.ipval} placeholder=""/>
                                     <span className={styles.sppa1}>cm</span>
                                 </li>

@@ -1,4 +1,4 @@
-import styles from "../css/req_weight.module.css"
+import styles from "../../css/req_weight.module.css"
 
 function Req_weight() {
     return (

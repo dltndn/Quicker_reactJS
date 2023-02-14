@@ -1,11 +1,11 @@
-import styles from "../css/req_transport.module.css"
+import styles from "../../css/req_transport.module.css"
 
-const walk = require('../image/walk.png')
-const bike = require('../image/bike.png')
-const kickboard = require('../image/kickboard.png')
-const motorcycle = require('../image/motorcycle.png')
-const car = require('../image/car.png')
-const truck = require('../image/truck.png')
+const walk = require('../../image/walk.png')
+const bike = require('../../image/bike.png')
+const kickboard = require('../../image/kickboard.png')
+const motorcycle = require('../../image/motorcycle.png')
+const car = require('../../image/car.png')
+const truck = require('../../image/truck.png')
 
 function Req_transport() {
     return (

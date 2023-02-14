@@ -1,4 +1,4 @@
-import styles from "../css/req_deadline.module.css"
+import styles from "../../css/req_deadline.module.css"
 import { BsCalendar3, BsClock} from "react-icons/bs";
 
 function Req_deadline() {

@@ -1,17 +1,13 @@
-import Main_topbar from "../components/main_topbar";
-import Main_phrase from "../components/main_phrase";
-import Main_textimage from "../components/main_textimage";
-import Main_notice from "../components/main_notice";
-import Main_Bottombar from "../components/main_bottombar";
+
+import BottomBar from "../components/BottomBar";
+import TopBarOthers from "../components/topBarOthers"
 
 function SearchPage() {
     return (
       <div>
-        <Main_topbar></Main_topbar>
-        <Main_phrase></Main_phrase>
-        <Main_textimage></Main_textimage>
-        <Main_notice></Main_notice>
-        <Main_Bottombar></Main_Bottombar>
+        <TopBarOthers title="의뢰목록" redirect="/"></TopBarOthers>
+        <div>의뢰 목록 탐색 페이지</div>
+        <BottomBar></BottomBar>
       </div>
     );
   }

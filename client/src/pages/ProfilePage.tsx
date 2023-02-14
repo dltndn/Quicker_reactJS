@@ -2,14 +2,14 @@
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
 
-function ChattingPage() {
+function ProfilePage() {
     return (
       <div className="App">
-        <TopBarOthers title="채팅" redirect="/"></TopBarOthers>
-        <div>채팅페이지</div>
+        <TopBarOthers title="프로필" redirect="/"></TopBarOthers>
+        <div>프로필 페이지</div>
         <BottomBar></BottomBar>
       </div>
     );
   }
   
-  export default ChattingPage;
+  export default ProfilePage;

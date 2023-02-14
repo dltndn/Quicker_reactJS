@@ -4,7 +4,7 @@ import SignUpPage from "./pages/SignUpPage";
 import RequestPage from "./pages/RequestPage";
 import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
-import ImformationPage from "./pages/ImformationPage";
+import ProfilePage from "./pages/ProfilePage";
 import React from "react";
 
 
@@ -17,7 +17,7 @@ function App() {
         <Route path="/request" element={<RequestPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/chatting" element={<ChattingPage />} />
-        <Route path="/imformation" element={<ImformationPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

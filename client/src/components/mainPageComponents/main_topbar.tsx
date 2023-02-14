@@ -1,5 +1,5 @@
 import {Icon} from 'semantic-ui-react';
-import styles from "../css/main_topbar.module.css"
+import styles from "../../css/main_topbar.module.css"
 
 function Main_topbar() {
 

@@ -1,5 +1,5 @@
 import {Button} from 'semantic-ui-react';
-import styles from "../css/main_notice.module.css"
+import styles from "../../css/main_notice.module.css"
 
 function Main_notice() {
 

@@ -1,15 +1,15 @@
-import styles from "../css/req_detail.module.css"
+import styles from "../../css/req_cost.module.css"
 
-function Req_detail() {
+function Req_cost() {
     return (
         <section className={styles.bc}>
                 <div className={styles.container}>
                     <div className={styles.box}>
                         <div>
-                            <span className={styles.reqfont}>세부사항</span>
+                            <span className={styles.reqfont}>의뢰 비용</span>
                         </div>
                         <div className={styles.ipdiv2}>
-                            <input type="text" className={styles.ipval} placeholder="내용을 입력해주세요"/>
+                            <input type="number" className={styles.ipval} placeholder="지갑 잔액을 확인하세요"/>
                         </div>
                     </div>
                 </div>
@@ -17,4 +17,4 @@ function Req_detail() {
     );
   }
   
-  export default Req_detail;
+  export default Req_cost;

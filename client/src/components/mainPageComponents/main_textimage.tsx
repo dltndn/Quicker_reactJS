@@ -1,6 +1,6 @@
-import styles from "../css/main_textimage.module.css"
+import styles from "../../css/main_textimage.module.css"
 
-const img1 = require('../image/ex1.jpg')
+const img1 = require('../../image/ex1.jpg')
 
 function Main_textimage() {
 

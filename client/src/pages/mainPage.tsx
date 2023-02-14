@@ -1,8 +1,8 @@
-import Main_topbar from "../components/main_topbar";
-import Main_phrase from "../components/main_phrase";
-import Main_textimage from "../components/main_textimage";
-import Main_notice from "../components/main_notice";
-import Main_Bottombar from "../components/main_bottombar";
+import Main_topbar from "../components/mainPageComponents/main_topbar";
+import Main_phrase from "../components/mainPageComponents/main_phrase";
+import Main_textimage from "../components/mainPageComponents/main_textimage";
+import Main_notice from "../components/mainPageComponents/main_notice";
+import BottomBar from "../components/BottomBar";
 
 function MainPage() {
     return (
@@ -11,7 +11,7 @@ function MainPage() {
         <Main_phrase></Main_phrase>
         <Main_textimage></Main_textimage>
         <Main_notice></Main_notice>
-        <Main_Bottombar></Main_Bottombar>
+        <BottomBar></BottomBar>
       </div>
     );
   }
