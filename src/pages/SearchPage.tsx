@@ -4,9 +4,9 @@ import Main_textimage from "../components/main_textimage";
 import Main_notice from "../components/main_notice";
 import Main_Bottombar from "../components/main_bottombar";
 
-function MainPage() {
+function SearchPage() {
     return (
-      <div className="App">
+      <div>
         <Main_topbar></Main_topbar>
         <Main_phrase></Main_phrase>
         <Main_textimage></Main_textimage>
@@ -16,4 +16,4 @@ function MainPage() {
     );
   }
   
-  export default MainPage;
+  export default SearchPage;

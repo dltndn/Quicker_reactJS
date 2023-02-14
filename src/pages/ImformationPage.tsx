@@ -4,7 +4,7 @@ import Main_textimage from "../components/main_textimage";
 import Main_notice from "../components/main_notice";
 import Main_Bottombar from "../components/main_bottombar";
 
-function MainPage() {
+function ImformationPage() {
     return (
       <div className="App">
         <Main_topbar></Main_topbar>
@@ -16,4 +16,4 @@ function MainPage() {
     );
   }
   
-  export default MainPage;
+  export default ImformationPage;
