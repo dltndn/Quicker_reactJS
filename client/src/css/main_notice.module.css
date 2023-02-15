@@ -1,0 +1,22 @@
+.bont{
+    position: fixed;
+    bottom: 62px;
+    width: 100%;
+}
+
+.notice{
+    padding: var(--padding);
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    font-size: var(--font-small);
+}
+
+.noticetx1{
+    font-weight: bold;
+}
+
+.noticetx2{
+    font-weight: lighter;
+    margin-left: 10px;
+}

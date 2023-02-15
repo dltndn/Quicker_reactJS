@@ -1,0 +1,24 @@
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding:  var(--padding);
+    background-color: var(--white-color);
+    color: var(--black-color);
+    height: 62px;
+}
+
+.button{
+    padding-top: 4px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background-color: #FFFFFF;
+    font-size: var(--font-md);
+}
+
+.headertext{
+    font-size: var(--font-md);
+    font-weight: bold;
+}
+
