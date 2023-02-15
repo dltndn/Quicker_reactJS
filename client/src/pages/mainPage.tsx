@@ -1,4 +1,4 @@
-import ExampleComponent from "../components/example";
+import ExampleComponent from "../../client/src/components/example";
 
 function MainPage() {
     return (

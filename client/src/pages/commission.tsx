@@ -1,7 +1,7 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
-import Tmap from "../components/Tmap"
-import Postcode from "../components/Postcode"
+import Tmap from "../../client/src/components/Tmap"
+import Postcode from "../../client/src/components/Postcode"
 
 const showMap = () => document.getElementById("TMapApp")!.style.display = "block"
 
