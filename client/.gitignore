@@ -11,8 +11,7 @@
 # production
 /build
 
-#contract information
-/src/contractInformation.js
+.env
 
 # misc
 .DS_Store

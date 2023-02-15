@@ -6,7 +6,6 @@ import {
   walletConnectProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
-import { projectId } from "./contractInformation";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -22,6 +21,7 @@ Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const chains = [polygonMumbai];
+const projectId = JSON.stringify(process.env.REACT_APP_PROJECTID)
 
 const { provider } = configureChains(chains, [
   walletConnectProvider({ projectId }),
