@@ -4,30 +4,32 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 const { daum } = window;
 
 interface setPosition {
-  setStartPosition: Dispatch<SetStateAction<object>>;
+  containerId : string
+  adressTextBoxId : string
+  onClick : React.MouseEventHandler<HTMLButtonElement>
+  setPosition: Dispatch<SetStateAction<object>>;
 }
 
-const Postcode = ({setStartPosition} : setPosition ) => {
-  
+const Postcode = ({containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
 
   //주소-좌표 변환 객체를 생성
   let geocoder = new daum.maps.services.Geocoder();
-  
+
   function sample5_execDaumPostcode() {
     new daum.Postcode({
-      oncomplete: function (data : any) {
-        
+      oncomplete: function (data: any) {
+
         let addr = data.address; // 최종 주소 변수
 
         // 주소 정보를 해당 필드에 넣는다.
-        (document.getElementById("sample5_address") as HTMLInputElement).value = addr;
+        (document.getElementById(adressTextBoxId) as HTMLInputElement).value = addr;
         // 주소로 상세 정보를 검색
-        geocoder.addressSearch(data.address, function (results : any, status : string) {
+        geocoder.addressSearch(data.address, function (results: any, status: string) {
           // 정상적으로 검색이 완료됐으면
           if (status === daum.maps.services.Status.OK) {
             let result = results[0]; //첫번째 결과의 값을 활용
 
-            setStartPosition({"latitude" : Number(result.x), "longitude" : Number(result.y)});
+            setPosition({ "latitude": Number(result.y), "longitude": Number(result.x) });
           }
         });
       },
@@ -35,8 +37,8 @@ const Postcode = ({setStartPosition} : setPosition ) => {
   }
 
   return (
-    <>
-      <input type="text" id="sample5_address" placeholder="주소" />
+    <div id={containerId}>
+      <input type="text" id={adressTextBoxId} placeholder="주소" />
       <input
         type="button"
         onClick={sample5_execDaumPostcode}
@@ -50,7 +52,8 @@ const Postcode = ({setStartPosition} : setPosition ) => {
         value=""
       ></input>
       <input type="text" id="longitude" style={{ display: "block" }} />
-    </>
+      <button onClick={onClick}>다음단계</button>
+    </div>
   );
 };
 

@@ -12,8 +12,8 @@ const TmapObject = {
         });
     },
 
-    setMarker: (map: any, lat: number, lon: number) => {
-        new Tmapv3.Marker({
+    Marker: (map: any, lat: number, lon: number) => {
+        return new Tmapv3.Marker({
             position: new Tmapv3.LatLng(lat, lon),
             map: map
         });
@@ -22,6 +22,10 @@ const TmapObject = {
     setViewMap: (map: any, lat: number, lon: number) => {
         map.setCenter(new Tmapv3.LatLng(lat, lon));
         map.setZoom(16);
+    },
+
+    LatLng : (lat: number, lon: number) => {
+        return new Tmapv3.LatLng(lat, lon)
     }
 }
 
