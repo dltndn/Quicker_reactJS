@@ -12,32 +12,31 @@ interface basicPos {
 }
 
 interface Position {
-    containerId : string
-    startPosition : basicPos
-    arrivePosition : basicPos
+    containerId: string
+    startPosition: basicPos
+    arrivePosition: basicPos
 }
 
 // 작동 문제
 // const isHavePosition = (startPosition : position) => {
 //     return (startPosition.latitude && startPosition.longitude)
 // }
-const Tmap = ({containerId, startPosition, arrivePosition } : Position) => {
-    
+const Tmap = ({ containerId, startPosition, arrivePosition }: Position) => {
+
     useEffect(() => {
         // 삭제
         document.getElementById("TMapApp")!.innerHTML = ""
         let map = Map.initTmap();
         let startMarker, arriveMarker
-        
+
         if (startPosition.latitude && startPosition.longitude) {
-            startMarker = Map.Marker(map, startPosition.latitude, startPosition.longitude)    
+            startMarker = Map.Marker(map, startPosition.latitude, startPosition.longitude)
             Map.setViewMap(map, startPosition.latitude, startPosition.longitude);
-        } 
-        if (arrivePosition.latitude && arrivePosition.longitude) {
-            arriveMarker = Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude)    
-            Map.setViewMap(map, arrivePosition.latitude, arrivePosition.longitude);
+            if (arrivePosition.latitude && arrivePosition.longitude) {
+                arriveMarker = Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude)
+                Map.setViewMap(map, arrivePosition.latitude, arrivePosition.longitude);
+            }
         }
-        
     }, [startPosition, arrivePosition])
 
 
@@ -49,7 +48,7 @@ const Tmap = ({containerId, startPosition, arrivePosition } : Position) => {
     // }, [])
 
     // // let marker
-    
+
     // if (startPosition.latitude && startPosition.longitude) {
     //     // marker = Map.Marker(map, startPosition.latitude, startPosition.longitude)    
     //     Map.setViewMap(map, startPosition.latitude, startPosition.longitude);

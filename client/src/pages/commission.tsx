@@ -20,12 +20,15 @@ export default function CommissionPage() {
 
     const [startPosition, setStartPosition] = useState({})
     const [arrivePosition, setArrivePosition] = useState({})
-
+    // 좌표 확인용 코드
+    const onClick = () => {
+        console.log(startPosition, arrivePosition)
+    }
     return (
         <>
             <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}></Tmap>
             <Postcode containerId={"startContainerBox"} adressTextBoxId={"startAdress"} onClick={() => { document.getElementById("startContainerBox")!.style.display = "none" }} setPosition={setStartPosition} ></Postcode>
-            <Postcode containerId={"arriveContainerBox"} adressTextBoxId={"arriveAdress"} onClick={() => { document.getElementById("arriveContainerBox")!.style.display = "none";document.getElementById("mapContainerBox")!.style.display = "none"; }} setPosition={setArrivePosition} ></Postcode>
+            <Postcode containerId={"arriveContainerBox"} adressTextBoxId={"arriveAdress"} onClick={() => { document.getElementById("arriveContainerBox")!.style.display = "none"; document.getElementById("mapContainerBox")!.style.display = "none"; }} setPosition={setArrivePosition} ></Postcode>
             {/* <button onClick={onClick} >check</button> */}
         </>
     );
