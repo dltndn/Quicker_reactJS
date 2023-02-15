@@ -7,7 +7,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
 import { Buffer } from "buffer";
-
+import { projectId } from "./contractInformation";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/mainPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -21,7 +21,8 @@ Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const chains = [polygonMumbai];
-const projectId = JSON.stringify(process.env.REACT_APP_PROJECTID)
+// const projectId = JSON.stringify("08edc54e7a399654f0647ee05f965603")
+// console.log(projectId)
 
 const { provider } = configureChains(chains, [
   walletConnectProvider({ projectId }),

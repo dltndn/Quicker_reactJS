@@ -1,4 +1,4 @@
-export const REACT_APP_QKRW_CONTRACT_ABI = [
+export const QKRW_CONTRACT_ABI = [
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -516,3 +516,5 @@ export const REACT_APP_QKRW_CONTRACT_ABI = [
 ]
 
 export const QKRW_ADDRESS = "0xb3eeB9cA4f439812b7d6816637688418F52ba2Bd"
+
+export const projectId = "08edc54e7a399654f0647ee05f965603"
