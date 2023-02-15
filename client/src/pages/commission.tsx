@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState } from 'react';
+import React, {createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
 import Tmap from "../components/Tmap"
 import Postcode from "../components/Postcode"
@@ -16,11 +16,18 @@ const getLatLong = () => {
 }
 
 export default function CommissionPage() {
+    
+    
 
+    const [startPosition, setStartPosition] = useState({})
+    const onClick = () =>{
+        console.log(startPosition)
+    }
     return (
         <>
             <Tmap></Tmap>
-            <Postcode ></Postcode>
+            <Postcode setStartPosition={setStartPosition} ></Postcode>
+            <button onClick={onClick} >check</button>
         </>
     );
 }
