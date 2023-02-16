@@ -8,12 +8,10 @@ const Postcode = () => {
   //주소-좌표 변환 객체를 생성
   let geocoder = new daum.maps.services.Geocoder();
 
-  const [value, setValue] = useState(0)
+  // const [value, setValue] = useState(0)
   function sample5_execDaumPostcode() {
     new daum.Postcode({
       oncomplete: function (data) {
-        
-        console.log(data)
 
         let addr = data.address; // 최종 주소 변수
 
