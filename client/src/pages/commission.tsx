@@ -15,7 +15,6 @@ const getLatLong = () => {
     );
 }
 
-
 export default function CommissionPage() {
 
     const [startPosition, setStartPosition] = useState({})
@@ -26,10 +25,10 @@ export default function CommissionPage() {
     }
     return (
         <>
-            <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}></Tmap>
-            <Postcode containerId={"startContainerBox"} adressTextBoxId={"startAdress"} onClick={() => { document.getElementById("startContainerBox")!.style.display = "none" }} setPosition={setStartPosition} ></Postcode>
-            <Postcode containerId={"arriveContainerBox"} adressTextBoxId={"arriveAdress"} onClick={() => { document.getElementById("arriveContainerBox")!.style.display = "none"; document.getElementById("mapContainerBox")!.style.display = "none"; }} setPosition={setArrivePosition} ></Postcode>
-            {/* <button onClick={onClick} >check</button> */}
+            <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition} />
+            <Postcode containerId={"startContainerBox"} title={"출발지"} style={{display : "block"}} adressTextBoxId={"startAdress"} onClick={() => { document.getElementById("startContainerBox")!.style.display = "none"; document.getElementById("arriveContainerBox")!.style.display = "block"; }} setPosition={setStartPosition} />
+            <Postcode containerId={"arriveContainerBox"} title={"도착지"} style={{display : "none"}} adressTextBoxId={"arriveAdress"} onClick={() => { document.getElementById("arriveContainerBox")!.style.display = "none"; document.getElementById("mapContainerBox")!.style.display = "none"; }} setPosition={setArrivePosition} />
+            <button onClick={onClick} >check</button>
         </>
     );
 }

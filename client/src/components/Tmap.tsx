@@ -34,7 +34,8 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: Position) => {
             Map.setViewMap(map, startPosition.latitude, startPosition.longitude);
             if (arrivePosition.latitude && arrivePosition.longitude) {
                 arriveMarker = Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude)
-                Map.setViewMap(map, arrivePosition.latitude, arrivePosition.longitude);
+                console.log(startPosition, arrivePosition, startPosition.latitude + arrivePosition.latitude / 2, arrivePosition.longitude + startPosition.longitude / 2)
+                Map.setViewMap(map, (startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2);
             }
         }
     }, [startPosition, arrivePosition])

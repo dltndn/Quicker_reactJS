@@ -4,6 +4,8 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 const { daum } = window;
 
 interface setPosition {
+  title : string
+  style : object
   containerId: string
   adressTextBoxId: string
   onClick: React.MouseEventHandler<HTMLButtonElement>
@@ -12,7 +14,7 @@ interface setPosition {
 
 
 
-const Postcode = ({ containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
+const Postcode = ({title, style, containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
 
   let element_wrap = document.getElementById('wrap');
 
@@ -60,7 +62,7 @@ const Postcode = ({ containerId, adressTextBoxId, onClick, setPosition }: setPos
         element_wrap!.style.height = size.height + 'px';
       },
       width: '100%',
-      height : '100%'
+      height: '100%'
     }).embed(element_wrap);
 
     // iframe을 넣은 element를 보이게 한다.
@@ -68,18 +70,17 @@ const Postcode = ({ containerId, adressTextBoxId, onClick, setPosition }: setPos
   }
 
   return (
-    <div id={containerId}>
+    <div id={containerId} style={style}>
+      <strong>{title}</strong> <br />
       <input type="text" id={adressTextBoxId} onFocus={onFocus} placeholder="주소" />
       <div id="wrap" style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} />
       <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
       <br />
-      <input
-        type="text"
-        id="latitude"
-        style={{ display: "block" }}
-        value=""
-      ></input>
-      <input type="text" id="longitude" style={{ display: "block" }} />
+      <input type="text" placeholder="세부주소" style={{ display: "block" }} /><br />
+      <input type="text" placeholder="이름" style={{ display: "block" }} />
+      <input type="text" placeholder="010" style={{ display: "block" }} />
+      <input type="text" placeholder="1234" style={{ display: "block" }} />
+      <input type="text" placeholder="5678" style={{ display: "block" }} />
       <button onClick={onClick}>다음단계</button>
     </div>
   );
