@@ -11,25 +11,16 @@
 # production
 /build
 
-<<<<<<< HEAD
 .env
 
-=======
-<<<<<<< HEAD
+
 # env
-=======
-<<<<<<< HEAD
 # env
-=======
-#env
->>>>>>> roadname
->>>>>>> roadname
 .env
 
 #contract information
 /src/contractInformation.js
 
->>>>>>> 146dc51f055aa3df9df50f01cffc12fbbb37b3e9
 # misc
 .DS_Store
 .env.local
