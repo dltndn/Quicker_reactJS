@@ -14,7 +14,6 @@ export default function GetQkrwBalance({ address }: AddressProps) {
   const [krwBalance, setKrwBalance] = useState("0");
   const [objData, setObjData] = useState<any>();
 
-
   const { data } = useContractRead({
     address: Qkrw_address,
     abi: Qkrw_abi,

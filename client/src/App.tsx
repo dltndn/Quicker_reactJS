@@ -6,7 +6,7 @@ import {
   walletConnectProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
-import { projectId } from "./contractInformation";
+// import { projectId } from "./contractInformation";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -23,11 +23,10 @@ Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const chains = [polygonMumbai];
-// const projectId = JSON.stringify("08edc54e7a399654f0647ee05f965603")
-// console.log(projectId)
+const projectId = process.env.REACT_APP_PROJECTID
 
 const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId }),
+  walletConnectProvider({ projectId: projectId ?? "" }),
 ]);
 
 const wagmiClient = createClient({
@@ -67,7 +66,7 @@ function App() {
         </BrowserRouter>
       </WagmiConfig>
       <Web3Modal
-        projectId={projectId}
+        projectId={projectId ?? ""}
         ethereumClient={ethereumClient}
         themeBackground={theme.themeBackground}
       />
