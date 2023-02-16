@@ -15,24 +15,11 @@
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
-<<<<<<< HEAD
     "@web3modal/ethereum": "^2.1.1",
     "@web3modal/react": "^2.1.1",
     "bootstrap": "^5.2.3",
     "env-cmd": "^10.1.0",
-=======
-<<<<<<< HEAD
     "dotenv": "^16.0.3",
-    "bootstrap": "^5.2.3",
-    "@web3modal/ethereum": "^2.1.1",
-    "@web3modal/react": "^2.1.1",
-=======
-    "@web3modal/ethereum": "^2.1.1",
-    "@web3modal/react": "^2.1.1",
-    "bootstrap": "^5.2.3",
-    "dotenv": "^16.0.3",
->>>>>>> roadname
->>>>>>> 146dc51f055aa3df9df50f01cffc12fbbb37b3e9
     "react": "^18.2.0",
     "react-bootstrap-icons": "^1.10.2",
     "react-dom": "^18.2.0",
