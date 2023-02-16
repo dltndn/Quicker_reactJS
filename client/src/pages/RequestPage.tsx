@@ -9,15 +9,16 @@ import ConfirmBtn from "../components/confirmBtn";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers"
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 function RequestPage() {
   const [cost, setCost] = useState<Number>(0)
+  const navigate = useNavigate();
   let btnContent = cost.toString() + "원 결제하기"
     return (
       <div style={{backgroundColor: '#efefef'}}>
         <TopBarOthers title="배송의뢰" redirect="/"></TopBarOthers>
-        <div>배송의뢰 기타 정보 작성 페이지</div>
+        <button onClick={()=> navigate(`/commission`) }>임시 지도 페이지 이동 버튼</button>
         <Req_transport></Req_transport>
         <Req_volume></Req_volume>
         <Req_weight></Req_weight>
