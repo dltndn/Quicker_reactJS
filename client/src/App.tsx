@@ -6,9 +6,11 @@ import {
   walletConnectProvider,
 } from "@web3modal/ethereum";
 import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
-import { Buffer } from "buffer";
 import { projectId } from "./contractInformation";
+import { Buffer } from "buffer";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CommissionPage from "./pages/commission";
 import MainPage from "./pages/mainPage";
 import SignUpPage from "./pages/SignUpPage";
 import RequestPage from "./pages/RequestPage";
@@ -60,6 +62,7 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/commission" element={<CommissionPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

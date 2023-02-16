@@ -69,7 +69,11 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <br />
               </span>
               <span className={styles.phrase_2}>지갑을 연결해주세요.</span>
+<<<<<<< HEAD
               <Web3Button icon="hide" label="지갑연결" balance="hide" />
+=======
+              <Web3Button icon="hide" label="지갑연결" balance="hide"/>
+>>>>>>> 146dc51f055aa3df9df50f01cffc12fbbb37b3e9
             </div>
           </section>
         </div>
