@@ -32,6 +32,7 @@ const Tmap = () => {
     useEffect(() => {
         let map = TmapObject.initTmap();
         TmapObject.setMarker(map, 37.56520450, 126.98702028)
+        TmapObject.setMarker(map, 37.53367922, 126.81710807)
         TmapObject.setViewMap(map, 37.56520450, 126.98607028)
     }, [])
 

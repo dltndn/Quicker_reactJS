@@ -17,8 +17,6 @@ const getLatLong = () => {
 
 export default function CommissionPage() {
     
-    
-
     const [startPosition, setStartPosition] = useState({})
     const onClick = () =>{
         console.log(startPosition)

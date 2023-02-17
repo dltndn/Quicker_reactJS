@@ -16,7 +16,7 @@ function TopBarOthers({ title, redirect }: Props) {
                 <span className={styles.headertext}>
                     {title}
                 </span>
-                <button className={styles.homebt}><BsHouseDoor></BsHouseDoor></button>
+                <button className={styles.homebt} onClick={() => navigate('/')}><BsHouseDoor></BsHouseDoor></button>
                 <button className={styles.bellbt}><BsBell></BsBell></button>
             </div>
         </section>
