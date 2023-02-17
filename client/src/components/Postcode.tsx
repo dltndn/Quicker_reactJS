@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 const { daum } = window;
 
 interface setPosition {
+  postcodeBoxId : string
   title : string
   style : object
   containerId: string
@@ -14,9 +15,9 @@ interface setPosition {
 
 
 
-const Postcode = ({title, style, containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
+const Postcode = ({postcodeBoxId, title, style, containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
 
-  let element_wrap = document.getElementById('wrap');
+  let element_wrap = document.getElementById(postcodeBoxId);
 
   //주소-좌표 변환 객체를 생성
   let geocoder = new daum.maps.services.Geocoder();
@@ -28,7 +29,7 @@ const Postcode = ({title, style, containerId, adressTextBoxId, onClick, setPosit
   }
 
   const onFocus = () => {
-    document.getElementById(adressTextBoxId)!.blur();
+    // document.getElementById(adressTextBoxId)!.blur();
     sample5_execDaumPostcode()
   }
 
@@ -50,7 +51,7 @@ const Postcode = ({title, style, containerId, adressTextBoxId, onClick, setPosit
 
             // iframe을 넣은 element를 안보이게 한다.
             // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
-            element_wrap!.style.display = 'none';
+            foldDaumPostcode()
 
             // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
             document.body.scrollTop = currentScroll;
@@ -73,7 +74,7 @@ const Postcode = ({title, style, containerId, adressTextBoxId, onClick, setPosit
     <div id={containerId} style={style}>
       <strong>{title}</strong> <br />
       <input type="text" id={adressTextBoxId} onFocus={onFocus} placeholder="주소" />
-      <div id="wrap" style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} />
+      <div id={postcodeBoxId} style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} />
       <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
       <br />
       <input type="text" placeholder="세부주소" style={{ display: "block" }} /><br />

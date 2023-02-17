@@ -22,13 +22,33 @@ interface Position {
 //     return (startPosition.latitude && startPosition.longitude)
 // }
 const Tmap = ({ containerId, startPosition, arrivePosition }: Position) => {
-
-    useEffect(() => {
+    
+    
+    const onClick2 = (map : any) =>{
+        console.log(map.realToScreen(Map.LatLng(37.566481622437934,126.98502302169841)).x)
+    }    
+    
+    const onClick = () =>{
+        document.getElementById("TMapApp")!.innerHTML = ""
+        let map = Map.initTmap();    
+        Map.Marker(map, 37.566481622437934,126.98502302169841)
+        map.zoomOut()
+        map.zoomOut()
+        setTimeout(() => {
+            console.log(map.realToScreen(Map.LatLng(37.566481622437934,126.98502302169841)).x )
+        } , 2000)
+        
+        // while (map.realToScreen(Map.LatLng(37.566481622437934,126.98502302169841)).x > 0) {
+        //     map.zoomOut();
+        // }
+    }
+    
+    let map = useEffect(() => {
         // 삭제
         document.getElementById("TMapApp")!.innerHTML = ""
-        let map = Map.initTmap();
+        map = Map.initTmap();
         let startMarker, arriveMarker
-
+        
         if (startPosition.latitude && startPosition.longitude) {
             startMarker = Map.Marker(map, startPosition.latitude, startPosition.longitude)
             Map.setViewMap(map, startPosition.latitude, startPosition.longitude);
@@ -64,6 +84,8 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: Position) => {
                     width: "300px",
                 }}
             />
+            <button onClick={onClick}>함수 확인 버튼</button>
+            <button onClick={onClick2}>함수 확인 버튼2</button>
         </div>
     );
 }

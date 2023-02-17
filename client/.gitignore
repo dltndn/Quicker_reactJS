@@ -11,15 +11,7 @@
 # production
 /build
 
-<<<<<<< HEAD
 # env
-=======
-<<<<<<< HEAD
-# env
-=======
-#env
->>>>>>> roadname
->>>>>>> roadname
 .env
 
 #contract information
