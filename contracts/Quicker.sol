@@ -12,6 +12,7 @@
 //  */
 // interface Qkrw {
 //     function transfer(address to, uint256 amount) external returns (bool);
+//     function transferFrom(address from, address to, uint256 amount) external returns (bool);
 // }
 
 // contract Quicker is Ownable {
@@ -65,19 +66,19 @@
 //     /**
 //      * @dev Initializes the contract setting the commission rate
 //      */
-//     // constructor(
-//     //     uint16 _platFormFee,
-//     //     uint16 _insuranceFee,
-//     //     uint16 _securityDeposit,
-//     //     address _QkrwToken
-//     // ) Ownable() {
-//     //     commissionRate = Commission(
-//     //         _platFormFee,
-//     //         _insuranceFee,
-//     //         _securityDeposit
-//     //     );
-//     //     qkrwToken = _QkrwToken;
-//     // }
+//     constructor(
+//         uint16 _platFormFee,
+//         uint16 _insuranceFee,
+//         uint16 _securityDeposit,
+//         address _QkrwToken
+//     ) Ownable() {
+//         commissionRate = Commission(
+//             _platFormFee,
+//             _insuranceFee,
+//             _securityDeposit
+//         );
+//         qkrwToken = _QkrwToken;
+//     }
 
 //     modifier isClientContract() {
 //         require(msg.sender == clientContractAddress, "not clientContract");
@@ -130,6 +131,18 @@
 //         );
 //     }
 
+//     function recieveTokensFromOtherAddress(
+//         address from,
+//         address to,
+//         uint256 amount
+//     ) public {
+//         token = Qkrw(qkrwToken);
+//         require(
+//             token.transferFrom(from, to, amount),
+//             "Token transfer failed"
+//         );
+//     }
+
 //     // test
 //     function createOrder(address _clientWalletAddress, uint256 _orderPrice)
 //         public
@@ -144,6 +157,7 @@
 //             0
 //         );
 //         orderList.push(newOrder);
+//         recieveTokensFromOtherAddress(_clientWalletAddress, address(this), _orderPrice);
 //     }
 
 //     //test
