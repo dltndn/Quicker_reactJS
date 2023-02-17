@@ -11,11 +11,7 @@
 //  * @dev declare Qkrw(ERC20) contract
 //  */
 // interface Qkrw {
-//     function transferFrom(
-//         address sender,
-//         address recipient,
-//         uint256 amount
-//     ) external returns (bool);
+//     function transfer(address to, uint256 amount) external returns (bool);
 // }
 
 // contract Quicker is Ownable {
@@ -36,6 +32,7 @@
 //     address clientContractAddress;
 //     address quickerContractAddress;
 //     address public qkrwToken;
+//     Qkrw public token;
 
 //     /**
 //      * @dev indicating the current status of order
@@ -112,13 +109,13 @@
 //         );
 //     }
 
-//     function transferTokensToOtherContract(
-//         address otherContractAddress,
+//     function transferTokensToOtherAddress(
+//         address to,
 //         uint256 amount
 //     ) public {
-//         Qkrw token = Qkrw(qkrwToken);
+//         token = Qkrw(qkrwToken);
 //         require(
-//             token.transferFrom(msg.sender, otherContractAddress, amount),
+//             token.transfer(to, amount),
 //             "Token transfer failed"
 //         );
 //     }
@@ -157,5 +154,5 @@
 
 //     // todo list
 //     // - 생성자에 client, quicker contract 선언하기
-//     // - test용 함수 test 후 modifier 붙이기
+//     // - test용 함수 test 완료 후 modifier 붙이기
 // }
