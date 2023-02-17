@@ -65,19 +65,19 @@
 //     /**
 //      * @dev Initializes the contract setting the commission rate
 //      */
-//     constructor(
-//         uint16 _platFormFee,
-//         uint16 _insuranceFee,
-//         uint16 _securityDeposit,
-//         address _QkrwToken
-//     ) Ownable() {
-//         commissionRate = Commission(
-//             _platFormFee,
-//             _insuranceFee,
-//             _securityDeposit
-//         );
-//         qkrwToken = _QkrwToken;
-//     }
+//     // constructor(
+//     //     uint16 _platFormFee,
+//     //     uint16 _insuranceFee,
+//     //     uint16 _securityDeposit,
+//     //     address _QkrwToken
+//     // ) Ownable() {
+//     //     commissionRate = Commission(
+//     //         _platFormFee,
+//     //         _insuranceFee,
+//     //         _securityDeposit
+//     //     );
+//     //     qkrwToken = _QkrwToken;
+//     // }
 
 //     modifier isClientContract() {
 //         require(msg.sender == clientContractAddress, "not clientContract");
@@ -95,7 +95,7 @@
 //     }
 
 //     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
-//         require(clientOfOrder[_orderNum] == _quicker, "not client of this order");
+//         require(clientOfOrder[_orderNum] == _quicker, "not quicker of this order");
 //         _;
 //     }
 
@@ -147,8 +147,14 @@
 //     }
 
 //     //test
-//     function cancelOrder() public {
-
+//     function cancelOrder(uint256 _orderNum, address _clientWalletAddress) public isClientOfOrder(_orderNum, _clientWalletAddress) {
+//         require(
+//             orderList[_orderNum].state == State.created,
+//             "Already matched with quicker..."
+//         );
+//         orderList[_orderNum].state = State.canceled;
+//         uint256 refundAmount = orderList[_orderNum].orderPrice;
+//         transferTokensToOtherAddress(_clientWalletAddress, refundAmount);
 //     }
 
 //     // test
