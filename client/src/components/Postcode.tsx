@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 //@ts-ignore
 const { daum } = window;
@@ -16,6 +16,7 @@ interface setPosition {
 
 
 const Postcode = ({postcodeBoxId, title, style, containerId, adressTextBoxId, onClick, setPosition }: setPosition) => {
+  
 
   let element_wrap = document.getElementById(postcodeBoxId);
 
