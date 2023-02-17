@@ -89,6 +89,16 @@
 //         _;
 //     }
 
+//     modifier isClientOfOrder(uint256 _orderNum, address _client) {
+//         require(clientOfOrder[_orderNum] == _client, "not client of this order");
+//         _;
+//     }
+
+//     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
+//         require(clientOfOrder[_orderNum] == _quicker, "not client of this order");
+//         _;
+//     }
+
 //     function setClientContract(address _newContract) public onlyOwner {
 //         clientContractAddress = _newContract;
 //     }
@@ -134,6 +144,11 @@
 //             0
 //         );
 //         orderList.push(newOrder);
+//     }
+
+//     //test
+//     function cancelOrder() public {
+
 //     }
 
 //     // test
