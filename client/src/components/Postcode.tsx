@@ -93,12 +93,12 @@ const Postcode = ({ refs, setStates, title }: props) => {
         });
       },
       // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
-      onresize: (size: any) => {
+      onresize: function (size : any) {
         postcodeContainer.current!.style.height = size.height + 'px';
       },
       width: '100%',
       height: '100%'
-    }).embed(postcodeContainer);
+    }).embed(postcodeContainer.current);
 
     // iframe을 넣은 element를 보이게 한다.
     postcodeContainer.current!.style.display = 'block';
@@ -106,8 +106,9 @@ const Postcode = ({ refs, setStates, title }: props) => {
 
   return (
     <>
-      <div ref={postcodeContainer} style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} />
-      <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
+      <div ref={postcodeContainer} style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} >
+        <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
+      </div>
       <strong>{title}</strong> <br />
       <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} />
       <PostcodeInputs refs={{ inputDiv: refs.arriveinputDiv, inputBox: arriveinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} />
