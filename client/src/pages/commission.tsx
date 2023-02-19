@@ -1,4 +1,5 @@
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useEffect, useState, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Tmap from "../components/Tmap"
 import Postcode from "../components/Postcode"
@@ -17,18 +18,35 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
 
+    const navigate = useNavigate();
+
+    const startinputDiv = useRef<HTMLDivElement>(null)
+    const arriveinputDiv = useRef<HTMLDivElement>(null)
+    const [title, setTitle] = useState("출발지")
     const [startPosition, setStartPosition] = useState({})
     const [arrivePosition, setArrivePosition] = useState({})
-    // 좌표 확인용 코드
-    const onClick = () => {
-        console.log(startPosition, arrivePosition)
+
+    const pageBack = () => {
+        if (title === "출발지") { navigate("/") }
+        else if (title === "도착지") {
+            setTitle("출발지")
+            startinputDiv.current!.style.display = "block"
+            arriveinputDiv.current!.style.display = "none"
+        }
+        else if (title === "세부사항") {
+            setTitle("도착지")
+            startinputDiv.current!.style.display = "none"
+            arriveinputDiv.current!.style.display = "block"
+        }
+
     }
+
     return (
         <>
+            
+            <button onClick={pageBack}>이전 버튼</button>
             <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition} />
-            <Postcode postcodeBoxId={"startpostcodeBox"} containerId={"startContainerBox"} title={"출발지"} style={{display : "block"}} adressTextBoxId={"startAdress"} onClick={() => { document.getElementById("startContainerBox")!.style.display = "none"; document.getElementById("arriveContainerBox")!.style.display = "block"; }} setPosition={setStartPosition} />
-            <Postcode postcodeBoxId={"arrivepostcodeBox"} containerId={"arriveContainerBox"} title={"도착지"} style={{display : "none"}} adressTextBoxId={"arriveAdress"} onClick={() => { document.getElementById("arriveContainerBox")!.style.display = "none"; document.getElementById("mapContainerBox")!.style.display = "none"; }} setPosition={setArrivePosition} />
-            <button onClick={onClick} >check</button>
+            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
         </>
     );
 }
