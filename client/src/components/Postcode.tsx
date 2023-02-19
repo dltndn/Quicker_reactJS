@@ -3,6 +3,11 @@ import PostcodeInputs from "./PostcodeInput";
 //@ts-ignore
 const { daum } = window;
 
+interface mapControl {
+  showMap : Function
+  hideMap : Function
+}
+
 interface setState {
   setStartPosition: React.Dispatch<React.SetStateAction<{}>>
   setArrivePosition: React.Dispatch<React.SetStateAction<{}>>
@@ -16,12 +21,13 @@ interface refs {
 
 interface props {
   refs : refs
+  mapControls : mapControl
   setStates: setState
   title: string
 }
 
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
-const Postcode = ({ refs, setStates, title }: props) => {
+const Postcode = ({ refs, mapControls ,setStates, title }: props) => {
 
   const postcodeContainer = useRef<HTMLDivElement>(null)
   const startinputBox = useRef<HTMLInputElement>(null)
@@ -41,7 +47,11 @@ const Postcode = ({ refs, setStates, title }: props) => {
     postcodeContainer.current!.style.display = 'none'
   }
 
-  const onFocus = () => sample5_execDaumPostcode()
+  // 지도 안보이게 처리
+  const onFocus = () => {
+    mapControls.hideMap()
+    sample5_execDaumPostcode()
+  }
 
   const pageNext = () => {
     if (title === "세부사항") {
@@ -86,6 +96,9 @@ const Postcode = ({ refs, setStates, title }: props) => {
             // iframe을 넣은 element를 안보이게 한다.
             // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
             foldDaumPostcode()
+
+            // 지도 보이게 처리
+            mapControls.showMap()
 
             // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
             document.body.scrollTop = currentScroll;

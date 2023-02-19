@@ -46,7 +46,7 @@ export default function CommissionPage() {
             
             <button onClick={pageBack}>이전 버튼</button>
             <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition} />
-            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
+            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} mapControls={{showMap: showMap, hideMap : hideMap }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
         </>
     );
 }
