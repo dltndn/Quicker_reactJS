@@ -2,6 +2,7 @@
 // pragma solidity ^0.8.9;
 
 // import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 // // @custom:security-contact james98099@gmail.com
 // // @dev:This contract was created for use in graduation project
@@ -10,10 +11,11 @@
 // /**
 //  * @dev declare Qkrw(ERC20) contract
 //  */
-// interface Qkrw {
-//     function transfer(address to, uint256 amount) external returns (bool);
-//     function transferFrom(address from, address to, uint256 amount) external returns (bool);
-// }
+// // interface Qkrw {
+// //     function transfer(address to, uint256 amount) external returns (bool);
+// //     function transferFrom(address from, address to, uint256 amount) external returns (bool);
+// //     function approve(address spender, uint256 amount) external;
+// // }
 
 // contract Quicker is Ownable {
 //     // unit is %
@@ -32,8 +34,8 @@
 //      */
 //     address clientContractAddress;
 //     address quickerContractAddress;
-//     address public qkrwToken;
-//     Qkrw public token;
+//     ERC20 public qkrwToken;
+//     // Qkrw public token;
 
 //     /**
 //      * @dev indicating the current status of order
@@ -77,7 +79,7 @@
 //             _insuranceFee,
 //             _securityDeposit
 //         );
-//         qkrwToken = _QkrwToken;
+//         qkrwToken = ERC20(_QkrwToken);
 //     }
 
 //     modifier isClientContract() {
@@ -108,6 +110,11 @@
 //         quickerContractAddress = _newContract;
 //     }
 
+//     function getTokenDecimals() internal view returns (uint8){
+//         ERC20 token = qkrwToken;
+//         return token.decimals();
+//     }
+
 //     function setCommissionRate(
 //         uint16 _platFormFee,
 //         uint16 _insuranceFee,
@@ -121,73 +128,62 @@
 //     }
 
 //     function transferTokensToOtherAddress(
-//         address to,
-//         uint256 amount
-//     ) public {
-//         token = Qkrw(qkrwToken);
-//         require(
-//             token.transfer(to, amount),
-//             "Token transfer failed"
-//         );
+//         address _to,
+//         uint256 _amount
+//     ) internal {
+//         ERC20 token = qkrwToken;
+//         token.transfer(_to, _amount);
 //     }
 
 //     function recieveTokensFromOtherAddress(
-//         address from,
-//         address to,
-//         uint256 amount
-//     ) public {
-//         token = Qkrw(qkrwToken);
-//         require(
-//             token.transferFrom(from, to, amount),
-//             "Token transfer failed"
-//         );
+//         address _from,
+//         uint256 _amount
+//     ) internal {
+//         ERC20 token = qkrwToken;
+//         token.transferFrom(_from, address(this), _amount);
 //     }
 
-//     // test
-//     function createOrder(address _clientWalletAddress, uint256 _orderPrice)
+//     function createOrder( uint256 _orderPrice)
 //         public
 //     {
 //         uint256 orderNum = orderList.length;
-//         clientOfOrder[orderNum] = _clientWalletAddress;
+//         uint256 amount = _orderPrice * (10 ** getTokenDecimals());
+//         clientOfOrder[orderNum] = msg.sender;
 //         Order memory newOrder = Order(
-//             _clientWalletAddress,
+//             msg.sender,
 //             address(0),
 //             State.created,
 //             _orderPrice,
 //             0
 //         );
+//         recieveTokensFromOtherAddress(msg.sender, amount);
 //         orderList.push(newOrder);
-//         recieveTokensFromOtherAddress(_clientWalletAddress, address(this), _orderPrice);
 //     }
 
-//     //test
-//     function cancelOrder(uint256 _orderNum, address _clientWalletAddress) public isClientOfOrder(_orderNum, _clientWalletAddress) {
+//     function cancelOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
 //         require(
 //             orderList[_orderNum].state == State.created,
-//             "Already matched with quicker..."
+//             "Matched with another quicker..."
 //         );
 //         orderList[_orderNum].state = State.canceled;
-//         uint256 refundAmount = orderList[_orderNum].orderPrice;
-//         transferTokensToOtherAddress(_clientWalletAddress, refundAmount);
+//         uint256 refundAmount = orderList[_orderNum].orderPrice * (10 ** getTokenDecimals());
+//         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
-//     // test
 //     function acceptOrder(
-//         address _quickerWalletAddress,
 //         uint256 _securityDeposit,
 //         uint256 _orderNum
 //     ) public {
 //         require(
 //             orderList[_orderNum].state == State.created,
-//             "matched with other quicker..."
+//             "Already matched with another quicker..."
 //         );
-//         orderList[_orderNum].quicker = _quickerWalletAddress;
+//         orderList[_orderNum].quicker = msg.sender;
 //         orderList[_orderNum].securityDeposit = _securityDeposit;
 //         orderList[_orderNum].state = State.matched;
-//         quickerOfOrder[_orderNum] = _quickerWalletAddress;
+//         quickerOfOrder[_orderNum] = msg.sender;
 //     }
 
 //     // todo list
-//     // - 생성자에 client, quicker contract 선언하기
 //     // - test용 함수 test 완료 후 modifier 붙이기
 // }
