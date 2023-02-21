@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Tmap from "../components/Tmap"
 import Postcode from "../components/Postcode"
+import { request } from 'http';
 
 const showMap = () => document.getElementById("TMapApp")!.style.display = "block"
 
@@ -40,13 +41,41 @@ export default function CommissionPage() {
         }
 
     }
+    const get = () => {
+        fetch('http://localhost:9000/get')
+            .then(response => response.json())
+            .then(data => console.log((data)))
+    }
+
+    const post = () => {
+        const data = { username: 'example' };
+
+        fetch('http://localhost:9000/post', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+        
+    }
 
     return (
         <>
-            
+
             <button onClick={pageBack}>이전 버튼</button>
             <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition} />
-            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} mapControls={{showMap: showMap, hideMap : hideMap }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
+            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
+            <button onClick={get}>get</button>
+            <button onClick={post}>post</button>
         </>
     );
 }
