@@ -192,6 +192,10 @@
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //     }
 
+//     function completeOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
+//         require(orderList[_orderNum].state == State.matched, "You can not complete before matched");
+//         orderList[_orderNum].state = State.completed;
+//     }
 
 
 //     // todo list
