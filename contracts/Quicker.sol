@@ -27,8 +27,8 @@
 //     /**
 //      * @dev The contract client or quicker is calling
 //      */
-//     address clientContractAddress;
-//     address quickerContractAddress;
+//     address feeCollection;
+//     address insuranceFeeCollection;
 //     ERC20 public qkrwToken;
 //     // Qkrw public token;
 
@@ -71,7 +71,9 @@
 //         uint16 _platFormFee,
 //         uint16 _insuranceFee,
 //         uint16 _securityDeposit,
-//         address _QkrwToken
+//         address _QkrwToken,
+//         address _Platform,
+//         address _Insurance
 //     ) Ownable() {
 //         commissionRate = Commission(
 //             _platFormFee,
@@ -79,16 +81,8 @@
 //             _securityDeposit
 //         );
 //         qkrwToken = ERC20(_QkrwToken);
-//     }
-
-//     modifier isClientContract() {
-//         require(msg.sender == clientContractAddress, "not clientContract");
-//         _;
-//     }
-
-//     modifier isQuickerContract() {
-//         require(msg.sender == quickerContractAddress, "not quickerContract");
-//         _;
+//         feeCollection = _Platform;
+//         insuranceFeeCollection = _Insurance;
 //     }
 
 //     modifier isClientOfOrder(uint256 _orderNum, address _client) {
@@ -101,12 +95,12 @@
 //         _;
 //     }
 
-//     function setClientContract(address _newContract) public onlyOwner {
-//         clientContractAddress = _newContract;
+//     function setFeeCollectionAddress(address _newAddress) public onlyOwner {
+//         feeCollection = _newAddress;
 //     }
 
-//     function setQuickerContract(address _newContract) public onlyOwner {
-//         quickerContractAddress = _newContract;
+//     function setInsuranceFeeCollection(address _newAddress) public onlyOwner {
+//         insuranceFeeCollection = _newAddress;
 //     }
 
 //     function getTokenDecimals() internal view returns (uint8){
