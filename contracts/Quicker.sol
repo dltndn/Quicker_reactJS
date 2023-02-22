@@ -11,11 +11,6 @@
 // /**
 //  * @dev declare Qkrw(ERC20) contract
 //  */
-// // interface Qkrw {
-// //     function transfer(address to, uint256 amount) external returns (bool);
-// //     function transferFrom(address from, address to, uint256 amount) external returns (bool);
-// //     function approve(address spender, uint256 amount) external;
-// // }
 
 // contract Quicker is Ownable {
 //     // unit is %
@@ -55,6 +50,10 @@
 //         State state;
 //         uint256 orderPrice;
 //         uint256 securityDeposit;
+//         uint256 limitedTime;
+//         uint256 createdTime;
+//         uint256 matchedTime;
+//         uint256 completedTime;
 //     }
 
 //     // array for order
@@ -115,6 +114,14 @@
 //         return token.decimals();
 //     }
 
+//     function getCurrentTime() internal view returns (uint256) {
+//         return block.timestamp;
+//     }
+
+//     function getMulTokenAmount(uint256 _amount) internal view returns (uint256) {
+//         return _amount * (10 ** getTokenDecimals());
+//     }
+
 //     function setCommissionRate(
 //         uint16 _platFormFee,
 //         uint16 _insuranceFee,
@@ -143,7 +150,7 @@
 //         token.transferFrom(_from, address(this), _amount);
 //     }
 
-//     function createOrder( uint256 _orderPrice)
+//     function createOrder(uint256 _orderPrice, uint256 _limitedTime)
 //         public
 //     {
 //         uint256 orderNum = orderList.length;
@@ -154,6 +161,10 @@
 //             address(0),
 //             State.created,
 //             _orderPrice,
+//             0,
+//             _limitedTime,
+//             getCurrentTime(),
+//             0,
 //             0
 //         );
 //         recieveTokensFromOtherAddress(msg.sender, amount);
@@ -166,7 +177,7 @@
 //             "Matched with another quicker..."
 //         );
 //         orderList[_orderNum].state = State.canceled;
-//         uint256 refundAmount = orderList[_orderNum].orderPrice * (10 ** getTokenDecimals());
+//         uint256 refundAmount = getMulTokenAmount(orderList[_orderNum].orderPrice);
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
@@ -181,8 +192,13 @@
 //         orderList[_orderNum].quicker = msg.sender;
 //         orderList[_orderNum].securityDeposit = _securityDeposit;
 //         orderList[_orderNum].state = State.matched;
+//         orderList[_orderNum].matchedTime = getCurrentTime();
 //         quickerOfOrder[_orderNum] = msg.sender;
+//         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
+//         transferTokensToOtherAddress(msg.sender, formatedDeposit);
 //     }
+
+
 
 //     // todo list
 //     // - test용 함수 test 완료 후 modifier 붙이기
