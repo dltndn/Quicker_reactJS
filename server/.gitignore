@@ -11,15 +11,9 @@
 # production
 /build
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
 # env
 .env
 
->>>>>>> roadname
->>>>>>> roadname
 # misc
 .DS_Store
 .env.local
