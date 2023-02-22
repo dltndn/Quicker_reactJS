@@ -195,7 +195,7 @@
 //         orderList[_orderNum].matchedTime = getCurrentTime();
 //         quickerOfOrder[_orderNum] = msg.sender;
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
-//         transferTokensToOtherAddress(msg.sender, formatedDeposit);
+//         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //     }
 
 
