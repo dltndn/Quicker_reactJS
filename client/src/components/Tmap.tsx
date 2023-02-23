@@ -1,43 +1,58 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
+import Map from "../script/Tmap"
+
 
 // @ts-ignore
 const { Tmapv3 } = window;
 
-const TmapObject = {
-
-    initTmap: () => {
-        return new Tmapv3.Map("TMapApp", {
-            center: new Tmapv3.LatLng(37.56520450, 126.98702028),
-            width: "300px",	// 지도의 넓이
-            height: "300px",	// 지도의 높이
-            zoom: 16	// 지도 줌레벨
-        });
-    },
-
-    setMarker: (map: any, lat: number, lon: number) => {
-        new Tmapv3.Marker({
-            position: new Tmapv3.LatLng(lat, lon),
-            map: map
-        });
-    },
-
-    setViewMap: (map: any, lat: number, lon: number) => {
-        map.setCenter(new Tmapv3.LatLng(lat, lon));
-        map.setZoom(16);
-    }
+interface basicPos {
+    latitude?: number,
+    longitude?: number
 }
 
-const Tmap = () => {
+interface Position {
+    containerId: string
+    startPosition: basicPos
+    arrivePosition: basicPos
+}
+    
+interface position {
+    latitude?: number,
+    longitude?: number
+}
+
+interface props {
+    containerId: string
+    startPosition: position
+    arrivePosition: position
+}
+
+const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
+    
+    const [map , setMap] = useState({})
+    const [startMarker , setStartMarker] = useState({})
+    const [arriveMarker , setArriveMarker] = useState({})
+
     useEffect(() => {
-        let map = TmapObject.initTmap();
-        TmapObject.setMarker(map, 37.56520450, 126.98702028)
-        TmapObject.setMarker(map, 37.53367922, 126.81710807)
-        TmapObject.setViewMap(map, 37.56520450, 126.98607028)
+        setMap(Map.initTmap())
     }, [])
 
+    useEffect(() => {
+        console.log(startPosition, arrivePosition)
+        if (startPosition.latitude && startPosition.longitude) {
+            setStartMarker(Map.Marker(map, startPosition.latitude, startPosition.longitude))
+            Map.setViewMap(map, startPosition.latitude, startPosition.longitude);
+            if (arrivePosition.latitude && arrivePosition.longitude) {
+                setArriveMarker(Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude))
+                Map.setViewMap(map, (startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2);
+            }
+        }
+    }, [startPosition, arrivePosition])
+
+
     return (
-        <div>
+        <div id={containerId}>
             <div
                 id="TMapApp"
                 style={{
