@@ -2,10 +2,6 @@
 const { Tmapv3 } = window;
 
 const TmapObject = {
-
-
-
-
     initTmap: () => {
         return new Tmapv3.Map("TMapApp", {
             center: new Tmapv3.LatLng(37.56520450, 126.98702028),
@@ -31,53 +27,29 @@ const TmapObject = {
         return new Tmapv3.LatLng(lat, lon)
     },
 
-    getBound: (map: any) => {
-        // return {
-        //     1 : map.getBounds()._ne._lat,
-        //     2 : map.getBounds()._ne._lat,
-        //     3 : map.getBounds()._sw._lat,
-        //     4 : map.getBounds()._sw._lat};	
+    autoZoom : (map : any , centerLatLng : any, startLatLon : any, arriveLatLon : any) => {
 
-        return map.getBounds();
-        // 이 부분을 수정
-        // bound 객체 생성 후
-        // 비교
-        // map.getBounds().contains(bounds2);
+        let latlngBounds = new Tmapv3.LatLngBounds(centerLatLng);
 
-        // map.fitBounds(latLngBounds,margin);
-    },
+        latlngBounds.extend(startLatLon);
+        latlngBounds.extend(arriveLatLon);
 
-    initBound: (l: number, b: number, r: number, t: number) => {
-        return new Tmapv3.Bounds(l, b, r, t)
-    },
-
-    fitmap: (map: any, latLngBounds: any, margin: number) => {
-        map.fitBounds(latLngBounds, margin)
-    },
-
-    test: (map : any , centerLat : number, centerLon : number, startLat : number, startLon : number, endLat : number, endLon : number) => {
-
-        // 화면의 중앙 좌표 설정
-        var lonlat =  new Tmapv3.LatLng(centerLat,centerLon);
-        var latlngBounds = new Tmapv3.LatLngBounds(lonlat);
-
-        // 시작지점
-        var start =  new Tmapv3.LatLng(startLat,startLon);
-
-        // 도착지점
-        var end =  new Tmapv3.LatLng(endLat,endLon);
-
-        // 확장
-        latlngBounds.extend(start);
-        latlngBounds.extend(end);
-        // 화면 맞춤
         map.fitBounds(latlngBounds, 50);
-    },
-
-    containMarker: (map: any, bound: any) => {
-        return map.getBounds().contains(bound);
     }
 
+    // MEMO : 나중에 사용 할 수도 있기 때문에 보류
+
+    // getBounds: (map: any) => {
+    //     return map.getBounds();
+    // },
+
+    // Bounds: (l: number, b: number, r: number, t: number) => {
+    //     return new Tmapv3.Bounds(l, b, r, t)
+    // },
+
+    // fitBounds: (map: any, latLngBounds: any, margin: number) => {
+    //     map.fitBounds(latLngBounds, margin)
+    // },
 }
 
 export default TmapObject;
