@@ -516,3 +516,406 @@ export const QKRW_CONTRACT_ABI = [
 ]
 
 export const QKRW_ADDRESS = "0xb3eeB9cA4f439812b7d6816637688418F52ba2Bd"
+
+export const QUICKER_CONTRACT_ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_securityDeposit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "acceptOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "completeOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_limitedTime",
+				"type": "uint256"
+			}
+		],
+		"name": "createOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint16",
+				"name": "_platFormFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_insuranceFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_securityDeposit",
+				"type": "uint16"
+			},
+			{
+				"internalType": "address",
+				"name": "_QkrwToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_Platform",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_Insurance",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint16",
+				"name": "_platFormFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_insuranceFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_securityDeposit",
+				"type": "uint16"
+			}
+		],
+		"name": "setCommissionRate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "setFeeCollectionAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "setInsuranceFeeCollection",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "clientOfOrder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "commissionRate",
+		"outputs": [
+			{
+				"internalType": "uint16",
+				"name": "platformFeeRate",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "insuranceFeeRate",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "securityDepositRate",
+				"type": "uint16"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "getOrder",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "quicker",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Quicker.State",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "orderPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "securityDeposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "limitedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "matchedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Quicker.Order",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "orderList",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "client",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "quicker",
+				"type": "address"
+			},
+			{
+				"internalType": "enum Quicker.State",
+				"name": "state",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "orderPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "securityDeposit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "limitedTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "createdTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "matchedTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "completedTime",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "qkrwToken",
+		"outputs": [
+			{
+				"internalType": "contract ERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "quickerOfOrder",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+export const QUICKER_ADDRESS = "0xDF303c2C19d251D2F17C5730B172773FB7ec302D"

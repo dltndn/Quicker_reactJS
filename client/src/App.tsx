@@ -17,7 +17,7 @@ import RequestPage from "./pages/RequestPage";
 import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
-import TestPage from "./pages/TestPage";
+import TestPage2 from "./pages/TestPage2";
 import React from "react";
 
 Buffer.from("anything", "base64");
@@ -63,7 +63,7 @@ function App() {
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/commission" element={<CommissionPage />} />
-            <Route path="/test" element={<TestPage />} />
+            <Route path="/test2" element={<TestPage2 />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
