@@ -9,12 +9,12 @@ interface refs {
     inputBox: React.RefObject<HTMLInputElement>
 }
 
-interface PostcodeInputs {
+interface PostcodeInputsType {
     refs: refs
     controls: controls
 }
 
-const PostcodeInputs = ({ refs, controls }: PostcodeInputs) => {
+const PostcodeInputs = ({ refs, controls }: PostcodeInputsType) => {
 
     return (
         <div ref={refs.inputDiv}>

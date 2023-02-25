@@ -24,10 +24,15 @@ interface props {
   mapControls : mapControl
   setStates: setState
   title: string
+  hideCommissionPage: () => void
 }
 
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
-const Postcode = ({ refs, mapControls ,setStates, title }: props) => {
+const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: props) => {
+  //마지막 버튼 클릭 시 OrderPage의 showCommissionPage를 false로 변경
+  const handleCompleteCommission = () => {
+    hideCommissionPage()
+  };
 
   const postcodeContainer = useRef<HTMLDivElement>(null)
   const startinputBox = useRef<HTMLInputElement>(null)
@@ -63,6 +68,8 @@ const Postcode = ({ refs, mapControls ,setStates, title }: props) => {
       setStates.setTitle("세부사항")
       refs.startinputDiv.current!.style.display = "none"
       refs.arriveinputDiv.current!.style.display = "none"
+      console.log("마지막?")
+      handleCompleteCommission()
     }
     else if (title === "출발지") {
       setStates.setTitle("도착지")

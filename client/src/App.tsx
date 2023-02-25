@@ -10,10 +10,11 @@ import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CommissionPage from "./pages/commission";
+import CommissionPage from "./components/commission";
 import MainPage from "./pages/mainPage";
 import SignUpPage from "./pages/SignUpPage";
-import RequestPage from "./pages/RequestPage";
+// import RequestPage from "./components/RequestPage";
+import OrderPage from "./pages/OrderPage";
 import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -58,11 +59,12 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-            <Route path="/request" element={<RequestPage />} />
+            <Route path="/order" element={<OrderPage />} /> 
+            {/* <Route path="/request" element={<RequestPage />} /> */}
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/commission" element={<CommissionPage />} />
+            {/* <Route path="/commission" element={<CommissionPage />} /> */}
             <Route path="/test2" element={<TestPage2 />} />
           </Routes>
         </BrowserRouter>

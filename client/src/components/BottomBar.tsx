@@ -9,7 +9,7 @@ function BottomBar() {
     <div className={styles.btposition}>
       <ul className={styles.btul}>
         <li>
-          <button onClick={() => navigate(`/request`)}>
+          <button onClick={() => navigate(`/order`)}>
             <span className={styles.icon}>
               <Icon link name="plus square outline" />
             </span>

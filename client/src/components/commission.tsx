@@ -1,8 +1,8 @@
 import React, { createElement, useEffect, useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
-import Tmap from "../components/Tmap"
-import Postcode from "../components/Postcode"
+import Tmap from "./Tmap"
+import Postcode from "./Postcode"
 import { request } from 'http';
 
 const showMap = () => document.getElementById("TMapApp")!.style.display = "block"
@@ -17,8 +17,11 @@ const getLatLon = () => {
     );
 }
 
-export default function CommissionPage() {
+type CommissionPageProps = {
+    hideCommissionPage: () => void
+}
 
+export default function CommissionPage({ hideCommissionPage }:CommissionPageProps) {
     const navigate = useNavigate();
 
     const startinputDiv = useRef<HTMLDivElement>(null)
@@ -70,10 +73,9 @@ export default function CommissionPage() {
 
     return (
         <>
-
             <button onClick={pageBack}>이전 버튼</button>
             <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition} />
-            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} />
+            <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{ "setStartPosition": setStartPosition, "setArrivePosition": setArrivePosition, "setTitle": setTitle }} title={title} hideCommissionPage={hideCommissionPage}/>
             <button onClick={get}>get</button>
             <button onClick={post}>post</button>
         </>
