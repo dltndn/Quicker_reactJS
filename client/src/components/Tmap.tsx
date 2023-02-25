@@ -7,7 +7,7 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
     const [map, setMap] = useState({})
     const [startMarker, setStartMarker] = useState({})
     const [arriveMarker, setArriveMarker] = useState({})
-    // const [mapDIV, setMapDIV] = useState({})
+    const [mapDIV, setMapDIV] = useState({})
 
     useEffect(() => {
         setMap(Map.initTmap())
@@ -22,7 +22,7 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
         }
     }, [startPosition, arrivePosition])
 
-    useEffect (() => {
+    useEffect(() => {
         if ((startPosition.latitude && startPosition.longitude) && (arrivePosition.latitude && arrivePosition.longitude)) {
             let centerLatLng = Map.LatLng((startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2)
             // @ts-ignore
@@ -30,7 +30,11 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
         }
     }, [startMarker, arriveMarker])
 
-        return (
+    const onClick = () => {
+        Map.testingobject(map)
+    }
+
+    return (
         <div id={containerId}>
             <div
                 id="TMapApp"
@@ -40,11 +44,14 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
                 }}
             />
             {/* <div>{JSON.stringify(mapDIV)}</div> */}
+            <button onClick={onClick}>check</button>
         </div>
     );
 }
 
 export default Tmap;
+
+
 
 interface position {
     latitude?: number,
