@@ -9,29 +9,52 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
     const [arriveMarker, setArriveMarker] = useState({})
     const [mapDIV, setMapDIV] = useState({})
 
+    const isPosition = (position : position) => {
+        return (position.latitude && position.longitude)
+    }
+
     useEffect(() => {
         setMap(Map.initTmap())
     }, [])
 
     useEffect(() => {
-        if (startPosition.latitude && startPosition.longitude) {
+        if (isPosition(startPosition)) {
+            // @ts-ignore
             setStartMarker(Map.Marker(map, startPosition.latitude, startPosition.longitude))
         }
-        if (arrivePosition.latitude && arrivePosition.longitude) {
+        if (isPosition(arrivePosition)) {
+            // @ts-ignore
             setArriveMarker(Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude))
         }
     }, [startPosition, arrivePosition])
 
     useEffect(() => {
-        if ((startPosition.latitude && startPosition.longitude) && (arrivePosition.latitude && arrivePosition.longitude)) {
+        if (isPosition(startPosition)) {
+            // @ts-ignore
+            Map.panTo(map, startMarker.getPosition())
+        }
+    }, [startMarker])
+
+    useEffect(() => {
+        if (isPosition(arrivePosition)) {
+            // @ts-ignore
+            Map.setViewMap(map, arriveMarker.getPosition())
+        }
+    }, [arriveMarker])
+
+    useEffect(() => {
+        if (isPosition(startPosition) && isPosition(arrivePosition)) {
+            // @ts-ignore
             let centerLatLng = Map.LatLng((startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2)
             // @ts-ignore
             Map.autoZoom(map, centerLatLng, startMarker.getPosition(), arriveMarker.getPosition())
+            // @ts-ignore
+            // Map.getRoutePlanJson(map, startMarker.getPosition(), arriveMarker.getPosition())
         }
     }, [startMarker, arriveMarker])
 
     const onClick = () => {
-        Map.testingobject(map)
+
     }
 
     return (
@@ -50,8 +73,6 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
 }
 
 export default Tmap;
-
-
 
 interface position {
     latitude?: number,
