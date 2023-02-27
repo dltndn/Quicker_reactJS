@@ -15,7 +15,7 @@ function SignUpPage() {
         } }/>
         <Join_ani></Join_ani>
         <Join_input></Join_input>
-        <ConfirmBtn content="확인"/>
+        <ConfirmBtn content="확인" confirmLogic={()=> console.log('회원가입로직')}/>
         <BottomBar></BottomBar>
       </div>
     );

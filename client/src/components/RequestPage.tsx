@@ -23,7 +23,7 @@ function RequestPage() {
         <Req_deadline></Req_deadline>
         <Req_detail></Req_detail>
         <Req_cost></Req_cost>
-        <ConfirmBtn content={btnContent} />
+        <ConfirmBtn content={btnContent} confirmLogic={()=> console.log('결제로직')}/>
       </div>
     );
   }

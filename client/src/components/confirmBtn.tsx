@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 
 interface Props {
     content: string;
+    confirmLogic: ()=> void
   }
 
   const StyledButton = styled.button`
@@ -20,10 +21,10 @@ interface Props {
     margin-bottom: 5px;
   `
 
-function ConfirmBtn({ content }: Props){
+function ConfirmBtn({ content, confirmLogic }: Props){
     return(
         <section className={styles.ipsect}>
-                <StyledButton>{content}</StyledButton>
+                <StyledButton onClick={() => confirmLogic()}>{content}</StyledButton>
         </section>
     );
 }

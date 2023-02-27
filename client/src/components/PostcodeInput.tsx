@@ -1,7 +1,8 @@
+import ConfirmBtn from "./confirmBtn"
 
 interface controls {
     onFocus: React.FocusEventHandler<HTMLInputElement>
-    pageNext: React.MouseEventHandler<HTMLButtonElement>
+    pageNext: ()=> void
 }
 
 interface refs {
@@ -25,6 +26,7 @@ const PostcodeInputs = ({ refs, controls }: PostcodeInputsType) => {
             <input type="text" placeholder="1234" /><br />
             <input type="text" placeholder="5678" /><br />
             <button onClick={controls.pageNext}>다음단계</button><br />
+            <ConfirmBtn content={"다음단계"} confirmLogic={controls.pageNext} />
         </div>
     )
 }
