@@ -10,7 +10,7 @@ import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CommissionPage from "./components/commission";
+import CommissionPage from "./pages/commission";
 import MainPage from "./pages/mainPage";
 import SignUpPage from "./pages/SignUpPage";
 // import RequestPage from "./components/RequestPage";
@@ -20,6 +20,7 @@ import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
 import React from "react";
+import CommissionPageTest from "./pages/commTestPage";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -64,8 +65,9 @@ function App() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            {/* <Route path="/commission" element={<CommissionPage />} /> */}
+            <Route path="/commission" element={<CommissionPage />} />
             <Route path="/test2" element={<TestPage2 />} />
+            <Route path="/commTest" element={<CommissionPageTest />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

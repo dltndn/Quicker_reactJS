@@ -1,7 +1,7 @@
 import TopBarOthers from "../components/topBarOthers";
 import BottomBar from "../components/BottomBar";
 import { useState } from "react";
-import CommissionPage from "../components/commission";
+import CommissionPage from "./commission";
 import RequestPage from "../components/RequestPage";
 
 export default function OrderPage() {
@@ -13,11 +13,15 @@ export default function OrderPage() {
     setShowCommissionPage(false);
   };
 
+  const redirectionLogic = () => {
+
+  }
+
   return (
     <>
-      <TopBarOthers title={title} redirect={redirection} />
+      <TopBarOthers title={title} redirectLogic={redirectionLogic} />
       {showCommissionPage ? (
-        <CommissionPage hideCommissionPage={handleCommissionPage} />
+        <CommissionPage />
       ) : (
         <RequestPage />
       )}
