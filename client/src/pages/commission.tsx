@@ -29,21 +29,21 @@ export default function CommissionPage() {
 
   const startinputDiv = useRef<HTMLDivElement>(null);
   const arriveinputDiv = useRef<HTMLDivElement>(null);
-  const [title, setTitle] = useState("출발지");
+  const [title, setTitle] = useState("출발지 입력");
   const [startPosition, setStartPosition] = useState({});
   const [arrivePosition, setArrivePosition] = useState({});
 
   const pageBack = () => {
-    if (title === "출발지") {
+    if (title === "출발지 입력") {
       navigate("/");
-    } else if (title === "도착지") {
-      setTitle("출발지");
+    } else if (title === "도착지 입력") {
+      setTitle("출발지 입력");
       startinputDiv.current!.style.display = "block";
       arriveinputDiv.current!.style.display = "none";
-    } else if (title === "세부사항") {
-      setTitle("도착지");
-      startinputDiv.current!.style.display = "none";
-      arriveinputDiv.current!.style.display = "block";
+    } else if (title === "세부사항 입력") {
+      setTitle("도착지 입력");
+      startinputDiv.current!.style.display = "block";
+      arriveinputDiv.current!.style.display = "none";
     }
   };
   const get = () => {
@@ -72,47 +72,57 @@ export default function CommissionPage() {
   };
 
   const redirectionLogic = () => {
-    pageBack()
-  } 
-  
+    const backFunc = () => {
+      setShowCommissionPage(true);
+      pageBack();
+    };
+    showCommissionPage ? pageBack() : backFunc();
+  };
+
   const handleCommissionPage = () => {
     setShowCommissionPage(false);
   };
 
+  useEffect(() => {
+    console.log(showCommissionPage);
+  }, [showCommissionPage]);
+
   return (
     <>
-      <TopBarOthers
-        title={title}
-        redirectLogic={() => redirectionLogic()}
-      />
-      {showCommissionPage ? (
-        <div>
-          <button onClick={pageBack}>이전 버튼</button>
-          <Tmap
-            containerId={"mapContainerBox"}
-            startPosition={startPosition}
-            arrivePosition={arrivePosition}
-          />
-          <Postcode
-            refs={{
-              startinputDiv: startinputDiv,
-              arriveinputDiv: arriveinputDiv,
-            }}
-            mapControls={{ showMap: showMap, hideMap: hideMap }}
-            setStates={{
-              setStartPosition: setStartPosition,
-              setArrivePosition: setArrivePosition,
-              setTitle: setTitle,
-            }}
-            title={title}
-            hideCommissionPage={() => handleCommissionPage()}
-          />
-          <button onClick={get}>get</button>
-          <button onClick={post}>post</button>
-        </div>
-      ) : (
+      <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
+      <div
+        style={showCommissionPage ? { display: "block" } : { display: "none" }}
+      >
+        <button onClick={pageBack}>이전 버튼</button>
+        <Tmap
+          containerId={"mapContainerBox"}
+          startPosition={startPosition}
+          arrivePosition={arrivePosition}
+        />
+        <Postcode
+          refs={{
+            startinputDiv: startinputDiv,
+            arriveinputDiv: arriveinputDiv,
+          }}
+          mapControls={{ showMap: showMap, hideMap: hideMap }}
+          setStates={{
+            setStartPosition: setStartPosition,
+            setArrivePosition: setArrivePosition,
+            setTitle: setTitle,
+          }}
+          title={title}
+          hideCommissionPage={() => handleCommissionPage()}
+        />
+        <button onClick={get}>get</button>
+        <button onClick={post}>post</button>
+      </div>
+
+      <div
+        style={showCommissionPage ? { display: "none" } : { display: "block" }}
+      >
         <RequestPage />
-      )}
+      </div>
+
       <BottomBar />
     </>
   );

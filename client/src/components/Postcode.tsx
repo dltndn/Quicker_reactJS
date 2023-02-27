@@ -59,20 +59,14 @@ const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: p
   }
 
   const pageNext = () => {
-    if (title === "세부사항") {
-      setStates.setTitle("")
+    if (title === "도착지 입력") {
+      setStates.setTitle("세부사항 입력")
       refs.startinputDiv.current!.style.display = "none"
       refs.arriveinputDiv.current!.style.display = "none"
-    }
-    else if (title === "도착지") {
-      setStates.setTitle("세부사항")
-      refs.startinputDiv.current!.style.display = "none"
-      refs.arriveinputDiv.current!.style.display = "none"
-      console.log("마지막?")
       handleCompleteCommission()
     }
-    else if (title === "출발지") {
-      setStates.setTitle("도착지")
+    else if (title === "출발지 입력") {
+      setStates.setTitle("도착지 입력")
       refs.startinputDiv.current!.style.display = "none"
       refs.arriveinputDiv.current!.style.display = "block"
     }

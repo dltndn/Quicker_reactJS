@@ -20,7 +20,6 @@ import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
 import React from "react";
-import CommissionPageTest from "./pages/commTestPage";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -60,14 +59,12 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-            <Route path="/order" element={<OrderPage />} /> 
             {/* <Route path="/request" element={<RequestPage />} /> */}
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/commTest" element={<CommissionPageTest />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
