@@ -93,7 +93,6 @@ export default function CommissionPage() {
       <div
         style={showCommissionPage ? { display: "block" } : { display: "none" }}
       >
-        <button onClick={pageBack}>이전 버튼</button>
         <Tmap
           containerId={"mapContainerBox"}
           startPosition={startPosition}
