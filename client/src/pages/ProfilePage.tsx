@@ -17,6 +17,7 @@ function ProfilePage() {
         <Web3Button icon="hide" label="지갑연결" balance="hide" />
         <div>지갑주소: {address}</div>
         <div>지갑잔액: {isConnected && address && <GetQkrwBalance address={address}/>}원</div>
+        <button onClick={() => navigate(`/imformation`)}>css보기</button>
         <BottomBar></BottomBar>
       </div>
     );

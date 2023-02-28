@@ -1,9 +1,0 @@
-.maintext{
-    background-color: #efefef;
-    min-height: 340px;
-    display: grid;
-    justify-content:space-around;
-    align-items: center;
-    font-size: 24px;
-    font-weight: bold;
-}

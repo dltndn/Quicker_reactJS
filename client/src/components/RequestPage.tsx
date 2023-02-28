@@ -1,10 +1,5 @@
 
-import Req_transport from "./orderComponents/req_transport";
-import Req_volume from "./orderComponents/req_volume";
-import Req_weight from "./orderComponents/req_weight";
-import Req_deadline from "./orderComponents/req_deadline";
-import Req_detail from "./orderComponents/req_detail";
-import Req_cost from "./orderComponents/req_cost";
+import Req from "./orderComponents/req";
 import ConfirmBtn from "./confirmBtn";
 // import BottomBar from "./BottomBar";
 // import TopBarOthers from "./topBarOthers"
@@ -17,12 +12,7 @@ function RequestPage() {
   let btnContent = cost.toString() + "원 결제하기"
     return (
       <div style={{backgroundColor: '#efefef'}}>
-        <Req_transport></Req_transport>
-        <Req_volume></Req_volume>
-        <Req_weight></Req_weight>
-        <Req_deadline></Req_deadline>
-        <Req_detail></Req_detail>
-        <Req_cost></Req_cost>
+        <Req></Req>
         <ConfirmBtn content={btnContent} confirmLogic={()=> console.log('결제로직')}/>
       </div>
     );
