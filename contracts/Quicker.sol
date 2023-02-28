@@ -45,6 +45,7 @@
 
 //     // structure of order
 //     struct Order {
+//         uint256 orderNumber;
 //         address client;
 //         address quicker;
 //         State state;
@@ -63,6 +64,11 @@
 //     mapping(uint256 => address) public clientOfOrder;
 //     // OrderList number => Quicker address
 //     mapping(uint256 => address) public quickerOfOrder;
+
+//     // Client address => OrderList number list
+//     mapping(address => uint256[]) public clientOrderList;
+//     // Quicker address => OrderList number list
+//     mapping(address => uint256[]) public quickerOrderList;
 
 //     /**
 //      * @dev Initializes the contract setting the commission rate
@@ -86,12 +92,18 @@
 //     }
 
 //     modifier isClientOfOrder(uint256 _orderNum, address _client) {
-//         require(clientOfOrder[_orderNum] == _client, "not client of this order");
+//         require(
+//             clientOfOrder[_orderNum] == _client,
+//             "not client of this order"
+//         );
 //         _;
 //     }
 
 //     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
-//         require(clientOfOrder[_orderNum] == _quicker, "not quicker of this order");
+//         require(
+//             clientOfOrder[_orderNum] == _quicker,
+//             "not quicker of this order"
+//         );
 //         _;
 //     }
 
@@ -103,7 +115,7 @@
 //         insuranceFeeCollection = _newAddress;
 //     }
 
-//     function getTokenDecimals() internal view returns (uint8){
+//     function getTokenDecimals() internal view returns (uint8) {
 //         ERC20 token = qkrwToken;
 //         return token.decimals();
 //     }
@@ -112,8 +124,16 @@
 //         return block.timestamp;
 //     }
 
-//     function getMulTokenAmount(uint256 _amount) internal view returns (uint256) {
-//         return _amount * (10 ** getTokenDecimals());
+//     function getMulTokenAmount(uint256 _amount)
+//         internal
+//         view
+//         returns (uint256)
+//     {
+//         return _amount * (10**getTokenDecimals());
+//     }
+
+//     function getOrder(uint256 _orderNum) public view returns (Order memory) {
+//         return orderList[_orderNum];
 //     }
 
 //     function setCommissionRate(
@@ -128,29 +148,56 @@
 //         );
 //     }
 
-//     function transferTokensToOtherAddress(
-//         address _to,
-//         uint256 _amount
-//     ) internal {
+//     function transferTokensToOtherAddress(address _to, uint256 _amount)
+//         internal
+//     {
 //         ERC20 token = qkrwToken;
 //         token.transfer(_to, _amount);
 //     }
 
-//     function recieveTokensFromOtherAddress(
-//         address _from,
-//         uint256 _amount
-//     ) internal {
+//     function recieveTokensFromOtherAddress(address _from, uint256 _amount)
+//         internal
+//     {
 //         ERC20 token = qkrwToken;
 //         token.transferFrom(_from, address(this), _amount);
 //     }
 
-//     function createOrder(uint256 _orderPrice, uint256 _limitedTime)
-//         public
-//     {
+//     /**
+//      * @dev 배송원과 매치가 되지 않은 의뢰 목록을 리턴한다
+//      * @return Order 배열
+//      */
+//     function getCreatedOrders() public view returns (Order[] memory) {
+//         uint256 numCreatedOrders = 0;
+
+//         for (uint256 i = 0; i < orderList.length; i++) {
+//             if (orderList[i].state == State.created) {
+//                 numCreatedOrders++;
+//             }
+//         }
+
+//         Order[] memory createdOrders = new Order[](numCreatedOrders);
+//         uint256 j = 0;
+//         for (uint256 i = 0; i < orderList.length; i++) {
+//             if (orderList[i].state == State.created) {
+//                 createdOrders[j] = orderList[i];
+//                 j++;
+//             }
+//         }
+
+//         return createdOrders;
+//     }
+
+//     /**
+//      * @dev 의뢰인이 새로운 Order를 생성하며 컨트랙에 QKRW 토큰을 입금한다
+//      * @param _orderPrice 의뢰인의 결제 금액
+//      * @param _limitedTime 배송 기한의 Timestamp값(초단위)
+//      */
+//     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
 //         uint256 orderNum = orderList.length;
-//         uint256 amount = _orderPrice * (10 ** getTokenDecimals());
+//         uint256 amount = _orderPrice * (10**getTokenDecimals());
 //         clientOfOrder[orderNum] = msg.sender;
 //         Order memory newOrder = Order(
+//             orderNum,
 //             msg.sender,
 //             address(0),
 //             State.created,
@@ -163,22 +210,25 @@
 //         );
 //         recieveTokensFromOtherAddress(msg.sender, amount);
 //         orderList.push(newOrder);
+//         clientOrderList[msg.sender].push(orderNum);
 //     }
 
-//     function cancelOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
+//     function cancelOrder(uint256 _orderNum)
+//         public
+//         isClientOfOrder(_orderNum, msg.sender)
+//     {
 //         require(
 //             orderList[_orderNum].state == State.created,
 //             "Matched with another quicker..."
 //         );
 //         orderList[_orderNum].state = State.canceled;
-//         uint256 refundAmount = getMulTokenAmount(orderList[_orderNum].orderPrice);
+//         uint256 refundAmount = getMulTokenAmount(
+//             orderList[_orderNum].orderPrice
+//         );
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
-//     function acceptOrder(
-//         uint256 _securityDeposit,
-//         uint256 _orderNum
-//     ) public {
+//     function acceptOrder(uint256 _securityDeposit, uint256 _orderNum) public {
 //         require(
 //             orderList[_orderNum].state == State.created,
 //             "Already matched with another quicker..."
@@ -188,15 +238,24 @@
 //         orderList[_orderNum].state = State.matched;
 //         orderList[_orderNum].matchedTime = getCurrentTime();
 //         quickerOfOrder[_orderNum] = msg.sender;
+//         quickerOrderList[msg.sender].push(_orderNum);
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //     }
 
-//     function completeOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
-//         require(orderList[_orderNum].state == State.matched, "You can not complete before matched");
+//     function completeOrder(uint256 _orderNum)
+//         public
+//         isClientOfOrder(_orderNum, msg.sender)
+//     {
+//         require(
+//             orderList[_orderNum].state == State.matched,
+//             "You can not complete before matched"
+//         );
 //         orderList[_orderNum].state = State.completed;
 //     }
 
+//     // quicker 정산 함수
+//     // 출금: state == completed || (limitedTime + 12 hours < currentTime && state == matched)
 
 //     // todo list
 //     // - test용 함수 test 완료 후 modifier 붙이기
