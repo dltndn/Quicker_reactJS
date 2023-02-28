@@ -163,28 +163,28 @@
 //     }
 
 //     /**
-//      * @dev 배송원과 매치가 되지 않은 의뢰 목록을 리턴한다
-//      * @return Order 배열
+//      * @dev To get orderlist that is matched with state
+//      * @return Order array
 //      */
-//     function getCreatedOrders() public view returns (Order[] memory) {
-//         uint256 numCreatedOrders = 0;
+//     function getOrdersForState(State _state) public view returns (Order[] memory) {
+//         uint256 numGetterOrders = 0;
 
 //         for (uint256 i = 0; i < orderList.length; i++) {
-//             if (orderList[i].state == State.created) {
-//                 numCreatedOrders++;
+//             if (orderList[i].state == _state) {
+//                 numGetterOrders++;
 //             }
 //         }
 
-//         Order[] memory createdOrders = new Order[](numCreatedOrders);
+//         Order[] memory getterOrders = new Order[](numGetterOrders);
 //         uint256 j = 0;
 //         for (uint256 i = 0; i < orderList.length; i++) {
-//             if (orderList[i].state == State.created) {
-//                 createdOrders[j] = orderList[i];
+//             if (orderList[i].state == _state) {
+//                 getterOrders[j] = orderList[i];
 //                 j++;
 //             }
 //         }
 
-//         return createdOrders;
+//         return getterOrders;
 //     }
 
 //     /**
