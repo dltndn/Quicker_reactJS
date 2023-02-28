@@ -9,10 +9,6 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
     const [arriveMarker, setArriveMarker] = useState({})
     const [mapDIV, setMapDIV] = useState({})
 
-    const isPosition = (position : position) => {
-        return (position.latitude && position.longitude)
-    }
-
     useEffect(() => {
         setMap(Map.initTmap())
     }, [])
@@ -49,12 +45,14 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
             // @ts-ignore
             Map.autoZoom(map, centerLatLng, startMarker.getPosition(), arriveMarker.getPosition())
             // @ts-ignore
-            // Map.getRoutePlanJson(map, startMarker.getPosition(), arriveMarker.getPosition())
+            Map.getRoutePlanJson(map, startMarker.getPosition(), arriveMarker.getPosition())
         }
     }, [startMarker, arriveMarker])
-
+    const isPosition = (position : position) => {
+        return (position.latitude && position.longitude)
+    }
     const onClick = () => {
-
+        
     }
 
     return (
