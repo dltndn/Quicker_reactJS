@@ -123,7 +123,6 @@ const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: p
       <div ref={postcodeContainer} style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} >
         <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
       </div>
-      <strong>{title}</strong> <br />
       <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} />
       <PostcodeInputs refs={{ inputDiv: refs.arriveinputDiv, inputBox: arriveinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} />
     </>
