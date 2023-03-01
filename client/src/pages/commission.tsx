@@ -83,10 +83,6 @@ export default function CommissionPage() {
     setShowCommissionPage(false);
   };
 
-  useEffect(() => {
-    console.log(showCommissionPage);
-  }, [showCommissionPage]);
-
   return (
     <>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
