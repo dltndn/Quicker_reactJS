@@ -1,6 +1,5 @@
 import TopBarOthers from "../components/topBarOthers";
 import Imfo from "../components/orderComponents/imfo";
-import Imfo_profile from "../components/orderComponents/imfo_profile";
 import BottomBar from "../components/BottomBar";
 import styled, { createGlobalStyle } from 'styled-components';
 import React from "react";
@@ -19,7 +18,6 @@ function ImformationPage() {
       <>
         <GlobalStyle />
         <TopBarOthers title="프로필" redirectLogic={function (){navigate("/")} }></TopBarOthers>
-        <Imfo_profile/>
         <Imfo/>
         <BottomBar/>
       </>

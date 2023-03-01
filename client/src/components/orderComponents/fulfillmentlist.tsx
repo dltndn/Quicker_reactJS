@@ -1,22 +1,27 @@
 import styled from "styled-components";
-import React, { useState } from 'react';
+import { useState, DetailedHTMLProps, HTMLAttributes, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 import { BsFillCircleFill } from "react-icons/bs";
+import FulfillModal from "./fulfillmodal";
 
+
+type DivStatusProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+    value?: number;
+  };
 
 const money = require('../../image/money.png')
 
 const SelectInput = styled.select`
-  width: 96px;
-  height: 26px;
+  width: 6rem;
+  height: 1.625rem;
   font-size: 0.75rem;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 0px;
   outline: #efefef;
   background-color: #D9d9d9;
   text-align: center;
   color: #000000;
-  margin: 10px;
+  margin: 0.625rem;
   font-weight: bold;
   font-size: var(--font-small);
 `;
@@ -25,7 +30,6 @@ const Sc0 = styled.section`
     display: flex;
     flex-direction: column;
     margin: 0rem 0.563rem 0.563rem 0.563rem;
-    height: 200px;
     border-radius: 0.313rem;
     border: 0rem;
     background-color: var(--white-color);
@@ -39,7 +43,7 @@ const Sc1 = styled(Sc0)`
 
 const Div0 = styled.div`
     display: flex;
-    padding: 18px 12px 16px 30px;
+    padding: 1.125rem 0.75rem 1rem 1.875rem;
 `;
 
 const Divwallet = styled.div`
@@ -54,10 +58,10 @@ const DivBs = styled.div`
     display: flex;
     flex-direction:column;
     justify-content: space-around;
-    height: 29px;
-    font-size: 4px;
+    height: 1.813rem;
+    font-size: 0.25rem;
     color: #CECECE;
-    padding: 5px 0 5px 40px;
+    padding: 0.313rem 0 0.313rem 2.5rem;
 `;
 
 const Spwallet = styled.div`
@@ -66,33 +70,32 @@ const Spwallet = styled.div`
     font-size: var(--font-md);
 `;
 
-const Divst0 = styled(Div0)`
-    margin-left: auto;
-    background-color: #9d9d9d;
-    border-radius: 20px;
-    width: 60px;
-    height: 23px;
-    align-items:center;
-    justify-content:center;
-    padding: 0px;
-    color: var(--white-color);
-    font-weight: bold;
+const DivStatus = styled(Div0)<DivStatusProps>`
+  margin-left: auto;
+  border-radius: 1.25rem;
+  width: 3.75rem;
+  height: 1.438rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-weight: bold;
+  color: var(--white-color);
+  background-color: ${props => {
+    switch (props.value) {
+      case 1:
+        return '#79AFFF';
+      case 2:
+        return '#0D6EFD';
+      case 3:
+        return '#DC3545';
+      default:
+        return '';
+    }
+  }};
 `;
 
-const Divsky = styled(Divst0)`
-    background-color: #79AFFF;
-    position: relative;
-`;
 
-const Divbl = styled(Divst0)`
-    background-color: #0D6EFD;
-`;
-
-const Divred = styled(Divst0)`
-    background-color: #DC3545;
-`;
-
-const DivDelay = styled(Divst0)`
+const DivDelay = styled(DivStatus)`
     background-color: var(--white-color);
     border-width: 1px;
     border-style: dashed;
@@ -108,7 +111,7 @@ const Divhid = styled(Div0)`
 
 const Div1 = styled.div`
     display:flex;
-    padding: 0px 0px 0px 30px;
+    padding: 0 0 0 1.875rem;
 `;
 
 const Sp0 = styled.span`
@@ -118,7 +121,7 @@ const Sp0 = styled.span`
 
 const Sp1 = styled.span`
     font-size: var(--font-micro);
-    padding-left: 16px;
+    padding-left: 1rem;
 `;
 
 const Sp2 = styled.span`
@@ -128,7 +131,7 @@ const Sp2 = styled.span`
 `;
 
 const Spprofit0 = styled.span`
-    padding: 16px 20px 10px 0;
+    padding: 1rem 1.25rem 0.625rem 0;
     font-size: 16px;
     font-weight: bold;
 `;
@@ -148,35 +151,26 @@ const Spprofit3 = styled(Spprofit2)`
     color : #79AFFF;
 `;
 
-const Modal = styled.div`
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+const Spsc0 = styled(Spprofit0)`
+    color : #0D6EFD;
+`; 
 
-const ModalContent = styled.div`
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  position:relative;
-`;
+const Spsc1 = styled(Spsc0)`
+    margin-left: auto;
+`; 
 
-const CloseButton  = styled.span`
-    position: absolute;
-    color: #aaa;
-    top:0;
-    right:0;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-`;
+const Spsc2 = styled(Spprofit2)`
+    margin-left: auto;
+`; 
+
+const Spfail0 = styled(Spprofit0)`
+    color : #DC3545;
+    padding: 1rem 1.25rem 1.25rem 0;
+`; 
+
+const Spfail1 = styled(Spfail0)`
+    margin-left: auto;
+`; 
 
 const Bticon = styled.button`
     border: none;
@@ -191,11 +185,18 @@ const Bticonimg = styled.img`
 
 function Fulfillmentlist(){
 
-    const [showModal, setShowModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOpen = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
 
+    
+    
     return(
         <>
         <SelectInput name = "date">
@@ -234,23 +235,14 @@ function Fulfillmentlist(){
                 </Bticon>
             </Divwallet>
         </Sc1>
-        <Sc0 onClick={handleOpen}>
-        {showModal && (
-            <Modal>
-            <ModalContent>
-              <CloseButton onClick={handleClose}>
-                &times;
-              </CloseButton>
-              <p>모달 내용</p>
-            </ModalContent>
-          </Modal>
-              )}
+        <Sc0 onClick={handleOpenModal}>
             <Div0>
                 <Sp0>오토바이</Sp0>
-                <Divsky>
+                <Sp1>23.01.01</Sp1>
+                <DivStatus value={1}>
                     수행중
                     <DivDelay>지연</DivDelay>
-                </Divsky>
+                </DivStatus>
             </Div0>
             <Div1>
                 <Sp2>김포시 김포대로 926번길 46 </Sp2>
@@ -276,7 +268,7 @@ function Fulfillmentlist(){
             <Div0>
                 <Sp0>도보</Sp0>
                 <Sp1>23.01.01</Sp1>
-                <Divbl>완료</Divbl>
+                <DivStatus value={2}>완료</DivStatus>
             </Div0>
             <Div1>
                 <Sp2>김포시 김포대로 926번길 46 </Sp2>
@@ -290,19 +282,19 @@ function Fulfillmentlist(){
                 <Sp2>김포시 김포대로 926번길 46 </Sp2>
             </Div1>
             <Div1>
-                <Spprofit0>수익</Spprofit0>
-                <Spprofit1>8000원</Spprofit1>
+                <Spsc0>수익</Spsc0>
+                <Spsc1>8000원</Spsc1>
             </Div1>
             <Div1>
                 <Spprofit2>수락 시간 17:30</Spprofit2>
-                <Spprofit3>완료 시간 20:00</Spprofit3>
+                <Spsc2>완료 시간 20:00</Spsc2>
             </Div1>
         </Sc0>
         <Sc0>
             <Div0>
                 <Sp0>도보</Sp0>
                 <Sp1>23.01.01</Sp1>
-                <Divred>실패</Divred>
+                <DivStatus value={3}>실패</DivStatus>
             </Div0>
             <Div1>
                 <Sp2>김포시 김포대로 926번길 46 </Sp2>
@@ -316,15 +308,11 @@ function Fulfillmentlist(){
                 <Sp2>김포시 김포대로 926번길 46 </Sp2>
             </Div1>
             <Div1>
-                <Spprofit0>수익</Spprofit0>
-                <Spprofit1>8000원</Spprofit1>
-            </Div1>
-            <Div1>
-                <Spprofit2>수락 시간 17:30</Spprofit2>
-                <Spprofit3>배송 완료 20:00까지</Spprofit3>
+                <Spfail0>수익</Spfail0>
+                <Spfail1>8000원</Spfail1>
             </Div1>
         </Sc0>
-        <Divhid/>
+        <FulfillModal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
         </>
     );
 }

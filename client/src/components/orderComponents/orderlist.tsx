@@ -1,18 +1,19 @@
 import styled from "styled-components";
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import Orderlistmodal from "./orderlistmodal";
 
 const SelectInput = styled.select`
-  width: 96px;
-  height: 26px;
+  width: 6rem;
+  height: 1.625rem;
   font-size: 0.75rem;
-  border-radius: 8px;
-  border: 0px;
+  border-radius: 0.5rem;
+  border: 0;
   outline: #efefef;
   background-color: #D9d9d9;
   text-align: center;
   color: #000000;
-  margin: 10px;
+  margin: 0.625rem 0.625rem 0 0.625rem;
   font-weight: bold;
   font-size: var(--font-small);
 `;
@@ -20,28 +21,25 @@ const SelectInput = styled.select`
 const Sc0 = styled.section`
     display: flex;
     flex-direction: column;
-    margin: 0rem 0.563rem 0.563rem 0.563rem;
-    height: 134px;
+    margin: 0.563rem 0.563rem 0.563rem 0.563rem;
     border-radius: 0.313rem;
     border: 0rem;
     background-color: var(--white-color);
 `;
-
-
 const Div0 = styled.div`
     display: flex;
-    padding: 18px 12px 16px 30px;
+    padding:  1rem 0.75rem 1rem 1.875rem;
 `;
 
 const Divst0 = styled(Div0)`
     margin-left: auto;
     background-color: #9d9d9d;
-    border-radius: 20px;
-    width: 60px;
-    height: 23px;
+    border-radius: 1.25rem;
+    width: 3.75rem;
+    height: 1.438rem;
     align-items:center;
     justify-content:center;
-    padding: 0px;
+    padding: 0;
     color: var(--white-color);
     font-weight: bold;
 `;
@@ -65,12 +63,12 @@ const DivOrg = styled(Divst0)`
 
 const DivDelay = styled(Divst0)`
     background-color: var(--white-color);
-    border-width: 1px;
+    border-width: 0.063rem;
     border-style: dashed;
     border-color: #FF3030;
     color: #FF3030;
     position: absolute;
-    bottom: -30px;
+    bottom: -1.875rem;
 `;
 
 const Divhid = styled(Div0)`
@@ -79,7 +77,7 @@ const Divhid = styled(Div0)`
 
 const Div1 = styled.div`
     display:flex;
-    padding: 0px 0px 0px 30px;
+    padding: 0px 0px 0px 1.875rem;
 `;
 
 const Sp0 = styled.span`
@@ -89,7 +87,7 @@ const Sp0 = styled.span`
 
 const Sp1 = styled.span`
     font-size: var(--font-micro);
-    padding-left: 16px;
+    padding-left: 1rem;
 `;
 
 const Sp2 = styled.span`
@@ -99,45 +97,21 @@ const Sp2 = styled.span`
 
 const Sp3 = styled(Sp1)`
     font-weight: bold;
-    padding-left: 26px;
-`;
-
-const Modal = styled.div`
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const ModalContent = styled.div`
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  position:relative;
-`;
-
-const CloseButton  = styled.span`
-    position: absolute;
-    color: #aaa;
-    top:0;
-    right:0;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+    padding-left: 1.625rem;
+    margin-bottom: 1rem;
 `;
 
 function Orderlist(){
 
-    const [showModal, setShowModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleOpen = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
 
     return(
         <>
@@ -168,17 +142,7 @@ function Orderlist(){
             <option value="cancel">취소</option>
             <option value="Delay">지연</option>
         </SelectInput>
-        <Sc0 onClick={handleOpen}>
-        {showModal && (
-            <Modal>
-            <ModalContent>
-              <CloseButton onClick={handleClose}>
-                &times;
-              </CloseButton>
-              <p>모달 내용</p>
-            </ModalContent>
-          </Modal>
-              )}
+        <Sc0 onClick={handleOpenModal}>
             <Div0>
                 <Sp0>접수 중</Sp0>
                 <Sp1>23.01.01</Sp1>
@@ -276,6 +240,7 @@ function Orderlist(){
                 <Sp3>19,800원</Sp3>
             </Div1>
         </Sc0>
+        <Orderlistmodal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
         <Divhid/>
         </>
     );
