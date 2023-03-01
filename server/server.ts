@@ -45,6 +45,10 @@ app.get("/", (req: Request, res: Response) => {
     <button onclick="location.href='/createTable'">createTable</button>
   `);
 });
+app.post("/register", (req: Request, res: Response) => {
+  console.log(req.body);
+  res.send({ msg: "done" });
+});
 
 app.get("/conn", (req: Request, res: Response) => {
   console.log("done");
