@@ -74,7 +74,6 @@ const DivStatus = styled(Div0)<DivStatusProps>`
   margin-left: auto;
   border-radius: 1.25rem;
   width: 3.75rem;
-  height: 1.438rem;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -103,10 +102,6 @@ const DivDelay = styled(DivStatus)`
     color: #FF3030;
     position: absolute;
     bottom: -30px;
-`;
-
-const Divhid = styled(Div0)`
-  height: 3.875rem;
 `;
 
 const Div1 = styled.div`
@@ -180,7 +175,6 @@ const Bticon = styled.button`
 
 const Bticonimg = styled.img`
     width: 1.875rem;
-    height: 1.875rem;
 `;
 
 function Fulfillmentlist(){
@@ -195,8 +189,6 @@ function Fulfillmentlist(){
       setIsModalOpen(false);
     };
 
-    
-    
     return(
         <>
         <SelectInput name = "date">

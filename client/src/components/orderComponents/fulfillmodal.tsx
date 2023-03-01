@@ -94,7 +94,7 @@ const FulfillModal: React.FC<FulfillModalProps> = ({ isOpen, onRequestClose }) =
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 9999,
+    zIndex: 0,
   };
 
   const boxStyle: CSSProperties = {

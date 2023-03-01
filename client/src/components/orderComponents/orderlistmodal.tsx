@@ -103,7 +103,6 @@ const Orderlistmodal: React.FC<OrderlistmodalProps> = ({ isOpen, onRequestClose 
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 9999,
   };
 
   const boxStyle: CSSProperties = {

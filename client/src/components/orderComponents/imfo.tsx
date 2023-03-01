@@ -84,7 +84,7 @@ const Sc3 = styled.section`
 const Div0 = styled.div`
     display: flex;
     align-items: center;
-    font-size: var(--font-small);
+    font-size: var(--font-md1);
     font-weight: bold;
     margin-left: 0.75rem;
 `;

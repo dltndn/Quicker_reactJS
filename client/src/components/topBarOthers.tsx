@@ -11,6 +11,7 @@ const Tdiv = styled.div`
     background-color: var(--white-color);
     color: var(--black-color);
     height: 3.875rem;
+    z-index: 1;
 `;
 
 const Divhid = styled.div`
