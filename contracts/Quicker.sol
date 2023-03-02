@@ -2,6 +2,7 @@
 // pragma solidity ^0.8.9;
 
 // import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 // // @custom:security-contact james98099@gmail.com
 // // @dev:This contract was created for use in graduation project
@@ -10,13 +11,6 @@
 // /**
 //  * @dev declare Qkrw(ERC20) contract
 //  */
-// interface Qkrw {
-//     function transferFrom(
-//         address sender,
-//         address recipient,
-//         uint256 amount
-//     ) external returns (bool);
-// }
 
 // contract Quicker is Ownable {
 //     // unit is %
@@ -33,9 +27,10 @@
 //     /**
 //      * @dev The contract client or quicker is calling
 //      */
-//     address clientContractAddress;
-//     address quickerContractAddress;
-//     address public qkrwToken;
+//     address feeCollection;
+//     address insuranceFeeCollection;
+//     ERC20 public qkrwToken;
+//     // Qkrw public token;
 
 //     /**
 //      * @dev indicating the current status of order
@@ -50,11 +45,16 @@
 
 //     // structure of order
 //     struct Order {
+//         uint256 orderNumber;
 //         address client;
 //         address quicker;
 //         State state;
 //         uint256 orderPrice;
 //         uint256 securityDeposit;
+//         uint256 limitedTime;
+//         uint256 createdTime;
+//         uint256 matchedTime;
+//         uint256 completedTime;
 //     }
 
 //     // array for order
@@ -65,6 +65,11 @@
 //     // OrderList number => Quicker address
 //     mapping(uint256 => address) public quickerOfOrder;
 
+//     // Client address => OrderList number list
+//     mapping(address => uint256[]) public clientOrderList;
+//     // Quicker address => OrderList number list
+//     mapping(address => uint256[]) public quickerOrderList;
+
 //     /**
 //      * @dev Initializes the contract setting the commission rate
 //      */
@@ -72,32 +77,63 @@
 //         uint16 _platFormFee,
 //         uint16 _insuranceFee,
 //         uint16 _securityDeposit,
-//         address _QkrwToken
+//         address _QkrwToken,
+//         address _Platform,
+//         address _Insurance
 //     ) Ownable() {
 //         commissionRate = Commission(
 //             _platFormFee,
 //             _insuranceFee,
 //             _securityDeposit
 //         );
-//         qkrwToken = _QkrwToken;
+//         qkrwToken = ERC20(_QkrwToken);
+//         feeCollection = _Platform;
+//         insuranceFeeCollection = _Insurance;
 //     }
 
-//     modifier isClientContract() {
-//         require(msg.sender == clientContractAddress, "not clientContract");
+//     modifier isClientOfOrder(uint256 _orderNum, address _client) {
+//         require(
+//             clientOfOrder[_orderNum] == _client,
+//             "not client of this order"
+//         );
 //         _;
 //     }
 
-//     modifier isQuickerContract() {
-//         require(msg.sender == quickerContractAddress, "not quickerContract");
+//     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
+//         require(
+//             clientOfOrder[_orderNum] == _quicker,
+//             "not quicker of this order"
+//         );
 //         _;
 //     }
 
-//     function setClientContract(address _newContract) public onlyOwner {
-//         clientContractAddress = _newContract;
+//     function setFeeCollectionAddress(address _newAddress) public onlyOwner {
+//         feeCollection = _newAddress;
 //     }
 
-//     function setQuickerContract(address _newContract) public onlyOwner {
-//         quickerContractAddress = _newContract;
+//     function setInsuranceFeeCollection(address _newAddress) public onlyOwner {
+//         insuranceFeeCollection = _newAddress;
+//     }
+
+//     function getTokenDecimals() internal view returns (uint8) {
+//         ERC20 token = qkrwToken;
+//         return token.decimals();
+//     }
+
+//     function getCurrentTime() internal view returns (uint256) {
+//         return block.timestamp;
+//     }
+
+//     function getMulTokenAmount(uint256 _amount)
+//         internal
+//         view
+//         returns (uint256)
+//     {
+//         return _amount * (10**getTokenDecimals());
+//     }
+
+//     function getOrder(uint256 _orderNum) public view returns (Order memory) {
+//         return orderList[_orderNum];
 //     }
 
 //     function setCommissionRate(
@@ -112,50 +148,115 @@
 //         );
 //     }
 
-//     function transferTokensToOtherContract(
-//         address otherContractAddress,
-//         uint256 amount
-//     ) public {
-//         Qkrw token = Qkrw(qkrwToken);
-//         require(
-//             token.transferFrom(msg.sender, otherContractAddress, amount),
-//             "Token transfer failed"
-//         );
+//     function transferTokensToOtherAddress(address _to, uint256 _amount)
+//         internal
+//     {
+//         ERC20 token = qkrwToken;
+//         token.transfer(_to, _amount);
 //     }
 
-//     // test
-//     function createOrder(address _clientWalletAddress, uint256 _orderPrice)
-//         public
+//     function recieveTokensFromOtherAddress(address _from, uint256 _amount)
+//         internal
 //     {
+//         ERC20 token = qkrwToken;
+//         token.transferFrom(_from, address(this), _amount);
+//     }
+
+//     /**
+//      * @dev To get orderlist that is matched with state
+//      * @return Order array
+//      */
+//     function getOrdersForState(State _state) public view returns (Order[] memory) {
+//         uint256 numGetterOrders = 0;
+
+//         for (uint256 i = 0; i < orderList.length; i++) {
+//             if (orderList[i].state == _state) {
+//                 numGetterOrders++;
+//             }
+//         }
+
+//         Order[] memory getterOrders = new Order[](numGetterOrders);
+//         uint256 j = 0;
+//         for (uint256 i = 0; i < orderList.length; i++) {
+//             if (orderList[i].state == _state) {
+//                 getterOrders[j] = orderList[i];
+//                 j++;
+//             }
+//         }
+
+//         return getterOrders;
+//     }
+
+//     /**
+//      * @dev 의뢰인이 새로운 Order를 생성하며 컨트랙에 QKRW 토큰을 입금한다
+//      * @param _orderPrice 의뢰인의 결제 금액
+//      * @param _limitedTime 배송 기한의 Timestamp값(초단위)
+//      */
+//     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
 //         uint256 orderNum = orderList.length;
-//         clientOfOrder[orderNum] = _clientWalletAddress;
+//         uint256 amount = _orderPrice * (10**getTokenDecimals());
+//         clientOfOrder[orderNum] = msg.sender;
 //         Order memory newOrder = Order(
-//             _clientWalletAddress,
+//             orderNum,
+//             msg.sender,
 //             address(0),
 //             State.created,
 //             _orderPrice,
+//             0,
+//             _limitedTime,
+//             getCurrentTime(),
+//             0,
 //             0
 //         );
+//         recieveTokensFromOtherAddress(msg.sender, amount);
 //         orderList.push(newOrder);
+//         clientOrderList[msg.sender].push(orderNum);
 //     }
 
-//     // test
-//     function acceptOrder(
-//         address _quickerWalletAddress,
-//         uint256 _securityDeposit,
-//         uint256 _orderNum
-//     ) public {
+//     function cancelOrder(uint256 _orderNum)
+//         public
+//         isClientOfOrder(_orderNum, msg.sender)
+//     {
 //         require(
 //             orderList[_orderNum].state == State.created,
-//             "matched with other quicker..."
+//             "Matched with another quicker..."
 //         );
-//         orderList[_orderNum].quicker = _quickerWalletAddress;
-//         orderList[_orderNum].securityDeposit = _securityDeposit;
-//         orderList[_orderNum].state = State.matched;
-//         quickerOfOrder[_orderNum] = _quickerWalletAddress;
+//         orderList[_orderNum].state = State.canceled;
+//         uint256 refundAmount = getMulTokenAmount(
+//             orderList[_orderNum].orderPrice
+//         );
+//         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
+//     function acceptOrder(uint256 _securityDeposit, uint256 _orderNum) public {
+//         require(
+//             orderList[_orderNum].state == State.created,
+//             "Already matched with another quicker..."
+//         );
+//         orderList[_orderNum].quicker = msg.sender;
+//         orderList[_orderNum].securityDeposit = _securityDeposit;
+//         orderList[_orderNum].state = State.matched;
+//         orderList[_orderNum].matchedTime = getCurrentTime();
+//         quickerOfOrder[_orderNum] = msg.sender;
+//         quickerOrderList[msg.sender].push(_orderNum);
+//         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
+//         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
+//     }
+
+//     function completeOrder(uint256 _orderNum)
+//         public
+//         isClientOfOrder(_orderNum, msg.sender)
+//     {
+//         require(
+//             orderList[_orderNum].state == State.matched,
+//             "You can not complete before matched"
+//         );
+//         orderList[_orderNum].state = State.completed;
+//     }
+
+//     // quicker 정산 함수
+//     // 출금: state == completed || (limitedTime + 12 hours < currentTime && state == matched)
+
 //     // todo list
-//     // - 생성자에 client, quicker contract 선언하기
-//     // - test용 함수 test 후 modifier 붙이기
+//     // - test용 함수 test 완료 후 modifier 붙이기
 // }
