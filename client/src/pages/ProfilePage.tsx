@@ -1,9 +1,8 @@
-import TopBarOthers from "../components/topBarOthers";
-import Imfo from "../components/orderComponents/imfo";
+import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
-import styled, { createGlobalStyle } from 'styled-components';
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import styled, { createGlobalStyle } from 'styled-components';
+import Imfo from "../components/orderComponents/imfo";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -12,16 +11,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function ImformationPage() {
+function ProfilePage() {
   const navigate = useNavigate()
-  return (
+    return (
       <>
         <GlobalStyle />
         <TopBarOthers title="프로필" redirectLogic={function (){navigate("/")} }></TopBarOthers>
         <Imfo/>
         <BottomBar/>
       </>
-  );
-}
+    );
+  }
   
-  export default ImformationPage;
+  export default ProfilePage;
