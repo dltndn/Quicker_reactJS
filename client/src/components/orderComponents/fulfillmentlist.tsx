@@ -3,6 +3,8 @@ import { useState, DetailedHTMLProps, HTMLAttributes, useCallback } from 'react'
 import { useNavigate } from "react-router-dom";
 import { BsFillCircleFill } from "react-icons/bs";
 import FulfillModal from "./fulfillmodal";
+import { useAccount } from "wagmi";
+import GetQkrwBalance from "../getQkrwBalance";
 
 
 type DivStatusProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
@@ -180,6 +182,7 @@ const Bticonimg = styled.img`
 function Fulfillmentlist(){
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { address, isConnected } = useAccount();
 
     const handleOpenModal = () => {
       setIsModalOpen(true);
@@ -221,7 +224,7 @@ function Fulfillmentlist(){
         <Sc1>
             <Divwallet>
                 <Sp0>지갑 잔액</Sp0>
-                <Spwallet>00,000</Spwallet>
+                <Spwallet>{isConnected && address && <GetQkrwBalance address={address}/>}</Spwallet>
                 <Bticon>
                     <Bticonimg src={money} alt="" />
                 </Bticon>

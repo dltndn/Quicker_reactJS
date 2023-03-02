@@ -55,9 +55,9 @@ function BottomBar() {
     setCurrentPage('/chatting');
     navigate('/chatting');
   };
-  const handleGoImformationPage = () => {
-    setCurrentPage('/imformation');
-    navigate('/imformation');
+  const handleGoProfilePage = () => {
+    setCurrentPage('/profile');
+    navigate('/profile');
   };
 
   return (
@@ -88,9 +88,9 @@ function BottomBar() {
                 </Bt0>
             </li>
             <li>
-                <Bt0 onClick={handleGoImformationPage}>
+                <Bt0 onClick={handleGoProfilePage}>
                     <Sp0>
-                        <Iconimg src={currentPage === '/imformation' ? black4 : white4} alt="icon" />
+                        <Iconimg src={currentPage === '/profile' ? black4 : white4} alt="icon" />
                     </Sp0>
                     <span>내정보</span>
                 </Bt0>

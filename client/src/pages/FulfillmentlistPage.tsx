@@ -17,7 +17,7 @@ function FulfillmentlistPage() {
     return (
       <>
       <GlobalStyle/>
-      <TopBarOthers title="수행 내역" redirectLogic={function (){navigate("/")} }></TopBarOthers>
+      <TopBarOthers title="수행 내역" redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
       <Fulfillmentlist></Fulfillmentlist>
       <BottomBar></BottomBar>
       </>
