@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import {BsAt} from "react-icons/bs";
+import { useAccount } from 'wagmi';
+
 const Maintx = styled.div`
   background-color: #efefef;
   min-height: 21.25rem;
@@ -105,6 +107,8 @@ function Join_input() {
   const [name, setName] = useState('');
   const [contact1, setContact1] = useState('');
   const [contact2, setContact2] = useState('');
+  const { address } = useAccount();
+
   return(
     <>
       <section>
@@ -168,7 +172,7 @@ function Join_input() {
       <Sc0>
         <Wal>
           <Btwal>
-            주소 내용
+            {address}
           </Btwal>
         </Wal>
       </Sc0>
