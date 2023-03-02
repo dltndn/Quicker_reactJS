@@ -22,6 +22,7 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
     args: [orderNum],
     onSuccess(data) {
       setObjData(data);
+      console.log(data)
     },
   });
 
