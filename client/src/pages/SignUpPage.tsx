@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useRef, ReactDOM } from 'react';
 import Join_ani from "../components/join_ani";
+=======
+>>>>>>> 2d57e6927eb693b987bd534e18a0cb4d832df661
 import Join_input from "../components/join_input";
 import ConfirmBtn from "../components/confirmBtn";
 import TopBarOthers from "../components/topBarOthers";
@@ -8,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
   const navigate = useNavigate()
+<<<<<<< HEAD
 
   const name = useRef<HTMLInputElement>(null);
   const birthday = useRef<HTMLInputElement>(null);
@@ -40,6 +44,18 @@ function SignUpPage() {
       console.error("Error:", error);
     });
     navigate("/")
+=======
+    return (
+      <div className="App">
+        <TopBarOthers title="회원가입" redirectLogic={function (){
+          navigate("/")
+        } }/>
+        <Join_input></Join_input>
+        <ConfirmBtn content="확인" confirmLogic={()=> console.log('회원가입로직')}/>
+        <BottomBar></BottomBar>
+      </div>
+    );
+>>>>>>> 2d57e6927eb693b987bd534e18a0cb4d832df661
   }
 
   return (

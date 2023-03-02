@@ -1,12 +1,38 @@
+import { BsChevronRight } from "react-icons/bs";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 import { Web3Button } from "@web3modal/react";
-import { Icon } from "semantic-ui-react";
-import styles from "../../css/main_phrase.module.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+
+const Div0 = styled.div`
+  padding-top: var(--padding);
+  padding-bottom: var(--padding);
+`;
+const Sp0 = styled.span`
+  margin-top: var(--padding);
+  padding: var(--padding);
+  font-size: var(--font-md);
+  font-weight: bold;
+`;
+const Sp1 = styled.span`
+  padding-left: var(--padding);
+  padding-bottom: var(--padding);
+  font-size: var(--font-md);
+  font-weight: bold;
+`;
+const Bt0 = styled.button`
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: var(--white-color);
+  font-size: var(--font-small);
+  margin-left: 0.313rem;
+`;
 
 type isConnectToWallet = {
   isConnect: boolean;
 };
+
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
   const [isMember, setIsMember] = useState<boolean>(false);
@@ -16,63 +42,39 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
     <>
       {isConnect ? (
         isMember ? (
-          <div>
-            <section>
-              <div className={styles.phrase_div}>
-                <span className={styles.phrase_1}>
-                  {userName}님!
-                  <br />
-                </span>
-                <span className={styles.phrase_2}>
-                  현재 배송원이 물건을 배송 중입니다.
-                </span>
-                <button
-                  className={styles.button}
-                  onClick={() => {
+          <section>
+            <Div0>
+              <Sp0>{userName}님!<br/></Sp0>
+              <Sp1>현재 배송원이 물건을 배송중입니다.</Sp1>
+              <Bt0 onClick={() => {
                     navigate("/");
-                  }}
-                >
-                  <Icon link name="angle right" />
-                </button>
-              </div>
-            </section>
-          </div>
+                  }}>
+                    <BsChevronRight />
+                  </Bt0>
+            </Div0>
+          </section>
         ) : (
-          <div>
-            <section>
-              <div className={styles.phrase_div}>
-                <span className={styles.phrase_1}>
-                  안녕하세요!
-                  <br />
-                </span>
-                <span className={styles.phrase_2}>
-                  회원가입을 진행해주세요.
-                </span>
-                <button
-                  className={styles.button}
-                  onClick={() => {
+          <section>
+            <Div0>
+              <Sp0>안녕하세요!<br/></Sp0>
+              <Sp1>회원가입을 진행해주세요.</Sp1>
+              <Bt0 onClick={() => {
                     navigate("/signUp");
                   }}
                 >
-                  <Icon link name="angle right" />
-                </button>
-              </div>
-            </section>
-          </div>
+                  <BsChevronRight />
+                </Bt0>
+            </Div0>
+          </section>
         )
       ) : (
-        <div>
-          <section>
-            <div className={styles.phrase_div}>
-              <span className={styles.phrase_1}>
-                안녕하세요!
-                <br />
-              </span>
-              <span className={styles.phrase_2}>지갑을 연결해주세요.</span>
+        <section>
+        <Div0>
+          <Sp0>안녕하세요!<br/></Sp0>
+          <Sp1>지갑을 연결해주세요.</Sp1>
               <Web3Button icon="hide" label="지갑연결" balance="hide" />
-            </div>
-          </section>
-        </div>
+        </Div0>
+        </section>
       )}
     </>
   );

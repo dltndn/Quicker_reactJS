@@ -14,12 +14,16 @@ export default function GetQkrwBalance({ address }: AddressProps) {
   const [krwBalance, setKrwBalance] = useState("0");
   const [objData, setObjData] = useState<any>();
 
+  const changeBalanceToForm = (balance:BigInt):string => {
+    let result = parseInt(balance.toString().slice(0, -18))
+    return result.toLocaleString()
+  }
+
   const { data } = useContractRead({
     address: Qkrw_address,
     abi: Qkrw_abi,
     functionName: "balanceOf",
     args: [address],
-    overrides: { from: address },
     onSuccess(data) {
       setObjData(data);
     },
@@ -28,7 +32,7 @@ export default function GetQkrwBalance({ address }: AddressProps) {
   useEffect(() => {
     objData === undefined
       ? setKrwBalance("0")
-      : setKrwBalance(BigInt(objData?._hex).toString().slice(0, -18));
+      : setKrwBalance(changeBalanceToForm(BigInt(objData?._hex)));
   }, [objData]);
 
   return (

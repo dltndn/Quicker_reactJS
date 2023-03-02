@@ -1,5 +1,3 @@
-import { timeStamp } from "console";
-import { type } from "os";
 import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
@@ -22,23 +20,17 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
     args: [orderNum],
     onSuccess(data) {
       setObjData(data);
+      console.log(data)
+    },
+    onError(error) {
+      console.log('Error', error)
     },
   });
-
-  useEffect(() => {
-    console.log(objData);
-  }, [objData]);
 
   return (
     <>
       {isLoading ? <div>loading...</div> : <div></div>}
-      {isError ? (
-        <div>wrong number</div>
-      ) : (
-        <div>
-          Result: <TemplateOrder data={objData} />
-        </div>
-      )}
+      {objData === undefined ? (<div>데이터 없음</div>):(<div>Result: <TemplateOrder data={objData} /></div>)}
     </>
   );
 }
