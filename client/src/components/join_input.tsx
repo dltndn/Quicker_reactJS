@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState, useRef, ReactDOM } from 'react';
+import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
-import {BsAt} from "react-icons/bs";
+import { BsAt } from "react-icons/bs";
 import { useAccount } from 'wagmi';
 
 const Maintx = styled.div`
@@ -103,13 +104,13 @@ const Btwal = styled.button`
     text-align: left;
     color: #a6a6a6;
 `;
-function Join_input() {
+function Join_input({ refs }: props) {
   const [name, setName] = useState('');
   const [contact1, setContact1] = useState('');
   const [contact2, setContact2] = useState('');
   const { address } = useAccount();
 
-  return(
+  return (
     <>
       <section>
         <Maintx>
@@ -122,7 +123,7 @@ function Join_input() {
           </Sp>
         </Divtx>
         <Div0>
-          <Ip type="text" placeholder="성함을 입력해주세요" ></Ip>
+          <Ip ref={refs.name} type="text" placeholder="성함을 입력해주세요" ></Ip>
         </Div0>
       </Sc0>
       <Sc0>
@@ -132,7 +133,7 @@ function Join_input() {
           </Sp>
         </Divtx>
         <Div0>
-          <Ip type="date"></Ip>
+          <Ip ref={refs.birthday} type="date"></Ip>
         </Div0>
       </Sc0>
       <Sc0>
@@ -140,7 +141,7 @@ function Join_input() {
           <Sp>이메일</Sp>
         </Divtx>
         <Em>
-          <Ip type="text" placeholder="ex0"></Ip>
+          <Ip ref={refs.email} type="text" placeholder="ex0"></Ip>
         </Em>
         <Ic><BsAt></BsAt></Ic>
         <Em>
@@ -152,13 +153,13 @@ function Join_input() {
           <Sp>연락처</Sp>
         </Divtx>
         <Div1>
-          <Ip type="text" placeholder="000"/>
+          <Ip ref={refs.prePhoneNumber} type="text" placeholder="000" />
         </Div1>
         <Div1>
-          <Ip type="text" placeholder="0000"/>
+          <Ip ref={refs.middlePhoneNumber} type="text" placeholder="0000" />
         </Div1>
         <Div1>
-          <Ip type="text" placeholder="0000"/>
+          <Ip ref={refs.lastPhoneNumber} type="text" placeholder="0000" />
         </Div1>
         <Div1>
           <Bt>인증</Bt>
@@ -176,7 +177,21 @@ function Join_input() {
           </Btwal>
         </Wal>
       </Sc0>
-      </>
-    );
+    </>
+  );
 }
+
 export default Join_input;
+
+interface refs {
+  name: React.RefObject<HTMLInputElement>,
+  birthday: React.RefObject<HTMLInputElement>
+  email: React.RefObject<HTMLInputElement>
+  prePhoneNumber: React.RefObject<HTMLInputElement>
+  middlePhoneNumber: React.RefObject<HTMLInputElement>
+  lastPhoneNumber: React.RefObject<HTMLInputElement>
+}
+
+interface props {
+  refs: refs
+}

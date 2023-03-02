@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { start } from "repl";
 
 // @ts-ignore
@@ -61,7 +62,7 @@ const Tmap = {
                 trafficType3Color: "#8E8111",  //정체
                 trafficType4Color: "#FF0000"  //정체
             };
-    
+            
             jsonObject.drawRouteByTraffic(map, jsonForm, trafficColors)
         },
     
@@ -70,7 +71,7 @@ const Tmap = {
         },
     
         onError = () => {
-            alert("error") 
+            console.error("error")   
         }
 
         let params = {
