@@ -1,21 +1,19 @@
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { QKRW_CONTRACT_ABI, QKRW_ADDRESS } from "../contractInformation";
+import { useAccount } from "wagmi";
 
 //Qkrw token contract information - polygon mumbai network
 const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
 
-type AddressProps = {
-    address: `0x${string}`;
-  };
 
-export default function IncreaseAllowance({ address }: AddressProps) {
+export default function IncreaseAllowance() {
+  const { address } = useAccount();
     const { config } = usePrepareContractWrite({
         address: Qkrw_address,
         abi: Qkrw_abi,
         functionName: "increaseAllowance",
         args: [Qkrw_address, "100000000000000000000000000"],
-        overrides: { from: address },
       });
 
       const { data, isLoading, isSuccess, write } = useContractWrite({
