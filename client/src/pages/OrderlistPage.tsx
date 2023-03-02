@@ -17,7 +17,7 @@ function OrderlistPage() {
     return (
       <>
       <GlobalStyle/>
-      <TopBarOthers title="주문 내역" redirectLogic={function (){navigate("/")} }></TopBarOthers>
+      <TopBarOthers title="주문 내역" redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
       <Orderlist></Orderlist>
       <BottomBar></BottomBar>
       </>
