@@ -24,7 +24,6 @@ export default function GetQkrwBalance({ address }: AddressProps) {
     abi: Qkrw_abi,
     functionName: "balanceOf",
     args: [address],
-    overrides: { from: address },
     onSuccess(data) {
       setObjData(data);
     },
