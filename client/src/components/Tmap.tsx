@@ -65,7 +65,7 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
                 }}
             />
             {/* <div>{JSON.stringify(mapDIV)}</div> */}
-            <button onClick={onClick}>check</button>
+            {/* <button onClick={onClick}>check</button> */}
         </div>
     );
 }
