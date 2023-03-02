@@ -17,12 +17,15 @@ function SignUpPage() {
  
   const onClick = () => {
     let registerData = {
-      name: name.current!.value,
-      birthday: birthday.current!.value,
-      email: email.current!.value,
-      prePhoneNumber: prePhoneNumber.current!.value,
-      middlePhoneNumber: middlePhoneNumber.current!.value,
-      lastPhoneNumber: lastPhoneNumber.current!.value
+      User :{
+        wallet_adress : "not ready",
+        name: name.current!.value,
+        email: email.current!.value,
+        contact: prePhoneNumber.current!.value + middlePhoneNumber.current!.value + lastPhoneNumber.current!.value
+      },
+      Birthday :{
+        birthday: birthday.current!.value,
+      }
     }
     fetch("http://localhost:9000/register", {
       method: "POST", // or 'PUT'

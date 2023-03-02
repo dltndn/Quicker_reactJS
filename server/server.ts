@@ -1,6 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import connector from "./DataBaseConnector";
 import sequelize from "./sequelizeConnector";
+import { initModels, User } from "./models/init-models";
+
+initModels(sequelize);
 
 const cors = require("cors");
 const app: Application = express();
@@ -18,8 +21,11 @@ app.get("/", (req: Request, res: Response) => {
     <button onclick="location.href='/createTable'">createTable</button>
   `);
 });
-app.post("/register", (req: Request, res: Response) => {
-  console.log(req.body);
+app.post("/register", async (req: Request, res: Response) => {
+  const userInstance = req.body.User
+  // console.log(userInstance)
+  await User.create(userInstance);
+
   res.send({ msg: "done" });
 });
 
