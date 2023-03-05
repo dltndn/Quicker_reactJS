@@ -13,7 +13,7 @@
 //  */
 
 // contract Quicker is Ownable {
-//     // unit is %
+//     // unit is % / 10 ex) 10 = 1%, 15 = 1.5%
 //     /**
 //      * @dev indicating the commission from order price
 //      */
@@ -101,7 +101,7 @@
 
 //     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
 //         require(
-//             clientOfOrder[_orderNum] == _quicker,
+//             quickerOfOrder[_orderNum] == _quicker,
 //             "not quicker of this order"
 //         );
 //         _;
@@ -122,6 +122,10 @@
 
 //     function getCurrentTime() internal view returns (uint256) {
 //         return block.timestamp;
+//     }
+
+//     function calculateFee(uint256 _orderPrice, uint16 _feeRate) internal pure returns (uint256){
+//         return _orderPrice * (_feeRate / 1000);
 //     }
 
 //     function getMulTokenAmount(uint256 _amount)
@@ -213,6 +217,11 @@
 //         clientOrderList[msg.sender].push(orderNum);
 //     }
 
+//     /**
+//      * @dev 의뢰인이 Order를 취소하는 함수
+//      *      배송원과 매칭시 취소 불가
+//      * @param _orderNum Order number
+//      */
 //     function cancelOrder(uint256 _orderNum)
 //         public
 //         isClientOfOrder(_orderNum, msg.sender)
@@ -228,15 +237,17 @@
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
-//     function acceptOrder(uint256 _securityDeposit, uint256 _orderNum) public {
+// function acceptOrder(uint256 _orderNum) public {
+//         Order memory order = orderList[_orderNum];
 //         require(
-//             orderList[_orderNum].state == State.created,
+//             order.state == State.created,
 //             "Already matched with another quicker..."
 //         );
-//         orderList[_orderNum].quicker = msg.sender;
-//         orderList[_orderNum].securityDeposit = _securityDeposit;
-//         orderList[_orderNum].state = State.matched;
-//         orderList[_orderNum].matchedTime = getCurrentTime();
+//         uint256 _securityDeposit = calculateFee(order.orderPrice, commissionRate.securityDepositRate);
+//         order.quicker = msg.sender;
+//         order.securityDeposit = _securityDeposit;
+//         order.state = State.matched;
+//         order.matchedTime = getCurrentTime();
 //         quickerOfOrder[_orderNum] = msg.sender;
 //         quickerOrderList[msg.sender].push(_orderNum);
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
@@ -255,7 +266,16 @@
 //     }
 
 //     // quicker 정산 함수
-//     // 출금: state == completed || (limitedTime + 12 hours < currentTime && state == matched)
+//     function withdrawFromOrder(uint256 _orderNum) public isQuickerOfOrder(_orderNum, msg.sender) {
+//         Order memory order = orderList[_orderNum];
+//         require(order.state == State.completed || (order.limitedTime + 12 hours < getCurrentTime() && order.state == State.matched), "You can't withdraw deposit now");
+//         uint256 platformFee = calculateFee(order.orderPrice, commissionRate.platformFeeRate);
+//         uint256 insuranceFee = calculateFee(order.orderPrice, commissionRate.insuranceFeeRate);
+//         uint256 toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+//         transferTokensToOtherAddress(feeCollection, platformFee);
+//         transferTokensToOtherAddress(insuranceFeeCollection, insuranceFee);
+//         transferTokensToOtherAddress(msg.sender, toQuickerAmount);
+//     }
 
 //     // todo list
 //     // - test용 함수 test 완료 후 modifier 붙이기
