@@ -66,9 +66,9 @@
 //     mapping(uint256 => address) public quickerOfOrder;
 
 //     // Client address => OrderList number list
-//     mapping(address => uint256[]) public clientOrderList;
+//     mapping(address => uint256[]) internal clientOrderList;
 //     // Quicker address => OrderList number list
-//     mapping(address => uint256[]) public quickerOrderList;
+//     mapping(address => uint256[]) internal quickerOrderList;
 
 //     /**
 //      * @dev Initializes the contract setting the commission rate
@@ -144,6 +144,14 @@
 //         return orderList[_orderNum];
 //     }
 
+//     function getClientOrderList(address _client) public view returns (uint256[] memory) {
+//         return clientOrderList[_client];
+//     }
+
+//     function getQuickerOrderList(address _quicker) public view returns (uint256[] memory) {
+//         return quickerOrderList[_quicker];
+//     }
+
 //     function setCommissionRate(
 //         uint16 _platFormFee,
 //         uint16 _insuranceFee,
@@ -207,8 +215,9 @@
 //     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
 //         require(
 //             _limitedTime >= getCurrentTime(),
-//             "Limited time must latest than current time!"
+//             "The deadline must later than the current time!"
 //         );
+//         require(_orderPrice > 0, "Order price must bigger than 0!");
 //         uint256 orderNum = orderList.length;
 //         uint256 amount = getMulTokenAmount(_orderPrice);
 //         clientOfOrder[orderNum] = msg.sender;
