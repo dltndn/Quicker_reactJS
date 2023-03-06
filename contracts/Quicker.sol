@@ -27,8 +27,8 @@
 //     /**
 //      * @dev The contract client or quicker is calling
 //      */
-//     address feeCollection;
-//     address insuranceFeeCollection;
+//     address feeCollector;
+//     address insuranceFeeCollector;
 //     ERC20 public qkrwToken;
 //     // Qkrw public token;
 
@@ -87,8 +87,8 @@
 //             _securityDeposit
 //         );
 //         qkrwToken = ERC20(_QkrwToken);
-//         feeCollection = _Platform;
-//         insuranceFeeCollection = _Insurance;
+//         feeCollector = _Platform;
+//         insuranceFeeCollector = _Insurance;
 //     }
 
 //     modifier isClientOfOrder(uint256 _orderNum, address _client) {
@@ -108,11 +108,11 @@
 //     }
 
 //     function setFeeCollectionAddress(address _newAddress) public onlyOwner {
-//         feeCollection = _newAddress;
+//         feeCollector = _newAddress;
 //     }
 
 //     function setInsuranceFeeCollection(address _newAddress) public onlyOwner {
-//         insuranceFeeCollection = _newAddress;
+//         insuranceFeeCollector = _newAddress;
 //     }
 
 //     function getTokenDecimals() internal view returns (uint8) {
@@ -124,8 +124,12 @@
 //         return block.timestamp;
 //     }
 
-//     function calculateFee(uint256 _orderPrice, uint16 _feeRate) internal pure returns (uint256){
-//         return _orderPrice * (_feeRate / 1000);
+//     function calculateFee(uint256 _orderPrice, uint16 _feeRate)
+//         internal
+//         pure
+//         returns (uint256)
+//     {
+//         return (_orderPrice * uint256(_feeRate)) / 1000;
 //     }
 
 //     function getMulTokenAmount(uint256 _amount)
@@ -170,7 +174,11 @@
 //      * @dev To get orderlist that is matched with state
 //      * @return Order array
 //      */
-//     function getOrdersForState(State _state) public view returns (Order[] memory) {
+//     function getOrdersForState(State _state)
+//         public
+//         view
+//         returns (Order[] memory)
+//     {
 //         uint256 numGetterOrders = 0;
 
 //         for (uint256 i = 0; i < orderList.length; i++) {
@@ -197,8 +205,12 @@
 //      * @param _limitedTime 배송 기한의 Timestamp값(초단위)
 //      */
 //     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
+//         require(
+//             _limitedTime >= getCurrentTime(),
+//             "Limited time must latest than current time!"
+//         );
 //         uint256 orderNum = orderList.length;
-//         uint256 amount = _orderPrice * (10**getTokenDecimals());
+//         uint256 amount = getMulTokenAmount(_orderPrice);
 //         clientOfOrder[orderNum] = msg.sender;
 //         Order memory newOrder = Order(
 //             orderNum,
@@ -237,13 +249,16 @@
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
-// function acceptOrder(uint256 _orderNum) public {
-//         Order memory order = orderList[_orderNum];
+//     function acceptOrder(uint256 _orderNum) public {
+//         Order storage order = orderList[_orderNum];
 //         require(
 //             order.state == State.created,
 //             "Already matched with another quicker..."
 //         );
-//         uint256 _securityDeposit = calculateFee(order.orderPrice, commissionRate.securityDepositRate);
+//         uint256 _securityDeposit = calculateFee(
+//             order.orderPrice,
+//             commissionRate.securityDepositRate
+//         );
 //         order.quicker = msg.sender;
 //         order.securityDeposit = _securityDeposit;
 //         order.state = State.matched;
@@ -266,15 +281,42 @@
 //     }
 
 //     // quicker 정산 함수
-//     function withdrawFromOrder(uint256 _orderNum) public isQuickerOfOrder(_orderNum, msg.sender) {
-//         Order memory order = orderList[_orderNum];
-//         require(order.state == State.completed || (order.limitedTime + 12 hours < getCurrentTime() && order.state == State.matched), "You can't withdraw deposit now");
-//         uint256 platformFee = calculateFee(order.orderPrice, commissionRate.platformFeeRate);
-//         uint256 insuranceFee = calculateFee(order.orderPrice, commissionRate.insuranceFeeRate);
-//         uint256 toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
-//         transferTokensToOtherAddress(feeCollection, platformFee);
-//         transferTokensToOtherAddress(insuranceFeeCollection, insuranceFee);
-//         transferTokensToOtherAddress(msg.sender, toQuickerAmount);
+//     function withdrawFromOrder(uint256 _orderNum)
+//         public
+//         isQuickerOfOrder(_orderNum, msg.sender)
+//     {
+//         Order storage order = orderList[_orderNum];
+//         require(order.securityDeposit != 0, "already withdraw!");
+//         require(
+//             order.state == State.completed ||
+//                 (order.limitedTime + 12 hours < getCurrentTime()),
+//             "You can't withdraw deposit now"
+//         );
+//         uint256 platformFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.platformFeeRate
+//         );
+//         uint256 insuranceFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.insuranceFeeRate
+//         );
+//         uint256 toQuickerAmount = order.securityDeposit +
+//             order.orderPrice -
+//             platformFee -
+//             insuranceFee;
+//         transferTokensToOtherAddress(
+//             feeCollector,
+//             getMulTokenAmount(platformFee)
+//         );
+//         transferTokensToOtherAddress(
+//             insuranceFeeCollector,
+//             getMulTokenAmount(insuranceFee)
+//         );
+//         transferTokensToOtherAddress(
+//             msg.sender,
+//             getMulTokenAmount(toQuickerAmount)
+//         );
+//         order.securityDeposit = 0;
 //     }
 
 //     // todo list
