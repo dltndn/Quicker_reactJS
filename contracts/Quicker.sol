@@ -54,6 +54,7 @@
 //         uint256 limitedTime;
 //         uint256 createdTime;
 //         uint256 matchedTime;
+//         uint256 deliveredTime;
 //         uint256 completedTime;
 //     }
 
@@ -144,11 +145,19 @@
 //         return orderList[_orderNum];
 //     }
 
-//     function getClientOrderList(address _client) public view returns (uint256[] memory) {
+//     function getClientOrderList(address _client)
+//         public
+//         view
+//         returns (uint256[] memory)
+//     {
 //         return clientOrderList[_client];
 //     }
 
-//     function getQuickerOrderList(address _quicker) public view returns (uint256[] memory) {
+//     function getQuickerOrderList(address _quicker)
+//         public
+//         view
+//         returns (uint256[] memory)
+//     {
 //         return quickerOrderList[_quicker];
 //     }
 
@@ -231,6 +240,7 @@
 //             _limitedTime,
 //             getCurrentTime(),
 //             0,
+//             0,
 //             0
 //         );
 //         recieveTokensFromOtherAddress(msg.sender, amount);
@@ -278,6 +288,20 @@
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //     }
 
+//     // 배송원 배달완료 시간 입력 함수
+//     function deliveredOrder(uint256 _orderNum)
+//         public
+//         isQuickerOfOrder(_orderNum, msg.sender)
+//     {
+//         Order storage order = orderList[_orderNum];
+//         require(
+//             orderList[_orderNum].state == State.matched,
+//             "State is not matched"
+//         );
+//         order.deliveredTime = getCurrentTime();
+//     }
+
+//     // client 계약 완료 함수
 //     function completeOrder(uint256 _orderNum)
 //         public
 //         isClientOfOrder(_orderNum, msg.sender)
@@ -298,7 +322,8 @@
 //         require(order.securityDeposit != 0, "already withdraw!");
 //         require(
 //             order.state == State.completed ||
-//                 (order.limitedTime + 12 hours < getCurrentTime()),
+//                 (order.limitedTime + 12 hours < getCurrentTime() &&
+//                     order.state == State.matched),
 //             "You can't withdraw deposit now"
 //         );
 //         uint256 platformFee = calculateFee(
@@ -309,10 +334,17 @@
 //             order.orderPrice,
 //             commissionRate.insuranceFeeRate
 //         );
-//         uint256 toQuickerAmount = order.securityDeposit +
-//             order.orderPrice -
-//             platformFee -
-//             insuranceFee;
+//         uint256 toQuickerAmount;
+//         // deadline 넘김
+//         if (order.deliveredTime > order.limitedTime) {
+//             toQuickerAmount = order.orderPrice - platformFee - insuranceFee;
+//             transferTokensToOtherAddress(
+//             order.client,
+//             getMulTokenAmount(order.securityDeposit)
+//             );
+//         } else {
+//             toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+//         }
 //         transferTokensToOtherAddress(
 //             feeCollector,
 //             getMulTokenAmount(platformFee)
@@ -325,8 +357,14 @@
 //             msg.sender,
 //             getMulTokenAmount(toQuickerAmount)
 //         );
+//         order.state = State.completed;
 //         order.securityDeposit = 0;
 //     }
+
+//     // failedOrder 함수
+//     // 상황: 배달원 물건 전달 x -> client가 실행
+//     // 조건: 마감기한 + 12 hours < 현재시간 일 때 state -> matched 이면 작동 가능
+//     // todo: 보증금 + 의뢰금 반환(수수료 제외)
 
 //     // todo list
 //     // - test용 함수 test 완료 후 modifier 붙이기
