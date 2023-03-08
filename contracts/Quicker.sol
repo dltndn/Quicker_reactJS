@@ -94,11 +94,9 @@
 //         address _Platform,
 //         address _Insurance
 //     ) Ownable() {
-//         commissionRate = Commission(
-//             _platFormFee,
-//             _insuranceFee,
-//             _securityDeposit
-//         );
+//         setCommissionRate(0, _platFormFee);
+//         setCommissionRate(1, _insuranceFee);
+//         setCommissionRate(2, _securityDeposit);
 //         qkrwToken = ERC20(_QkrwToken);
 //         feeCollector = _Platform;
 //         insuranceFeeCollector = _Insurance;
@@ -173,30 +171,21 @@
 //         return quickerOrderList[_quicker];
 //     }
 
-//     function setCommissionRate(
-//         uint16 _platFormFee,
-//         uint16 _insuranceFee,
-//         uint16 _securityDeposit
-//     ) public onlyOwner {
-//         commissionRate = Commission(
-//             _platFormFee,
-//             _insuranceFee,
-//             _securityDeposit
-//         );
-//     }
-
 //     // _num == 0, platform fee
 //     // _num == 1, insurance fee
 //     // _num == 2, security deposit fee
-//     function recordChangedFeeLog(uint8 _num, uint16 _changedRate) internal {
+//     function setCommissionRate(uint8 _num, uint16 _changedRate) internal {
 //         require((_num == 0)||(_num == 1) || (_num == 2), "Invalid number");
 //         if (_num == 0) {
+//             commissionRate.platformFeeRate = _changedRate;
 //             platformFeeRateLogKeys.push(getCurrentTime());
 //             changeLogPlatformFeeRate[getCurrentTime()] = _changedRate;
 //         } else if (_num == 1) {
+//             commissionRate.insuranceFeeRate = _changedRate;
 //             insuranceFeeRateLogKeys.push(getCurrentTime());
 //             changeLogInsuranceFeeRate[getCurrentTime()] = _changedRate;
 //         } else {
+//             commissionRate.securityDepositRate = _changedRate;
 //             securityDepositRateLogKeys.push(getCurrentTime());
 //             changeLogSecurityDepositRate[getCurrentTime()] = _changedRate;
 //         }
