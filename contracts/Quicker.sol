@@ -71,6 +71,13 @@
 //     // Quicker address => OrderList number list
 //     mapping(address => uint256[]) internal quickerOrderList;
 
+//     // array number => (timestamp => changed value of platformFeeRate)
+//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogPlatformFeeRate;
+//     // array number => (timestamp => changed value of insuranceFeeRate)
+//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogInsuranceFeeRate;
+//     // array number => (timestamp => changed value of securityDepositRate)
+//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogSecurityDepositRate;
+
 //     /**
 //      * @dev Initializes the contract setting the commission rate
 //      */
