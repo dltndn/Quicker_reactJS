@@ -71,12 +71,17 @@
 //     // Quicker address => OrderList number list
 //     mapping(address => uint256[]) internal quickerOrderList;
 
-//     // array number => (timestamp => changed value of platformFeeRate)
-//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogPlatformFeeRate;
-//     // array number => (timestamp => changed value of insuranceFeeRate)
-//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogInsuranceFeeRate;
-//     // array number => (timestamp => changed value of securityDepositRate)
-//     mapping(uint16 => mapping(uint256 => uint16)) internal changeLogSecurityDepositRate;
+//     // timestamp => changed value of FeeRate
+//     // keys array of fee rate changed log
+//     // Key is timestamp from mapping
+//     mapping(uint256 => uint16) internal changeLogPlatformFeeRate;
+//     uint256[] internal platformFeeRateLogKeys;
+    
+//     mapping(uint256 => uint16) internal changeLogInsuranceFeeRate;
+//     uint256[] internal insuranceFeeRateLogKeys;
+    
+//     mapping(uint256 => uint16) internal changeLogSecurityDepositRate;
+//     uint256[] internal securityDepositRateLogKeys;
 
 //     /**
 //      * @dev Initializes the contract setting the commission rate
@@ -178,6 +183,23 @@
 //             _insuranceFee,
 //             _securityDeposit
 //         );
+//     }
+
+//     // _num == 0, platform fee
+//     // _num == 1, insurance fee
+//     // _num == 2, security deposit fee
+//     function recordChangedFeeLog(uint8 _num, uint16 _changedRate) internal {
+//         require((_num == 0)||(_num == 1) || (_num == 2), "Invalid number");
+//         if (_num == 0) {
+//             platformFeeRateLogKeys.push(getCurrentTime());
+//             changeLogPlatformFeeRate[getCurrentTime()] = _changedRate;
+//         } else if (_num == 1) {
+//             insuranceFeeRateLogKeys.push(getCurrentTime());
+//             changeLogInsuranceFeeRate[getCurrentTime()] = _changedRate;
+//         } else {
+//             securityDepositRateLogKeys.push(getCurrentTime());
+//             changeLogSecurityDepositRate[getCurrentTime()] = _changedRate;
+//         }
 //     }
 
 //     function transferTokensToOtherAddress(address _to, uint256 _amount)
@@ -405,7 +427,8 @@
 //         order.securityDeposit = 0;
 //     }
 
-//     // todo list
 //     // 수수료, 보증금, 보험료 비율 변경 날짜 저장 함수
+
+//     // todo list
 //     // 
 // }
