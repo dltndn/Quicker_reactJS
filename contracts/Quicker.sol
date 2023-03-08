@@ -73,7 +73,7 @@
 
 //     // timestamp => changed value of FeeRate
 //     // keys array of fee rate changed log
-//     // Key is timestamp from mapping
+//     // Value is timestamp from mapping
 //     mapping(uint256 => uint16) internal changeLogPlatformFeeRate;
 //     uint256[] internal platformFeeRateLogKeys;
     
@@ -189,6 +189,10 @@
 //             securityDepositRateLogKeys.push(getCurrentTime());
 //             changeLogSecurityDepositRate[getCurrentTime()] = _changedRate;
 //         }
+//     }
+
+//     function changeCommissionRate(uint8 _num, uint16 _changedRate) public onlyOwner {
+//         setCommissionRate(_num, _changedRate);
 //     }
 
 //     function transferTokensToOtherAddress(address _to, uint256 _amount)
@@ -415,8 +419,6 @@
 //         order.state = State.failed;
 //         order.securityDeposit = 0;
 //     }
-
-//     // 수수료, 보증금, 보험료 비율 변경 날짜 저장 함수
 
 //     // todo list
 //     // 
