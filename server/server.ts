@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import connector from "./DataBaseConnector";
 import sequelize from "./sequelizeConnector";
-import { initModels, User } from "./models/init-models";
+import { initModels, User } from "./models/DB/init-models";
 
 initModels(sequelize);
 
@@ -23,9 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 app.post("/register", async (req: Request, res: Response) => {
   const userInstance = req.body.User
-  // console.log(userInstance)
   await User.create(userInstance);
-
   res.send({ msg: "done" });
 });
 
