@@ -189,6 +189,7 @@
 
 //     /**
 //      * @dev To get orderlist that is matched with state
+//      * @param _state current state from Order
 //      * @return Order array
 //      */
 //     function getOrdersForState(State _state)
@@ -295,9 +296,11 @@
 //     {
 //         Order storage order = orderList[_orderNum];
 //         require(
-//             orderList[_orderNum].state == State.matched,
+//             order.state == State.matched,
 //             "State is not matched"
 //         );
+//         require(order.deliveredTime == 0, "Already delivered");
+//         require(order.limitedTime + 12 hours >= getCurrentTime(), "Please contact customer service center");
 //         order.deliveredTime = getCurrentTime();
 //     }
 
@@ -363,9 +366,39 @@
 
 //     // failedOrder 함수
 //     // 상황: 배달원 물건 전달 x -> client가 실행
-//     // 조건: 마감기한 + 12 hours < 현재시간 일 때 state -> matched 이면 작동 가능
-//     // todo: 보증금 + 의뢰금 반환(수수료 제외)
+//     // 조건: 마감기한 + 12 hours < 현재시간 일 때 deliverdTime == 0 이면 작동 가능
+//     function failedOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
+//         Order storage order = orderList[_orderNum];
+//         require(order.state == State.matched, "State is not matched");
+//         require((order.limitedTime + 12 hours < getCurrentTime()) && (order.deliveredTime == 0), "You can't process order to failed");
+//         // todo: 보증금 + 의뢰금 반환(수수료 제외)
+//         uint256 platformFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.platformFeeRate
+//         );
+//         uint256 insuranceFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.insuranceFeeRate
+//         );
+//         transferTokensToOtherAddress(
+//             feeCollector,
+//             getMulTokenAmount(platformFee)
+//         );
+//         transferTokensToOtherAddress(
+//             insuranceFeeCollector,
+//             getMulTokenAmount(insuranceFee)
+//         );
+//         // 수수료를 제외한 반환금 전송 (의뢰 가격 + 배송원 보증금)
+//         uint256 toClientAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+//         transferTokensToOtherAddress(
+//             msg.sender,
+//             getMulTokenAmount(toClientAmount)
+//         );
+//         order.state = State.failed;
+//         order.securityDeposit = 0;
+//     }
 
 //     // todo list
-//     // - test용 함수 test 완료 후 modifier 붙이기
+//     // 수수료, 보증금, 보험료 비율 변경 날짜 저장 함수
+//     // 
 // }
