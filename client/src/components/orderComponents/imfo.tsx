@@ -42,6 +42,13 @@ const Toptx = styled.span`
     padding-left: 1.125rem;
 `;
 
+const Scwal = styled.section`
+    display: flex;
+    height: 3rem;
+    border: 0rem;
+    margin: 0.175rem 0.563rem;
+`;
+
 
 const Sc0 = styled.section`
     display: flex;
@@ -102,6 +109,8 @@ const Sp2 = styled.div`
     margin-left: 10px;
 `;
 
+
+
 const Bteye = styled.button`
     border: none;
     box-shadow: none;
@@ -148,20 +157,15 @@ function Imfo(){
                 <Topimg src={img1} />
                 <Toptx>배영준</Toptx>
                 <Topbt>
-                    <Web3Button icon="hide" label="지갑연결" balance="hide" />
                     <BsPencilSquare></BsPencilSquare>
                 </Topbt>
             </Topdiv>
         </section>
-        <Sc0>
-            <Div0>
-                <span>지갑 주소</span>
-                <Sp0>{address}</Sp0>
-                <Bteye><BsEyeSlash></BsEyeSlash></Bteye>
-            </Div0>
-        </Sc0>
+        <Scwal>
+            <Web3Button icon="hide" label="지갑연결" balance="hide" />
+        </Scwal>
         <Hr></Hr>
-        <Sc1>
+        <Sc3>
             <Div0>
                 <span>지갑 잔액</span>
                 <Sp1>{isConnected && address && <GetQkrwBalance address={address}/>}</Sp1>
@@ -169,7 +173,7 @@ function Imfo(){
                     <Bticonimg src={money} alt="" />
                 </Bticon>
             </Div0>
-        </Sc1>
+        </Sc3>
         <Sc0>
             <Div0 onClick={ClickOrderlist}>
                 <BsFileText></BsFileText>

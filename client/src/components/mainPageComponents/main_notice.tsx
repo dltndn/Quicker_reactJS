@@ -1,11 +1,9 @@
 import styled from "styled-components";
-
 const Sc0 = styled.section`
     position: fixed;
     bottom: 3.875rem;
     width: 100%;
 `;
-
 const Div0 = styled.div`
     padding: var(--padding);
     display: flex;
@@ -14,19 +12,15 @@ const Div0 = styled.div`
     background-color: #e6e6e6;
     height: 5rem;
 `;
-
 const Sp0 = styled.div`
     font-weight: bold;
     margin-left: 1.25rem;
 `;
-
 const Sp1 = styled.div`
     font-weight: lighter;
     margin-left: 0.625rem;
 `;
-
 function Main_notice() {
-
     return (
         <Sc0>
             <Div0>
