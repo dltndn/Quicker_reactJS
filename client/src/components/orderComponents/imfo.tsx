@@ -2,8 +2,7 @@ import { BsPencilSquare, BsEyeSlash, BsFileText, BsCheck2Circle, BsClipboardChec
 import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
-import { Web3Button } from "@web3modal/react";
+import { useAccount, useDisconnect } from "wagmi";
 import GetQkrwBalance from "../getQkrwBalance";
 
 const money = require('../../image/money.png')
@@ -141,9 +140,10 @@ const Bticonimg = styled.img`
 `;
 
 function Imfo(){
-
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
+    const { disconnect } = useDisconnect()
+
     const ClickOrderlist = () => {
         navigate("/orderlist")
     }
@@ -215,7 +215,7 @@ function Imfo(){
             </Div0>
         </Sc1>
         <Sc3>
-            <Div0>
+            <Div0 onClick={() => {disconnect(); navigate('/')}}>
                 <AiOutlineLogout></AiOutlineLogout>
                 <Sp2>로그아웃</Sp2>
             </Div0>

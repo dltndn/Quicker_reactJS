@@ -13,7 +13,7 @@
 //  */
 
 // contract Quicker is Ownable {
-//     // unit is %
+//     // unit is % / 10 ex) 10 = 1%, 15 = 1.5%
 //     /**
 //      * @dev indicating the commission from order price
 //      */
@@ -27,8 +27,8 @@
 //     /**
 //      * @dev The contract client or quicker is calling
 //      */
-//     address feeCollection;
-//     address insuranceFeeCollection;
+//     address feeCollector;
+//     address insuranceFeeCollector;
 //     ERC20 public qkrwToken;
 //     // Qkrw public token;
 
@@ -54,6 +54,7 @@
 //         uint256 limitedTime;
 //         uint256 createdTime;
 //         uint256 matchedTime;
+//         uint256 deliveredTime;
 //         uint256 completedTime;
 //     }
 
@@ -66,9 +67,21 @@
 //     mapping(uint256 => address) public quickerOfOrder;
 
 //     // Client address => OrderList number list
-//     mapping(address => uint256[]) public clientOrderList;
+//     mapping(address => uint256[]) internal clientOrderList;
 //     // Quicker address => OrderList number list
-//     mapping(address => uint256[]) public quickerOrderList;
+//     mapping(address => uint256[]) internal quickerOrderList;
+
+//     // timestamp => changed value of FeeRate
+//     // keys array of fee rate changed log
+//     // Value is timestamp from mapping
+//     mapping(uint256 => uint16) internal changeLogPlatformFeeRate;
+//     uint256[] internal platformFeeRateLogKeys;
+    
+//     mapping(uint256 => uint16) internal changeLogInsuranceFeeRate;
+//     uint256[] internal insuranceFeeRateLogKeys;
+    
+//     mapping(uint256 => uint16) internal changeLogSecurityDepositRate;
+//     uint256[] internal securityDepositRateLogKeys;
 
 //     /**
 //      * @dev Initializes the contract setting the commission rate
@@ -81,14 +94,12 @@
 //         address _Platform,
 //         address _Insurance
 //     ) Ownable() {
-//         commissionRate = Commission(
-//             _platFormFee,
-//             _insuranceFee,
-//             _securityDeposit
-//         );
+//         setCommissionRate(0, _platFormFee);
+//         setCommissionRate(1, _insuranceFee);
+//         setCommissionRate(2, _securityDeposit);
 //         qkrwToken = ERC20(_QkrwToken);
-//         feeCollection = _Platform;
-//         insuranceFeeCollection = _Insurance;
+//         feeCollector = _Platform;
+//         insuranceFeeCollector = _Insurance;
 //     }
 
 //     modifier isClientOfOrder(uint256 _orderNum, address _client) {
@@ -101,18 +112,18 @@
 
 //     modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
 //         require(
-//             clientOfOrder[_orderNum] == _quicker,
+//             quickerOfOrder[_orderNum] == _quicker,
 //             "not quicker of this order"
 //         );
 //         _;
 //     }
 
 //     function setFeeCollectionAddress(address _newAddress) public onlyOwner {
-//         feeCollection = _newAddress;
+//         feeCollector = _newAddress;
 //     }
 
 //     function setInsuranceFeeCollection(address _newAddress) public onlyOwner {
-//         insuranceFeeCollection = _newAddress;
+//         insuranceFeeCollector = _newAddress;
 //     }
 
 //     function getTokenDecimals() internal view returns (uint8) {
@@ -122,6 +133,14 @@
 
 //     function getCurrentTime() internal view returns (uint256) {
 //         return block.timestamp;
+//     }
+
+//     function calculateFee(uint256 _orderPrice, uint16 _feeRate)
+//         internal
+//         pure
+//         returns (uint256)
+//     {
+//         return (_orderPrice * uint256(_feeRate)) / 1000;
 //     }
 
 //     function getMulTokenAmount(uint256 _amount)
@@ -136,16 +155,44 @@
 //         return orderList[_orderNum];
 //     }
 
-//     function setCommissionRate(
-//         uint16 _platFormFee,
-//         uint16 _insuranceFee,
-//         uint16 _securityDeposit
-//     ) public onlyOwner {
-//         commissionRate = Commission(
-//             _platFormFee,
-//             _insuranceFee,
-//             _securityDeposit
-//         );
+//     function getClientOrderList(address _client)
+//         public
+//         view
+//         returns (uint256[] memory)
+//     {
+//         return clientOrderList[_client];
+//     }
+
+//     function getQuickerOrderList(address _quicker)
+//         public
+//         view
+//         returns (uint256[] memory)
+//     {
+//         return quickerOrderList[_quicker];
+//     }
+
+//     // _num == 0, platform fee
+//     // _num == 1, insurance fee
+//     // _num == 2, security deposit fee
+//     function setCommissionRate(uint8 _num, uint16 _changedRate) internal {
+//         require((_num == 0)||(_num == 1) || (_num == 2), "Invalid number");
+//         if (_num == 0) {
+//             commissionRate.platformFeeRate = _changedRate;
+//             platformFeeRateLogKeys.push(getCurrentTime());
+//             changeLogPlatformFeeRate[getCurrentTime()] = _changedRate;
+//         } else if (_num == 1) {
+//             commissionRate.insuranceFeeRate = _changedRate;
+//             insuranceFeeRateLogKeys.push(getCurrentTime());
+//             changeLogInsuranceFeeRate[getCurrentTime()] = _changedRate;
+//         } else {
+//             commissionRate.securityDepositRate = _changedRate;
+//             securityDepositRateLogKeys.push(getCurrentTime());
+//             changeLogSecurityDepositRate[getCurrentTime()] = _changedRate;
+//         }
+//     }
+
+//     function changeCommissionRate(uint8 _num, uint16 _changedRate) public onlyOwner {
+//         setCommissionRate(_num, _changedRate);
 //     }
 
 //     function transferTokensToOtherAddress(address _to, uint256 _amount)
@@ -164,9 +211,14 @@
 
 //     /**
 //      * @dev To get orderlist that is matched with state
+//      * @param _state current state from Order
 //      * @return Order array
 //      */
-//     function getOrdersForState(State _state) public view returns (Order[] memory) {
+//     function getOrdersForState(State _state)
+//         public
+//         view
+//         returns (Order[] memory)
+//     {
 //         uint256 numGetterOrders = 0;
 
 //         for (uint256 i = 0; i < orderList.length; i++) {
@@ -193,8 +245,13 @@
 //      * @param _limitedTime 배송 기한의 Timestamp값(초단위)
 //      */
 //     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
+//         require(
+//             _limitedTime >= getCurrentTime(),
+//             "The deadline must later than the current time!"
+//         );
+//         require(_orderPrice > 0, "Order price must bigger than 0!");
 //         uint256 orderNum = orderList.length;
-//         uint256 amount = _orderPrice * (10**getTokenDecimals());
+//         uint256 amount = getMulTokenAmount(_orderPrice);
 //         clientOfOrder[orderNum] = msg.sender;
 //         Order memory newOrder = Order(
 //             orderNum,
@@ -206,6 +263,7 @@
 //             _limitedTime,
 //             getCurrentTime(),
 //             0,
+//             0,
 //             0
 //         );
 //         recieveTokensFromOtherAddress(msg.sender, amount);
@@ -213,6 +271,11 @@
 //         clientOrderList[msg.sender].push(orderNum);
 //     }
 
+//     /**
+//      * @dev 의뢰인이 Order를 취소하는 함수
+//      *      배송원과 매칭시 취소 불가
+//      * @param _orderNum Order number
+//      */
 //     function cancelOrder(uint256 _orderNum)
 //         public
 //         isClientOfOrder(_orderNum, msg.sender)
@@ -228,21 +291,42 @@
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
 //     }
 
-//     function acceptOrder(uint256 _securityDeposit, uint256 _orderNum) public {
+//     function acceptOrder(uint256 _orderNum) public {
+//         Order storage order = orderList[_orderNum];
 //         require(
-//             orderList[_orderNum].state == State.created,
+//             order.state == State.created,
 //             "Already matched with another quicker..."
 //         );
-//         orderList[_orderNum].quicker = msg.sender;
-//         orderList[_orderNum].securityDeposit = _securityDeposit;
-//         orderList[_orderNum].state = State.matched;
-//         orderList[_orderNum].matchedTime = getCurrentTime();
+//         uint256 _securityDeposit = calculateFee(
+//             order.orderPrice,
+//             commissionRate.securityDepositRate
+//         );
+//         order.quicker = msg.sender;
+//         order.securityDeposit = _securityDeposit;
+//         order.state = State.matched;
+//         order.matchedTime = getCurrentTime();
 //         quickerOfOrder[_orderNum] = msg.sender;
 //         quickerOrderList[msg.sender].push(_orderNum);
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //     }
 
+//     // 배송원 배달완료 시간 입력 함수
+//     function deliveredOrder(uint256 _orderNum)
+//         public
+//         isQuickerOfOrder(_orderNum, msg.sender)
+//     {
+//         Order storage order = orderList[_orderNum];
+//         require(
+//             order.state == State.matched,
+//             "State is not matched"
+//         );
+//         require(order.deliveredTime == 0, "Already delivered");
+//         require(order.limitedTime + 12 hours >= getCurrentTime(), "Please contact customer service center");
+//         order.deliveredTime = getCurrentTime();
+//     }
+
+//     // client 계약 완료 함수
 //     function completeOrder(uint256 _orderNum)
 //         public
 //         isClientOfOrder(_orderNum, msg.sender)
@@ -255,8 +339,87 @@
 //     }
 
 //     // quicker 정산 함수
-//     // 출금: state == completed || (limitedTime + 12 hours < currentTime && state == matched)
+//     function withdrawFromOrder(uint256 _orderNum)
+//         public
+//         isQuickerOfOrder(_orderNum, msg.sender)
+//     {
+//         Order storage order = orderList[_orderNum];
+//         require(order.securityDeposit != 0, "already withdraw!");
+//         require(
+//             order.state == State.completed ||
+//                 (order.limitedTime + 12 hours < getCurrentTime() &&
+//                     order.state == State.matched),
+//             "You can't withdraw deposit now"
+//         );
+//         uint256 platformFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.platformFeeRate
+//         );
+//         uint256 insuranceFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.insuranceFeeRate
+//         );
+//         uint256 toQuickerAmount;
+//         // deadline 넘김
+//         if (order.deliveredTime > order.limitedTime) {
+//             toQuickerAmount = order.orderPrice - platformFee - insuranceFee;
+//             transferTokensToOtherAddress(
+//             order.client,
+//             getMulTokenAmount(order.securityDeposit)
+//             );
+//         } else {
+//             toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+//         }
+//         transferTokensToOtherAddress(
+//             feeCollector,
+//             getMulTokenAmount(platformFee)
+//         );
+//         transferTokensToOtherAddress(
+//             insuranceFeeCollector,
+//             getMulTokenAmount(insuranceFee)
+//         );
+//         transferTokensToOtherAddress(
+//             msg.sender,
+//             getMulTokenAmount(toQuickerAmount)
+//         );
+//         order.state = State.completed;
+//         order.securityDeposit = 0;
+//     }
+
+//     // failedOrder 함수
+//     // 상황: 배달원 물건 전달 x -> client가 실행
+//     // 조건: 마감기한 + 12 hours < 현재시간 일 때 deliverdTime == 0 이면 작동 가능
+//     function failedOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
+//         Order storage order = orderList[_orderNum];
+//         require(order.state == State.matched, "State is not matched");
+//         require((order.limitedTime + 12 hours < getCurrentTime()) && (order.deliveredTime == 0), "You can't process order to failed");
+//         // todo: 보증금 + 의뢰금 반환(수수료 제외)
+//         uint256 platformFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.platformFeeRate
+//         );
+//         uint256 insuranceFee = calculateFee(
+//             order.orderPrice,
+//             commissionRate.insuranceFeeRate
+//         );
+//         transferTokensToOtherAddress(
+//             feeCollector,
+//             getMulTokenAmount(platformFee)
+//         );
+//         transferTokensToOtherAddress(
+//             insuranceFeeCollector,
+//             getMulTokenAmount(insuranceFee)
+//         );
+//         // 수수료를 제외한 반환금 전송 (의뢰 가격 + 배송원 보증금)
+//         uint256 toClientAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+//         transferTokensToOtherAddress(
+//             msg.sender,
+//             getMulTokenAmount(toClientAmount)
+//         );
+//         order.state = State.failed;
+//         order.securityDeposit = 0;
+//     }
 
 //     // todo list
-//     // - test용 함수 test 완료 후 modifier 붙이기
+//     // 
 // }

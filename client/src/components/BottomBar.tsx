@@ -1,5 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+
 import styled from "styled-components";
 const white1 = require('../image/white1.png');
 const black1 = require('../image/black1.png');
@@ -36,28 +38,26 @@ const Sp0 = styled.div`
 `;
 
 const Iconimg = styled.img`
-    width: 1.5rem;
-    height : 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
 `;
 
 function BottomBar() {
   const navigate = useNavigate();
+  const { isConnected } = useAccount();
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
-  const handleGoCommissionPage = () => {
-    setCurrentPage('/commission');
-    navigate('/commission');
-  };
-  const handleGoSearchPage = () => {
-    setCurrentPage('/search');
-    navigate('/search');
-  };
-  const handleGoChattingPage = () => {
-    setCurrentPage('/chatting');
-    navigate('/chatting');
-  };
-  const handleGoProfilePage = () => {
-    setCurrentPage('/profile');
-    navigate('/profile');
+  const [showDiv, setShowDiv] = useState(false);
+
+  const handleButtonClick = (page:string) => {
+    if (!isConnected) {
+      setShowDiv(true);
+      const timeoutId = setTimeout(() => {
+        setShowDiv(false);
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+    setCurrentPage(page);
+    navigate(page);
   };
 
   return (
