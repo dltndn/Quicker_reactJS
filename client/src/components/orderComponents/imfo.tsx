@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
 import GetQkrwBalance from "../getQkrwBalance";
+import { Web3Button } from "@web3modal/react";
 
 const money = require('../../image/money.png')
 
