@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function SearchPage() {
   const navigate = useNavigate()
+
     return (
       <div>
         <TopBarOthers title="의뢰목록" redirectLogic={function () {

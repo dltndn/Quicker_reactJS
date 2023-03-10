@@ -41,8 +41,8 @@ const TemplateOrder = ({ data }: { data: any }) => {
       <div>의뢰인: {JSON.stringify(data[0])}</div>
       <div>배송원: {JSON.stringify(data[1])}</div>
       <div>상태: {ConvertStateData(data[2])}</div>
-      <div>결제가격: {ConvertCostData(data[3])}원</div>
-      <div>보증금: {ConvertCostData(data[4])}원</div>
+      <div>결제가격: {ConvertCostData(data[3])}</div>
+      <div>보증금: {ConvertCostData(data[4])}</div>
       <div>배송기한: {ConvertDateData(data[5])}</div>
       <div>의뢰시간: {ConvertDateData(data[6])}</div>
       <div>수락시간: {ConvertDateData(data[7])}</div>
@@ -59,11 +59,20 @@ const ConvertStateData = (state: number): string => {
 };
 
 const ConvertCostData = (cost: any): string => {
-  const result = BigInt(cost._hex).toString();
+  let result = ''
+  if (cost == 0) {
+    result = '배송원 매칭x'
+  } else {
+    result = BigInt(cost._hex).toString() + '원';
+  }
   return result;
 };
 
 const ConvertDateData = (timestamp: any) => {
+  if (timestamp == 0) {
+    return '배송원 매칭x'
+  } else {
     const { year, month, day, hours, minutes } = getDateFromTimestamp(timestamp)
     return (<div>{year}/{month}/{day} {hours}:{minutes}</div>)
+  }
 }

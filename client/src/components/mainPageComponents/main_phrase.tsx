@@ -70,11 +70,14 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
       ) : (
         <section>
         <Div0>
-          <Sp0>안녕하세요!<br/></Sp0>
+          <Sp0>
+            안녕하세요!
+            <br />
+          </Sp0>
           <Sp1>지갑을 연결해주세요.</Sp1>
-              <Web3Button icon="hide" label="지갑연결" balance="hide" />
+          <Web3Button icon="hide" label="지갑연결" balance="hide" />
         </Div0>
-        </section>
+      </section>
       )}
     </>
   );
