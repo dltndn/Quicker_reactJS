@@ -44,57 +44,59 @@ const Iconimg = styled.img`
 
 function BottomBar() {
   const navigate = useNavigate();
-  const { isConnected } = useAccount();
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
-  const [showDiv, setShowDiv] = useState(false);
-
-  const handleButtonClick = (page:string) => {
-    if (!isConnected) {
-      setShowDiv(true);
-      const timeoutId = setTimeout(() => {
-        setShowDiv(false);
-      }, 3000);
-      return () => clearTimeout(timeoutId);
-    }
-    setCurrentPage(page);
-    navigate(page);
+  const handleGoCommissionPage = () => {
+    setCurrentPage('/commission');
+    navigate('/commission');
+  };
+  const handleGoSearchPage = () => {
+    setCurrentPage('/search');
+    navigate('/search');
+  };
+  const handleGoChattingPage = () => {
+    setCurrentPage('/chatting');
+    navigate('/chatting');
+  };
+  const handleGoProfilePage = () => {
+    setCurrentPage('/profile');
+    navigate('/profile');
   };
 
   return (
     <Sc0>
-        <Div0 onClick={handleGoCommissionPage}>
-            <Div1>
-            <Iconimg src={currentPage === '/commission' ? black1 : white1} alt="icon" />
-            </Div1>
-            <Sp0>
-                의뢰하기
-            </Sp0>
-        </Div0>
-        <Div0 onClick={handleGoSearchPage}>
-            <Div1>
-            <Iconimg src={currentPage === '/search' ? black2 : white2} alt="icon" />
-            </Div1>
-            <Sp0>
-                검색
-            </Sp0>
-        </Div0>
-        <Div0 onClick={handleGoChattingPage}>
-            <Div1>
-            <Iconimg src={currentPage === '/chatting' ? black3 : white3} alt="icon" />
-            </Div1>
-            <Sp0>
-                채팅
-            </Sp0>
-        </Div0>
-        <Div0 onClick={handleGoProfilePage}>
-            <Div1>
-            <Iconimg src={currentPage === '/profile' ? black4 : white4} alt="icon" />
-            </Div1>
-            <Sp0>
-                내정보
-            </Sp0>
-        </Div0>
-    </Sc0>
+    <Div0 onClick={handleGoCommissionPage}>
+        <Div1>
+        <Iconimg src={currentPage === '/commission' ? black1 : white1} alt="icon" />
+        </Div1>
+        <Sp0>
+            의뢰하기
+        </Sp0>
+    </Div0>
+    <Div0 onClick={handleGoSearchPage}>
+        <Div1>
+        <Iconimg src={currentPage === '/search' ? black2 : white2} alt="icon" />
+        </Div1>
+        <Sp0>
+            검색
+        </Sp0>
+    </Div0>
+    <Div0 onClick={handleGoChattingPage}>
+        <Div1>
+        <Iconimg src={currentPage === '/chatting' ? black3 : white3} alt="icon" />
+        </Div1>
+        <Sp0>
+            채팅
+        </Sp0>
+    </Div0>
+    <Div0 onClick={handleGoProfilePage}>
+        <Div1>
+        <Iconimg src={currentPage === '/profile' ? black4 : white4} alt="icon" />
+        </Div1>
+        <Sp0>
+            내정보
+        </Sp0>
+    </Div0>
+</Sc0>
   );
 }
 
