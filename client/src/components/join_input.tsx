@@ -143,11 +143,11 @@ function Join_input({ refs }: props) {
           <Sp>이메일</Sp>
         </Divtx>
         <Em>
-          <Ip ref={refs.email} type="text" placeholder="ex0"></Ip>
+          <Ip ref={refs.preEmail} type="text" placeholder="ex0"></Ip>
         </Em>
         <Ic><BsAt></BsAt></Ic>
         <Em>
-          <Ip type="text" placeholder="gmail.com"></Ip>
+          <Ip ref={refs.lastEmail} type="text" placeholder="gmail.com"></Ip>
         </Em>
       </Sc0>
       <Sc0>
@@ -188,7 +188,8 @@ export default Join_input;
 interface refs {
   name: React.RefObject<HTMLInputElement>,
   birthday: React.RefObject<HTMLInputElement>
-  email: React.RefObject<HTMLInputElement>
+  preEmail: React.RefObject<HTMLInputElement>
+  lastEmail: React.RefObject<HTMLInputElement>
   prePhoneNumber: React.RefObject<HTMLInputElement>
   middlePhoneNumber: React.RefObject<HTMLInputElement>
   lastPhoneNumber: React.RefObject<HTMLInputElement>
