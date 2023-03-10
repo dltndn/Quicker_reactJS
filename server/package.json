@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.ts"
+    "start": "nodemon server.ts",
+    "getdb" : "sequelize-auto -h svc.sel3.cloudtype.app -d Quicker -u root -x luj2cle3o12zt -p 30665  --dialect mysql -o ./models/DB -l ts"
   },
   "keywords": [],
   "author": "",
