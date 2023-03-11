@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
 import GetQkrwBalance from "../getQkrwBalance";
 import { Web3Button } from "@web3modal/react";
+import { useEffect } from "react";
 
 const money = require('../../image/money.png')
 
@@ -151,6 +152,12 @@ function Imfo(){
     const ClickFulfillmentlist = () => {
         navigate("/fulfillmentlist")
     }
+
+    useEffect(() => {
+        if(!isConnected) {
+            navigate('/')
+        }
+    }, [isConnected])
     return(
         <>
         <section>
@@ -216,7 +223,7 @@ function Imfo(){
             </Div0>
         </Sc1>
         <Sc3>
-            <Div0 onClick={() => {disconnect(); navigate('/')}}>
+            <Div0 onClick={() => {disconnect();}}>
                 <AiOutlineLogout></AiOutlineLogout>
                 <Sp2>로그아웃</Sp2>
             </Div0>
