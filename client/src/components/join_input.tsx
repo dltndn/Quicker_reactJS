@@ -32,7 +32,7 @@ const Maintx = styled.div`
   padding: 0 calc(var(--padding) / 2) 0 calc(var(--padding) / 2);
   flex: 1 1 20%;
 `;
-  const Sp = styled.span`
+const Sp = styled.div`
   font-size: var(--font-small);
   font-weight: bold;
 `;
@@ -72,14 +72,23 @@ const Maintx = styled.div`
     height: 2.25rem;
     font-size: var(--font-small);
     border-radius: 0.313rem;
-    border: 0rem;
-    outline: #efefef;
+    border: 1px solid #efefef; /* 테두리 */
+    outline: none; /* 포커스 시 발생하는 외곽선 제거 */
     background-color: #efefef;
     padding-left: 0.625rem;
+    padding-right: 0.625rem;
     text-align: left;
     color: #a6a6a6;
+    
+    &:focus {
+        border-color: #efefef; /* 포커스 시 테두리 색상 변경 */
+        background-color: #ffffff;
+    }
 `;
-  const Ic = styled.div`
+
+
+
+const Ic = styled.div`
   padding-top: 0.438rem;
 `;
   const Em = styled.div`
@@ -154,13 +163,13 @@ function Join_input({ refs }: props) {
           <Sp>연락처</Sp>
         </Divtx>
         <Div1>
-          <Ip ref={refs.prePhoneNumber} type="text" placeholder="000" />
+          <Ip ref={refs.prePhoneNumber} type="number" placeholder="000"/>
         </Div1>
         <Div1>
-          <Ip ref={refs.middlePhoneNumber} type="text" placeholder="0000" />
+          <Ip ref={refs.middlePhoneNumber} type="number" placeholder="0000"/>
         </Div1>
         <Div1>
-          <Ip ref={refs.lastPhoneNumber} type="text" placeholder="0000" />
+          <Ip ref={refs.lastPhoneNumber} type="number" placeholder="0000"/>
         </Div1>
         <Div1>
           <Bt>인증</Bt>

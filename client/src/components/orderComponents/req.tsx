@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from "react";
-import { BsCalendar3, BsClock} from "react-icons/bs";
+import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -12,6 +12,22 @@ const truck = require('../../image/truck.png')
 const Container = styled.section`
   display: flex;
   justify-content: center;
+  align-items: center;
+`;
+
+const Div0 = styled.div`
+  display: flex;  
+    text-align:center;
+    margin-top: 0.938rem;
+    font-size: var(--font-micro);
+`;
+
+const Div1 = styled.div`
+    flex: 1 1 16.66666666666667%;
+`;
+
+const Div2 = styled.div`
+    margin-top: -0.313rem;  
 `;
 
 const Box = styled.div`
@@ -70,13 +86,6 @@ const Leftli = styled.li`
     padding: 0 0.313rem 0 0.313rem;
 `;
 
-const Bt = styled.button`
-    display: flex;
-    flex-direction: column;
-    font-size: var(--font-micro);
-    background-color: var(--white-color);
-    border: none;
-`;
 
 const Btam= styled.button`
   width: 2.75rem;
@@ -99,7 +108,13 @@ const Ipval = styled.input`
     outline: #efefef;
     background-color: #efefef;
     text-align: center;
-    color: #a6a6a6;
+    border: 1px solid #efefef; /* 테두리 */
+    outline: none; /* 포커스 시 발생하는 외곽선 제거 */
+
+    &:focus {
+        border-color: #efefef; /* 포커스 시 테두리 색상 변경 */
+        background-color: #ffffff;
+    }
 `;
 
 const Ipyear = styled(Ipval)`
@@ -121,14 +136,8 @@ const Sp1 = styled.span`
     margin-left : 0.313rem;
 `;
 
-const Spicon = styled.span`
-    font-size: var(--font-md);
-    margin: auto;
-    margin-bottom: calc(var(--padding) / 2);
-`;
-
-const Reqtx = styled.span`
-    font-size: var(--font-micro);
+const ImgWrapper = styled.div`
+  position: relative;
 `;
 
 const Img = styled.img`
@@ -136,7 +145,21 @@ const Img = styled.img`
     height: 1.875rem;
 `;
 
+const CheckIcon = styled(BsFillCheckCircleFill)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none;
+  fill: green;
+`;
+
 function Req() {
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleClick = () => {
+    setIsChecked(!isChecked);
+    };
     
     return (
     <>
@@ -145,58 +168,56 @@ function Req() {
             <div>
                 <ReqFont>운송수단 (1개 이상 선택)</ReqFont>
             </div>
-            <Btdiv>
-                <Btul>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={walk} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>도보</Reqtx>
-                        </Bt>
-                    </li>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={bike} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>자전거</Reqtx>
-                        </Bt>
-                    </li>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={kickboard} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>킥보드</Reqtx>
-                        </Bt>
-                    </li>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={motorcycle} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>오토바이</Reqtx>
-                        </Bt>
-                    </li>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={car} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>승용차</Reqtx>
-                        </Bt>
-                    </li>
-                    <li>
-                        <Bt>
-                            <Spicon>
-                                <Img src={truck} alt=""></Img>
-                            </Spicon>
-                            <Reqtx>트럭</Reqtx>
-                        </Bt>
-                    </li>
-                </Btul>
-            </Btdiv>
+            <Div0>
+                <Div1>
+                    <ImgWrapper>
+                        <Img src={walk} alt="" onClick={handleClick} />{isChecked && <CheckIcon />}
+                    </ImgWrapper>
+                    <Div2>
+                    도보
+                    </Div2>  
+                </Div1>
+                <Div1>
+                    <div>
+                        <Img src={bike} alt=""></Img>
+                    </div>
+                    <Div2>
+                    자전거
+                    </Div2>                 
+                </Div1>
+                <Div1>
+                    <div>
+                        <Img src={kickboard} alt=""></Img>
+                    </div>
+                    <Div2>
+                    킥보드
+                    </Div2>                
+                </Div1>
+                <Div1>
+                    <div>
+                        <Img src={motorcycle} alt=""></Img>
+                    </div>
+                    <Div2>
+                    오토바이
+                    </Div2>                
+                </Div1>
+                <Div1>
+                    <div>
+                        <Img src={car} alt=""></Img>
+                    </div>
+                    <Div2>
+                    승용차
+                    </Div2>             
+                </Div1>
+                <Div1>
+                    <div>
+                        <Img src={truck} alt=""></Img>
+                    </div>
+                    <Div2>
+                    트럭
+                    </Div2>               
+                </Div1>
+            </Div0>
         </Boxtrans>
     </Container>
     <Container>
