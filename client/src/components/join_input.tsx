@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import { BsAt } from "react-icons/bs";
 import { useAccount } from 'wagmi';
 
-function Join_input({ refs }: props) {
-
-  const Maintx = styled.div`
+const Maintx = styled.div`
   background-color: #efefef;
   min-height: 21.25rem;
   display: grid;
@@ -107,6 +105,7 @@ function Join_input({ refs }: props) {
     color: #a6a6a6;
 `;
 
+function Join_input({ refs }: props) {
   const [name, setName] = useState('');
   const [contact1, setContact1] = useState('');
   const [contact2, setContact2] = useState('');
