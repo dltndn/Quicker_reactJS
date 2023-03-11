@@ -8,6 +8,7 @@ import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
+import { useAccount } from "wagmi";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,6 +34,7 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
   const navigate = useNavigate();
+  const { address } = useAccount();
 
   const [showCommissionPage, setShowCommissionPage] = useState<boolean>(true);
 
