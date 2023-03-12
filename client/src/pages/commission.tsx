@@ -8,6 +8,7 @@ import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
+import { useAccount } from "wagmi";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -33,6 +34,7 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
   const navigate = useNavigate();
+  const { address } = useAccount();
 
   const [showCommissionPage, setShowCommissionPage] = useState<boolean>(true);
 
@@ -96,38 +98,15 @@ export default function CommissionPage() {
     <>
     <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
-      <div
-        style={showCommissionPage ? { display: "block" } : { display: "none" }}
-      >
-        <Tmap
-          containerId={"mapContainerBox"}
-          startPosition={startPosition}
-          arrivePosition={arrivePosition}
-        />
-        <Postcode
-          refs={{
-            startinputDiv: startinputDiv,
-            arriveinputDiv: arriveinputDiv,
-          }}
-          mapControls={{ showMap: showMap, hideMap: hideMap }}
-          setStates={{
-            setStartPosition: setStartPosition,
-            setArrivePosition: setArrivePosition,
-            setTitle: setTitle,
-          }}
-          title={title}
-          hideCommissionPage={() => handleCommissionPage()}
-        />
+      <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
+        <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
+        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv,}} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{setStartPosition: setStartPosition, setArrivePosition: setArrivePosition, setTitle: setTitle,}} title={title} hideCommissionPage={() => handleCommissionPage()}/>
         <button onClick={get}>get</button>
         <button onClick={post}>post</button>
       </div>
-
-      <div
-        style={showCommissionPage ? { display: "none" } : { display: "block" }}
-      >
+      <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage />
       </div>
-
       <BottomBar />
     </>
   );
