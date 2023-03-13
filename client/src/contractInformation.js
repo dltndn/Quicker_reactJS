@@ -522,11 +522,6 @@ export const QUICKER_CONTRACT_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_securityDeposit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
 				"name": "_orderNum",
 				"type": "uint256"
 			}
@@ -545,6 +540,24 @@ export const QUICKER_CONTRACT_ABI = [
 			}
 		],
 		"name": "cancelOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "_num",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_changedRate",
+				"type": "uint16"
+			}
+		],
+		"name": "changeCommissionRate",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -576,6 +589,32 @@ export const QUICKER_CONTRACT_ABI = [
 			}
 		],
 		"name": "createOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "deliveredOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "failedOrder",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -620,6 +659,19 @@ export const QUICKER_CONTRACT_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "OrderCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "previousOwner",
@@ -638,29 +690,6 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [],
 		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint16",
-				"name": "_platFormFee",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_insuranceFee",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_securityDeposit",
-				"type": "uint16"
-			}
-		],
-		"name": "setCommissionRate",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -700,6 +729,19 @@ export const QUICKER_CONTRACT_ABI = [
 			}
 		],
 		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawFromOrder",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -749,6 +791,25 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_client",
+				"type": "address"
+			}
+		],
+		"name": "getClientOrderList",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_orderNum",
 				"type": "uint256"
@@ -758,6 +819,11 @@ export const QUICKER_CONTRACT_ABI = [
 		"outputs": [
 			{
 				"components": [
+					{
+						"internalType": "uint256",
+						"name": "orderNumber",
+						"type": "uint256"
+					},
 					{
 						"internalType": "address",
 						"name": "client",
@@ -800,6 +866,11 @@ export const QUICKER_CONTRACT_ABI = [
 					},
 					{
 						"internalType": "uint256",
+						"name": "deliveredTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "completedTime",
 						"type": "uint256"
 					}
@@ -815,6 +886,101 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "enum Quicker.State",
+				"name": "_state",
+				"type": "uint8"
+			}
+		],
+		"name": "getOrdersForState",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "orderNumber",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "quicker",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Quicker.State",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "orderPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "securityDeposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "limitedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "matchedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deliveredTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Quicker.Order[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_quicker",
+				"type": "address"
+			}
+		],
+		"name": "getQuickerOrderList",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
@@ -822,6 +988,11 @@ export const QUICKER_CONTRACT_ABI = [
 		],
 		"name": "orderList",
 		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "orderNumber",
+				"type": "uint256"
+			},
 			{
 				"internalType": "address",
 				"name": "client",
@@ -860,6 +1031,11 @@ export const QUICKER_CONTRACT_ABI = [
 			{
 				"internalType": "uint256",
 				"name": "matchedTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deliveredTime",
 				"type": "uint256"
 			},
 			{
@@ -918,4 +1094,4 @@ export const QUICKER_CONTRACT_ABI = [
 	}
 ]
 
-export const QUICKER_ADDRESS = "0xDF303c2C19d251D2F17C5730B172773FB7ec302D"
+export const QUICKER_ADDRESS = "0xEd9089dfa3C95ba80b38A17729eCD997759a8bb7"

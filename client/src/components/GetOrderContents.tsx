@@ -20,7 +20,6 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
     args: [orderNum],
     onSuccess(data) {
       setObjData(data);
-      console.log(data)
     },
     onError(error) {
       console.log('Error', error)
@@ -38,15 +37,17 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
 const TemplateOrder = ({ data }: { data: any }) => {
   return (
     <>
-      <div>의뢰인: {JSON.stringify(data[0])}</div>
-      <div>배송원: {JSON.stringify(data[1])}</div>
-      <div>상태: {ConvertStateData(data[2])}</div>
-      <div>결제가격: {ConvertCostData(data[3])}</div>
-      <div>보증금: {ConvertCostData(data[4])}</div>
-      <div>배송기한: {ConvertDateData(data[5])}</div>
-      <div>의뢰시간: {ConvertDateData(data[6])}</div>
-      <div>수락시간: {ConvertDateData(data[7])}</div>
-      <div>계약완료시간: {ConvertDateData(data[8])}</div>
+      <div>오더번호: {BigInt(data[0]._hex).toString()}</div><br></br>
+      <div>의뢰인: {JSON.stringify(data[1])}</div><br></br>
+      <div>배송원: {JSON.stringify(data[2])}</div><br></br>
+      <div>상태: {ConvertStateData(data[3])}</div><br></br>
+      <div>결제가격: {ConvertCostData(data[4])}</div><br></br>
+      <div>보증금: {ConvertCostData(data[5])}</div><br></br>
+      <div>배송기한: {ConvertDateData(data[6])}</div><br></br>
+      <div>의뢰시간: {ConvertDateData(data[7])}</div><br></br>
+      <div>수락시간: {ConvertDateData(data[8])}</div><br></br>
+      <div>배송완료시간: {ConvertDateData(data[9])}</div><br></br>
+      <div>계약완료시간: {ConvertDateData(data[10])}</div><br></br>
     </>
   );
 };
