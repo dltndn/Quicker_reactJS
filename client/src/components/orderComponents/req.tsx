@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 
+type Transport = "walk" | "bike" | "kickboard" | "motorcycle" | "car" | "truck";
+
+type CheckedState = Record<Transport, boolean>;
+
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
 const kickboard = require('../../image/kickboard.png')
@@ -145,22 +149,29 @@ const Img = styled.img`
     height: 1.875rem;
 `;
 
-const CheckIcon = styled(BsFillCheckCircleFill)`
+const CheckIcon = styled.div`
   position: absolute;
-  top: 0;
+  top: -0.5rem;
   right: 0;
-  display: none;
-  fill: green;
+  font-size: 0.1rem;
 `;
 
 function Req() {
+    const [isChecked, setIsChecked] = useState({
+        walk: false,
+        bike: false,
+        kickboard: false,
+        motorcycle: false,
+        car: false,
+        truck: false,
+      });
 
-    const [isChecked, setIsChecked] = useState(false);
-
-    const handleClick = () => {
-    setIsChecked(!isChecked);
-    };
-    
+    const handleImgClick = (transport: Transport) => {
+        setIsChecked((prevState) => ({
+          ...prevState,
+          [transport]: !prevState[transport],
+        }));
+      };
     return (
     <>
     <Container>
@@ -170,49 +181,55 @@ function Req() {
             </div>
             <Div0>
                 <Div1>
-                    <ImgWrapper>
-                        <Img src={walk} alt="" onClick={handleClick} />{isChecked && <CheckIcon />}
+                    <ImgWrapper onClick={() => handleImgClick("walk")}>
+                    <Img src={walk} alt=""/>
+                    {isChecked.walk && <CheckIcon>✔️</CheckIcon>}
                     </ImgWrapper>
                     <Div2>
                     도보
                     </Div2>  
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={bike} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("bike")}>
+                    <Img src={bike} alt=""/>
+                    {isChecked.bike && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     자전거
                     </Div2>                 
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={kickboard} alt=""></Img>
-                    </div>
+                <ImgWrapper  onClick={() => handleImgClick("kickboard")}>
+                    <Img src={kickboard} alt=""/>
+                    {isChecked.kickboard && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     킥보드
                     </Div2>                
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={motorcycle} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("motorcycle")}>
+                    <Img src={motorcycle} alt=""/>
+                    {isChecked.motorcycle && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     오토바이
                     </Div2>                
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={car} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("car")}>
+                    <Img src={car} alt=""/>
+                    {isChecked.car && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     승용차
                     </Div2>             
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={truck} alt=""></Img>
-                    </div>
+                <ImgWrapper  onClick={() => handleImgClick("truck")}>
+                    <Img src={truck} alt=""/>
+                    {isChecked.truck && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     트럭
                     </Div2>               

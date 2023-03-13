@@ -5,21 +5,35 @@ import { useState } from "react";
 import { Web3Button } from "@web3modal/react";
 
 const Div0 = styled.div`
-  padding-top: var(--padding);
-  padding-bottom: var(--padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
-const Sp0 = styled.span`
-  margin-top: var(--padding);
-  padding: var(--padding);
+
+const Div1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+
+const Sp0 = styled.div`
+  padding: var(--padding) var(--padding) 0 var(--padding);
   font-size: var(--font-md);
   font-weight: bold;
 `;
+
 const Sp1 = styled.span`
+  padding-top: var(--padding);
   padding-left: var(--padding);
   padding-bottom: var(--padding);
   font-size: var(--font-md);
   font-weight: bold;
 `;
+
+const Sp2 = styled.span`
+  padding-right: var(--padding);
+`;
+
 const Bt0 = styled.button`
   border: none;
   box-shadow: none;
@@ -45,26 +59,32 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           <section>
             <Div0>
               <Sp0>{userName}님!<br/></Sp0>
-              <Sp1>현재 배송원이 물건을 배송중입니다.</Sp1>
+            </Div0>
+            <Div1>
+              <Sp1>현재 배송원이 물건을 배송중입니다.
               <Bt0 onClick={() => {
                     navigate("/");
                   }}>
                     <BsChevronRight />
-                  </Bt0>
-            </Div0>
+                </Bt0>
+              </Sp1>
+            </Div1>
           </section>
         ) : (
           <section>
             <Div0>
               <Sp0>안녕하세요!<br/></Sp0>
-              <Sp1>회원가입을 진행해주세요.</Sp1>
+            </Div0>
+            <Div1>
+              <Sp1>회원가입을 진행해주세요.
               <Bt0 onClick={() => {
                     navigate("/signUp");
                   }}
                 >
                   <BsChevronRight />
                 </Bt0>
-            </Div0>
+              </Sp1>
+            </Div1>
           </section>
         )
       ) : (
@@ -74,9 +94,13 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
             안녕하세요!
             <br />
           </Sp0>
-          <Sp1>지갑을 연결해주세요.</Sp1>
-          <Web3Button icon="hide" label="지갑연결" balance="hide" />
         </Div0>
+        <Div1>
+          <Sp1>지갑을 연결해주세요.</Sp1>
+          <Sp2>
+          <Web3Button icon="hide" label="지갑연결" balance="hide" />
+          </Sp2>
+        </Div1>
       </section>
       )}
     </>

@@ -175,6 +175,13 @@ function Imfo(){
         <Hr></Hr>
         <Sc3>
             <Div0>
+                <span>지갑 주소</span>
+                <Sp0>{address}</Sp0>
+                <Bteye><BsEyeSlash></BsEyeSlash></Bteye>
+            </Div0>
+        </Sc3>
+        <Sc3>
+            <Div0>
                 <span>지갑 잔액</span>
                 <Sp1>{isConnected && address && <GetQkrwBalance address={address}/>}</Sp1>
                 <Bticon>
