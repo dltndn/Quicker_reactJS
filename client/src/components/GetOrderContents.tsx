@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useContractRead } from "wagmi";
+import { useContractRead, useContractEvent } from "wagmi";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
 
-const contract_abi = QUICKER_CONTRACT_ABI;
-const contract_address = QUICKER_ADDRESS;
+const Quicker_abi = QUICKER_CONTRACT_ABI;
+const Quicker_address = QUICKER_ADDRESS;
 
 type OrderProps = {
   orderNum: string;
@@ -14,8 +14,8 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
   const [objData, setObjData] = useState<any>();
 
   const { data, isError, isLoading } = useContractRead({
-    address: contract_address,
-    abi: contract_abi,
+    address: Quicker_address,
+    abi: Quicker_abi,
     functionName: "getOrder",
     args: [orderNum],
     onSuccess(data) {

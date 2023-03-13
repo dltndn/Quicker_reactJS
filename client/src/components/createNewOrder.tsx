@@ -45,8 +45,6 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     },
   });
 
-
-
   return (
     <>
       <button disabled={!write} onClick={() => write?.()}>

@@ -672,6 +672,19 @@ export const QUICKER_CONTRACT_ABI = [
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "result",
+				"type": "bool"
+			}
+		],
+		"name": "OrderResult",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "previousOwner",
@@ -1094,4 +1107,4 @@ export const QUICKER_CONTRACT_ABI = [
 	}
 ]
 
-export const QUICKER_ADDRESS = "0xEd9089dfa3C95ba80b38A17729eCD997759a8bb7"
+export const QUICKER_ADDRESS = "0xf334c6cb7e78434FC0a467FD6371c16EA42952B9"

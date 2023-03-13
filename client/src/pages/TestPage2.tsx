@@ -2,6 +2,12 @@ import GetOrderContents from "../components/GetOrderContents";
 import CreateNewOrder from "../components/createNewOrder";
 import AcceptOrder from "../components/acceptOrder";
 import { useState, useEffect } from "react";
+import { useContractEvent } from "wagmi";
+import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
+
+//Qkrw token contract information - polygon mumbai network
+const Quicker_abi = QUICKER_CONTRACT_ABI;
+const Quicker_address = QUICKER_ADDRESS;
 
 export default function TestPage2() {
   const [orderNum, setOrderNum] = useState<string>("0");
@@ -9,10 +15,18 @@ export default function TestPage2() {
   const [deadline, setDeadline] = useState<string>("");
   const [acceptNum, setAcceptNum] = useState<string>("");
 
-  const handleClick = (e: any) => {
-    const newOrderNum = e.target.previousSibling.value;
-    setOrderNum(newOrderNum);
+  const handleClick = (_orderNum:string) => {
+    setOrderNum(_orderNum)
   };
+
+  useContractEvent({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    eventName: "OrderResult",
+    listener(node: any, label, owner) {
+        console.log("listening")
+    },
+  });
 
   return (
     <>
@@ -36,10 +50,13 @@ export default function TestPage2() {
       />
       <AcceptOrder _orderNumber={acceptNum} />
       <div>오더 조회하기</div>
-      <input placeholder="오더번호" />
-      <button onClick={handleClick}>오더 내용 확인</button>
+      <input
+        placeholder="오더번호"
+        value={orderNum}
+        onChange={(e) => handleClick(e.target.value)}
+      />
       <br></br>
-      <GetOrderContents orderNum={orderNum}></GetOrderContents>
+      <GetOrderContents orderNum={orderNum} />
     </>
   );
 }
