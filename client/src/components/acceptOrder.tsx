@@ -11,18 +11,15 @@ const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
 interface Props {
-  _orderPrice: string;
-  _deadLine: string;
+  _orderNumber: string;
 }
 
-export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
-  const [createdOrder, setCreatedOrder] = useState<any>("오더 생성 전");
-
+export default function AcceptOrder({ _orderNumber }: Props) {
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
     abi: Quicker_abi,
-    functionName: "createOrder",
-    args: [_orderPrice, _deadLine],
+    functionName: "acceptOrder",
+    args: [_orderNumber],
   });
 
   const { data, isLoading, isSuccess, write } = useContractWrite({
@@ -35,25 +32,14 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     },
   });
 
-  useContractEvent({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    eventName: "OrderCreated",
-    listener(node: any, label, owner) {
-      let oNum = BigInt(node._hex).toString()
-      setCreatedOrder(oNum)
-    },
-  });
-
-
-
   return (
     <>
       <button disabled={!write} onClick={() => write?.()}>
-        오더생성하기
+        오더수락하기
       </button>
-      <br></br>
-      <div>생성된 오더 번호: {isLoading && (<div>지갑 서명 대기중...</div>)}{isSuccess && createdOrder}</div><br></br>
+      {isLoading && <div>지갑 서명 대기중...</div>}
+      {isSuccess && <div>매칭 성공!</div>}
+      <div></div><br></br>
     </>
   );
 }

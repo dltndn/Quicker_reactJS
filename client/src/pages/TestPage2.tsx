@@ -1,12 +1,13 @@
 import GetOrderContents from "../components/GetOrderContents";
 import CreateNewOrder from "../components/createNewOrder";
+import AcceptOrder from "../components/acceptOrder";
 import { useState, useEffect } from "react";
 
 export default function TestPage2() {
   const [orderNum, setOrderNum] = useState<string>("0");
   const [orderPrice, setOrderPrice] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
-
+  const [acceptNum, setAcceptNum] = useState<string>("");
 
   const handleClick = (e: any) => {
     const newOrderNum = e.target.previousSibling.value;
@@ -27,9 +28,17 @@ export default function TestPage2() {
         onChange={(e) => setDeadline(e.target.value)}
       />
       <CreateNewOrder _orderPrice={orderPrice} _deadLine={deadline} />
+      <div>오더 수락하기(배송원)</div>
+      <input
+        placeholder="오더번호"
+        value={acceptNum}
+        onChange={(e) => setAcceptNum(e.target.value)}
+      />
+      <AcceptOrder _orderNumber={acceptNum} />
       <div>오더 조회하기</div>
       <input placeholder="오더번호" />
-      <button onClick={handleClick}>오더 내용 확인</button><br></br>
+      <button onClick={handleClick}>오더 내용 확인</button>
+      <br></br>
       <GetOrderContents orderNum={orderNum}></GetOrderContents>
     </>
   );

@@ -28,7 +28,7 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
 
   return (
     <>
-      {isLoading ? <div>loading...</div> : <div></div>}
+      {isLoading && <div>loading...</div>}
       {objData === undefined ? (<div>데이터 없음</div>):(<div>Result: <TemplateOrder data={objData} /></div>)}
     </>
   );
@@ -62,7 +62,7 @@ const ConvertStateData = (state: number): string => {
 const ConvertCostData = (cost: any): string => {
   let result = ''
   if (cost == 0) {
-    result = '배송원 매칭x'
+    result = '-'
   } else {
     result = BigInt(cost._hex).toString() + '원';
   }
@@ -71,7 +71,7 @@ const ConvertCostData = (cost: any): string => {
 
 const ConvertDateData = (timestamp: any) => {
   if (timestamp == 0) {
-    return '배송원 매칭x'
+    return '-'
   } else {
     const { year, month, day, hours, minutes } = getDateFromTimestamp(timestamp)
     return (<div>{year}/{month}/{day} {hours}:{minutes}</div>)
