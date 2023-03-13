@@ -122,13 +122,13 @@ const PostcodeInputs = ({ refs, controls }: PostcodeInputsType) => {
                     <Ip type="text" placeholder="이름" />
                 </DivName>
                 <Divcall>
-                    <Ip type="text" placeholder="010" />
+                    <Ip type="number" placeholder="010" />
                 </Divcall>
                 <Divcall>
-                    <Ip type="text" placeholder="010" />
+                    <Ip type="number" placeholder="0000" />
                 </Divcall>
                 <Divcall1>
-                    <Ip type="text" placeholder="010" />
+                    <Ip type="number" placeholder="0000" />
                 </Divcall1>
             </Div0>
         </Box>

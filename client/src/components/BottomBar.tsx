@@ -44,6 +44,7 @@ const Iconimg = styled.img`
 
 function BottomBar() {
   const navigate = useNavigate();
+  const { isConnected } = useAccount();
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
   const [showDiv, setShowDiv] = useState(false);
 

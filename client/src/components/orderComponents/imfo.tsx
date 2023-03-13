@@ -170,7 +170,7 @@ function Imfo(){
             </Topdiv>
         </section>
         <Scwal>
-            <Web3Button icon="hide" label="지갑연결" balance="hide" />
+            <Web3Button icon="hide" label="지갑연결" balance="hide" style={{ width: '100%' }} />
         </Scwal>
         <Hr></Hr>
         <Sc3>
