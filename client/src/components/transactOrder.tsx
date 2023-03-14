@@ -1,7 +1,6 @@
 import {
   useContractWrite,
   usePrepareContractWrite,
-  useContractEvent,
 } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
@@ -11,15 +10,31 @@ const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
 interface Props {
-  _orderNumber: string;
+  _functionName: string;
+  title: string;
 }
 
-export default function AcceptOrder({ _orderNumber }: Props) {
+interface ErrorProps {
+  reason: string;
+}
+
+export default function TransactOrder({
+  _functionName,
+  title,
+}: Props) {
+    const [orderNum, setOrderNum] = useState<string>()
+    const [errorMessage, setErrorMessage] = useState<string>()
+
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
     abi: Quicker_abi,
-    functionName: "acceptOrder",
-    args: [_orderNumber],
+    functionName: _functionName,
+    args: [orderNum],
+    onSettled(data: any, error: any) {
+      let result: ErrorProps = JSON.parse(JSON.stringify(error))
+      setErrorMessage(result.reason)
+    },
+
   });
 
   const { error, isLoading, isSuccess, write } = useContractWrite({
@@ -34,12 +49,20 @@ export default function AcceptOrder({ _orderNumber }: Props) {
 
   return (
     <>
+      <div>{title}</div>
+      <input
+        placeholder="오더번호"
+        value={orderNum}
+        onChange={(e) => setOrderNum(e.target.value)}
+      />
       <button disabled={!write} onClick={() => write?.()}>
-        오더수락하기
+        확인
       </button>
       {isLoading && <div>지갑 서명 대기중...</div>}
       {isSuccess && <div>트랜잭션 전송 완료</div>}
-      <div></div><br></br>
+      {errorMessage && <div>에러: {errorMessage}</div>}
+      <div></div>
+      <br></br>
     </>
   );
 }

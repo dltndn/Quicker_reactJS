@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useContractRead, useContractEvent } from "wagmi";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
+import GetQkrwBalance from "./getQkrwBalance";
 
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
@@ -38,7 +39,7 @@ const TemplateOrder = ({ data }: { data: any }) => {
   return (
     <>
       <div>오더번호: {BigInt(data[0]._hex).toString()}</div><br></br>
-      <div>의뢰인: {JSON.stringify(data[1])}</div><br></br>
+      <div>의뢰인: {JSON.stringify(data[1])}</div>
       <div>배송원: {JSON.stringify(data[2])}</div><br></br>
       <div>상태: {ConvertStateData(data[3])}</div><br></br>
       <div>결제가격: {ConvertCostData(data[4])}</div><br></br>
