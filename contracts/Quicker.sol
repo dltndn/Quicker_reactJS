@@ -342,6 +342,7 @@
 //             "You can not complete before matched"
 //         );
 //         orderList[_orderNum].state = State.completed;
+//         orderList[_orderNum].completedTime = getCurrentTime();
 //         emit OrderResult(true);
 //     }
 
