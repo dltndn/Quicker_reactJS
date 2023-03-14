@@ -1,6 +1,7 @@
 import GetOrderContents from "../components/GetOrderContents";
 import CreateNewOrder from "../components/createNewOrder";
 import AcceptOrder from "../components/acceptOrder";
+import CancelOrder from "../components/cancelOrder";
 import { useState, useEffect } from "react";
 import { useContractEvent } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
@@ -11,6 +12,7 @@ const Quicker_address = QUICKER_ADDRESS;
 
 export default function TestPage2() {
   const [orderNum, setOrderNum] = useState<string>("0");
+  const [cancelNum, setCancelNum] = useState<string>("")
   const [orderPrice, setOrderPrice] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
   const [acceptNum, setAcceptNum] = useState<string>("");
@@ -24,7 +26,7 @@ export default function TestPage2() {
     abi: Quicker_abi,
     eventName: "OrderResult",
     listener(node: any, label, owner) {
-        console.log("listening")
+        alert("트랜잭션 성공!")
     },
   });
 
@@ -42,6 +44,13 @@ export default function TestPage2() {
         onChange={(e) => setDeadline(e.target.value)}
       />
       <CreateNewOrder _orderPrice={orderPrice} _deadLine={deadline} />
+      <div>오더 취소하기(의뢰인)</div>
+      <input
+        placeholder="오더번호"
+        value={cancelNum}
+        onChange={(e) => setCancelNum(e.target.value)}
+      />
+      <CancelOrder _orderNumber={cancelNum} />
       <div>오더 수락하기(배송원)</div>
       <input
         placeholder="오더번호"

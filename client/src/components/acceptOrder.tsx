@@ -22,7 +22,7 @@ export default function AcceptOrder({ _orderNumber }: Props) {
     args: [_orderNumber],
   });
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const { error, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess(data) {
       console.log(data);
@@ -38,7 +38,7 @@ export default function AcceptOrder({ _orderNumber }: Props) {
         오더수락하기
       </button>
       {isLoading && <div>지갑 서명 대기중...</div>}
-      {isSuccess && <div>매칭 성공!</div>}
+      {isSuccess && <div>트랜잭션 전송 완료</div>}
       <div></div><br></br>
     </>
   );
