@@ -28,6 +28,7 @@ export default function TestPage2() {
     listener(node: any, label, owner) {
         alert("트랜잭션 성공!")
     },
+    once: true,
   });
 
   return (
