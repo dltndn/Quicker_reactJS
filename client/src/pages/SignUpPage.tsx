@@ -6,6 +6,7 @@ import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from 'wagmi';
 
+const serverUrl = `https://port-0-quicker-reactjs-sever-luj2cle2iiwho.sel3.cloudtype.app`
 
 function SignUpPage() {
   const navigate = useNavigate()
@@ -38,7 +39,7 @@ function SignUpPage() {
         date: parseInt(birthday.current!.value.substring(8, 10))
       }
     }
-    fetch("http://localhost:9000/register", {
+    fetch(`${serverUrl}/register`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
