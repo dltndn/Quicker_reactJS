@@ -17,9 +17,6 @@ interface ErrorProps {
 
 export default function TransactOrder({ _functionName, title }: Props) {
   const [orderNum, setOrderNum] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(
-    undefined
-  );
 
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
@@ -28,10 +25,9 @@ export default function TransactOrder({ _functionName, title }: Props) {
     args: [orderNum],
     onSettled(data: any, error: any) {
       let result: ErrorProps = JSON.parse(JSON.stringify(error));
-      if(result.reason === 'invalid BigNumber string') {
-        setErrorMessage(undefined)
-      } else {
-        setErrorMessage(result.reason);
+      if(!((result.reason === 'invalid BigNumber string') || (result.reason === 'invalid BigNumber value'))){
+        alert(result.reason);
+        setOrderNum("")
       }
     },
   });
@@ -59,7 +55,6 @@ export default function TransactOrder({ _functionName, title }: Props) {
       </button>
       {isLoading && <div>지갑 서명 대기중...</div>}
       {isSuccess && <div>트랜잭션 전송 완료</div>}
-      {errorMessage && <div>에러: {errorMessage}</div>}
       <div></div>
       <br></br>
     </>
