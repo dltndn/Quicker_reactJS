@@ -30,6 +30,7 @@ app.post("/register", async (req: Request, res: Response) => {
   const userInstance = req.body.User
   const userBirthDate = req.body.Birthday
   //NOTE : 전화번호를 기반으로 암호화한 id 사용
+  console.log(secret)
   const hashed = crypto.createHmac('sha256', secret).update(userInstance.contact).digest('hex');
   userInstance.id = hashed
   userBirthDate.id = hashed
