@@ -1,7 +1,4 @@
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-} from "wagmi";
+import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
 
@@ -18,12 +15,11 @@ interface ErrorProps {
   reason: string;
 }
 
-export default function TransactOrder({
-  _functionName,
-  title,
-}: Props) {
-    const [orderNum, setOrderNum] = useState<string>()
-    const [errorMessage, setErrorMessage] = useState<string>()
+export default function TransactOrder({ _functionName, title }: Props) {
+  const [orderNum, setOrderNum] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
 
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
@@ -31,10 +27,13 @@ export default function TransactOrder({
     functionName: _functionName,
     args: [orderNum],
     onSettled(data: any, error: any) {
-      let result: ErrorProps = JSON.parse(JSON.stringify(error))
-      setErrorMessage(result.reason)
+      let result: ErrorProps = JSON.parse(JSON.stringify(error));
+      if(result.reason === 'invalid BigNumber string') {
+        setErrorMessage(undefined)
+      } else {
+        setErrorMessage(result.reason);
+      }
     },
-
   });
 
   const { error, isLoading, isSuccess, write } = useContractWrite({
