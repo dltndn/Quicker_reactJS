@@ -29,7 +29,6 @@ app.post("/register", async (req: Request, res: Response) => {
   const secret = process.env.cryptoKey
   const userInstance = req.body.User
   const userBirthDate = req.body.Birthday
-  console.log(secret)
   //NOTE : 전화번호를 기반으로 암호화한 id 사용
   const hashed = crypto.createHmac('sha256', secret).update(userInstance.contact).digest('hex');
   userInstance.id = hashed
@@ -72,4 +71,5 @@ app.post("/post", (req: Request, res: Response) => {
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port} !`);
+  console.log(process.env.password)
 });
