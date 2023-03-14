@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAccount } from 'wagmi';
 
 const serverUrl = `https://port-0-quicker-reactjs-sever-luj2cle2iiwho.sel3.cloudtype.app`
+// const serverUrl = `http://localhost:9000`
 
 function SignUpPage() {
   const navigate = useNavigate()

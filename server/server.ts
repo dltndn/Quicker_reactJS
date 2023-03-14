@@ -34,6 +34,13 @@ app.post("/register", async (req: Request, res: Response) => {
   const hashed = crypto.createHmac('sha256', secret).update(userInstance.contact).digest('hex');
   userInstance.id = hashed
   userBirthDate.id = hashed
+
+  console.log(process.env.cryptoKey)
+  console.log(process.env.host)
+  console.log(process.env.user)
+  console.log(process.env.port)
+  console.log(process.env.password)
+  console.log(req.body)
   
   await User.create(userInstance);
   await Birth_date.create(userBirthDate);
