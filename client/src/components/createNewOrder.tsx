@@ -28,7 +28,8 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
   const { data, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess(data) {
-      console.log(data);
+      // console.log(data);
+      console.log()
     },
     onError(error) {
       console.log(error);
@@ -39,7 +40,8 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     address: Quicker_address,
     abi: Quicker_abi,
     eventName: "OrderCreated",
-    listener(node: any, label, owner) {
+    async listener(node: any, label: any, owner) {
+      let resTx = await label.getTransactionReceipt()
       let oNum = BigInt(node._hex).toString()
       setCreatedOrder(oNum)
     },

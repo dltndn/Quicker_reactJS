@@ -3,7 +3,7 @@ import CreateNewOrder from "../components/createNewOrder";
 import styled from "styled-components";
 import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
-import { useContractEvent } from "wagmi";
+import { useContractEvent, useTransaction, useAccount } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 
 //Qkrw token contract information - polygon mumbai network
@@ -12,10 +12,12 @@ const Quicker_address = QUICKER_ADDRESS;
 
 export default function TestPage2() {
   const [orderNum, setOrderNum] = useState<string>("");
-  const [cancelNum, setCancelNum] = useState<string>("");
   const [orderPrice, setOrderPrice] = useState<string>("");
   const [deadline, setDeadline] = useState<string>("");
-  const [acceptNum, setAcceptNum] = useState<string>("");
+  const [txSender, setTxSender] = useState<string>("")
+  const [txHash, setTxHash] = useState<string>("")
+
+  const { address } = useAccount()
 
   const handleClick = (_orderNum: string) => {
     setOrderNum(_orderNum);
@@ -25,8 +27,17 @@ export default function TestPage2() {
     address: Quicker_address,
     abi: Quicker_abi,
     eventName: "OrderResult",
-    listener(node: any, label, owner) {
-      alert("트랜잭션 성공!");
+    async listener(node: any, label: any, owner) {
+      let resTx = await label.getTransactionReceipt()
+      if(txHash !== resTx.transactionHash) {
+        setTxHash(resTx.transactionHash)
+        setTxSender(resTx.from)
+        if(address === txSender){
+          alert("트랜잭션 성공!")
+        } else {
+          console.log("다른 트랜잭션")
+        }
+      }
     },
   });
 

@@ -23,7 +23,7 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
       setObjData(data);
     },
     onError(error) {
-      console.log('Error', error)
+      // console.log('Error', error)
     },
   });
 

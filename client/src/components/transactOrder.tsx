@@ -1,4 +1,4 @@
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useTransaction, useAccount, useContractEvent } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
 
@@ -16,7 +16,7 @@ interface ErrorProps {
 }
 
 export default function TransactOrder({ _functionName, title }: Props) {
-  const [orderNum, setOrderNum] = useState<string>("");
+  const [orderNum, setOrderNum] = useState<string>("");  
 
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
@@ -35,7 +35,7 @@ export default function TransactOrder({ _functionName, title }: Props) {
   const { error, isLoading, isSuccess, write } = useContractWrite({
     ...config,
     onSuccess(data) {
-      console.log(data);
+      console.log("트잭 성공!")
     },
     onError(error) {
       console.log(error);
@@ -50,7 +50,7 @@ export default function TransactOrder({ _functionName, title }: Props) {
         value={orderNum}
         onChange={(e) => setOrderNum(e.target.value)}
       />
-      <button disabled={!write} onClick={() => write?.()}>
+      <button disabled={!write} onClick={() => {write?.(); setOrderNum("")}}>
         확인
       </button>
       {isLoading && <div>지갑 서명 대기중...</div>}
