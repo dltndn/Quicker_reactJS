@@ -6,15 +6,52 @@ import { initModels, User, Birth_date, Join_date } from "./models/DB/init-models
 initModels(sequelize);
 
 const cors = require("cors");
+const http = require("http");
+const io = require('socket.io');
 const app: Application = express();
-const port: number = 9000;
+const port: Number = 9000;
+const httpServer = http.createServer(app).listen(9001);
 const bodyParser = require("body-parser");
 const { Sequelize, DataTypes, Op } = require("sequelize");
 const crypto = require('crypto');
-require("dotenv").config();
+
+const socketServer = io(httpServer, {
+	cors: {
+		origin: "*",
+		methods: ["GET", "POST"]
+	}
+});
 
 app.use(cors());
+require("dotenv").config();
+
 app.use(bodyParser.json());
+
+
+let roomName = "testroom"
+// socketServer.on('connect');
+let sockets : Array<Object> = []
+socketServer.on('connect', (socket : any) => {
+	sockets.push(socket)
+	socket.join(roomName);
+	socket.on('sendMessage', (message : MessageObejct, done : Function) => {
+		socket.to(roomName).emit("sendMessage", message.data);
+    console.log(message.data)
+		done();
+		// done()
+	});
+});
+
+interface MessageObejct {
+  data : String
+}
+
+
+
+
+
+
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send(`

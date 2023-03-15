@@ -2,6 +2,7 @@
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
+import ChatArea from "../components/chat"
 
 function ChattingPage() {
   const navigate = useNavigate()
@@ -10,7 +11,7 @@ function ChattingPage() {
         <TopBarOthers title="채팅" redirectLogic={() => {
           navigate("/")
         } }></TopBarOthers>
-        <div>채팅페이지</div>
+        <ChatArea></ChatArea>
         <BottomBar></BottomBar>
       </div>
     );
