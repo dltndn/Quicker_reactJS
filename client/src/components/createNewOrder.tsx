@@ -44,6 +44,7 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
       let resTx = await label.getTransactionReceipt()
       let oNum = BigInt(node._hex).toString()
       setCreatedOrder(oNum)
+      alert("created new order")
     },
   });
 
