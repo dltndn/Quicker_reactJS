@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 const white1 = require('../image/white1.png');
 const black1 = require('../image/black1.png');
 const white2 = require('../image/white2.png');
@@ -42,6 +42,33 @@ const Iconimg = styled.img`
   height: 1.5rem;
 `;
 
+const wave = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+const Container = styled.div`
+  font-weight: bold;
+`;
+
+const Letter = styled.span<{ delay: number }>`
+  display: inline-block;
+  animation: ${wave} 0.5s ease-in-out ${(props) => props.delay}s infinite;
+`;
+
 function BottomBar() {
   const navigate = useNavigate();
   const { isConnected } = useAccount();
@@ -64,7 +91,13 @@ function BottomBar() {
     <>
       {showDiv ? (
         <Sc0>
-          <div>지갑을 연결해주세요.</div>
+           <Container>
+      {Array.from('지갑을 연결해주세요.').map((letter, index) => (
+        <Letter key={index} delay={index * 0.1}>
+          {letter}
+        </Letter>
+      ))}
+    </Container>
         </Sc0>
       ) : (
         <Sc0>

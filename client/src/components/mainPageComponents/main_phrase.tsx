@@ -73,16 +73,14 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         ) : (
           <section>
             <Div0>
-              <Sp0>안녕하세요!<br/></Sp0>
+              <Sp0 onClick={() => {
+                    navigate("/signUp");
+                  }}>안녕하세요!<br/></Sp0>
             </Div0>
             <Div1>
-              <Sp1>회원가입을 진행해주세요.
-              <Bt0 onClick={() => {
+              <Sp1 onClick={() => {
                     navigate("/signUp");
-                  }}
-                >
-                  <BsChevronRight />
-                </Bt0>
+                  }}>회원가입을 진행해주세요.
               </Sp1>
             </Div1>
           </section>
@@ -98,8 +96,9 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         <Div1>
           <Sp1>지갑을 연결해주세요.</Sp1>
           <Sp2>
-          <Web3Button icon="hide" label="지갑연결" balance="hide" />
+            <Web3Button icon="hide" label="지갑연결" balance="hide" />
           </Sp2>
+          
         </Div1>
       </section>
       )}

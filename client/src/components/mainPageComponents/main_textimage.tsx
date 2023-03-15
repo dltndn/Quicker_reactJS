@@ -23,7 +23,7 @@ const Divimg = styled.div`
 `;
 const Img = styled.img`
     border-radius: 10%;
-    width: 100%;
+    width: 90%;
 `;
 const img1 = require('../../image/ex1.jpg')
 

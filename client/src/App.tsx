@@ -5,7 +5,7 @@ import {
   modalConnectors,
   walletConnectProvider,
 } from "@web3modal/ethereum";
-import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
+import { Web3Modal, useWeb3ModalTheme, } from "@web3modal/react";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -18,6 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
 import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
+import Profile_settingPage from "./pages/Profile_settingPage";
 import React from "react";
 
 Buffer.from("anything", "base64");
@@ -65,6 +66,7 @@ function App() {
             <Route path="/test2" element={<TestPage2 />} />
             <Route path="/orderlist" element={<OrderlistPage />} />
             <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} />
+            <Route path="/profile/setting" element={<Profile_settingPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

@@ -6,6 +6,7 @@ type Transport = "walk" | "bike" | "kickboard" | "motorcycle" | "car" | "truck";
 
 type CheckedState = Record<Transport, boolean>;
 
+
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
 const kickboard = require('../../image/kickboard.png')
@@ -38,7 +39,6 @@ const Box = styled.div`
   border-radius: 0.313rem;
   margin-top: 0.5rem;
   width: 97%;
-  height: 5.5rem;
   background-color: #ffffff;
   padding: 0.75rem 1.125rem 0.75rem 1.125rem;
 `;
@@ -74,7 +74,7 @@ const SelectInput = styled.select`
 `;
 
 const Btdiv = styled.div`
-    padding: 0.625rem 0 0.625rem 0;
+    padding: 0.625rem 0 0 0;
 `;
 
 const Btul = styled.ul`
@@ -91,7 +91,7 @@ const Leftli = styled.li`
 `;
 
 
-const Btam= styled.button`
+const Btam = styled.button`
   width: 2.75rem;
   height: 1.375rem;
   font-size: var(--font-small);
@@ -102,6 +102,7 @@ const Btam= styled.button`
   color: #a6a6a6;
   margin-right: 0.375rem;
 `;
+
 
 const Ipval = styled.input`
     width: 2.75rem;
@@ -120,6 +121,23 @@ const Ipval = styled.input`
         background-color: #ffffff;
     }
 `;
+const Ip = styled.input`
+width: 77%;
+height: 1.375rem;
+font-size: var(--font-small);
+border-radius: 0.313rem;
+border: 1px solid #efefef; /* 테두리 */
+outline: none; /* 포커스 시 발생하는 외곽선 제거 */
+background-color: #efefef;
+text-align: center;
+color: #a6a6a6;
+
+&:focus {
+    border-color: #efefef; /* 포커스 시 테두리 색상 변경 */
+    background-color: #ffffff;
+}
+`;
+
 
 const Ipyear = styled(Ipval)`
     width: 4.688rem;
@@ -156,6 +174,11 @@ const CheckIcon = styled.div`
   font-size: 0.1rem;
 `;
 
+const Divhid = styled(Div0)`
+  height: 7rem;
+`;
+
+
 function Req() {
     const [isChecked, setIsChecked] = useState({
         walk: false,
@@ -172,6 +195,17 @@ function Req() {
           [transport]: !prevState[transport],
         }));
       };
+    
+      const [isAMSelected, setIsAMSelected] = useState(true);
+
+      const handleClickAM = () => {
+        setIsAMSelected(true);
+      };
+    
+      const handleClickPM = () => {
+        setIsAMSelected(false);
+      };
+
     return (
     <>
     <Container>
@@ -288,18 +322,7 @@ function Req() {
                     <Leftli>
                         <BsCalendar3></BsCalendar3>
                     </Leftli>
-                    <li>
-                        <Ipyear type='number'></Ipyear>
-                        <Sp0> 년</Sp0>
-                    </li>
-                    <li>
-                        <Ipval type='number'></Ipval>
-                        <Sp0> 월</Sp0>
-                    </li>
-                    <li>
-                        <Ipval type='number'></Ipval>
-                        <Sp0> 일</Sp0>
-                    </li>
+                    <Ip type="date"></Ip>
                 </Btul>
                 <Btdiv>
                     <Btul>
@@ -307,8 +330,8 @@ function Req() {
                             <BsClock></BsClock>
                         </Leftli>
                         <li>
-                            <Btam>오전</Btam>
-                            <Btam>오후</Btam>
+                        <Btam onClick={handleClickAM} style={{ backgroundColor: isAMSelected ? 'blue' : '#efefef', color: isAMSelected ? '#ffffff' : '#a6a6a6' }}>오전</Btam>
+                        <Btam onClick={handleClickPM} style={{ backgroundColor: !isAMSelected ? 'blue' : '#efefef', color: !isAMSelected ? '#ffffff' : '#a6a6a6' }}>오후</Btam>
                         </li>
                         <li>
                             <Ipval type='number'></Ipval>
@@ -343,6 +366,8 @@ function Req() {
             </div>
         </Box>
     </Container>
+    
+    <Divhid/>
     </>
   );
   }
