@@ -62,7 +62,6 @@ app.get("/", (req: Request, res: Response) => {
   `);
 });
 app.post("/register", async (req: Request, res: Response) => {
-
   try {
     const secret = process.env.cryptoKey
     const userInstance = req.body.User

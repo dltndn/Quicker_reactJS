@@ -17,6 +17,10 @@ interface Props {
   background-color: #0D6EFD;
   color: var(--white-color);
   margin-bottom: 0.313rem;
+  transition: all 0.2s ease-in-out;
+  &:active {
+    transform: translateY(0.25rem);
+  }
 `;
 
 const Container = styled.section`

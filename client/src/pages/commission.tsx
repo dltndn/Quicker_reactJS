@@ -7,6 +7,16 @@ import { request } from "http";
 import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
+import { createGlobalStyle } from "styled-components";
+import { useAccount } from "wagmi";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #efefef !important;
+    height: 100%;
+  }
+`;
+
 
 const showMap = () =>
   (document.getElementById("TMapApp")!.style.display = "block");
@@ -24,6 +34,7 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
   const navigate = useNavigate();
+  const { address } = useAccount();
 
   const [showCommissionPage, setShowCommissionPage] = useState<boolean>(true);
 
@@ -85,6 +96,7 @@ export default function CommissionPage() {
 
   return (
     <>
+    <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
         <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>

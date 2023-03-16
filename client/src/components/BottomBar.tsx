@@ -11,32 +11,32 @@ const white3 = require("../image/white3.png");
 const black3 = require("../image/black3.png");
 const white4 = require("../image/white4.png");
 const black4 = require("../image/black4.png");
-const Div0 = styled.div`
+
+const Sc0 = styled.section`
   position: fixed;
+  display: flex;
   bottom: 0;
   width: 100%;
   height: 3.875rem;
   background-color: var(--white-color);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
-const Ul0 = styled.ul`
-  display: flex;
-  justify-content: space-around;
-  list-style: none;
-  margin: calc(var(--padding) / 2) 0;
+
+const Div0 = styled.div`
+  flex: 1 1 25%;
 `;
-const Bt0 = styled.button`
-  display: flex;
-  flex-direction: column;
+
+const Div1 = styled.div`
+  margin-top: 5px;
+`;
+
+const Sp0 = styled.div`
+  margin-top: -5px;
   font-size: var(--font-micro);
-  background-color: var(--white-color);
-  border: none;
 `;
-const Sp0 = styled.span`
-  font-size: var(--font-md);
-  margin: 0 auto;
-  margin-top: 0.125rem;
-  margin-bottom: 0.313rem;
-`;
+
 const Iconimg = styled.img`
   width: 1.5rem;
   height: 1.5rem;
@@ -48,7 +48,7 @@ function BottomBar() {
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
   const [showDiv, setShowDiv] = useState(false);
 
-  const handleButtonClick = (page:string) => {
+  const handleButtonClick = (page: string) => {
     if (!isConnected) {
       setShowDiv(true);
       const timeoutId = setTimeout(() => {
@@ -63,56 +63,48 @@ function BottomBar() {
   return (
     <>
       {showDiv ? (
-        <Div0><div>지갑을 연결해주세요.</div></Div0>
+        <Sc0>
+          <div>지갑을 연결해주세요.</div>
+        </Sc0>
       ) : (
-        <Div0>
-          <Ul0>
-            <li>
-              <Bt0 onClick={() => handleButtonClick("/commission")}>
-                <Sp0>
-                  <Iconimg
-                    src={currentPage === "/commission" ? black1 : white1}
-                    alt="icon"
-                  />
-                </Sp0>
-                <span>의뢰하기</span>
-              </Bt0>
-            </li>
-            <li>
-              <Bt0 onClick={() => handleButtonClick("/search")}>
-                <Sp0>
-                  <Iconimg
-                    src={currentPage === "/search" ? black2 : white2}
-                    alt="icon"
-                  />
-                </Sp0>
-                <span>검색</span>
-              </Bt0>
-            </li>
-            <li>
-              <Bt0 onClick={() => handleButtonClick("/chatting")}>
-                <Sp0>
-                  <Iconimg
-                    src={currentPage === "/chatting" ? black3 : white3}
-                    alt="icon"
-                  />
-                </Sp0>
-                <span>채팅</span>
-              </Bt0>
-            </li>
-            <li>
-              <Bt0 onClick={() => handleButtonClick("/profile")}>
-                <Sp0>
-                  <Iconimg
-                    src={currentPage === "/profile" ? black4 : white4}
-                    alt="icon"
-                  />
-                </Sp0>
-                <span>내정보</span>
-              </Bt0>
-            </li>
-          </Ul0>
-        </Div0>
+        <Sc0>
+          <Div0 onClick={() => handleButtonClick("/commission")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/commission" ? black1 : white1}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>의뢰하기</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/search")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/search" ? black2 : white2}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>검색</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/chatting")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/chatting" ? black3 : white3}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>채팅</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/profile")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/profile" ? black4 : white4}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>내정보</Sp0>
+          </Div0>
+        </Sc0>
       )}
     </>
   );

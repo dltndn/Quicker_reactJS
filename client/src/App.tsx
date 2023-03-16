@@ -1,4 +1,4 @@
-import { WagmiConfig, createClient, configureChains } from "wagmi";
+import { WagmiConfig, createClient, configureChains, useAccount } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import {
   EthereumClient,
@@ -18,7 +18,7 @@ import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
 import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
-import React from "react";
+import React, { useEffect } from "react";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -45,11 +45,17 @@ const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
+  const { address } = useAccount()
+
   setTheme({
     themeMode: "dark",
     themeColor: "default",
     themeBackground: "gradient",
   });
+
+  useEffect(() => {
+    console.log("changed user wallet")
+  }, [address])
 
   return (
     <>
