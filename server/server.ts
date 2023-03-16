@@ -63,18 +63,22 @@ app.get("/", (req: Request, res: Response) => {
 });
 app.post("/register", async (req: Request, res: Response) => {
 
-  const secret = process.env.cryptoKey
-  const userInstance = req.body.User
-  const userBirthDate = req.body.Birthday
-  //NOTE : 전화번호를 기반으로 암호화한 id 사용
-  const hashed = crypto.createHmac('sha256', secret).update(userInstance.contact).digest('hex');
-  userInstance.id = hashed
-  userBirthDate.id = hashed
-  
-  await User.create(userInstance);
-  await Birth_date.create(userBirthDate);
-  await Join_date.create({id : hashed, timeStamp: Math.floor(Date.now()/100)})
-  res.send({ msg: "done" });
+  try {
+    const secret = process.env.cryptoKey
+    const userInstance = req.body.User
+    const userBirthDate = req.body.Birthday
+    //NOTE : 전화번호를 기반으로 암호화한 id 사용
+    const hashed = crypto.createHmac('sha256', secret).update(userInstance.contact).digest('hex');
+    userInstance.id = hashed
+    userBirthDate.id = hashed
+    
+    await User.create(userInstance);
+    await Birth_date.create(userBirthDate);
+    await Join_date.create({id : hashed, timeStamp: Math.floor(Date.now()/100)})
+    return res.send({ msg: "done" });
+  } catch (error) {
+    res.send(error)
+  }
 });
 
 app.get("/conn", (req: Request, res: Response) => {
