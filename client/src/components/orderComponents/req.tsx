@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
+import { useOrderStore } from '../../pages/OrderPage';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -160,6 +161,15 @@ function Req() {
     const handleClick = () => {
     setIsChecked(!isChecked);
     };
+    
+    const { setCost } = useOrderStore()
+    const convertStrToNum = (data:string):number => {
+        let result =  parseInt(data);
+        if (Number.isNaN(result)) {
+            result = 0
+        }
+        return result
+    }
     
     return (
     <>
@@ -322,7 +332,7 @@ function Req() {
                 <ReqFont>의뢰 비용</ReqFont>
             </div>
             <div>
-                <Ipdet type="number" placeholder="지갑 잔액을 확인하세요"></Ipdet>
+                <Ipdet type="number" placeholder="지갑 잔액을 확인하세요" onChange={(e) => setCost(convertStrToNum(e.target.value))}></Ipdet>
             </div>
         </Box>
     </Container>

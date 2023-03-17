@@ -55,6 +55,7 @@ function App() {
 
   useEffect(() => {
     console.log("changed user wallet")
+    console.log(address)
   }, [address])
 
   return (
