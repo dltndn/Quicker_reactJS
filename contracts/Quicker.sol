@@ -239,6 +239,8 @@
 //         return getterOrders;
 //     }
 
+//     event OrderCreated(uint256 orderNum);
+//     event OrderResult(bool result);
 //     /**
 //      * @dev 의뢰인이 새로운 Order를 생성하며 컨트랙에 QKRW 토큰을 입금한다
 //      * @param _orderPrice 의뢰인의 결제 금액
@@ -269,6 +271,7 @@
 //         recieveTokensFromOtherAddress(msg.sender, amount);
 //         orderList.push(newOrder);
 //         clientOrderList[msg.sender].push(orderNum);
+//         emit OrderCreated(orderNum);
 //     }
 
 //     /**
@@ -289,6 +292,7 @@
 //             orderList[_orderNum].orderPrice
 //         );
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
+//         emit OrderResult(true);
 //     }
 
 //     function acceptOrder(uint256 _orderNum) public {
@@ -309,6 +313,7 @@
 //         quickerOrderList[msg.sender].push(_orderNum);
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
+//         emit OrderResult(true);
 //     }
 
 //     // 배송원 배달완료 시간 입력 함수
@@ -324,6 +329,7 @@
 //         require(order.deliveredTime == 0, "Already delivered");
 //         require(order.limitedTime + 12 hours >= getCurrentTime(), "Please contact customer service center");
 //         order.deliveredTime = getCurrentTime();
+//         emit OrderResult(true);
 //     }
 
 //     // client 계약 완료 함수
@@ -336,6 +342,8 @@
 //             "You can not complete before matched"
 //         );
 //         orderList[_orderNum].state = State.completed;
+//         orderList[_orderNum].completedTime = getCurrentTime();
+//         emit OrderResult(true);
 //     }
 
 //     // quicker 정산 함수
@@ -384,6 +392,7 @@
 //         );
 //         order.state = State.completed;
 //         order.securityDeposit = 0;
+//         emit OrderResult(true);
 //     }
 
 //     // failedOrder 함수
@@ -418,6 +427,7 @@
 //         );
 //         order.state = State.failed;
 //         order.securityDeposit = 0;
+//         emit OrderResult(true);
 //     }
 
 //     // todo list

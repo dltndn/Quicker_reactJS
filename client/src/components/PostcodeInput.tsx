@@ -15,6 +15,7 @@ interface refs {
 interface PostcodeInputsType {
     refs: refs
     controls: controls
+    title: String
 }
 
 const Box = styled.div`
@@ -94,12 +95,17 @@ const Ip = styled.input`
 `;
 
 
-const PostcodeInputs = ({ refs, controls }: PostcodeInputsType) => {
+const PostcodeInputs = ({ refs, controls, title }: PostcodeInputsType) => {
 
     return (
         <>
         <Container>
         <Box ref={refs.inputDiv}>
+            <div>
+                <ReqFont>
+                    {title}
+                </ReqFont>
+            </div>
             <Divfont>
                 주소
             </Divfont>

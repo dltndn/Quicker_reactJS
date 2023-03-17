@@ -8,6 +8,7 @@ import {
   QKRW_ADDRESS,
   QUICKER_ADDRESS,
 } from "../contractInformation";
+import { useOrderStore } from "../pages/OrderPage";
 
 //Qkrw token contract information - polygon mumbai network
 const Qkrw_abi = QKRW_CONTRACT_ABI;
@@ -18,9 +19,9 @@ function RequestPage() {
   const { address } = useAccount();
   const [allowIndex, setAllowIndex] = useState<any>();
   const [showAllowance, setShowAllowance] = useState<boolean>(false);
-  const [cost, setCost] = useState<Number>(0);
-
-  let btnContent = cost.toString() + "원 결제하기";
+  
+  const { cost } = useOrderStore()
+  const btnContent = cost.toString() + "원 결제하기";
 
   const { data } = useContractRead({
     address: Qkrw_address,
