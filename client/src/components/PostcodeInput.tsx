@@ -1,5 +1,6 @@
 import ConfirmBtn from "./confirmBtn";
 import styled from "styled-components";
+import Profile_settingPage from "../pages/Profile_settingPage";
 
 interface controls {
     onFocus: React.FocusEventHandler<HTMLInputElement>
@@ -29,6 +30,8 @@ const Container = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  bottom: 7.5rem;
 `;
 
 const ReqFont = styled.span`
@@ -38,17 +41,17 @@ const ReqFont = styled.span`
 
 const Divfont = styled.div`
   font-size: var(--font-small);
-  margin-top: 10px;
-
+  margin-bottom: 10px;
 `;
 
 const Divfont1 = styled(Divfont)`
     flex : 1 1 30%;
-    margin-bottom: 10px;
+      margin-top: 10px;
 `;
 
 const Divfont2 = styled(Divfont)`
     flex : 1 1 70%;
+      margin-top: 10px;
 `;
 
 const Div0 = styled.div`
@@ -97,11 +100,6 @@ const PostcodeInputs = ({ refs, controls }: PostcodeInputsType) => {
         <>
         <Container>
         <Box ref={refs.inputDiv}>
-            <div>
-                <ReqFont>
-                    출발지
-                </ReqFont>
-            </div>
             <Divfont>
                 주소
             </Divfont>
