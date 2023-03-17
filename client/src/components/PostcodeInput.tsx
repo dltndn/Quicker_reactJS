@@ -43,6 +43,7 @@ const ReqFont = styled.span`
 const Divfont = styled.div`
   font-size: var(--font-small);
   margin-bottom: 10px;
+  margin-top: 10px;
 `;
 
 const Divfont1 = styled(Divfont)`
