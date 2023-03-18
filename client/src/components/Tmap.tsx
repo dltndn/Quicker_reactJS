@@ -61,7 +61,7 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
                 id="TMapApp"
                 style={{
                     height: "300px",
-                    width: "300px",
+                    width: "100%",
                 }}
             />
             {/* <div>{JSON.stringify(mapDIV)}</div> */}
