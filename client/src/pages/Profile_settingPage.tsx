@@ -2,25 +2,25 @@ import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from 'styled-components';
-import Imfo from "../components/orderComponents/imfo";
+import Profilesetting from "../components/Profilesetting";
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #efefef !important;
+    background-color: #e6e6e6 !important;
     height: 100%;
   }
 `;
 
-function ProfilePage() {
-  const navigate = useNavigate()
+function Profile_settingPage() {
+    const navigate = useNavigate()
     return (
       <>
         <GlobalStyle />
-        <TopBarOthers title="프로필" redirectLogic={function (){navigate("/")} }></TopBarOthers>
-        <Imfo/>
+        <TopBarOthers title="내 정보" redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
+        <Profilesetting/>
         <BottomBar/>
       </>
     );
   }
   
-  export default ProfilePage;
+  export default Profile_settingPage;

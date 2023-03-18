@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
+import { useOrderStore } from '../../pages/commission';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -8,6 +9,10 @@ const kickboard = require('../../image/kickboard.png')
 const motorcycle = require('../../image/motorcycle.png')
 const car = require('../../image/car.png')
 const truck = require('../../image/truck.png')
+
+type Transport = "walk" | "bike" | "kickboard" | "motorcycle" | "car" | "truck";
+type CheckedState = Record<Transport, boolean>;
+
 
 const Container = styled.section`
   display: flex;
@@ -70,7 +75,7 @@ const SelectInput = styled.select`
 `;
 
 const Btdiv = styled.div`
-    padding: 0.625rem 0 0.625rem 0;
+     padding: 0.625rem 0 0 0;
 `;
 
 const Btul = styled.ul`
@@ -97,6 +102,22 @@ const Btam= styled.button`
   background-color: #efefef;
   color: #a6a6a6;
   margin-right: 0.375rem;
+`;
+
+const Ip = styled.input`
+width: 77%;
+height: 1.375rem;
+font-size: var(--font-small);
+border-radius: 0.313rem;
+border: 1px solid #efefef; /* 테두리 */
+outline: none; /* 포커스 시 발생하는 외곽선 제거 */
+background-color: #efefef;
+text-align: center;
+color: #a6a6a6;
+&:focus {
+    border-color: #efefef; /* 포커스 시 테두리 색상 변경 */
+    background-color: #ffffff;
+}
 `;
 
 const Ipval = styled.input`
@@ -144,22 +165,48 @@ const Img = styled.img`
     width: 1.875rem;
     height: 1.875rem;
 `;
-
-const CheckIcon = styled(BsFillCheckCircleFill)`
+const CheckIcon = styled.div`
   position: absolute;
-  top: 0;
+  top: -0.5rem;
   right: 0;
-  display: none;
-  fill: green;
+  font-size: 0.1rem;
 `;
-
 function Req() {
 
-    const [isChecked, setIsChecked] = useState(false);
 
-    const handleClick = () => {
-    setIsChecked(!isChecked);
-    };
+    const [isChecked, setIsChecked] = useState({
+        walk: false,
+        bike: false,
+        kickboard: false,
+        motorcycle: false,
+        car: false,
+        truck: false,
+      });
+
+      const handleImgClick = (transport: Transport) => {
+        setIsChecked((prevState) => ({
+          ...prevState,
+          [transport]: !prevState[transport],
+        }));
+      };
+    
+      const [isAMSelected, setIsAMSelected] = useState(true);
+      const handleClickAM = () => {
+        setIsAMSelected(true);
+      };
+    
+      const handleClickPM = () => {
+        setIsAMSelected(false);
+      };
+      
+    const { setCost } = useOrderStore()
+    const convertStrToNum = (data:string):number => {
+        let result =  parseInt(data);
+        if (Number.isNaN(result)) {
+            result = 0
+        }
+        return result
+    }
     
     return (
     <>
@@ -170,49 +217,55 @@ function Req() {
             </div>
             <Div0>
                 <Div1>
-                    <ImgWrapper>
-                        <Img src={walk} alt="" onClick={handleClick} />{isChecked && <CheckIcon />}
+                    <ImgWrapper onClick={() => handleImgClick("walk")}>
+                    <Img src={walk} alt=""/>
+                    {isChecked.walk && <CheckIcon>✔️</CheckIcon>}
                     </ImgWrapper>
                     <Div2>
                     도보
                     </Div2>  
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={bike} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("bike")}>
+                    <Img src={bike} alt=""/>
+                    {isChecked.bike && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     자전거
                     </Div2>                 
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={kickboard} alt=""></Img>
-                    </div>
+                <ImgWrapper  onClick={() => handleImgClick("kickboard")}>
+                    <Img src={kickboard} alt=""/>
+                    {isChecked.kickboard && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     킥보드
                     </Div2>                
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={motorcycle} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("motorcycle")}>
+                    <Img src={motorcycle} alt=""/>
+                    {isChecked.motorcycle && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     오토바이
                     </Div2>                
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={car} alt=""></Img>
-                    </div>
+                <ImgWrapper onClick={() => handleImgClick("car")}>
+                    <Img src={car} alt=""/>
+                    {isChecked.car && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     승용차
                     </Div2>             
                 </Div1>
                 <Div1>
-                    <div>
-                        <Img src={truck} alt=""></Img>
-                    </div>
+                <ImgWrapper  onClick={() => handleImgClick("truck")}>
+                    <Img src={truck} alt=""/>
+                    {isChecked.truck && <CheckIcon>✔️</CheckIcon>}
+                    </ImgWrapper>
                     <Div2>
                     트럭
                     </Div2>               
@@ -271,18 +324,7 @@ function Req() {
                     <Leftli>
                         <BsCalendar3></BsCalendar3>
                     </Leftli>
-                    <li>
-                        <Ipyear type='number'></Ipyear>
-                        <Sp0> 년</Sp0>
-                    </li>
-                    <li>
-                        <Ipval type='number'></Ipval>
-                        <Sp0> 월</Sp0>
-                    </li>
-                    <li>
-                        <Ipval type='number'></Ipval>
-                        <Sp0> 일</Sp0>
-                    </li>
+                    <Ip type="date"></Ip>
                 </Btul>
                 <Btdiv>
                     <Btul>
@@ -290,8 +332,8 @@ function Req() {
                             <BsClock></BsClock>
                         </Leftli>
                         <li>
-                            <Btam>오전</Btam>
-                            <Btam>오후</Btam>
+                        <Btam onClick={handleClickAM} style={{ backgroundColor: isAMSelected ? 'blue' : '#efefef', color: isAMSelected ? '#ffffff' : '#a6a6a6' }}>오전</Btam>
+                        <Btam onClick={handleClickPM} style={{ backgroundColor: !isAMSelected ? 'blue' : '#efefef', color: !isAMSelected ? '#ffffff' : '#a6a6a6' }}>오후</Btam>
                         </li>
                         <li>
                             <Ipval type='number'></Ipval>
@@ -322,7 +364,7 @@ function Req() {
                 <ReqFont>의뢰 비용</ReqFont>
             </div>
             <div>
-                <Ipdet type="number" placeholder="지갑 잔액을 확인하세요"></Ipdet>
+                <Ipdet type="number" placeholder="지갑 잔액을 확인하세요" onChange={(e) => setCost(convertStrToNum(e.target.value))}></Ipdet>
             </div>
         </Box>
     </Container>

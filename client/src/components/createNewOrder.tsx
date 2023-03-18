@@ -36,17 +36,17 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     },
   });
 
-  useContractEvent({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    eventName: "OrderCreated",
-    async listener(node: any, label: any, owner) {
-      let resTx = await label.getTransactionReceipt()
-      let oNum = BigInt(node._hex).toString()
-      setCreatedOrder(oNum)
-      alert("created new order")
-    },
-  });
+  // useContractEvent({
+  //   address: Quicker_address,
+  //   abi: Quicker_abi,
+  //   eventName: "OrderCreated",
+  //   async listener(node: any, label: any, owner) {
+  //     let resTx = await label.getTransactionReceipt()
+  //     let oNum = BigInt(node._hex).toString()
+  //     setCreatedOrder(oNum)
+  //     alert("created new order")
+  //   },
+  // });
 
   return (
     <>

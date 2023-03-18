@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #e6e6e6 !important;
+    background-color: #efefef !important;
     height: 100%;
   }
 `;

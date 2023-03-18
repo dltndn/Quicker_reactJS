@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState, useRef } from "react";
 import PostcodeInputs from "./PostcodeInput";
+import { useOrderStore } from "../pages/commission";
 //@ts-ignore
 const { daum } = window;
 
@@ -11,7 +12,7 @@ interface mapControl {
 interface setState {
   setStartPosition: React.Dispatch<React.SetStateAction<{}>>
   setArrivePosition: React.Dispatch<React.SetStateAction<{}>>
-  setTitle: React.Dispatch<React.SetStateAction<string>>
+  // setTitle: React.Dispatch<React.SetStateAction<string>>
 }
 
 interface refs {
@@ -28,11 +29,12 @@ interface props {
 }
 
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
-const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: props) => {
+const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) => {
   //마지막 버튼 클릭 시 OrderPage의 showCommissionPage를 false로 변경
   const handleCompleteCommission = () => {
     hideCommissionPage()
   };
+  const { title, setTitle } = useOrderStore()
 
   const postcodeContainer = useRef<HTMLDivElement>(null)
   const startinputBox = useRef<HTMLInputElement>(null)
@@ -60,13 +62,13 @@ const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: p
 
   const pageNext = () => {
     if (title === "도착지 입력") {
-      setStates.setTitle("세부사항 입력")
+      setTitle("세부사항 입력")
       refs.startinputDiv.current!.style.display = "none"
       refs.arriveinputDiv.current!.style.display = "none"
       handleCompleteCommission()
     }
     else if (title === "출발지 입력") {
-      setStates.setTitle("도착지 입력")
+      setTitle("도착지 입력")
       refs.startinputDiv.current!.style.display = "none"
       refs.arriveinputDiv.current!.style.display = "block"
     }
@@ -111,7 +113,7 @@ const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: p
         postcodeContainer.current!.style.height = size.height + 'px';
       },
       width: '100%',
-      height: '100%'
+      height: '400px'
     }).embed(postcodeContainer.current);
 
     // iframe을 넣은 element를 보이게 한다.
@@ -120,7 +122,7 @@ const Postcode = ({ refs, mapControls ,setStates, title, hideCommissionPage }: p
 
   return (
     <>
-      <div ref={postcodeContainer} style={{ display: "none", border: "1px solid", width: "500px", height: "300px", margin: "5px 0", position: "relative" }} >
+      <div ref={postcodeContainer} style={{ display: "none", width: "100%", height: "400px", margin: "5px 0", position: "relative"}} >
         <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
       </div>
       <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} title={"출발지"}/>
