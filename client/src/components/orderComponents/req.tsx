@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
-import { useOrderStore } from '../../pages/OrderPage';
+import { useOrderStore } from '../../pages/commission';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')

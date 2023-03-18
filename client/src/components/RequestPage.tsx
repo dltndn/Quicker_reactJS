@@ -8,7 +8,7 @@ import {
   QKRW_ADDRESS,
   QUICKER_ADDRESS,
 } from "../contractInformation";
-import { useOrderStore } from "../pages/OrderPage";
+import { useOrderStore } from "../pages/commission";
 
 //Qkrw token contract information - polygon mumbai network
 const Qkrw_abi = QKRW_CONTRACT_ABI;

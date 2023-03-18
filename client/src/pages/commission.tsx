@@ -9,6 +9,21 @@ import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
 import { useAccount } from "wagmi";
+import { create } from 'zustand'
+
+interface OrderState {
+  cost: number;
+  setCost: (newCost:number) => void;
+  title: string;
+  setTitle: (newTitle:string) => void;
+}
+
+export const useOrderStore = create<OrderState>((set) => ({
+  cost: 0,
+  setCost: (cost: number) => set({cost}),
+  title: "출발지 입력",
+  setTitle: (title: string) => set({title}),
+}))
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -40,9 +55,11 @@ export default function CommissionPage() {
 
   const startinputDiv = useRef<HTMLDivElement>(null);
   const arriveinputDiv = useRef<HTMLDivElement>(null);
-  const [title, setTitle] = useState("출발지 입력");
+  // const [title, setTitle] = useState("출발지 입력");
   const [startPosition, setStartPosition] = useState({});
   const [arrivePosition, setArrivePosition] = useState({});
+
+  const { title, setTitle } = useOrderStore()
 
   const pageBack = () => {
     if (title === "출발지 입력") {
@@ -100,7 +117,7 @@ export default function CommissionPage() {
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
         <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
-        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv,}} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{setStartPosition: setStartPosition, setArrivePosition: setArrivePosition, setTitle: setTitle,}} title={title} hideCommissionPage={() => handleCommissionPage()}/>
+        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv,}} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{setStartPosition: setStartPosition, setArrivePosition: setArrivePosition,}} title={title} hideCommissionPage={() => handleCommissionPage()}/>
         <button onClick={get}>get</button>
         <button onClick={post}>post</button>
       </div>
