@@ -114,6 +114,11 @@ const Ic = styled.div`
     color: #a6a6a6;
 `;
 
+const Divhid = styled(Div0)`
+  height: 7rem;
+`;
+
+
 function Join_input({ refs }: props) {
   const [name, setName] = useState('');
   const [contact1, setContact1] = useState('');
@@ -187,6 +192,7 @@ function Join_input({ refs }: props) {
           </Btwal>
         </Wal>
       </Sc0>
+      <Divhid/>
     </>
   );
 }

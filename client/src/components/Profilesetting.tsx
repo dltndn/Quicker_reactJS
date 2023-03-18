@@ -3,14 +3,10 @@ import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useAccount, useDisconnect } from "wagmi";
-import GetQkrwBalance from "../getQkrwBalance";
 import { Web3Button } from "@web3modal/react";
 import { useEffect } from "react";
-import Profile_settingPage from "../../pages/Profile_settingPage";
 
-const money = require('../../image/money.png')
-
-const img1 = require('../../image/ex1.jpg')
+const ex1 = require('../image/ex1.jpg');
 
 const Topdiv = styled.div`
     display: flex;
@@ -18,6 +14,7 @@ const Topdiv = styled.div`
     color: var(--black-color);
     height: 9.688rem;
     align-items: center;
+    
 `;
 
 const Topbt = styled.button`
@@ -142,7 +139,7 @@ const Bticonimg = styled.img`
     height: 1.875rem;
 `;
 
-function Imfo(){
+function Profilesetting(){
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
     const { disconnect } = useDisconnect()
@@ -168,7 +165,7 @@ function Imfo(){
         <>
         <section>
             <Topdiv>
-                <Topimg src={img1} />
+                <Topimg src={ex1} />
                 <Toptx>배영준</Toptx>
                 <Topbt onClick={ClickSettingPage}>
                     <BsPencilSquare></BsPencilSquare>
@@ -176,7 +173,6 @@ function Imfo(){
             </Topdiv>
         </section>
         <Scwal>
-            <Web3Button icon="hide" label="지갑연결" balance="hide" />
         </Scwal>
         <Hr></Hr>
         <Sc3>
@@ -189,9 +185,9 @@ function Imfo(){
         <Sc3>
             <Div0>
                 <span>지갑 잔액</span>
-                <Sp1>{isConnected && address && <GetQkrwBalance address={address}/>}</Sp1>
+                
                 <Bticon>
-                    <Bticonimg src={money} alt="" />
+                    <Bticonimg alt="" />
                 </Bticon>
             </Div0>
         </Sc3>
@@ -252,4 +248,4 @@ function Imfo(){
 }
 
 
-export default Imfo;
+export default Profilesetting;
