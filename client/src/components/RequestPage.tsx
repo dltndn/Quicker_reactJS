@@ -37,6 +37,7 @@ function RequestPage() {
     if (checkAllowance()) {
       //결제 로직 수행
       console.log("결제로직")
+      // NOTE : 이벤트 맞는지 확인
     } else {
       setShowAllowance(true)
     }

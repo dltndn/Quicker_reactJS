@@ -74,12 +74,6 @@ export default function CommissionPage() {
       arriveinputDiv.current!.style.display = "none";
     }
   };
-  const get = () => {
-    fetch("http://localhost:9000/get")
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  };
-
   const post = () => {
     const data = { username: "example" };
 
@@ -118,8 +112,6 @@ export default function CommissionPage() {
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
         <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
         <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv,}} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{setStartPosition: setStartPosition, setArrivePosition: setArrivePosition,}} title={title} hideCommissionPage={() => handleCommissionPage()}/>
-        <button onClick={get}>get</button>
-        <button onClick={post}>post</button>
       </div>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage />

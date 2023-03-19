@@ -1,6 +1,6 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
-import Map from "../script/Tmap"
+import Map from "../lib/Tmap"
 
 const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
 
@@ -51,9 +51,6 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
     const isPosition = (position : position) => {
         return (position.latitude && position.longitude)
     }
-    const onClick = () => {
-        
-    }
 
     return (
         <div id={containerId}>
@@ -64,8 +61,6 @@ const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
                     width: "100%",
                 }}
             />
-            {/* <div>{JSON.stringify(mapDIV)}</div> */}
-            {/* <button onClick={onClick}>check</button> */}
         </div>
     );
 }

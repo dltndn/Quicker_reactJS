@@ -2,9 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import ChatArea from "../components/chat"
-=======
 import styled, { createGlobalStyle } from "styled-components";
 
 const nochat = require('../image/nochat.png');
@@ -36,7 +33,6 @@ const Div1 = styled.div`
   font-size: var(--font-micro);
   color: #828282;
 `;
->>>>>>> c133b0013af21b4267ae7592fdcbfcba9fd1ad8f
 
 function ChattingPage() {
   const navigate = useNavigate()
@@ -46,9 +42,6 @@ function ChattingPage() {
       <TopBarOthers title="채팅" redirectLogic={() => {
           navigate("/")
         } }></TopBarOthers>
-<<<<<<< HEAD
-        <ChatArea></ChatArea>
-=======
       <Div0 className="App">
         <div>
         <Img src={nochat}/>
@@ -56,7 +49,6 @@ function ChattingPage() {
         <Div1>현재 진행 중인 채팅이 없습니다.<br></br>
         거래를 시작하여 채팅을 활성화 시켜보세요!</Div1>
       </Div0>
->>>>>>> c133b0013af21b4267ae7592fdcbfcba9fd1ad8f
         <BottomBar></BottomBar>
       </>
     );
