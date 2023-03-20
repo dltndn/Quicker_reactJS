@@ -30,6 +30,8 @@ function SearchPage() {
     }
   }, [userLocation])
 
+  // 항목 온 클릭 이벤트
+
   return (
     <div>
       <TopBarOthers title="의뢰목록" redirectLogic={function () {
@@ -44,7 +46,6 @@ function SearchPage() {
           }}
         />
       </div>
-      <div>{"location : " + JSON.stringify(userLocation)}</div>
       <BottomBar></BottomBar>
     </div>
   );
