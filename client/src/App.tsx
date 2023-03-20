@@ -20,6 +20,7 @@ import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
 import React, { useEffect } from "react";
+import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -44,9 +45,24 @@ const wagmiClient = createClient({
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+interface UseVerifiaction {
+  isMember: boolean;
+  setIsMember: (newIsMember:boolean) => void;
+  userName: string | null;
+  setUserName: (newUserName:string) => void;
+}
+
+export const useVerificationStore = create<UseVerifiaction>((set) => ({
+  isMember: false,
+  setIsMember: (isMember: boolean) => set({isMember}),
+  userName: null,
+  setUserName: (userName: string) => set({userName}),
+}))
+
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
   const { address } = useAccount()
+  const { isMember, setIsMember, setUserName } = useVerificationStore();
 
   setTheme({
     themeMode: "dark",
@@ -55,8 +71,11 @@ function App() {
   });
 
   useEffect(() => {
+    // 지갑주소 유저 여부 조회
     console.log("changed user wallet")
     console.log(address)
+    setUserName("유저이름")
+    setIsMember(true)
   }, [address])
 
   return (

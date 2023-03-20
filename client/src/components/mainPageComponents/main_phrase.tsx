@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { Web3Button } from "@web3modal/react";
+import { useVerificationStore } from "../../App";
 
 const Div0 = styled.div`
   display: flex;
@@ -49,8 +50,7 @@ type isConnectToWallet = {
 
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
-  const [isMember, setIsMember] = useState<boolean>(false);
-  let userName = "member";
+  const { isMember, setIsMember, userName }  = useVerificationStore();
 
   return (
     <>

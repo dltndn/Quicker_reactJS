@@ -7,6 +7,7 @@ import GetQkrwBalance from "../getQkrwBalance";
 import { Web3Button } from "@web3modal/react";
 import { useEffect } from "react";
 import Profile_settingPage from "../../pages/Profile_settingPage";
+import { useVerificationStore } from "../../App";
 
 const money = require('../../image/money.png')
 
@@ -146,6 +147,7 @@ function Imfo(){
     const navigate = useNavigate();
     const { address, isConnected } = useAccount();
     const { disconnect } = useDisconnect()
+    const { isMember, userName } = useVerificationStore()
 
     const ClickOrderlist = () => {
         navigate("/orderlist")
@@ -163,13 +165,19 @@ function Imfo(){
         }
     }, [isConnected])
 
+    useEffect(() => {
+        if(!isMember) {
+            navigate('/')
+        }
+    }, [isMember])
+
 
     return(
         <>
         <section>
             <Topdiv>
                 <Topimg src={img1} />
-                <Toptx>배영준</Toptx>
+                <Toptx>{userName}</Toptx>
                 <Topbt onClick={ClickSettingPage}>
                     <BsPencilSquare></BsPencilSquare>
                 </Topbt>
