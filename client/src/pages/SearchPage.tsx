@@ -3,32 +3,17 @@ import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers"
 import { useNavigate } from "react-router-dom";
 import Tmap from "../lib/Tmap";
+import Geolocation from "../lib/Geolocation";
 
 function SearchPage() {
   const navigate = useNavigate()
   const [map, setMap] = useState({})
   const [userLocation, setUserLocation] = useState({})
 
-  const getCurrentLocation = (setState : Function) => {
-    if (navigator.geolocation) {
-    
-      navigator.geolocation.getCurrentPosition(function(position) {
-              setState({lat : position.coords.latitude, lon : position.coords.longitude})
-      });
-    } else { 
-        alert("위치를 사용할 수 없음")
-    }
-  }
-
   useEffect(() => {
     setMap(Tmap.initTmap());
-    getCurrentLocation(setUserLocation)
+    Geolocation.getCurrentLocation(setUserLocation)
   }, [])
-
-  useEffect(() => {
-    
-    
-  }, [map])
 
   return (
     <div>
