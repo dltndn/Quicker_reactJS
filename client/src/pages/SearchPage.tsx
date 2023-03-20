@@ -4,6 +4,7 @@ import TopBarOthers from "../components/topBarOthers"
 import { useNavigate } from "react-router-dom";
 import Map from "../lib/Tmap"
 import Geolocation from "../lib/Geolocation";
+import Handler from "../lib/Handler";
 
 function SearchPage() {
   
@@ -22,6 +23,19 @@ function SearchPage() {
   useEffect(() => {
     setMap(Map.initTmap());
     Geolocation.getCurrentLocation(setUserLocation)    
+    fetch("http://localhost:9000/checkJoin", {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
   }, [])
 
   useEffect(() => {
@@ -29,7 +43,7 @@ function SearchPage() {
       initalizeUserMarker()
     }
   }, [userLocation])
-
+  
   // 항목 온 클릭 이벤트
 
   return (

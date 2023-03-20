@@ -150,7 +150,7 @@ app.get("/del", async (req: Request, res: Response) => {
   await Join_date.destroy({ where: { id: firstUserId } });
   await Birth_date.destroy({ where: { id: firstUserId } });
   await User.destroy({ where: { id: firstUserId } });
-
+  
   res.redirect(`/`);
 });
 
