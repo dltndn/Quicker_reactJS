@@ -8,7 +8,6 @@ import {
   Join_date,
   Order,
   Destination,
-  Product,
   Transportation,
   Departure,
 } from "./models/DB/init-models";
@@ -57,7 +56,7 @@ interface MessageObejct {
 app.get("/", (req: Request, res: Response) => {
   res.send(`
     <button onclick="location.href='/del'">del</button>
-    <button onclick="location.href='/createTable'">createTable</button>
+    <button onclick="location.href='/CreateAssociatedOrdertableTable'">CreateAssociatedOrdertableTable</button>
     <button onclick="location.href='/checkJoin'">checkJoin</button>
   `);
 });
@@ -65,6 +64,7 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
   Order.hasOne(Transportation, { as: "Transportations", foreignKey: "ID" });
   Order.hasOne(Destination, { as: "Destinations", foreignKey: "id" });
   Order.hasOne(Departure, { as: "Departures", foreignKey: "id" });
+
   const data = await Order.findAll({
     include: [
       {
@@ -79,16 +79,41 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
       },
       {
         model: Transportation,
-        as : "Transportations",
-        required: true
-      }
+        as: "Transportations",
+        required: true,
+      },
     ],
   });
-  console.log(JSON.stringify(data, null, 2));
-  // console.log([0])
-
-  res.send("/");
+  console.log(JSON.stringify(data, null, 2))
+  res.send(JSON.stringify(data, null, 2));
 }),
+  app.get("/CreateAssociatedOrdertableTable", async (req: Request, res: Response) => {
+    await Order.create({
+      ID_REQ: "checking_id",
+      DETAIL: "detail",
+      PAYMENT: 1,
+      CHECK_RES: 1,
+      PICTURE: "picture_adress",
+    });
+    await Destination.create({
+      X: 126.72197753053393,
+      Y: 37.54354049196439,
+      DETAIL: "디테일한 세부주소",
+    });
+    await Transportation.create({
+      WALKING: 1,
+      BICYCLE: 1,
+      SCOOTER: 1,
+      BIKE: 1,
+      CAR: 1,
+      TRUCK: 1,
+    });
+    await Departure.create({
+      X: 1,
+      Y: 1,
+      DETAIL: "디테일한 세부주소"
+    });
+  }),
   app.post("/register", async (req: Request, res: Response) => {
     try {
       const secret = process.env.cryptoKey;
