@@ -3,43 +3,32 @@ import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers"
 import { useNavigate } from "react-router-dom";
 import Tmap from "../lib/Tmap";
-import Geolocation from "../lib/Geolocation";
 
 function SearchPage() {
   const navigate = useNavigate()
-
   const [map, setMap] = useState({})
   const [userLocation, setUserLocation] = useState({})
 
-  useEffect(() => {
-    setMap(Tmap.initTmap());
-    setUserLocation(() => Geolocation.getCurrentLocation())
-
-  }, [])
-
-  const onclick = () => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos: any) {
-      const crd = pos.coords;
-      return { latitude: crd.latitude, longitude: crd.longitude }
+  const getCurrentLocation = (setState : Function) => {
+    if (navigator.geolocation) {
+    
+      navigator.geolocation.getCurrentPosition(function(position) {
+              setState({lat : position.coords.latitude, lon : position.coords.longitude})
+      });
+    } else { 
+        alert("위치를 사용할 수 없음")
     }
-
-    function error(err: any) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
   }
 
   useEffect(() => {
+    setMap(Tmap.initTmap());
+    getCurrentLocation(setUserLocation)
+  }, [])
+
+  useEffect(() => {
+    
     
   }, [map])
-
 
   return (
     <div>
@@ -55,7 +44,7 @@ function SearchPage() {
           }}
         />
       </div>
-      <div>{JSON.stringify(userLocation)}</div>
+      <div>{"location : " + JSON.stringify(userLocation)}</div>
       <BottomBar></BottomBar>
     </div>
   );
