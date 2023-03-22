@@ -80,8 +80,6 @@ function Orderlist() {
             <OrderBox orderNum={value}/>
         </Sc0>)
       )}
-
-      
       <Orderlistmodal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
       <Divhid />
     </>
@@ -97,7 +95,7 @@ const getOrderContents = async (orderNum: string) => {
         orderPrice: result.orderPrice,
         orderY: result.createdTime?.year,
         orderM: result.createdTime?.month,
-        orderD: result.completedTime?.day
+        orderD: result.createdTime?.day
     }
     return resObj;
   };
