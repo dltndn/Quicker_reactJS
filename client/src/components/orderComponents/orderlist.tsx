@@ -11,29 +11,32 @@ import {
 
 interface OrderState {
   OrderNum: string | null;
-  setOrderNum: (newOrder: string) => void;
+  setOrderNum: (newOrder: string|null) => void;
 }
 
 export const useOrderState = create<OrderState>((set) => ({
   OrderNum: null,
-  setOrderNum: (OrderNum: string) => set({ OrderNum }),
+  setOrderNum: (OrderNum: string|null) => set({ OrderNum }),
 }));
 
 function Orderlist() {
   const { address } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [orderNumList, setOrderNumList] = useState<undefined | string[]>(
-    undefined
-  );
+  const [orderNumList, setOrderNumList] = useState<undefined | string[]>(undefined);
 
-  const handleOpenModal = () => {
+  const { setOrderNum } = useOrderState()
+
+  const handleOpenModal = (orderNum:string) => {
     setIsModalOpen(true);
+    setOrderNum(orderNum)
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setOrderNum(null);
   };
 
+  // 현재 연결된 지갑 주소의 오더 내역 번호 array를 반환
   const getOrderNumList = async () => {
     const result = await getClientOrderList(address);
     setOrderNumList(result);
@@ -76,9 +79,11 @@ function Orderlist() {
       {orderNumList === undefined ? (
         <div>오더 내역이 없습니다</div>
       ) : (
-        orderNumList.map((value) => <Sc0 onClick={handleOpenModal}>
-            <OrderBox orderNum={value}/>
-        </Sc0>)
+        orderNumList.map((value) => (
+          <Sc0 onClick={() => handleOpenModal(value)}>
+            <OrderBox orderNum={value} />
+          </Sc0>
+        ))
       )}
       <Orderlistmodal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
       <Divhid />
@@ -88,73 +93,84 @@ function Orderlist() {
 
 export default Orderlist;
 
+// 오더 번호를 인수로 받아 객체로 반환
 const getOrderContents = async (orderNum: string) => {
-    const result = await getOrder(orderNum);
-    const resObj = {
-        state: result.state,
-        orderPrice: result.orderPrice,
-        orderY: result.createdTime?.year,
-        orderM: result.createdTime?.month,
-        orderD: result.createdTime?.day
-    }
-    return resObj;
+  const result = await getOrder(orderNum);
+  const resObj = {
+    state: result.state,
+    orderPrice: result.orderPrice,
+    orderY: result.createdTime?.year,
+    orderM: result.createdTime?.month,
+    orderD: result.createdTime?.day,
   };
+  return resObj;
+};
 
 interface OrderBoxObj {
-    state: string;
-    orderPrice: string | null;
-    orderY: string | undefined;
-    orderM: string | undefined;
-    orderD: string | undefined;
+  state: string;
+  orderPrice: string | null;
+  orderY: string | undefined;
+  orderM: string | undefined;
+  orderD: string | undefined;
 }
 
-const OrderBox = ({orderNum}:{orderNum:string}) => {
-    const [obj, setObj] = useState<OrderBoxObj | undefined>(undefined)
+const OrderBox = ({ orderNum }: { orderNum: string }) => {
+  const [obj, setObj] = useState<OrderBoxObj | undefined>(undefined);
 
-    const getData = async (orderNum:string) => {
-        const result:any = await getOrderContents(orderNum)
-        setObj(result)
-    }
+  const getData = async (orderNum: string) => {
+    const result: any = await getOrderContents(orderNum);
+    setObj(result);
+  };
 
-    useEffect(() => {
-        getData(orderNum)
-    }, [])
-    
-    const ViewState = () => {
-        switch(obj?.state) {
-            case "created":
-                return(<Divst0>대기</Divst0>)
-            case "matched":
-                return(<Divgr>수락</Divgr>)
-            case "completed":
-                return(<Divbl>완료</Divbl>)
-            case "failed":
-                return(<Divred>실패</Divred>)
-            case "canceled":
-                return(<DivOrg>취소</DivOrg>)
-            default :
-                return(<Divst0>대기</Divst0>)
-        }
+  useEffect(() => {
+    getData(orderNum);
+  }, []);
+
+  const ViewState = () => {
+    switch (obj?.state) {
+      case "created":
+        return <Divst0>대기</Divst0>;
+      case "matched":
+        return <Divgr>수락</Divgr>;
+      case "completed":
+        return <Divbl>완료</Divbl>;
+      case "failed":
+        return <Divred>실패</Divred>;
+      case "canceled":
+        return <DivOrg>취소</DivOrg>;
+      default:
+        return <Divst0>대기</Divst0>;
     }
+  };
   return (
     <>
-      <Div0>
-        <Sp0>접수 중</Sp0>
-        <Sp1>{obj?.orderY}.{obj?.orderM}.{obj?.orderD}</Sp1>
-        <ViewState />
-      </Div0>
-      <Div1>
-        <Sp2>출발지</Sp2>
-        <Sp1>경기도 김포시 김포대로</Sp1>
-      </Div1>
-      <Div1>
-        <Sp2>도착지</Sp2>
-        <Sp1>경기도 김포시 김포대로</Sp1>
-      </Div1>
-      <Div1>
-        <Sp2>금액</Sp2>
-        <Sp3>{obj?.orderPrice}</Sp3>
-      </Div1>
+      {obj === undefined ? (
+        <>
+          <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
+        </>
+      ) : (
+        <>
+          <Div0>
+            <Sp0>접수 중</Sp0>
+            <Sp1>
+              {obj.orderY}.{obj.orderM}.{obj.orderD}
+            </Sp1>
+            <ViewState />
+          </Div0>
+          <Div1>
+            <Sp2>출발지</Sp2>
+            <Sp1>경기도 김포시 김포대로</Sp1>
+          </Div1>
+          <Div1>
+            <Sp2>도착지</Sp2>
+            <Sp1>경기도 김포시 김포대로</Sp1>
+          </Div1>
+          <Div1>
+            <Sp2>금액</Sp2>
+            <Sp3>{obj.orderPrice}</Sp3>
+          </Div1>
+        </>
+      )}
     </>
   );
 };
