@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Orderlistmodal from "./orderlistmodal";
 import { create } from "zustand";
+import { useAccount } from "wagmi";
+import { getClientOrderList } from "../../utils/GetOrderFromBlockchain";
 
 interface OrderState {
     OrderNum: number | null;
@@ -15,6 +17,7 @@ export const useOrderState = create<OrderState>((set) => ({
 }))
 
 function Orderlist(){
+    const { address } = useAccount()
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [orderNumList, setOrderNumList] = useState([])
 
@@ -25,6 +28,13 @@ function Orderlist(){
     const handleCloseModal = () => {
       setIsModalOpen(false);
     };
+
+    const test = async() => {
+        const result = await getClientOrderList(address)
+        console.log(result)
+    }
+
+    test()
 
     useEffect(() => {
         
@@ -102,6 +112,7 @@ function Orderlist(){
                 <Sp3>19,800원</Sp3>
             </Div1>
         </Sc0>
+
         <Sc0>
             <Div0>
                 <Sp0>도보</Sp0>

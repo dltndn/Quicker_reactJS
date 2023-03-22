@@ -6,13 +6,28 @@ const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
 export const getOrder = async(orderNum:string) => {
-    const data = await readContract({
-        address: Quicker_address,
-        abi: Quicker_abi,
-        functionName: "getOrder",
-        args: [orderNum],
-      })
-      return TemplateOrder(data)
+  const data = await readContract({
+      address: Quicker_address,
+      abi: Quicker_abi,
+      functionName: "getOrder",
+      args: [orderNum],
+    })
+    return TemplateOrder(data)
+}
+
+export const getClientOrderList = async(address:`0x${string}` | undefined) => {
+  if (address === undefined){
+    return undefined
+  }
+  const data:any = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: "getClientOrderList",
+    args: [address],
+  })
+  let result:string[] = []
+  data.forEach((element: any) => result.push(BigInt(element._hex).toString()));  
+  return result
 }
 
 const TemplateOrder = (data: any) => {
