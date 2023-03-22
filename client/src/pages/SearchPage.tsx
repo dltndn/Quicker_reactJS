@@ -43,8 +43,6 @@ function SearchPage() {
       initalizeUserMarker()
     }
   }, [userLocation])
-  
-  // 항목 온 클릭 이벤트
 
   return (
     <div>

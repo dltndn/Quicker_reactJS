@@ -61,59 +61,58 @@ app.get("/", (req: Request, res: Response) => {
   `);
 });
 app.get("/checkJoin", async (req: Request, res: Response) => {
-  Order.hasOne(Transportation, { as: "Transportations", foreignKey: "ID" });
-  Order.hasOne(Destination, { as: "Destinations", foreignKey: "id" });
-  Order.hasOne(Departure, { as: "Departures", foreignKey: "id" });
+  Order.hasOne(Transportation, { foreignKey: "id" });
+  Order.hasOne(Destination, { foreignKey: "id" });
+  Order.hasOne(Departure, { foreignKey: "id" });
 
   const data = await Order.findAll({
     include: [
       {
+        model: Transportation,
+        required: false,
+      },
+      {
         model: Destination,
-        as: "Destinations",
         required: true,
       },
       {
         model: Departure,
-        as: "Departures",
-        required: true,
-      },
-      {
-        model: Transportation,
-        as: "Transportations",
         required: true,
       },
     ],
   });
-  console.log(JSON.stringify(data, null, 2))
-  res.send(JSON.stringify(data, null, 2));
+  res.send(data);
 }),
-  app.get("/CreateAssociatedOrdertableTable", async (req: Request, res: Response) => {
-    await Order.create({
-      ID_REQ: "checking_id",
-      DETAIL: "detail",
-      PAYMENT: 1,
-      CHECK_RES: 1,
-      PICTURE: "picture_adress",
-    });
-    await Destination.create({
-      X: 126.72197753053393,
-      Y: 37.54354049196439,
-      DETAIL: "디테일한 세부주소",
-    });
-    await Transportation.create({
-      WALKING: 1,
-      BICYCLE: 1,
-      SCOOTER: 1,
-      BIKE: 1,
-      CAR: 1,
-      TRUCK: 1,
-    });
-    await Departure.create({
-      X: 1,
-      Y: 1,
-      DETAIL: "디테일한 세부주소"
-    });
-  }),
+  app.get(
+    "/CreateAssociatedOrdertableTable",
+    async (req: Request, res: Response) => {
+      await Order.create({
+        ID_REQ: "checking_id",
+        DETAIL: "detail",
+        PAYMENT: 1,
+        CHECK_RES: 1,
+        PICTURE: "picture_adress",
+      });
+      await Destination.create({
+        X: 126.72197753053393,
+        Y: 37.54354049196439,
+        DETAIL: "디테일한 세부주소",
+      });
+      await Transportation.create({
+        WALKING: 1,
+        BICYCLE: 1,
+        SCOOTER: 1,
+        BIKE: 1,
+        CAR: 1,
+        TRUCK: 1,
+      });
+      await Departure.create({
+        X: 1,
+        Y: 1,
+        DETAIL: "디테일한 세부주소",
+      });
+    }
+  ),
   app.post("/register", async (req: Request, res: Response) => {
     try {
       const secret = process.env.cryptoKey;
@@ -150,7 +149,7 @@ app.get("/del", async (req: Request, res: Response) => {
   await Join_date.destroy({ where: { id: firstUserId } });
   await Birth_date.destroy({ where: { id: firstUserId } });
   await User.destroy({ where: { id: firstUserId } });
-  
+
   res.redirect(`/`);
 });
 
