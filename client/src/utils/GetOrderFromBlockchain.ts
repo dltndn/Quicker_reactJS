@@ -57,12 +57,12 @@ const TemplateOrder = (data: any) => {
     if (cost == 0) {
       result = null
     } else {
-      result = BigInt(cost._hex).toString() + '원';
+      result = BigInt(cost._hex).toLocaleString() + '원';
     }
     return result;
   };
   
-  const ConvertDateData = (timestamp: any): object|null => {
+  const ConvertDateData = (timestamp: any) => {
     if (timestamp == 0) {
       return null
     } else {
