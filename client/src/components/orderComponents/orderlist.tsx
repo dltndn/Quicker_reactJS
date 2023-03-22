@@ -106,8 +106,8 @@ interface OrderBoxObj {
     state: string;
     orderPrice: string | null;
     orderY: string | undefined;
-    orderm: string | undefined;
-    orderd: string | undefined;
+    orderM: string | undefined;
+    orderD: string | undefined;
 }
 
 const OrderBox = ({orderNum}:{orderNum:string}) => {
@@ -142,7 +142,7 @@ const OrderBox = ({orderNum}:{orderNum:string}) => {
     <>
       <Div0>
         <Sp0>접수 중</Sp0>
-        <Sp1>{obj?.orderY}.{obj?.orderm}.{obj?.orderd}</Sp1>
+        <Sp1>{obj?.orderY}.{obj?.orderM}.{obj?.orderD}</Sp1>
         <ViewState />
       </Div0>
       <Div1>
