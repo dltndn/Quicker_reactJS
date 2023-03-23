@@ -61,26 +61,33 @@ app.get("/", (req: Request, res: Response) => {
   `);
 });
 app.get("/checkJoin", async (req: Request, res: Response) => {
+
+// 객체 생성
+
   Order.hasOne(Transportation, { foreignKey: "id" });
   Order.hasOne(Destination, { foreignKey: "id" });
   Order.hasOne(Departure, { foreignKey: "id" });
-
   const data = await Order.findAll({
+    attributes : ['id', 'PAYMENT'],
     include: [
       {
         model: Transportation,
+        attributes: { exclude: ['ID', 'id'] },
         required: false,
       },
       {
         model: Destination,
+        attributes: { exclude: ['id'] },
         required: true,
       },
       {
         model: Departure,
+        attributes: { exclude: ['ID', 'id'] },
         required: true,
       },
     ],
   });
+  console.log(JSON.stringify(data, null, 2))
   res.send(data);
 }),
   app.get(
@@ -107,8 +114,8 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
         TRUCK: 1,
       });
       await Departure.create({
-        X: 1,
-        Y: 1,
+        X: 126.72197753053393,
+        Y: 37.54354049196439,
         DETAIL: "디테일한 세부주소",
       });
     }
