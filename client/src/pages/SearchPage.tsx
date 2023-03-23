@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers"
 import { useNavigate } from "react-router-dom";
@@ -7,10 +7,13 @@ import Geolocation from "../lib/Geolocation";
 import Handler from "../lib/Handler";
 
 function SearchPage() {
-  
+  const requestListContainer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const [map, setMap] = useState({})
+  // const [requestData, setRequestData] = useState({})
   const [userLocation, setUserLocation] = useState({})
+
+  const [requestListContent, setRequestListContent] =useState({})
   
   let initalizeUserMarker = () => { 
     // @ts-ignore
@@ -23,26 +26,51 @@ function SearchPage() {
   useEffect(() => {
     setMap(Map.initTmap());
     Geolocation.getCurrentLocation(setUserLocation)    
-    fetch("http://localhost:9000/checkJoin", {
-      method: "GET",
-      headers: {
-          "Content-Type": "application/json",
-      },
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+    
+    const getData = async () => {
+      const response = fetch("http://localhost:9000/checkJoin", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+      })
+      return response.then (res => res.json())
+    }
+
+    const exec = async () => {
+      try {
+        let data = await getData()
+        setRequestListContent(data)
+      }catch (error) {
+        console.error(error)
+      }
+    }
+    exec();
   }, [])
+
+  useEffect(() => {
+    let requestListContents = Object.keys(requestListContent).length
+
+    if (requestListContents !== 0) {
+      console.log(requestListContent)
+      for (let index = 0 ; index < requestListContents; index++)
+      
+      // @ts-ignore
+      Map.Marker(map, requestListContent[index].Departure.Y, requestListContent[index].Departure.X) 
+    }
+  }, [requestListContent])
 
   useEffect(() => {
     if (Object.keys(userLocation).length !== 0) {
       initalizeUserMarker()
     }
   }, [userLocation])
+
+  useEffect(() =>{
+    if (Object.keys(requestListContent).length !== 0 && Object.keys(userLocation).length !== 0) {
+      // Map.autoZoom(map, Map)
+    }
+  }, [userLocation, requestListContent])
 
   return (
     <div>
@@ -57,6 +85,9 @@ function SearchPage() {
             width: "100%",
           }}
         />
+      </div>
+      <div ref={requestListContainer}>
+          {JSON.stringify(requestListContent)}
       </div>
       <BottomBar></BottomBar>
     </div>
