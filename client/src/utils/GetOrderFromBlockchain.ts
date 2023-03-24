@@ -5,6 +5,10 @@ import { getDateFromTimestamp } from './ConvertTimestampToDate';
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
+export const getOrders =async (orderNumList:string[]) => {
+  
+}
+
 export const getOrder = async(orderNum:string) => {
   const data = await readContract({
       address: Quicker_address,
