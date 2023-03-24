@@ -26,7 +26,7 @@ const Topbt = styled.button`
     box-shadow: none;
     outline: none;
     font-size: var(--font-md);
-    background-color: #e6e6e6;
+    background-color: #efefef;
     margin-left: auto;
     padding-right: 0.25rem;
     padding-top: 0.438rem;
