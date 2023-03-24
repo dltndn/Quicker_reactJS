@@ -1,7 +1,6 @@
 import {
   useContractWrite,
   usePrepareContractWrite,
-  useContractEvent,
 } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
@@ -36,21 +35,13 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     },
   });
 
-  // useContractEvent({
-  //   address: Quicker_address,
-  //   abi: Quicker_abi,
-  //   eventName: "OrderCreated",
-  //   async listener(node: any, label: any, owner) {
-  //     let resTx = await label.getTransactionReceipt()
-  //     let oNum = BigInt(node._hex).toString()
-  //     setCreatedOrder(oNum)
-  //     alert("created new order")
-  //   },
-  // });
+  const createOrderLogic = () => {
+    write?.()
+  }
 
   return (
     <>
-      <button disabled={!write} onClick={() => write?.()}>
+      <button disabled={!write} onClick={() => createOrderLogic()}>
         오더생성하기
       </button>
       <br></br>
@@ -58,3 +49,5 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     </>
   );
 }
+
+// button에 ConfirmBtn 적용하기

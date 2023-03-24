@@ -99,9 +99,7 @@ const getOrderContents = async (orderNum: string) => {
   const resObj = {
     state: result.state,
     orderPrice: result.orderPrice,
-    orderY: result.createdTime?.year,
-    orderM: result.createdTime?.month,
-    orderD: result.createdTime?.day,
+    orderedTime: result.createdTime,
   };
   return resObj;
 };
@@ -109,9 +107,7 @@ const getOrderContents = async (orderNum: string) => {
 interface OrderBoxObj {
   state: string;
   orderPrice: string | null;
-  orderY: string | undefined;
-  orderM: string | undefined;
-  orderD: string | undefined;
+  orderedTime: object | undefined;
 }
 
 const OrderBox = ({ orderNum }: { orderNum: string }) => {
@@ -153,7 +149,7 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
           <Div0>
             <Sp0>접수 중</Sp0>
             <Sp1>
-              {obj.orderY}.{obj.orderM}.{obj.orderD}
+              {formatedDate(obj.orderedTime)}
             </Sp1>
             <ViewState />
           </Div0>
@@ -174,6 +170,13 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
     </>
   );
 };
+
+const formatedDate = (data:any):string => {
+  const year = data.year
+  const month = data.month
+  const day = data.day
+  return `${year}.${month}.${day}`
+}
 
 const SelectInput = styled.select`
   width: 6rem;
