@@ -36,6 +36,17 @@ export default function GetOrderContents({ orderNum }: OrderProps) {
 }
 
 const TemplateOrder = ({ data }: { data: any }) => {
+  let obj = {orderNUm: BigInt(data[0]._hex).toString(),
+  client: JSON.stringify(data[1]),
+  quicker: JSON.stringify(data[2]),
+  state: ConvertStateData(data[3]),
+  orderPrice: ConvertCostData(data[4]),
+  securityDeposit: ConvertCostData(data[5]),
+  limitedTime: ConvertDateData(data[6]),
+  createdTime: ConvertDateData(data[7]),
+  matchedTime: ConvertDateData(data[8]),
+  deliveredTime: ConvertDateData(data[9]),
+  completedTime: ConvertDateData(data[10]),}
   return (
     <>
       <div>오더번호: {BigInt(data[0]._hex).toString()}</div><br></br>

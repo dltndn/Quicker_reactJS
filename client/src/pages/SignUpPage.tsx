@@ -5,6 +5,7 @@ import TopBarOthers from "../components/topBarOthers";
 import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from 'wagmi';
+import { useVerificationStore } from '../App';
 
 const serverUrl = `https://port-0-quicker-reactjs-sever-luj2cle2iiwho.sel3.cloudtype.app`
 // const serverUrl = `http://localhost:9000`
@@ -12,6 +13,7 @@ const serverUrl = `https://port-0-quicker-reactjs-sever-luj2cle2iiwho.sel3.cloud
 function SignUpPage() {
   const navigate = useNavigate()
   const { address } = useAccount()
+  const { setIsMember } = useVerificationStore()
 
   const name = useRef<HTMLInputElement>(null);
   const birthday = useRef<HTMLInputElement>(null);
@@ -50,6 +52,7 @@ function SignUpPage() {
     .then((response) => response.json())
     .then((data) => {
       console.log("Success:", data);
+      setIsMember(true)
     })
     .catch((error) => {
       console.error("Error:", error);

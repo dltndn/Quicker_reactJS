@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers"
@@ -5,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Map from "../lib/Tmap"
 import Geolocation from "../lib/Geolocation";
 import Handler from "../lib/Handler";
+import Search from "../components/Search";
 
 function SearchPage() {
   const requestListContainer = useRef<HTMLDivElement>(null)
@@ -89,6 +91,7 @@ function SearchPage() {
       <div ref={requestListContainer}>
           {JSON.stringify(requestListContent)}
       </div>
+      <Search/>
       <BottomBar></BottomBar>
     </div>
   );
