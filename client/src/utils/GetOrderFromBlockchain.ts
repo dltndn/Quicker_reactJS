@@ -1,12 +1,34 @@
-import { readContract } from '@wagmi/core'
+import { readContract, readContracts, } from '@wagmi/core'
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
  
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
-export const getOrders =async (orderNumList:string[]) => {
-  
+export const getOrders = async (orderNumList:string[]) => {
+  const quickerContract = {
+    address: Quicker_address,
+    abi: Quicker_abi
+  }
+
+  const orderNumListToObjList = (orderNumList:string[]) => {
+    let objList:object[] = []
+    orderNumList.map((value) => (objList.push({
+      ...quickerContract,
+      functionName: 'getOrder',
+      args: [value]
+    })))
+    return objList
+  }
+
+  const data = await readContracts({
+    contracts: orderNumListToObjList(orderNumList) as any
+  })
+
+  let orderList:any[] = []
+
+  data.map((value) => (orderList.push(TemplateOrder(value))))
+  return orderList
 }
 
 export const getOrder = async(orderNum:string) => {
@@ -35,7 +57,7 @@ export const getClientOrderList = async(address:`0x${string}` | undefined) => {
 }
 
 const TemplateOrder = (data: any) => {
-    let obj = {orderNUm: BigInt(data[0]._hex).toString(),
+    let obj = {orderNum: BigInt(data[0]._hex).toString(),
     client: JSON.stringify(data[1]),
     quicker: JSON.stringify(data[2]),
     state: ConvertStateData(data[3]),

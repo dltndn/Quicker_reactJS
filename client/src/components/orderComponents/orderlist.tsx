@@ -4,46 +4,62 @@ import { useNavigate } from "react-router-dom";
 import Orderlistmodal from "./orderlistmodal";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
-import {
-  getClientOrderList,
-  getOrder,
-} from "../../utils/GetOrderFromBlockchain";
+import { getClientOrderList, getOrders } from "../../utils/GetOrderFromBlockchain";
 
 interface OrderState {
-  OrderNum: string | null;
-  setOrderNum: (newOrder: string|null) => void;
+  Order: object | null;
+  setOrder: (newOrder: object | null) => void;
+  orderObj: object[] | null;
+  setOrderObj: (newOrderObj: object[] | null) => void;
 }
 
 export const useOrderState = create<OrderState>((set) => ({
-  OrderNum: null,
-  setOrderNum: (OrderNum: string|null) => set({ OrderNum }),
+  Order: null,
+  setOrder: (Order: object | null) => set({ Order }),
+  orderObj: null,
+  setOrderObj: (orderObj: object[] | null) => set({ orderObj }),
 }));
 
 function Orderlist() {
   const { address } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [orderNumList, setOrderNumList] = useState<undefined | string[]>(undefined);
+  const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
 
-  const { setOrderNum } = useOrderState()
+  const { orderObj, setOrder, setOrderObj } = useOrderState();
 
-  const handleOpenModal = (orderNum:string) => {
+  const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
-    setOrderNum(orderNum)
+    setOrder(order);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setOrderNum(null);
+    setOrder(null);
   };
 
   // 현재 연결된 지갑 주소의 오더 내역 번호 array를 반환
-  const getOrderNumList = async () => {
-    const result = await getClientOrderList(address);
-    setOrderNumList(result);
+  const getOrderList = async () => {
+    const orderNumList = await getClientOrderList(address);
+    //getOrders 호출
+    if (orderNumList !== undefined) {
+      getOrderObj(orderNumList);
+    } else {
+      setIsEmptyOrder(true);
+      console.log("오더 내역 없음");
+    }
+  };
+
+  // orderNumList -> 오더번호
+  const getOrderObj = async (orderNumList: string[]) => {
+    const result = await getOrders(orderNumList);
+
+    // orderNumList로 DB정보 가져와서 데이터 셋팅
+    setOrderObj(result);
   };
 
   useEffect(() => {
-    getOrderNumList();
+    setIsEmptyOrder(false);
+    getOrderList();
   });
 
   return (
@@ -76,16 +92,23 @@ function Orderlist() {
         <option value="Delay">지연</option>
       </SelectInput>
 
-      {orderNumList === undefined ? (
-        <div>오더 내역이 없습니다</div>
+      {orderObj === null ? (
+        isEmptyOrder ? (
+          <Div0>오더 내역이 없습니다</Div0>
+        ) : (
+          <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
+        )
       ) : (
-        orderNumList.map((value) => (
+        orderObj.map((value) => (
           <Sc0 onClick={() => handleOpenModal(value)}>
-            <OrderBox orderNum={value} />
+            <OrderBox orderObj={value} />
           </Sc0>
         ))
       )}
-      <Orderlistmodal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
+      <Orderlistmodal
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseModal}
+      />
       <Divhid />
     </>
   );
@@ -93,37 +116,9 @@ function Orderlist() {
 
 export default Orderlist;
 
-// 오더 번호를 인수로 받아 객체로 반환
-const getOrderContents = async (orderNum: string) => {
-  const result = await getOrder(orderNum);
-  const resObj = {
-    state: result.state,
-    orderPrice: result.orderPrice,
-    orderedTime: result.createdTime,
-  };
-  return resObj;
-};
-
-interface OrderBoxObj {
-  state: string;
-  orderPrice: string | null;
-  orderedTime: object | undefined;
-}
-
-const OrderBox = ({ orderNum }: { orderNum: string }) => {
-  const [obj, setObj] = useState<OrderBoxObj | undefined>(undefined);
-
-  const getData = async (orderNum: string) => {
-    const result: any = await getOrderContents(orderNum);
-    setObj(result);
-  };
-
-  useEffect(() => {
-    getData(orderNum);
-  }, []);
-
+const OrderBox = ({ orderObj }: any) => {
   const ViewState = () => {
-    switch (obj?.state) {
+    switch (orderObj?.state) {
       case "created":
         return <Divst0>대기</Divst0>;
       case "matched":
@@ -140,7 +135,7 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
   };
   return (
     <>
-      {obj === undefined ? (
+      {orderObj === undefined ? (
         <>
           <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
         </>
@@ -148,9 +143,7 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
         <>
           <Div0>
             <Sp0>접수 중</Sp0>
-            <Sp1>
-              {formatedDate(obj.orderedTime)}
-            </Sp1>
+            <Sp1>{formatedDate(orderObj.createdTime)}</Sp1>
             <ViewState />
           </Div0>
           <Div1>
@@ -163,7 +156,7 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
           </Div1>
           <Div1>
             <Sp2>금액</Sp2>
-            <Sp3>{obj.orderPrice}</Sp3>
+            <Sp3>{orderObj.orderPrice}</Sp3>
           </Div1>
         </>
       )}
@@ -171,12 +164,12 @@ const OrderBox = ({ orderNum }: { orderNum: string }) => {
   );
 };
 
-const formatedDate = (data:any):string => {
-  const year = data.year
-  const month = data.month
-  const day = data.day
-  return `${year}.${month}.${day}`
-}
+const formatedDate = (data: any): string => {
+  const year = data.year;
+  const month = data.month;
+  const day = data.day;
+  return `${year}.${month}.${day}`;
+};
 
 const SelectInput = styled.select`
   width: 6rem;
