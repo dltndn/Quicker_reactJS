@@ -8,7 +8,7 @@ const Tmap = {
     initTmap: () => {
         return new Tmapv3.Map("TMapApp", {
             center: new Tmapv3.LatLng(37.56520450, 126.98702028),
-            width: "300px",	// 지도의 넓이
+            width: "100%",	// 지도의 넓이
             height: "300px",	// 지도의 높이
             zoom: 15	// 지도 줌레벨
         });

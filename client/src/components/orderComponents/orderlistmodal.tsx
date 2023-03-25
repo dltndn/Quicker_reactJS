@@ -27,6 +27,8 @@ const getOrderContents = async (orderNum: string) => {
     orderedTime: result.createdTime,
     matchedTime: result.matchedTime,
     deliveredTime: result.deliveredTime,
+
+    //MEMO 
   };
   return resObj;
 };
