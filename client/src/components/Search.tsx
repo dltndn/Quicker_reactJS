@@ -1,7 +1,57 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useSearchState } from '../pages/SearchPage';
 
-const Se0 = styled.section`
+interface Props {
+    clickOrder: (index: number) => void;
+}
+
+function Search({ clickOrder }:Props) {
+
+    const { orders } = useSearchState()
+
+    return (
+    <>
+    <Se0>
+        <Hr0/>
+        <Div0>
+            <Div0_1>전체</Div0_1>
+            <Div0_1>도보</Div0_1>
+            <Div0_1>자전거</Div0_1>
+            <Div0_1>자동차</Div0_1>
+        </Div0>
+        <Div1>
+            <Dvi1_1>픽업지까지</Dvi1_1>
+            <Dvi1_1>픽업지</Dvi1_1>
+            <Dvi1_1>배송지</Dvi1_1>
+            <Dvi1_1>수익</Dvi1_1>
+        </Div1>
+
+        {orders !== undefined ? (orders.map((value, index) => (
+        <Div1 onClick={() => clickOrder(index)}>
+            <Div1_2>0.2Km</Div1_2>
+            <Div1_2>
+                <div>
+                    <Sp0>김포<br/></Sp0>
+                    북변
+                </div>
+            </Div1_2>
+            <Div1_2>
+                <div>
+                    <Sp0>김포<br/></Sp0>
+                    북변
+                </div>
+            </Div1_2>
+            <Div1_2>{value.income}</Div1_2>
+        </Div1>
+        ))):(<>데이터를 조회중입니다...</>)}
+    </Se0>
+    </>
+  );
+  }
+  
+  export default Search;
+
+  const Se0 = styled.section`
     position: fixed;
     bottom: 3.875rem;
     background-color: #F5F5F5;
@@ -58,48 +108,3 @@ const Sp0 = styled.span`
     font-size: 12px;
     font-weight: normal;
 `;
-
-function Search() {
-    const navigate = useNavigate();
-    const ClickDetailgPage = () => {
-        navigate("/search_detail")
-    }
-
-    return (
-    <>
-    <Se0>
-        <Hr0/>
-        <Div0>
-            <Div0_1>전체</Div0_1>
-            <Div0_1>도보</Div0_1>
-            <Div0_1>자전거</Div0_1>
-            <Div0_1>자동차</Div0_1>
-        </Div0>
-        <Div1>
-            <Dvi1_1>픽업지까지</Dvi1_1>
-            <Dvi1_1>픽업지</Dvi1_1>
-            <Dvi1_1>배송지</Dvi1_1>
-            <Dvi1_1>수익</Dvi1_1>
-        </Div1>
-        <Div1 onClick={ClickDetailgPage}>
-            <Div1_2>0.2Km</Div1_2>
-            <Div1_2>
-                <div>
-                    <Sp0>김포<br/></Sp0>
-                    북변
-                </div>
-            </Div1_2>
-            <Div1_2>
-                <div>
-                    <Sp0>김포<br/></Sp0>
-                    북변
-                </div>
-            </Div1_2>
-            <Div1_2>20,000</Div1_2>
-        </Div1>
-    </Se0>
-    </>
-  );
-  }
-  
-  export default Search;

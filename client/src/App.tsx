@@ -19,7 +19,6 @@ import TestPage2 from "./pages/TestPage2";
 import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
-import SearchDetail from "./pages/Searchdetail";
 import React, { useEffect } from "react";
 import { create } from 'zustand'
 
@@ -87,7 +86,6 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route path="/search_detail" element={<SearchDetail />} />
             <Route path="/chatting" element={<ChattingPage />} />
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/profile" element={<ProfilePage />} />

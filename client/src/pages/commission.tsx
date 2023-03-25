@@ -74,24 +74,6 @@ export default function CommissionPage() {
       arriveinputDiv.current!.style.display = "none";
     }
   };
-  const post = () => {
-    const data = { username: "example" };
-
-    fetch("http://localhost:9000/post", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
 
   const redirectionLogic = () => {
     const backFunc = () => {
