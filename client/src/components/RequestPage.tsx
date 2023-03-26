@@ -9,13 +9,28 @@ import {
   QUICKER_ADDRESS,
 } from "../contractInformation";
 import { useOrderStore } from "../pages/commission";
+import Handler from "../lib/Handler";
 
 //Qkrw token contract information - polygon mumbai network
 const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
 const Quicker_address = QUICKER_ADDRESS;
 
-function RequestPage() {
+interface setStates {
+  setWidth: React.Dispatch<React.SetStateAction<number>>
+  setHeight: React.Dispatch<React.SetStateAction<number>>
+  setLength: React.Dispatch<React.SetStateAction<number>>
+  setWeight: React.Dispatch<React.SetStateAction<number>>
+  setDetails: React.Dispatch<React.SetStateAction<string>>
+  setCost: React.Dispatch<React.SetStateAction<number>>
+}
+
+interface props {
+  setStates: setStates
+}
+
+
+function RequestPage({setStates} : props) {
   const { address } = useAccount();
   const [allowIndex, setAllowIndex] = useState<any>();
   const [showAllowance, setShowAllowance] = useState<boolean>(false);
@@ -38,6 +53,9 @@ function RequestPage() {
       //결제 로직 수행
       console.log("결제로직")
       // NOTE : 이벤트 맞는지 확인
+      // 데이터 전송
+      // Handler.fetch({})
+      
     } else {
       setShowAllowance(true)
     }
@@ -65,7 +83,7 @@ function RequestPage() {
         <IncreaseAllowance setShowAllowance={() => showAllowanceFalse()}/>
       ) : (
         <div style={{ backgroundColor: "#efefef" }}>
-          <Req></Req>
+          <Req setStates={setStates}></Req>
           <ConfirmBtn
             content={btnContent}
             confirmLogic={() => executePayment()}

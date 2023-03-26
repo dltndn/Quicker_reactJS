@@ -55,9 +55,24 @@ export default function CommissionPage() {
 
   const startinputDiv = useRef<HTMLDivElement>(null);
   const arriveinputDiv = useRef<HTMLDivElement>(null);
-  // const [title, setTitle] = useState("출발지 입력");
+  
   const [startPosition, setStartPosition] = useState({});
+  const [startAddress, setStartAddress] = useState("");
+  const [sender , setSender] = useState("");
+  const [senderPhoneNumber , setSenderPhoneNumber] = useState("");
+
   const [arrivePosition, setArrivePosition] = useState({});
+  const [arriveAddress, setArriveAddress] = useState("");
+  const [receiver , setReceiver] =useState("");
+  const [receiverPhoneNumber , setReceiverPhoneNumber] =useState("");
+
+  const [width , setWidth] = useState(0);
+  const [height , setHeight] = useState(0);
+  const [length , setLength] = useState(0);
+  const [weight, setWeight] = useState(0);
+
+  const [details , setDetails] =useState("");
+  const [cost , setCost] =useState(0);
 
   const { title, setTitle } = useOrderStore()
 
@@ -87,18 +102,51 @@ export default function CommissionPage() {
     setShowCommissionPage(false);
   };
 
+  const test = () => {
+    console.log(startPosition, arrivePosition, startAddress,
+      sender,
+      senderPhoneNumber,
+      arriveAddress,
+      receiver,
+      receiverPhoneNumber,
+      width,
+      height,
+      length,
+      weight,
+      details,
+      cost,
+    )
+  }
+
   return (
     <>
     <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
         <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
-        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv,}} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{setStartPosition: setStartPosition, setArrivePosition: setArrivePosition,}} title={title} hideCommissionPage={() => handleCommissionPage()}/>
+        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv, }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{
+          setStartPosition: setStartPosition, setArrivePosition: setArrivePosition, setStartAddress: setStartAddress,
+          setSender: setSender,
+          setSenderPhoneNumber: setSenderPhoneNumber,
+          setArriveAddress: setArriveAddress,
+          setReceiver: setReceiver,
+          setReceiverPhoneNumber: setReceiverPhoneNumber
+        }} title={title} hideCommissionPage={() => handleCommissionPage()} />
       </div>
+      <button onClick={() => test()}>값 확인</button>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
-        <RequestPage />
+        <RequestPage
+          setStates={{
+            setWidth: setWidth,
+            setHeight: setHeight,
+            setLength: setLength,
+            setWeight: setWeight,
+            setDetails: setDetails,
+            setCost: setCost
+          }} />
       </div>
       <BottomBar />
     </>
   );
 }
+

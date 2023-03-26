@@ -9,10 +9,15 @@ interface mapControl {
   hideMap : Function
 }
 
-interface setState {
+interface setStates {
   setStartPosition: React.Dispatch<React.SetStateAction<{}>>
   setArrivePosition: React.Dispatch<React.SetStateAction<{}>>
-  // setTitle: React.Dispatch<React.SetStateAction<string>>
+  setStartAddress : React.Dispatch<React.SetStateAction<string>>
+  setSender : React.Dispatch<React.SetStateAction<string>>
+  setSenderPhoneNumber : React.Dispatch<React.SetStateAction<string>>
+  setArriveAddress : React.Dispatch<React.SetStateAction<string>>
+  setReceiver : React.Dispatch<React.SetStateAction<string>>
+  setReceiverPhoneNumber : React.Dispatch<React.SetStateAction<string>>
 }
 
 interface refs {
@@ -23,7 +28,7 @@ interface refs {
 interface props {
   refs : refs
   mapControls : mapControl
-  setStates: setState
+  setStates: setStates
   title: string
   hideCommissionPage: () => void
 }
@@ -125,8 +130,17 @@ const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) =
       <div ref={postcodeContainer} style={{ display: "none", width: "100%", height: "400px", margin: "5px 0", position: "relative"}} >
         <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style={{ cursor: "pointer", position: "absolute", right: "0px", top: "-1px", zIndex: "1" }} onClick={foldDaumPostcode} alt="접기 버튼" />
       </div>
-      <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} title={"출발지"}/>
-      <PostcodeInputs refs={{ inputDiv: refs.arriveinputDiv, inputBox: arriveinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} title={"도착지"}/>
+          
+      <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} setStates={{
+        setAddress : setStates.setStartAddress,
+        setTarget : setStates.setSender,
+        setPhoneNumber : setStates.setSenderPhoneNumber
+      }} title={"출발지"} />
+      <PostcodeInputs refs={{ inputDiv: refs.arriveinputDiv, inputBox: arriveinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} setStates={{
+        setAddress : setStates.setArriveAddress,
+        setTarget : setStates.setReceiver,
+        setPhoneNumber : setStates.setReceiverPhoneNumber
+      }} title={"도착지"} />
     </>
   );
 };
