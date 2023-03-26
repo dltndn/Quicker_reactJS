@@ -11,6 +11,7 @@ import {
   Transportation,
   Departure,
   Product,
+  Pickup,
 } from "./models/DB/init-models";
 
 initModels(sequelize);
@@ -70,19 +71,17 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
   Order.hasOne(Departure, { foreignKey: "id" });
   Order.hasOne(Product, { foreignKey: "id" });
   const data = await Order.findAll({
-    attributes : ['id', 'PAYMENT'],
+    attributes : ['id', 'PAYMENT', 'DETAIL'],
     include: [
       {
         model: Transportation,
         attributes: { exclude: ['ID', 'id'] },
         required: false,
-      },
-      {
+      },{
         model: Destination,
         attributes: { exclude: ['id'] },
         required: true,
-      },
-      {
+      },{
         model: Departure,
         attributes: { exclude: ['ID', 'id'] },
         required: true,
@@ -90,7 +89,7 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
         model: Product,
         attributes: { exclude: ['ID', 'id'] },
         required: false,
-      },
+      }
     ],
   });
   console.log(JSON.stringify(data, null, 2))
