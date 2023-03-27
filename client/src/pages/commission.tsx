@@ -11,6 +11,7 @@ import { createGlobalStyle } from "styled-components";
 import { useAccount } from "wagmi";
 import { create } from 'zustand'
 
+
 interface OrderState {
   cost: number;
   setCost: (newCost:number) => void;
@@ -71,6 +72,11 @@ export default function CommissionPage() {
   const [length , setLength] = useState(0);
   const [weight, setWeight] = useState(0);
 
+  const [AMPM, setAMPM] = useState("")
+  const [date, setDate] = useState("")
+  const [hour, setHour] = useState(0)
+  const [minute, setMinute] = useState(0)
+
   const [details , setDetails] =useState("");
   const [cost , setCost] =useState(0);
 
@@ -115,6 +121,10 @@ export default function CommissionPage() {
       weight,
       details,
       cost,
+      date,
+      hour,
+      minute,
+      AMPM
     )
   }
 
@@ -142,7 +152,11 @@ export default function CommissionPage() {
             setLength: setLength,
             setWeight: setWeight,
             setDetails: setDetails,
-            setCost: setCost
+            setCost: setCost,
+            setDate: setDate,
+            setHour: setHour,
+            setMinute: setMinute,
+            setAMPM: setAMPM
           }} />
       </div>
       <BottomBar />

@@ -183,15 +183,6 @@ function Req({setStates} : props) {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
-    const [date, setDate] = useState("")
-    const [hour, setHour] = useState(0)
-    const [minute, setMinute] = useState(0)
-
-    useEffect(() => {
-        console.log(date, hour, minute)
-    }, [date, hour, minute])
-
-
     const [isChecked, setIsChecked] = useState({
         walk: false,
         bike: false,
@@ -211,10 +202,12 @@ function Req({setStates} : props) {
       const [isAMSelected, setIsAMSelected] = useState(true);
       const handleClickAM = () => {
         setIsAMSelected(true);
+        setStates.setAMPM("오전")
       };
     
       const handleClickPM = () => {
         setIsAMSelected(false);
+        setStates.setAMPM("오후")
       };
       
     const { setCost } = useOrderStore()
@@ -344,7 +337,7 @@ function Req({setStates} : props) {
             </div>
             <InputDiv>
             {/* ERROR : 타입이 String 타입임 */}
-            <SelectInput ref={weightRef} onChange={() => {setStates.setWeight(parseInt(weightRef.current!.value)); console.log(weightRef.current!.value)}} name="weight">
+            <SelectInput ref={weightRef} onChange={() => {setStates.setWeight(parseInt(weightRef.current!.value))}} name="weight">
                 <option value="10">10 이상</option>
                 <option value="20">20 이상</option>
             </SelectInput>
@@ -361,7 +354,7 @@ function Req({setStates} : props) {
                     <Leftli>
                         <BsCalendar3></BsCalendar3>
                     </Leftli>
-                    <Ip ref={dateRef} onChange={(e) => {setDate(dateRef.current!.value); console.log(dateRef.current!.value)}} type="date"></Ip>
+                    <Ip ref={dateRef} onChange={(e) => {setStates.setDate(dateRef.current!.value)}} type="date"></Ip>
                 </Btul>
                 <Btdiv>
                     <Btul>
@@ -374,12 +367,12 @@ function Req({setStates} : props) {
                         </li>
                         <li>
                             {/* ERROR : 타입이 String 타입임 */}
-                            <Ipval type='number' ref={hourRef} onChange={() => setHour(parseInt(hourRef.current!.value))}></Ipval>
+                            <Ipval type='number' ref={hourRef} onChange={() => setStates.setHour(parseInt(hourRef.current!.value))}></Ipval>
                             <Sp0> 시</Sp0>
                         </li>
                         <li>
                             {/* ERROR : 타입이 String 타입임 */}
-                            <Ipval type='number' ref={minuteRef} onChange={() => setMinute(parseInt(minuteRef.current!.value))}></Ipval>
+                            <Ipval type='number' ref={minuteRef} onChange={() => setStates.setMinute(parseInt(minuteRef.current!.value))}></Ipval>
                             <Sp0> 분</Sp0>
                         </li>
                     </Btul>
@@ -418,12 +411,17 @@ function Req({setStates} : props) {
 
   interface setStates {
     setWidth: React.Dispatch<React.SetStateAction<number>>
-    setHeight:React.Dispatch<React.SetStateAction<number>>
-    setLength:React.Dispatch<React.SetStateAction<number>>
-    setWeight:React.Dispatch<React.SetStateAction<number>>
-    setDetails : React.Dispatch<React.SetStateAction<string>>
+    setHeight: React.Dispatch<React.SetStateAction<number>>
+    setLength: React.Dispatch<React.SetStateAction<number>>
+    setWeight: React.Dispatch<React.SetStateAction<number>>
+    setDetails: React.Dispatch<React.SetStateAction<string>>
     setCost: React.Dispatch<React.SetStateAction<number>>
+    setDate: React.Dispatch<React.SetStateAction<string>>
+    setHour: React.Dispatch<React.SetStateAction<number>>
+    setMinute: React.Dispatch<React.SetStateAction<number>>
+    setAMPM : React.Dispatch<React.SetStateAction<string>>
   }
+  
   
   interface props {
     setStates : setStates

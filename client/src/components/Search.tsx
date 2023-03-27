@@ -27,17 +27,18 @@ function Search({ clickOrder }:Props) {
         </Div1>
 
         {orders !== undefined ? (orders.map((value, index) => (
+            
         <Div1 onClick={() => clickOrder(index)}>
             <Div1_2>0.2Km</Div1_2>
             <Div1_2>
                 <div>
-                    <Sp0>김포<br/></Sp0>
+                    <Sp0>{value.dep_detail}<br/></Sp0>
                     북변
                 </div>
             </Div1_2>
             <Div1_2>
                 <div>
-                    <Sp0>김포<br/></Sp0>
+                    <Sp0>{value.dep_detail}<br/></Sp0>
                     북변
                 </div>
             </Div1_2>

@@ -23,6 +23,10 @@ interface setStates {
   setWeight: React.Dispatch<React.SetStateAction<number>>
   setDetails: React.Dispatch<React.SetStateAction<string>>
   setCost: React.Dispatch<React.SetStateAction<number>>
+  setDate: React.Dispatch<React.SetStateAction<string>>
+  setHour: React.Dispatch<React.SetStateAction<number>>
+  setMinute: React.Dispatch<React.SetStateAction<number>>
+  setAMPM : React.Dispatch<React.SetStateAction<string>>
 }
 
 interface props {
@@ -52,7 +56,6 @@ function RequestPage({setStates} : props) {
     if (checkAllowance()) {
       //결제 로직 수행
       console.log("결제로직")
-      // NOTE : 이벤트 맞는지 확인
       // 데이터 전송
       // Handler.fetch({})
       
