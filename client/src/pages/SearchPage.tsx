@@ -10,7 +10,6 @@ import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
 
-
 export interface OrderObj {
     orderNum: string;
     departure: string;
@@ -21,6 +20,7 @@ export interface OrderObj {
     destination_region_1depth_name : string;
     destination_region_3depth_name : string;
     des_detail: string;
+    distance : number;
     volume: string;
     weight: string;
     detail: string;
@@ -84,11 +84,14 @@ function SearchPage() {
       let transportations = appendTransportation(element);
       
       (async () =>{
+        
         // @ts-ignore
         let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X )
         // @ts-ignore
         let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X )
-
+        // @ts-ignore
+        let distance = await Map.getDistance(element.Departure, element.Destination)
+        
         let obj : OrderObj = {
           // @ts-ignore
           orderNum: element.id,
@@ -109,6 +112,8 @@ function SearchPage() {
           // @ts-ignore
           des_detail: element.Destination.DETAIL,
           // @ts-ignore
+          distance : distance.distanceInfo.distance,
+          // @ts-ignore
           volume: `가로 ${element.Product.WIDTH}cm, 세로 ${element.Product.LENGTH}cm, 높이 ${element.Product.HEIGHT}cm`,
           // @ts-ignore
           weight: `${element.Product.WEIGHT}kg 이상`,
@@ -123,7 +128,6 @@ function SearchPage() {
           // @ts-ignore
           securityDeposit: element.PAYMENT * 0.1,
         }
-        
         setMockData(mockData => [...mockData, obj])        
       })()
       
@@ -151,6 +155,8 @@ function SearchPage() {
       }
     }
     exec();
+    
+
   }, [])
 
   useEffect(() => {

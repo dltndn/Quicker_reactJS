@@ -1,6 +1,3 @@
-import { Console } from "console";
-import { start } from "repl";
-
 // @ts-ignore
 const { Tmapv3 } = window;
 
@@ -13,6 +10,26 @@ const Tmap = {
             zoom: 15	// 지도 줌레벨
         });
     },
+
+    getDistance: (startPosition: coordination, arrivePosition: coordination) => {
+        const headers = { "appKey": process.env.REACT_APP_TMAP_API_KEY };
+
+        return new Promise ((resolve, reject) => {
+            fetch(`https://apis.openapi.sk.com/tmap/routes/distance?version=1&format=json&callback=result&startX=${startPosition.X}&startY=${startPosition.Y}&endX=${arrivePosition.X}&endY=${arrivePosition.Y}&reqCoordType=WGS84GEO`, {
+            method: "GET",
+            // @ts-ignore
+            headers: headers
+            })
+            .then(response => response.json())
+            .then(data => {
+                resolve(data)
+            })
+            .catch(error => {
+                reject(error)
+            });
+        }) 
+    },
+
 
     Marker: (map: any, lat: number, lon: number) => {
         return new Tmapv3.Marker({
@@ -112,74 +129,12 @@ const Tmap = {
                 console.error("Error:", error);
             });
         },
-        // $.ajax({
-        //         method : "GET",
-        //         headers : APIKEY,
-        //         url : "https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&format=json&callback=result",
-        //         async : false,
-        //         data : {
-        //             "coordType" : "WGS84GEO",
-        //             "addressType" : "A10",
-        //             "lon" : lon,
-        //             "lat" : lat
-        //         },
-        //         success : (response : Response) => {
-        //             // 3. json에서 주소 파싱
-        //             // @ts-ignore
-        //             let arrResult = response.addressInfo;
-
-        //             //법정동 마지막 문자 
-        //             let lastLegal = arrResult.legalDong
-        //                     .charAt(arrResult.legalDong.length - 1);
-
-        //             // 새주소
-        //             let newRoadAddr = arrResult.city_do + ' '
-        //                     + arrResult.gu_gun + ' ';
-
-        //             if (arrResult.eup_myun == ''
-        //                     && (lastLegal == "읍" || lastLegal == "면")) {//읍면
-        //                 newRoadAddr += arrResult.legalDong;
-        //             } else {
-        //                 newRoadAddr += arrResult.eup_myun;
-        //             }
-        //             newRoadAddr += ' ' + arrResult.roadName + ' '
-        //                     + arrResult.buildingIndex;
-
-        //             // 새주소 법정동& 건물명 체크
-        //             if (arrResult.legalDong != ''
-        //                     && (lastLegal != "읍" && lastLegal != "면")) {//법정동과 읍면이 같은 경우
-
-        //                 if (arrResult.buildingName != '') {//빌딩명 존재하는 경우
-        //                     newRoadAddr += (' (' + arrResult.legalDong
-        //                             + ', ' + arrResult.buildingName + ') ');
-        //                 } else {
-        //                     newRoadAddr += (' (' + arrResult.legalDong + ')');
-        //                 }
-        //             } else if (arrResult.buildingName != '') {//빌딩명만 존재하는 경우
-        //                 newRoadAddr += (' (' + arrResult.buildingName + ') ');
-        //             }
-
-        //             // 구주소
-        //             let jibunAddr = arrResult.city_do + ' '
-        //                     + arrResult.gu_gun + ' '
-        //                     + arrResult.legalDong + ' ' + arrResult.ri
-        //                     + ' ' + arrResult.bunji;
-        //             //구주소 빌딩명 존재
-        //             if (arrResult.buildingName != '') {//빌딩명만 존재하는 경우
-        //                 jibunAddr += (' ' + arrResult.buildingName);
-        //             }
-
-                    
-
-        //         },
-        //         error : function(request :Request, status : string, error: Error) {
-        //             // @ts-ignore
-        //             console.log("code:" + request.status, "message:" + request.responseText, "error:" + error);
-        //         }
-        //     });
-
-    // }
 
 }
 
 export default Tmap;
+
+interface coordination {
+    X: number,
+    Y: number
+}

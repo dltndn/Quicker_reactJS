@@ -29,7 +29,7 @@ function Search({ clickOrder }:Props) {
         {orders !== undefined ? (orders.map((value, index) => (
             
         <Div1 onClick={() => clickOrder(index)}>
-            <Div1_2>0.2Km</Div1_2>
+            <Div1_2>{(value.distance / 1000).toFixed(1) + "KM"}</Div1_2>
             <Div1_2>
                 <div>
                     <Sp0>{value.departure_region_1depth_name}<br/></Sp0>
