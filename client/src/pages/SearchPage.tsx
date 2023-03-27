@@ -14,8 +14,12 @@ import Kakao from "../lib/Kakao";
 export interface OrderObj {
     orderNum: string;
     departure: string;
+    departure_region_1depth_name : string;
+    departure_region_3depth_name : string;
     dep_detail: string;
     destination: string;
+    destination_region_1depth_name : string;
+    destination_region_3depth_name : string;
     des_detail: string;
     volume: string;
     weight: string;
@@ -89,11 +93,19 @@ function SearchPage() {
           // @ts-ignore
           orderNum: element.id,
           // @ts-ignore
-          departure: departure,
+          departure: departure.address_name,
+          // @ts-ignore
+          departure_region_1depth_name: departure.region_1depth_name,
+          // @ts-ignore
+          departure_region_3depth_name: departure.region_3depth_name,
           // @ts-ignore
           dep_detail: element.Departure.DETAIL,
           // @ts-ignore
-          destination: destination,
+          destination: destination.address_name,
+          // @ts-ignore
+          destination_region_1depth_name: destination.region_1depth_name,
+          // @ts-ignore
+          destination_region_3depth_name: destination.region_3depth_name,
           // @ts-ignore
           des_detail: element.Destination.DETAIL,
           // @ts-ignore

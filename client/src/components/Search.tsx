@@ -32,14 +32,14 @@ function Search({ clickOrder }:Props) {
             <Div1_2>0.2Km</Div1_2>
             <Div1_2>
                 <div>
-                    <Sp0>{value.dep_detail}<br/></Sp0>
-                    북변
+                    <Sp0>{value.departure_region_1depth_name}<br/></Sp0>
+                    {value.departure_region_3depth_name}
                 </div>
             </Div1_2>
             <Div1_2>
                 <div>
-                    <Sp0>{value.dep_detail}<br/></Sp0>
-                    북변
+                    <Sp0>{value.destination_region_1depth_name}<br/></Sp0>
+                    {value.destination_region_3depth_name}
                 </div>
             </Div1_2>
             <Div1_2>{value.income}</Div1_2>

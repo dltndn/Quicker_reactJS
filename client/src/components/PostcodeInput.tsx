@@ -118,7 +118,6 @@ const PostcodeInputs = ({ refs, controls, setStates, title }: PostcodeInputsType
 
     useEffect(()=>{
         setStates.setPhoneNumber(prePhoneNumber + middlePhoneNumber + lastPhoneNumber)
-        console.log(prePhoneNumber + middlePhoneNumber + lastPhoneNumber)
     }, [prePhoneNumber, middlePhoneNumber, lastPhoneNumber])
     return (
         <>
