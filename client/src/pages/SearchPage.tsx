@@ -74,9 +74,9 @@ function SearchPage() {
 
   const [requestListContents, setRequestListContents] =useState([])
   
-  // const [mockData, setMockData] = useState<OrderObj[]>([]);
+  const [mockData, setMockData] = useState<OrderObj[]>([]);
   // 이 부분 수정
-  const mockData : Array<OrderObj> = [];
+  // const mockData : Array<OrderObj> = [];
 
   const changeToData = (dataArray : Array<OrderObj>) => {
     requestListContents.forEach( element => {
@@ -103,49 +103,20 @@ function SearchPage() {
       
       const a = async () =>{
         // @ts-ignore
-        let departurea = await reverseGeoCording(element.Departure.Y, element.Departure.X )
+        let departure = await reverseGeoCording(element.Departure.Y, element.Departure.X )
         // @ts-ignore
-        // let destinationa = await reverseGeoCording(element.Destination.Y, element.Destination.X )
-        // console.log(departurea, destinationa)
+        let destination = await reverseGeoCording(element.Destination.Y, element.Destination.X )
+        console.log(departure, destination)
 
-        // let obj : OrderObj= {
-        //   // @ts-ignore
-        //   orderNum: element.id,
-        //   // @ts-ignore
-        //   departure: departurea,
-        //   // @ts-ignore
-        //   dep_detail: element.Departure.DETAIL,
-        //   // @ts-ignore
-        //   destination: destinationa,
-        //   // @ts-ignore
-        //   des_detail: element.Destination.DETAIL,
-        //   // @ts-ignore
-        //   volume: `가로 ${element.Product.WIDTH}cm, 세로 ${element.Product.LENGTH}cm, 높이 ${element.Product.HEIGHT}cm`,
-        //   // @ts-ignore
-        //   weight: `${element.Product.WEIGHT}kg 이상`,
-        //   // @ts-ignore
-        //   detail: element.DETAIL,
-        //   // @ts-ignore
-        //   deadline: "23.03.24 17:50",
-        //   // @ts-ignore
-        //   transportation: transportations,
-        //   // @ts-ignore
-        //   income: element.PAYMENT,
-        //   // @ts-ignore
-        //   securityDeposit: element.PAYMENT * 0.1,
-        // }
-        
-        // setMockData(mockData.push(obj))
-
-        dataArray.push({
+        let obj : OrderObj = {
           // @ts-ignore
           orderNum: element.id,
           // @ts-ignore
-          departure: departurea,
+          departure: departure,
           // @ts-ignore
           dep_detail: element.Departure.DETAIL,
           // @ts-ignore
-          destination: departurea,
+          destination: destination,
           // @ts-ignore
           des_detail: element.Destination.DETAIL,
           // @ts-ignore
@@ -162,9 +133,9 @@ function SearchPage() {
           income: element.PAYMENT,
           // @ts-ignore
           securityDeposit: element.PAYMENT * 0.1,
-        })
-
+        }
         
+        setMockData(mockData => [...mockData, obj])        
       }
       a() 
     });    
@@ -201,14 +172,14 @@ function SearchPage() {
         // @ts-ignore
         Map.Marker(map, element.Departure.Y, element.Departure.X)   
       });
-
-
-
-      changeToData(mockData)
-      //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고
-      setOrders(mockData);
+      changeToData(mockData)      
     }
   }, [requestListContents])
+
+  useEffect(() => {
+    //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고
+    setOrders(mockData);
+  }, [mockData])
 
   useEffect(() => {
     if (Object.keys(userLocation).length !== 0) {
