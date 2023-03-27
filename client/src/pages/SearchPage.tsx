@@ -8,10 +8,8 @@ import Handler from "../lib/Handler";
 import Search from "../components/Search";
 import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
-import Tmap from "../lib/Tmap";
-import dotenv from "dotenv";
 import Kakao from "../lib/Kakao";
-import { resolve } from "path";
+
 
 export interface OrderObj {
     orderNum: string;
@@ -75,38 +73,17 @@ function SearchPage() {
   const [requestListContents, setRequestListContents] =useState([])
   
   const [mockData, setMockData] = useState<OrderObj[]>([]);
-  // 이 부분 수정
-  // const mockData : Array<OrderObj> = [];
-
+  
   const changeToData = (dataArray : Array<OrderObj>) => {
     requestListContents.forEach( element => {
    
       let transportations = appendTransportation(element);
-      // ERROR
-
-      // @ts-ignore
-      const { kakao } = window;
-
-      const reverseGeoCording =  (lat: number, lon: number) => {
-        let geocoder = new kakao.maps.services.Geocoder();
-        let coord = new kakao.maps.LatLng(lat, lon)
-        return new Promise((resolve, reject) => {
-          geocoder.coord2Address(coord.getLng(), coord.getLat(), (result: any, status: string) => {
-            if (status === kakao.maps.services.Status.OK) {
-              resolve(result[0].address.address_name)  
-            } else {
-              reject(status)
-            }
-          });
-        }) 
-      }
       
-      const a = async () =>{
+      (async () =>{
         // @ts-ignore
-        let departure = await reverseGeoCording(element.Departure.Y, element.Departure.X )
+        let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X )
         // @ts-ignore
-        let destination = await reverseGeoCording(element.Destination.Y, element.Destination.X )
-        console.log(departure, destination)
+        let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X )
 
         let obj : OrderObj = {
           // @ts-ignore
@@ -136,8 +113,8 @@ function SearchPage() {
         }
         
         setMockData(mockData => [...mockData, obj])        
-      }
-      a() 
+      })()
+      
     });    
   }
   
