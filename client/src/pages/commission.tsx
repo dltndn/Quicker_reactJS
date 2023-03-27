@@ -16,6 +16,14 @@ interface OrderState {
   setCost: (newCost:number) => void;
   title: string;
   setTitle: (newTitle:string) => void;
+  btnContent: string;
+  setBtnContent: (newContent:string) => void;
+  deadLine: string;
+  setDeadLine: (newDeadLine:string) => void;
+  showAllowance: boolean;
+  setShowAllowance: (newAllowance:boolean) => void;
+  createdOrderNum: string | undefined;
+  setCreatedOrderNum: (newOrder:string|undefined) => void;
 }
 
 export const useOrderStore = create<OrderState>((set) => ({
@@ -23,6 +31,14 @@ export const useOrderStore = create<OrderState>((set) => ({
   setCost: (cost: number) => set({cost}),
   title: "출발지 입력",
   setTitle: (title: string) => set({title}),
+  btnContent: "결제하기",
+  setBtnContent: (btnContent: string) => set({btnContent}),
+  deadLine: "1682562868", //임시
+  setDeadLine: (deadLine: string) => set({deadLine}),
+  showAllowance: false,
+  setShowAllowance: (showAllowance:boolean) => set({showAllowance}),
+  createdOrderNum: undefined,
+  setCreatedOrderNum: (createdOrderNum:string|undefined) => set({createdOrderNum})
 }))
 
 const GlobalStyle = createGlobalStyle`

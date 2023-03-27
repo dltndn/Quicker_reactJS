@@ -1,9 +1,22 @@
 import { readContract, readContracts, } from '@wagmi/core'
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
+import { QKRW_CONTRACT_ABI,
+  QKRW_ADDRESS, QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
- 
+
+const Qkrw_abi = QKRW_CONTRACT_ABI;
+const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
+
+export const getAllowance =async (address:`0x${string}` | undefined) => {
+  const data = await readContract({
+    address: Qkrw_address,
+    abi: Qkrw_abi,
+    functionName: "allowance",
+    args: [address, Quicker_address],
+  })
+  return data
+}
 
 export const getOrders = async (orderNumList:string[]) => {
   const quickerContract = {
@@ -39,6 +52,18 @@ export const getOrder = async(orderNum:string) => {
       args: [orderNum],
     })
     return TemplateOrder(data)
+}
+
+export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
+  if (address === undefined){
+    return undefined
+  }
+  let orderList = await getClientOrderList(address)
+  if (orderList === undefined) {
+    return undefined
+  }
+  let result = orderList[orderList.length - 1]
+  return result
 }
 
 export const getClientOrderList = async(address:`0x${string}` | undefined) => {

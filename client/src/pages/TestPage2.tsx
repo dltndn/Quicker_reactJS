@@ -1,5 +1,6 @@
 import GetOrderContents from "../components/GetOrderContents";
 import CreateNewOrder from "../components/createNewOrder";
+import NewOrderTest from "../components/newOrderTest";
 import styled from "styled-components";
 import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
@@ -56,7 +57,7 @@ export default function TestPage2() {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
           />
-          <CreateNewOrder _orderPrice={orderPrice} _deadLine={deadline} />
+          <NewOrderTest _orderPrice={orderPrice} _deadLine={deadline} />
           <TransactOrder
             _functionName="cancelOrder"
             title="오더 취소하기(의뢰인)"
