@@ -5,6 +5,7 @@ import Orderlistmodal from "./orderlistmodal";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
 import { getClientOrderList, getOrders } from "../../utils/GetOrderFromBlockchain";
+import { formatedDate } from "../../utils/ConvertTimestampToDate";
 
 interface OrderState {
   Order: object | null;
@@ -162,13 +163,6 @@ const OrderBox = ({ orderObj }: any) => {
       )}
     </>
   );
-};
-
-const formatedDate = (data: any): string => {
-  const year = data.year;
-  const month = data.month;
-  const day = data.day;
-  return `${year}.${month}.${day}`;
 };
 
 const SelectInput = styled.select`

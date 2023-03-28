@@ -9,6 +9,9 @@ import Search from "../components/Search";
 import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
+import { getOrder } from "../utils/GetOrderFromBlockchain";
+import { formatedDate } from "../utils/ConvertTimestampToDate";
+import { calQuickerIncome, calSecurityDeposit, extractNumber } from "../utils/CalAny";
 
 export interface OrderObj {
     orderNum: string;
@@ -66,6 +69,11 @@ const appendTransportation = (element : any) =>{
   return transportations
 }
 
+const getOrderFromBlochchain = async (orderNum:string) => {
+  const orderObj = await getOrder(orderNum)
+  return orderObj
+}
+
 function SearchPage() {
   
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } = useSearchState();
@@ -80,10 +88,25 @@ function SearchPage() {
   
   const changeToData = (dataArray : Array<OrderObj>) => {
     requestListContents.forEach( element => {
-   
+      
       let transportations = appendTransportation(element);
       
       (async () =>{
+        // @ts-ignore
+        const orderFromBlockchain = getOrderFromBlochchain(element.id)
+        // @ts-ignore
+        console.log("searchPage order number: " + element.id)
+        const deadLine = formatedDate((await orderFromBlockchain).limitedTime)
+        let orderPrice = (await orderFromBlockchain).orderPrice
+        let orderPriceNum:number
+        if (orderPrice === null){
+          orderPriceNum = 0
+        } else {
+          orderPriceNum = extractNumber(orderPrice)
+        }
+        console.log(orderPriceNum)
+        const income = calQuickerIncome(orderPriceNum)
+        const securityDeposit = calSecurityDeposit(orderPriceNum)
         
         // @ts-ignore
         let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X )
@@ -120,13 +143,13 @@ function SearchPage() {
           // @ts-ignore
           detail: element.DETAIL,
           // @ts-ignore
-          deadline: "23.03.24 17:50",
+          deadline: deadLine,
           // @ts-ignore
           transportation: transportations,
           // @ts-ignore
-          income: element.PAYMENT,
+          income: income,
           // @ts-ignore
-          securityDeposit: element.PAYMENT * 0.1,
+          securityDeposit: securityDeposit,
         }
         setMockData(mockData => [...mockData, obj])        
       })()
