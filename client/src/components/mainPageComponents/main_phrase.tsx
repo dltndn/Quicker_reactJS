@@ -52,6 +52,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
   const { isMember, setIsMember, userName }  = useVerificationStore();
 
+  
   return (
     <>
       {isConnect ? (

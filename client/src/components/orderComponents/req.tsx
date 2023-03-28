@@ -157,20 +157,37 @@ const Sp1 = styled.span`
     margin-left : 0.313rem;
 `;
 
-const ImgWrapper = styled.div`
+const ImgWrapper = styled.label`
   position: relative;
+  display: inline-block;
+  cursor: pointer;
+`;
+
+const Checkbox = styled.input.attrs({ type: "checkbox" })`
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 `;
 
 const Img = styled.img`
     width: 1.875rem;
     height: 1.875rem;
 `;
-const CheckIcon = styled.div`
+const CheckIcon = styled.span`
   position: absolute;
-  top: -0.5rem;
-  right: 0;
-  font-size: 0.1rem;
+  top: -1rem;
+  right: -0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+  font-size: var(--font-small);
 `;
+
 function Req({setStates} : props) {
 
     const widthRef = useRef<HTMLInputElement>(null)
@@ -228,55 +245,79 @@ function Req({setStates} : props) {
             </div>
             <Div0>
                 <Div1>
-                    <ImgWrapper onClick={() => handleImgClick("walk")}>
-                    <Img src={walk} alt=""/>
-                    {isChecked.walk && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={walk} alt=""/>
+                <Checkbox
+                  checked={isChecked.walk}
+                  onChange={() => handleImgClick("walk")}
+                />
+                <CheckIcon>{isChecked.walk ? "✔️" : ""}</CheckIcon>
+              </ImgWrapper>
                     <Div2>
                     도보
                     </Div2>  
                 </Div1>
                 <Div1>
-                <ImgWrapper onClick={() => handleImgClick("bike")}>
-                    <Img src={bike} alt=""/>
-                    {isChecked.bike && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={bike} alt=""/>
+                <Checkbox
+                    checked={isChecked.bike}
+                    onChange={() => handleImgClick("bike")}
+                />
+                <CheckIcon>{isChecked.bike ? "✔️" : ""}</CheckIcon>
+                </ImgWrapper>
                     <Div2>
                     자전거
                     </Div2>                 
                 </Div1>
                 <Div1>
-                <ImgWrapper  onClick={() => handleImgClick("kickboard")}>
-                    <Img src={kickboard} alt=""/>
-                    {isChecked.kickboard && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={kickboard} alt=""/>
+                <Checkbox
+                    checked={isChecked.kickboard}
+                    onChange={() => handleImgClick("kickboard")}
+                />
+                <CheckIcon>{isChecked.kickboard ? "✔️" : ""}</CheckIcon>
+                </ImgWrapper>
                     <Div2>
                     킥보드
-                    </Div2>                
+                    </Div2>
                 </Div1>
                 <Div1>
-                <ImgWrapper onClick={() => handleImgClick("motorcycle")}>
-                    <Img src={motorcycle} alt=""/>
-                    {isChecked.motorcycle && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={motorcycle} alt=""/>
+                <Checkbox
+                    checked={isChecked.motorcycle}
+                    onChange={() => handleImgClick("motorcycle")}
+                />
+                <CheckIcon>{isChecked.motorcycle ? "✔️" : ""}</CheckIcon>
+                </ImgWrapper>
                     <Div2>
                     오토바이
                     </Div2>                
                 </Div1>
                 <Div1>
-                <ImgWrapper onClick={() => handleImgClick("car")}>
-                    <Img src={car} alt=""/>
-                    {isChecked.car && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={car} alt=""/>
+                <Checkbox
+                    checked={isChecked.car}
+                    onChange={() => handleImgClick("car")}
+                />
+                <CheckIcon>{isChecked.car ? "✔️" : ""}</CheckIcon>
+                </ImgWrapper>
                     <Div2>
                     승용차
                     </Div2>             
                 </Div1>
                 <Div1>
-                <ImgWrapper  onClick={() => handleImgClick("truck")}>
-                    <Img src={truck} alt=""/>
-                    {isChecked.truck && <CheckIcon>✔️</CheckIcon>}
-                    </ImgWrapper>
+                <ImgWrapper>
+                <Img src={truck} alt=""/>
+                <Checkbox
+                    checked={isChecked.truck}
+                    onChange={() => handleImgClick("truck")}
+                />
+                <CheckIcon>{isChecked.truck ? "✔️" : ""}</CheckIcon>
+                </ImgWrapper>
                     <Div2>
                     트럭
                     </Div2>               
