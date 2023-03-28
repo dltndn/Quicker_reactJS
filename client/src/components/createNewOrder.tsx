@@ -8,17 +8,21 @@ import { useEffect, useState } from "react";
 import ConfirmBtn from "./confirmBtn";
 import { useOrderStore } from "../pages/commission";
 import { getAllowance, getLastClientOrder } from "../utils/GetOrderFromBlockchain";
+import Handler from "../lib/Handler";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
 interface Props {
+  orderId: number
+  setOrderId : React.Dispatch<React.SetStateAction<number>>
+  data : object
   _orderPrice: string;
   _deadLine: string;
 }
 
-export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
+export default function CreateNewOrder({orderId, setOrderId,  data,  _orderPrice, _deadLine }: Props) {
   const { btnContent, setBtnContent, setShowAllowance, createdOrderNum, setCreatedOrderNum } = useOrderStore()
   const { address } = useAccount()
 
@@ -56,18 +60,32 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     return () => clearTimeout(timeoutId);
   }
 
-  useEffect(() => {
+  useEffect( () => {
     if (isSuccess) {
       if (createdOrderNum !== undefined) {
         // db 데이터 저장 로직 수행
-        console.log("db 데이터 저장 로직")
-        console.log("db에 저장할 오더번호: " + createdOrderNum)
-        // 로직 마지막은 프로필 오더 내역으로 리다이렉트
+        (async () => {
+          console.log("db 데이터 저장 로직")
+          console.log("db에 저장할 오더번호: " + createdOrderNum)
+          await setOrderId(parseInt(createdOrderNum))
+          console.log(typeof(parseInt(createdOrderNum)))        
+
+          
+          
+          // 로직 마지막은 프로필 오더 내역으로 리다이렉트
+        })()
+        
         } else {
           console.log("createdOrderNum is null")
         }
     }
   }, [createdOrderNum])
+
+  useEffect( () => {
+    if (orderId !== 0) {
+      Handler.post(data, "http://localhost:9000/request")
+    }
+  }, [orderId])
 
   useEffect(() => {
     if (isLoading) {
