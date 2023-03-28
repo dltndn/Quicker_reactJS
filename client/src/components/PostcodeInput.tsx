@@ -1,6 +1,7 @@
 import ConfirmBtn from "./confirmBtn";
 import styled from "styled-components";
 import Profile_settingPage from "../pages/Profile_settingPage";
+import { useEffect, useRef, useState } from "react";
 
 interface controls {
     onFocus: React.FocusEventHandler<HTMLInputElement>
@@ -12,9 +13,16 @@ interface refs {
     inputBox: React.RefObject<HTMLInputElement>
 }
 
+interface setStates {
+    setAddress : React.Dispatch<React.SetStateAction<string>>
+    setTarget : React.Dispatch<React.SetStateAction<string>>
+    setPhoneNumber : React.Dispatch<React.SetStateAction<string>>  
+}
+
 interface PostcodeInputsType {
     refs: refs
     controls: controls
+    setStates : setStates
     title: String
 }
 
@@ -96,8 +104,21 @@ const Ip = styled.input`
 `;
 
 
-const PostcodeInputs = ({ refs, controls, title }: PostcodeInputsType) => {
+const PostcodeInputs = ({ refs, controls, setStates, title }: PostcodeInputsType) => {
 
+    const addressDetailRef = useRef<HTMLInputElement>(null);
+    const nameRef = useRef<HTMLInputElement>(null);
+    const prePhoneNumberRef = useRef<HTMLInputElement>(null);
+    const middlePhoneNumberRef = useRef<HTMLInputElement>(null);
+    const lastPhoneNumberRef = useRef<HTMLInputElement>(null);
+
+    const [prePhoneNumber, setPrePhoneNumber] = useState("");
+    const [middlePhoneNumber, setMiddlePhoneNumber] = useState("");
+    const [lastPhoneNumber, setLastPhoneNumber] = useState("");
+
+    useEffect(()=>{
+        setStates.setPhoneNumber(prePhoneNumber + middlePhoneNumber + lastPhoneNumber)
+    }, [prePhoneNumber, middlePhoneNumber, lastPhoneNumber])
     return (
         <>
         <Container>
@@ -112,7 +133,7 @@ const PostcodeInputs = ({ refs, controls, title }: PostcodeInputsType) => {
             </Divfont>
             <div>
             <Ip type="text" onFocus={controls.onFocus} ref={refs.inputBox} placeholder="주소" />
-            <Ip type="text" placeholder="세부주소" />
+            <Ip type="text" ref={addressDetailRef} onChange={() => setStates.setAddress(addressDetailRef.current!.value)} placeholder="세부주소" />
             </div>
             <Div0>
                 <Divfont1>
@@ -124,16 +145,16 @@ const PostcodeInputs = ({ refs, controls, title }: PostcodeInputsType) => {
             </Div0>
             <Div0>
                 <DivName>
-                    <Ip type="text" placeholder="이름" />
+                    <Ip type="text" ref={nameRef} onChange={() => setStates.setTarget(nameRef.current!.value)} placeholder="이름" />
                 </DivName>
                 <Divcall>
-                    <Ip type="number" placeholder="010" />
+                    <Ip type="number" ref={prePhoneNumberRef} onChange={() => setPrePhoneNumber(prePhoneNumberRef.current!.value)} placeholder="010" />
                 </Divcall>
                 <Divcall>
-                    <Ip type="number" placeholder="0000" />
+                    <Ip type="number" ref={middlePhoneNumberRef} onChange={() => setMiddlePhoneNumber(middlePhoneNumberRef.current!.value)} placeholder="0000" />
                 </Divcall>
                 <Divcall1>
-                    <Ip type="number" placeholder="0000" />
+                    <Ip type="number" ref={lastPhoneNumberRef} onChange={() => setLastPhoneNumber(lastPhoneNumberRef.current!.value)} placeholder="0000" />
                 </Divcall1>
             </Div0>
         </Box>

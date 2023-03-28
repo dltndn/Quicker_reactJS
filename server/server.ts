@@ -10,6 +10,8 @@ import {
   Destination,
   Transportation,
   Departure,
+  Product,
+  Pickup,
 } from "./models/DB/init-models";
 
 initModels(sequelize);
@@ -67,24 +69,27 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
   Order.hasOne(Transportation, { foreignKey: "id" });
   Order.hasOne(Destination, { foreignKey: "id" });
   Order.hasOne(Departure, { foreignKey: "id" });
+  Order.hasOne(Product, { foreignKey: "id" });
   const data = await Order.findAll({
-    attributes : ['id', 'PAYMENT'],
+    attributes : ['id', 'PAYMENT', 'DETAIL'],
     include: [
       {
         model: Transportation,
         attributes: { exclude: ['ID', 'id'] },
         required: false,
-      },
-      {
+      },{
         model: Destination,
         attributes: { exclude: ['id'] },
         required: true,
-      },
-      {
+      },{
         model: Departure,
         attributes: { exclude: ['ID', 'id'] },
         required: true,
-      },
+      },{
+        model: Product,
+        attributes: { exclude: ['ID', 'id'] },
+        required: false,
+      }
     ],
   });
   console.log(JSON.stringify(data, null, 2))
@@ -144,7 +149,22 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
       res.send(error);
     }
   });
+  app.post("/request", async (req: Request, res: Response) => {
+    try {
+      const data = req.body
 
+      console.log(data)
+      // await User.create(userInstance);
+      // await Birth_date.create(userBirthDate);
+      // await Join_date.create({
+      //   id: hashed,
+      //   timeStamp: Math.floor(Date.now() / 100),
+      // });
+      return res.send({ msg: "done" });
+    } catch (error) {
+      // res.send(error);
+    }
+  });
 app.get("/conn", (req: Request, res: Response) => {
   console.log("done");
   res.redirect(`/`);

@@ -8,30 +8,19 @@ import Handler from "../lib/Handler";
 import Search from "../components/Search";
 import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
-
-const mockData = [
-  {
-    orderNum: "3",
-    departure: "김포시 김포대로 926번길 46",
-    dep_detail: "삼성아파트 309동 704호",
-    destination: "부천시 길주로 210",
-    des_detail: "부천시청 민원여권과",
-    volume: "가로 10cm, 세로 10cm, 높이 10cm",
-    weight: "40kg 이상",
-    detail: "경비실에 맡겨주세요.",
-    deadline: "23.03.24 17:50",
-    transportation: ["bike", "walk"],
-    income: "21,000",
-    securityDeposit: "2,100",
-  },
-];
+import Kakao from "../lib/Kakao";
 
 export interface OrderObj {
-  orderNum: string;
+    orderNum: string;
     departure: string;
+    departure_region_1depth_name : string;
+    departure_region_3depth_name : string;
     dep_detail: string;
     destination: string;
+    destination_region_1depth_name : string;
+    destination_region_3depth_name : string;
     des_detail: string;
+    distance : number;
     volume: string;
     weight: string;
     detail: string;
@@ -63,16 +52,87 @@ export const useSearchState = create<SearchProps>((set) => ({
   setShowOrder: (showOrder: number) => set({ showOrder })
 }));
 
+const appendTransportation = (element : any) =>{
+  // 운송수단 배열      
+  let transportations : Array<string> = []
+  // @ts-ignore
+  for (let key in element.Transportation) {
+    // @ts-ignore
+    if (element.Transportation[key] === true) {
+      transportations.push(key)
+    }
+  }
+
+  return transportations
+}
+
 function SearchPage() {
   
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } = useSearchState();
   const requestListContainer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const [map, setMap] = useState({})
-  // const [requestData, setRequestData] = useState({})
   const [userLocation, setUserLocation] = useState({})
 
-  const [requestListContent, setRequestListContent] =useState({})
+  const [requestListContents, setRequestListContents] =useState([])
+  
+  const [mockData, setMockData] = useState<OrderObj[]>([]);
+  
+  const changeToData = (dataArray : Array<OrderObj>) => {
+    requestListContents.forEach( element => {
+   
+      let transportations = appendTransportation(element);
+      
+      (async () =>{
+        
+        // @ts-ignore
+        let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X )
+        // @ts-ignore
+        let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X )
+        // @ts-ignore
+        let distance = await Map.getDistance(element.Departure, element.Destination)
+        
+        let obj : OrderObj = {
+          // @ts-ignore
+          orderNum: element.id,
+          // @ts-ignore
+          departure: departure.address_name,
+          // @ts-ignore
+          departure_region_1depth_name: departure.region_1depth_name,
+          // @ts-ignore
+          departure_region_3depth_name: departure.region_3depth_name,
+          // @ts-ignore
+          dep_detail: element.Departure.DETAIL,
+          // @ts-ignore
+          destination: destination.address_name,
+          // @ts-ignore
+          destination_region_1depth_name: destination.region_1depth_name,
+          // @ts-ignore
+          destination_region_3depth_name: destination.region_3depth_name,
+          // @ts-ignore
+          des_detail: element.Destination.DETAIL,
+          // @ts-ignore
+          distance : distance.distanceInfo.distance,
+          // @ts-ignore
+          volume: `가로 ${element.Product.WIDTH}cm, 세로 ${element.Product.LENGTH}cm, 높이 ${element.Product.HEIGHT}cm`,
+          // @ts-ignore
+          weight: `${element.Product.WEIGHT}kg 이상`,
+          // @ts-ignore
+          detail: element.DETAIL,
+          // @ts-ignore
+          deadline: "23.03.24 17:50",
+          // @ts-ignore
+          transportation: transportations,
+          // @ts-ignore
+          income: element.PAYMENT,
+          // @ts-ignore
+          securityDeposit: element.PAYMENT * 0.1,
+        }
+        setMockData(mockData => [...mockData, obj])        
+      })()
+      
+    });    
+  }
   
   let initalizeUserMarker = () => { 
     // @ts-ignore
@@ -86,38 +146,35 @@ function SearchPage() {
     setMap(Map.initTmap());
     Geolocation.getCurrentLocation(setUserLocation)    
     
-    const getData = async () => {
-      const response = fetch("http://localhost:9000/checkJoin", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-      })
-      return response.then (res => res.json())
-    }
-
     const exec = async () => {
       try {
-        let data = await getData()
-        setRequestListContent(data)
+        let data = await Handler.get("http://localhost:9000/checkJoin")
+        setRequestListContents(data)
       }catch (error) {
         console.error(error)
       }
     }
     exec();
+    
+
   }, [])
 
   useEffect(() => {
-    let requestListContents = Object.keys(requestListContent).length
+    let requestListContentLength = Object.keys(requestListContents).length
 
-    if (requestListContents !== 0) {
-      console.log(requestListContent)
-      for (let index = 0 ; index < requestListContents; index++)
-      
-      // @ts-ignore
-      Map.Marker(map, requestListContent[index].Departure.Y, requestListContent[index].Departure.X) 
+    if (requestListContentLength !== 0) {
+      requestListContents.forEach(element => {
+        // @ts-ignore
+        Map.Marker(map, element.Departure.Y, element.Departure.X)   
+      });
+      changeToData(mockData)      
     }
-  }, [requestListContent])
+  }, [requestListContents])
+
+  useEffect(() => {
+    //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고
+    setOrders(mockData);
+  }, [mockData])
 
   useEffect(() => {
     if (Object.keys(userLocation).length !== 0) {
@@ -126,34 +183,26 @@ function SearchPage() {
   }, [userLocation])
 
   useEffect(() =>{
-    if (Object.keys(requestListContent).length !== 0 && Object.keys(userLocation).length !== 0) {
+    if (Object.keys(requestListContents).length !== 0 && Object.keys(userLocation).length !== 0) {
       // Map.autoZoom(map, Map)
     }
-  }, [userLocation, requestListContent])
-
+  }, [userLocation, requestListContents])
 
   const clickBackBtn = () => {
     if (!isDetail) {
       navigate("/");
     } else {
       setIsDetail(false);
+      document.getElementById("TMapApp")!.style.display = "block"
     }
   };
 
   // 오더 클릭시 세부정보 노출
   const clickOrder = (index: number) => {
+    document.getElementById("TMapApp")!.style.display = "none"
     setShowOrder(index)
     setIsDetail(true);
   };
-
-  useEffect(() => {
-    //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고
-    setOrders(mockData);
-  }, []);
-
-  
-
-
 
   return (
     <div>
@@ -171,9 +220,6 @@ function SearchPage() {
           }}
         />
       </div>
-      <div ref={requestListContainer}>
-          {JSON.stringify(requestListContent)}
-      </div>
       {!isDetail ? (
          <Search clickOrder={(index) => clickOrder(index)} />
        ) : (
@@ -181,16 +227,7 @@ function SearchPage() {
        )}
        <BottomBar></BottomBar>
     </div>
-
-
-       
-       
-     
-
-  )
-  
+  ) 
 }
-
-
 
 export default SearchPage;

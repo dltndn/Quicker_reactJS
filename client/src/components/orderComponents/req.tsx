@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 import { useOrderStore } from '../../pages/commission';
 
@@ -171,8 +171,17 @@ const CheckIcon = styled.div`
   right: 0;
   font-size: 0.1rem;
 `;
-function Req() {
+function Req({setStates} : props) {
 
+    const widthRef = useRef<HTMLInputElement>(null)
+    const heightRef = useRef<HTMLInputElement>(null)
+    const lengthRef = useRef<HTMLInputElement>(null)
+    const weightRef = useRef<HTMLSelectElement>(null)
+    const detailsRef = useRef<HTMLInputElement>(null)
+    const costRef = useRef<HTMLInputElement>(null)
+    const hourRef = useRef<HTMLInputElement>(null)
+    const minuteRef = useRef<HTMLInputElement>(null)
+    const dateRef = useRef<HTMLInputElement>(null)
 
     const [isChecked, setIsChecked] = useState({
         walk: false,
@@ -193,10 +202,12 @@ function Req() {
       const [isAMSelected, setIsAMSelected] = useState(true);
       const handleClickAM = () => {
         setIsAMSelected(true);
+        setStates.setAMPM("오전")
       };
     
       const handleClickPM = () => {
         setIsAMSelected(false);
+        setStates.setAMPM("오후")
       };
       
     const { setCost } = useOrderStore()
@@ -284,17 +295,35 @@ function Req() {
                 <Btul>
                     <li>
                         <Sp0>가로</Sp0>
-                        <Ipval placeholder='' type='number'></Ipval>
+                        <Ipval type="number" ref={widthRef} 
+                            onChange={
+                                () => {
+                                // ERROR : 타입이 String 타입임
+                                    setStates.setWidth(parseInt(widthRef.current!.value))
+                                    console.log(typeof(widthRef.current!.value))
+                                }
+                            } placeholder='' ></Ipval>
                         <Sp1>cm</Sp1>
                     </li>
                     <li>
                         <Sp0>세로</Sp0>
-                        <Ipval placeholder='' type='number'></Ipval>
+                        <Ipval ref={lengthRef} onChange={
+                                () => {
+                                // ERROR : 타입이 String 타입임
+                                    setStates.setLength(parseInt(lengthRef.current!.value))
+                                }
+                            } placeholder='' type='number'></Ipval>
                         <Sp1>cm</Sp1>
                     </li>
                     <li>
                         <Sp0>높이</Sp0>
-                        <Ipval placeholder='' type='number'></Ipval>
+                        <Ipval ref={heightRef} onChange={
+                                () => {
+                                // ERROR : 타입이 String 타입임
+                                    setStates.setHeight(parseInt(heightRef.current!.value))
+                                }
+                            }
+                            placeholder='' type='number'></Ipval>
                         <Sp1>cm</Sp1>
                     </li>
                 </Btul>
@@ -307,7 +336,8 @@ function Req() {
             <ReqFont>물품 중량</ReqFont>
             </div>
             <InputDiv>
-            <SelectInput name="weight">
+            {/* ERROR : 타입이 String 타입임 */}
+            <SelectInput ref={weightRef} onChange={() => {setStates.setWeight(parseInt(weightRef.current!.value))}} name="weight">
                 <option value="10">10 이상</option>
                 <option value="20">20 이상</option>
             </SelectInput>
@@ -324,7 +354,7 @@ function Req() {
                     <Leftli>
                         <BsCalendar3></BsCalendar3>
                     </Leftli>
-                    <Ip type="date"></Ip>
+                    <Ip ref={dateRef} onChange={(e) => {setStates.setDate(dateRef.current!.value)}} type="date"></Ip>
                 </Btul>
                 <Btdiv>
                     <Btul>
@@ -336,11 +366,13 @@ function Req() {
                         <Btam onClick={handleClickPM} style={{ backgroundColor: !isAMSelected ? 'blue' : '#efefef', color: !isAMSelected ? '#ffffff' : '#a6a6a6' }}>오후</Btam>
                         </li>
                         <li>
-                            <Ipval type='number'></Ipval>
+                            {/* ERROR : 타입이 String 타입임 */}
+                            <Ipval type='number' ref={hourRef} onChange={() => setStates.setHour(parseInt(hourRef.current!.value))}></Ipval>
                             <Sp0> 시</Sp0>
                         </li>
                         <li>
-                            <Ipval type='number'></Ipval>
+                            {/* ERROR : 타입이 String 타입임 */}
+                            <Ipval type='number' ref={minuteRef} onChange={() => setStates.setMinute(parseInt(minuteRef.current!.value))}></Ipval>
                             <Sp0> 분</Sp0>
                         </li>
                     </Btul>
@@ -354,7 +386,7 @@ function Req() {
                 <ReqFont>세부사항</ReqFont>
             </div>
             <div>
-                <Ipdet type="text" placeholder="내용을 입력해주세요"></Ipdet>
+                <Ipdet type="text" ref={detailsRef} onChange={() => setStates.setDetails(detailsRef.current!.value)} placeholder="내용을 입력해주세요"></Ipdet>
             </div>
         </Box>
     </Container>
@@ -364,7 +396,10 @@ function Req() {
                 <ReqFont>의뢰 비용</ReqFont>
             </div>
             <div>
-                <Ipdet type="number" placeholder="지갑 잔액을 확인하세요" onChange={(e) => setCost(convertStrToNum(e.target.value))}></Ipdet>
+                {/* ERROR : 타입이 String 타입임 */}
+                <Ipdet type="number" ref={costRef} onChange={(e) => {
+                    setStates.setCost(parseInt(costRef.current!.value));
+                     setCost(convertStrToNum(e.target.value))}} placeholder="지갑 잔액을 확인하세요" ></Ipdet>
             </div>
         </Box>
     </Container>
@@ -373,3 +408,21 @@ function Req() {
   }
   
   export default Req;
+
+  interface setStates {
+    setWidth: React.Dispatch<React.SetStateAction<number>>
+    setHeight: React.Dispatch<React.SetStateAction<number>>
+    setLength: React.Dispatch<React.SetStateAction<number>>
+    setWeight: React.Dispatch<React.SetStateAction<number>>
+    setDetails: React.Dispatch<React.SetStateAction<string>>
+    setCost: React.Dispatch<React.SetStateAction<number>>
+    setDate: React.Dispatch<React.SetStateAction<string>>
+    setHour: React.Dispatch<React.SetStateAction<number>>
+    setMinute: React.Dispatch<React.SetStateAction<number>>
+    setAMPM : React.Dispatch<React.SetStateAction<string>>
+  }
+  
+  
+  interface props {
+    setStates : setStates
+  }

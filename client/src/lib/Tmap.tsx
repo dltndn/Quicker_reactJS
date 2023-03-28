@@ -1,6 +1,3 @@
-import { Console } from "console";
-import { start } from "repl";
-
 // @ts-ignore
 const { Tmapv3 } = window;
 
@@ -13,6 +10,26 @@ const Tmap = {
             zoom: 15	// 지도 줌레벨
         });
     },
+
+    getDistance: (startPosition: coordination, arrivePosition: coordination) => {
+        const headers = { "appKey": process.env.REACT_APP_TMAP_API_KEY };
+
+        return new Promise ((resolve, reject) => {
+            fetch(`https://apis.openapi.sk.com/tmap/routes/distance?version=1&format=json&callback=result&startX=${startPosition.X}&startY=${startPosition.Y}&endX=${arrivePosition.X}&endY=${arrivePosition.Y}&reqCoordType=WGS84GEO`, {
+            method: "GET",
+            // @ts-ignore
+            headers: headers
+            })
+            .then(response => response.json())
+            .then(data => {
+                resolve(data)
+            })
+            .catch(error => {
+                reject(error)
+            });
+        }) 
+    },
+
 
     Marker: (map: any, lat: number, lon: number) => {
         return new Tmapv3.Marker({
@@ -88,8 +105,36 @@ const Tmap = {
         
         // TData 객체의 경로요청 함수
         tData.getRoutePlanJson(startLatLon, arriveLatLon, optionObj, params);
-    }
+    },
+
+    reverseGeo : (lon : number, lat : number, APIKEY : string) => {
+        
+        fetch("https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&format=json&callback=result", {
+            method : "GET",
+            headers : {APIKEY},
+            body: JSON.stringify(
+                {
+                    "coordType": "WGS84GEO",
+                    "addressType": "A10",
+                    "lon": lon,
+                    "lat": lat
+                }
+            ),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        },
 
 }
 
 export default Tmap;
+
+interface coordination {
+    X: number,
+    Y: number
+}
