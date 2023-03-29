@@ -5,6 +5,7 @@ import Orderlistmodal from "./orderlistmodal";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
 import { getClientOrderList, getOrders } from "../../utils/GetOrderFromBlockchain";
+import { formatedDate } from "../../utils/ConvertTimestampToDate";
 
 interface OrderState {
   Order: object | null;
@@ -24,6 +25,7 @@ function Orderlist() {
   const { address } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
+  const [reversedOrders, setReversedOrders] = useState<object[]>([])
 
   const { orderObj, setOrder, setOrderObj } = useOrderState();
 
@@ -52,7 +54,7 @@ function Orderlist() {
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     const result = await getOrders(orderNumList);
-
+    console.log(result)
     // orderNumList로 DB정보 가져와서 데이터 셋팅
     setOrderObj(result);
   };
@@ -60,7 +62,13 @@ function Orderlist() {
   useEffect(() => {
     setIsEmptyOrder(false);
     getOrderList();
-  });
+  }, []);
+
+  useEffect(() => {
+    if (orderObj !== null) {
+      setReversedOrders(orderObj.slice().reverse())
+    }
+  }, [orderObj])
 
   return (
     <>
@@ -99,7 +107,7 @@ function Orderlist() {
           <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
         )
       ) : (
-        orderObj.map((value) => (
+        reversedOrders.map((value) => (
           <Sc0 onClick={() => handleOpenModal(value)}>
             <OrderBox orderObj={value} />
           </Sc0>
@@ -162,13 +170,6 @@ const OrderBox = ({ orderObj }: any) => {
       )}
     </>
   );
-};
-
-const formatedDate = (data: any): string => {
-  const year = data.year;
-  const month = data.month;
-  const day = data.day;
-  return `${year}.${month}.${day}`;
 };
 
 const SelectInput = styled.select`

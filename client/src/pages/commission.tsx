@@ -25,6 +25,8 @@ interface OrderState {
   setShowAllowance: (newAllowance:boolean) => void;
   createdOrderNum: string | undefined;
   setCreatedOrderNum: (newOrder:string|undefined) => void;
+  errorMessage: string | undefined;
+  setErrorMessage: (newData: string) => void;
 }
 
 export const useOrderStore = create<OrderState>((set) => ({
@@ -39,7 +41,9 @@ export const useOrderStore = create<OrderState>((set) => ({
   showAllowance: false,
   setShowAllowance: (showAllowance:boolean) => set({showAllowance}),
   createdOrderNum: undefined,
-  setCreatedOrderNum: (createdOrderNum:string|undefined) => set({createdOrderNum})
+  setCreatedOrderNum: (createdOrderNum:string|undefined) => set({createdOrderNum}),
+  errorMessage: undefined,
+  setErrorMessage: (errorMessage: string) => set({errorMessage})
 }))
 
 const GlobalStyle = createGlobalStyle`

@@ -7,3 +7,12 @@ export const getDateFromTimestamp = (timestamp: number) => {
   const minutes = date.getMinutes().toString().padStart(2, "0");
   return { year, month, day, hours, minutes };
 };
+
+export const formatedDate = (data: any): string => {
+  const year = data.year;
+  const month = data.month;
+  const day = data.day;
+  const hours = data.hours;
+  const min = data.minutes;
+  return `${year}.${month}.${day} ${hours}:${min}`;
+};
