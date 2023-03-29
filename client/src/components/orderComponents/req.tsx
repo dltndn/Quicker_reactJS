@@ -227,7 +227,7 @@ function Req({setStates} : props) {
         setStates.setAMPM("오후")
       };
       
-    const { setCost } = useOrderStore()
+    const { setCost, errorMessage } = useOrderStore()
     const convertStrToNum = (data:string):number => {
         let result =  parseInt(data);
         if (Number.isNaN(result)) {
@@ -434,7 +434,7 @@ function Req({setStates} : props) {
     <Container>
         <Box>
             <div>
-                <ReqFont>의뢰 비용</ReqFont>
+                <ReqFont>의뢰 비용 <span style={{color: "red"}}>{errorMessage}</span></ReqFont>
             </div>
             <div>
                 {/* ERROR : 타입이 String 타입임 */}

@@ -18,8 +18,12 @@ interface Props {
   _deadLine: string;
 }
 
+interface ErrorProps {
+  reason: string;
+}
+
 export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
-  const { btnContent, setBtnContent, setShowAllowance, createdOrderNum, setCreatedOrderNum } = useOrderStore()
+  const { btnContent, setBtnContent, setShowAllowance, createdOrderNum, setCreatedOrderNum, setErrorMessage } = useOrderStore()
   const { address } = useAccount()
 
   const { config } = usePrepareContractWrite({
@@ -27,6 +31,19 @@ export default function CreateNewOrder({ _orderPrice, _deadLine }: Props) {
     abi: Quicker_abi,
     functionName: "createOrder",
     args: [_orderPrice, _deadLine],
+    onSettled(data: any, error: any) {
+      let result: ErrorProps = JSON.parse(JSON.stringify(error));
+      console.log("reason: " + result.reason)
+      if (result.reason === 'execution reverted: ERC20: transfer amount exceeds balance') {
+        setErrorMessage("QKRW토큰이 부족합니다.")
+      } else {
+        setErrorMessage("")
+      }
+      // if(!((result.reason === 'invalid BigNumber string') || (result.reason === 'invalid BigNumber value'))){
+      //   alert(result.reason);
+      //   setOrderNum("")
+      // }
+    },
   });
 
   const { isLoading, isSuccess, write } = useContractWrite({

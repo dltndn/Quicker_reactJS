@@ -94,8 +94,6 @@ function SearchPage() {
       (async () =>{
         // @ts-ignore
         const orderFromBlockchain = getOrderFromBlochchain(element.id)
-        // @ts-ignore
-        console.log("searchPage order number: " + element.id)
         const deadLine = formatedDate((await orderFromBlockchain).limitedTime)
         let orderPrice = (await orderFromBlockchain).orderPrice
         let orderPriceNum:number
@@ -104,7 +102,6 @@ function SearchPage() {
         } else {
           orderPriceNum = extractNumber(orderPrice)
         }
-        console.log(orderPriceNum)
         const income = calQuickerIncome(orderPriceNum)
         const securityDeposit = calSecurityDeposit(orderPriceNum)
         

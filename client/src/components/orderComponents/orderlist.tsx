@@ -54,7 +54,7 @@ function Orderlist() {
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     const result = await getOrders(orderNumList);
-
+    console.log(result)
     // orderNumList로 DB정보 가져와서 데이터 셋팅
     setOrderObj(result);
   };
