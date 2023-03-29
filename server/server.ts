@@ -88,38 +88,80 @@ app.post("/deleteAssociateOrderProcess", async (req: Request, res: Response) => 
   res.send("done")
 })
 app.get("/checkJoin", async (req: Request, res: Response) => {
-
-// 객체 생성
+  // 객체 생성
 
   Order.hasOne(Transportation, { foreignKey: "id" });
   Order.hasOne(Destination, { foreignKey: "id" });
   Order.hasOne(Departure, { foreignKey: "id" });
   Order.hasOne(Product, { foreignKey: "id" });
   const data = await Order.findAll({
-    attributes : ['id', 'PAYMENT', 'DETAIL'],
+    attributes: ["id", "PAYMENT", "DETAIL"],
     include: [
       {
         model: Transportation,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: false,
-      },{
+      },
+      {
         model: Destination,
-        attributes: { exclude: ['id'] },
+        attributes: { exclude: ["id"] },
         required: true,
-      },{
+      },
+      {
         model: Departure,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: true,
-      },{
+      },
+      {
         model: Product,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: false,
-      }
+      },
     ],
   });
-  console.log(JSON.stringify(data, null, 2))
+  console.log(JSON.stringify(data, null, 2));
   res.send(data);
 }),
+  app.post("/orderlist", async (req: Request, res: Response) => {
+    let id: number  = parseInt(req.body.id);
+
+    console.log(id)
+    
+    Order.hasOne(Destination, { foreignKey: "id" });
+    Order.hasOne(Departure, { foreignKey: "id" });
+    Order.hasOne(Recipient, { foreignKey: "id" });
+    Order.hasOne(Sender, { foreignKey: "id" });
+
+    let instance = await Order.findOne({
+      where: { id: id },
+      attributes: ["id", "DETAIL"],
+      include: [
+        {
+          model: Destination,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Recipient,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Sender,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+      ],
+    })
+    
+    res.send(instance);
+  });
+
   app.get(
     "/CreateAssociatedOrdertableTable",
     async (req: Request, res: Response) => {
