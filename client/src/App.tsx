@@ -20,6 +20,7 @@ import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
 import React, { useEffect } from "react";
+import Notification from "./components/Notification";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -93,6 +94,7 @@ function App() {
             <Route path="/orderlist" element={<OrderlistPage />} />
             <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} />
             <Route path="/profile/setting" element={<Profile_settingPage />} />
+            <Route path="/notification" element={<Notification />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

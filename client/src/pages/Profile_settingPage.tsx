@@ -3,6 +3,7 @@ import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from 'styled-components';
 import Profilesetting from "../components/Profilesetting";
+import TopBarThin from "../components/topBarthin";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -16,9 +17,9 @@ function Profile_settingPage() {
     return (
       <>
         <GlobalStyle />
-        <TopBarOthers title="내 정보" redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
+        <TopBarThin title="내 정보" redirectLogic={function (){navigate("/profile")} }/>
         <Profilesetting/>
-        <BottomBar/>
+
       </>
     );
   }

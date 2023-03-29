@@ -1,4 +1,4 @@
-import { BsHouseDoor, BsBell,BsChevronLeft  } from "react-icons/bs";
+import { BsHouseDoor, BsBell,BsChevronLeft, BsTrash  } from "react-icons/bs";
 import { redirect, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -31,7 +31,7 @@ const Tbt = styled.button`
 const Tbtleft = styled(Tbt)`
     justify-content: left;
     width: 1.375rem;
-    font-weight: bold;
+    font-weight: thin;
 `;
 
 const Tbhome = styled(Tbt)`
@@ -41,7 +41,7 @@ const Tbhome = styled(Tbt)`
 
 const Tbsp = styled.div`
     font-size: var(--font-md);
-    font-weight: bold;
+    font-weight: thin;
     margin-top: 0.125rem;
     margin-left: 0.313rem;
 `;
@@ -52,7 +52,7 @@ interface Props {
     redirectLogic: ()=> void
   }
 
-function TopBarOthers({ title, redirectLogic }: Props) {
+function TopBarThin({ title, redirectLogic }: Props) {
     const navigate = useNavigate();
 
     return (
@@ -61,13 +61,9 @@ function TopBarOthers({ title, redirectLogic }: Props) {
             <Tdiv>
                 <Tbtleft onClick={() => redirectLogic()}><BsChevronLeft></BsChevronLeft></Tbtleft>
                 <Tbsp>{title}</Tbsp>
-                <Tbhome onClick={() => navigate('/')}><BsHouseDoor></BsHouseDoor></Tbhome>
-                <Tbt onClick={() => navigate('/notification')}>
-                <BsBell/>
-                </Tbt>
             </Tdiv>
         </section>
     );
   }
   
-  export default TopBarOthers;
+  export default TopBarThin;
