@@ -1,7 +1,6 @@
 import Req from "./orderComponents/req";
 import ConfirmBtn from "./confirmBtn";
 import { useEffect, useState } from "react";
-import { useContractRead, useAccount } from "wagmi";
 import IncreaseAllowance from "./IncreaseAllowance";
 import CreateNewOrder from "./createNewOrder";
 import { useOrderStore } from "../pages/commission";
@@ -26,11 +25,7 @@ interface props {
 
 
 function RequestPage({setStates} : props) {
-  const { cost, setBtnContent, deadLine, showAllowance, setShowAllowance } = useOrderStore()
-
-  const showAllowanceFalse = () => {
-    setShowAllowance(false)
-  }
+  const { cost, setBtnContent, deadLine, showAllowance } = useOrderStore()
 
   useEffect(() => {
     setBtnContent(cost.toString() + "원 결제하기")
@@ -39,7 +34,7 @@ function RequestPage({setStates} : props) {
   return (
     <>
       {showAllowance ? (
-        <IncreaseAllowance setShowAllowance={() => showAllowanceFalse()}/>
+        <IncreaseAllowance/>
       ) : (
         <div style={{ backgroundColor: "#efefef" }}>
           <Req setStates={setStates}></Req>
