@@ -17,14 +17,37 @@ interface setStates {
   setHour: React.Dispatch<React.SetStateAction<number>>
   setMinute: React.Dispatch<React.SetStateAction<number>>
   setAMPM : React.Dispatch<React.SetStateAction<string>>
+  setIsChecked : React.Dispatch<React.SetStateAction<{
+    walk: boolean;
+    bike: boolean;
+    kickboard: boolean;
+    motorcycle: boolean;
+    car: boolean;
+    truck: boolean;
+  }>>
+  setOrderId : React.Dispatch<React.SetStateAction<number>>
+}
+
+interface states {
+  isChecked: {
+    walk: boolean;
+    bike: boolean;
+    kickboard: boolean;
+    motorcycle: boolean;
+    car: boolean;
+    truck: boolean;
+  }
 }
 
 interface props {
+  orderId : number
+  sendData : object
+  states: states
   setStates: setStates
 }
 
 
-function RequestPage({setStates} : props) {
+function RequestPage({orderId, sendData, states, setStates} : props) {
   const { cost, setBtnContent, deadLine, showAllowance } = useOrderStore()
 
   useEffect(() => {
@@ -37,8 +60,11 @@ function RequestPage({setStates} : props) {
         <IncreaseAllowance/>
       ) : (
         <div style={{ backgroundColor: "#efefef" }}>
-          <Req setStates={setStates}></Req>
+          <Req states={states} setStates={setStates}></Req>
           <CreateNewOrder
+          orderId={orderId}
+            setOrderId={setStates.setOrderId}
+            data={sendData}
             _orderPrice={cost.toString()}
             _deadLine={deadLine}
             />

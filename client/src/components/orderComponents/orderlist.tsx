@@ -6,6 +6,9 @@ import { create } from "zustand";
 import { useAccount } from "wagmi";
 import { getClientOrderList, getOrders } from "../../utils/GetOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
+import Handler from "../../lib/Handler";
+import Kakao from "../../lib/Kakao";
+
 
 interface OrderState {
   Order: object | null;
@@ -27,6 +30,8 @@ function Orderlist() {
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
   const [reversedOrders, setReversedOrders] = useState<object[]>([])
 
+  // const [dataBaseData, setDataBaseData] = useState([])
+  
   const { orderObj, setOrder, setOrderObj } = useOrderState();
 
   const handleOpenModal = (order: object) => {
@@ -45,6 +50,9 @@ function Orderlist() {
     //getOrders 호출
     if (orderNumList !== undefined) {
       getOrderObj(orderNumList);
+      
+
+
     } else {
       setIsEmptyOrder(true);
       console.log("오더 내역 없음");
@@ -53,10 +61,26 @@ function Orderlist() {
 
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
-    const result = await getOrders(orderNumList);
-    console.log(result)
+    let result = await getOrders(orderNumList);
+    let cloneList = result.slice()
+    result.forEach(async (element, index) => {
+      
+      let data = await Handler.post({id : parseInt(element.orderNum) }, "http://localhost:9000/orderlist")
+      if (data !== null) {
+        
+        let realdepartureAdress = await Kakao.reverseGeoCording(data.Departure.Y, data.Departure.X)
+        let realdestinationAdress = await Kakao.reverseGeoCording(data.Destination.Y, data.Destination.X)
+
+        
+                cloneList[index].dbData = data
+                cloneList[index].dbData.realdepartureAdress = realdepartureAdress
+                cloneList[index].dbData.realdestinationAdress = realdestinationAdress
+      }
+      
+    });
+    
     // orderNumList로 DB정보 가져와서 데이터 셋팅
-    setOrderObj(result);
+    setOrderObj(cloneList);
   };
 
   useEffect(() => {
@@ -156,11 +180,17 @@ const OrderBox = ({ orderObj }: any) => {
           </Div0>
           <Div1>
             <Sp2>출발지</Sp2>
-            <Sp1>경기도 김포시 김포대로</Sp1>
-          </Div1>
+           
+              <Sp1>
+                               
+                </Sp1>
+            </Div1>
           <Div1>
-            <Sp2>도착지</Sp2>
-            <Sp1>경기도 김포시 김포대로</Sp1>
+            <Sp2>{orderObj.orderNum}</Sp2>
+            <Sp1>
+            
+            
+              </Sp1>
           </Div1>
           <Div1>
             <Sp2>금액</Sp2>

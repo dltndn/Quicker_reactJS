@@ -77,6 +77,8 @@ export default function CommissionPage() {
   const startinputDiv = useRef<HTMLDivElement>(null);
   const arriveinputDiv = useRef<HTMLDivElement>(null);
   
+  const [orderId, setOrderId] = useState(0)
+
   const [startPosition, setStartPosition] = useState({});
   const [startAddress, setStartAddress] = useState("");
   const [sender , setSender] = useState("");
@@ -99,6 +101,70 @@ export default function CommissionPage() {
 
   const [details , setDetails] =useState("");
   const [cost , setCost] =useState(0);
+
+  const [isChecked, setIsChecked] = useState({
+    walk: false,
+    bike: false,
+    kickboard: false,
+    motorcycle: false,
+    car: false,
+    truck: false,
+  });
+
+  const forSendData = {
+    userWalletAddress : address,
+    Order : {
+      id: orderId,
+      ID_REQ: "",
+      ID_DVRY: "",
+      DETAIL: details,
+      PAYMENT: cost,
+      CHECK_RES: 0,
+      PICTURE: "",
+    },
+    Transportation :{
+      ID: orderId,
+      WALKING: isChecked.walk,
+      BICYCLE: isChecked.motorcycle,
+      SCOOTER: isChecked.kickboard,
+      BIKE: isChecked.bike,
+      CAR: isChecked.car,
+      TRUCK: isChecked.truck,
+    },
+    Destination :{
+      id: orderId,
+      // @ts-ignore
+      X: arrivePosition.longitude,
+      // @ts-ignore
+      Y: arrivePosition.latitude,
+      DETAIL: arriveAddress
+    },
+    Departure :{
+      ID: orderId,
+      // @ts-ignore
+      X: startPosition.longitude,
+      // @ts-ignore
+      Y: startPosition.latitude,
+      DETAIL: startAddress,
+    },
+    Product : {
+      ID: orderId,
+      WIDTH: width,
+      LENGTH: length,
+      HEIGHT: height,
+      WEIGHT: weight,
+    },
+    Sender : {
+      ID: orderId,
+      NAME: sender,
+      PHONE: senderPhoneNumber,
+    }, 
+    Recipient : {
+      id: orderId,
+      NAME: receiver,
+      PHONE: receiverPhoneNumber,
+    }
+  }
 
   const { title, setTitle } = useOrderStore()
 
@@ -166,6 +232,9 @@ export default function CommissionPage() {
       <button onClick={() => test()}>값 확인</button>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage
+        orderId={orderId}
+        sendData={forSendData}
+        states={{isChecked}}
           setStates={{
             setWidth: setWidth,
             setHeight: setHeight,
@@ -176,7 +245,9 @@ export default function CommissionPage() {
             setDate: setDate,
             setHour: setHour,
             setMinute: setMinute,
-            setAMPM: setAMPM
+            setAMPM: setAMPM,
+            setIsChecked : setIsChecked,
+            setOrderId : setOrderId
           }} />
       </div>
       <BottomBar />

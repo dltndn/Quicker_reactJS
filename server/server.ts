@@ -12,6 +12,8 @@ import {
   Departure,
   Product,
   Pickup,
+  Sender,
+  Recipient
 } from "./models/DB/init-models";
 
 initModels(sequelize);
@@ -35,7 +37,7 @@ const socketServer = io(httpServer, {
 
 app.use(cors());
 require("dotenv").config();
-
+app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json());
 
 let roomName = "testroom";
@@ -58,71 +60,112 @@ interface MessageObejct {
 app.get("/", (req: Request, res: Response) => {
   res.send(`
     <button onclick="location.href='/del'">del</button>
+    <button onclick="location.href='/deleteAssociateOrder'">deleteAssociateOrder</button>
     <button onclick="location.href='/CreateAssociatedOrdertableTable'">CreateAssociatedOrdertableTable</button>
     <button onclick="location.href='/checkJoin'">checkJoin</button>
   `);
 });
-app.get("/checkJoin", async (req: Request, res: Response) => {
+app.get("/deleteAssociateOrder", async (req: Request, res: Response) => {
+  res.send(`
+  <form action="/deleteAssociateOrderProcess" method="POST">
+    <input type="text" name="id"></input>
+    <button type="submit" class="btn btn-outline-secondary">Submit</button>
+  </form>
+  `)
+})
+app.post("/deleteAssociateOrderProcess", async (req: Request, res: Response) => {
+  let data = parseInt(req.body.id);
+  (async () => {
+    await Transportation.destroy({where : {ID : data}})
+    await Sender.destroy({where : {ID : data}})
+    await Recipient.destroy({where : {id : data}})
+    await Destination.destroy({where : {id : data}})
+    await Departure.destroy({where : {ID : data}})
+    await Product.destroy({where : {ID : data}})
+    await Order.destroy({where : {id : data}})
+  }) ()
 
-// 객체 생성
+  res.send("done")
+})
+app.get("/checkJoin", async (req: Request, res: Response) => {
+  // 객체 생성
 
   Order.hasOne(Transportation, { foreignKey: "id" });
   Order.hasOne(Destination, { foreignKey: "id" });
   Order.hasOne(Departure, { foreignKey: "id" });
   Order.hasOne(Product, { foreignKey: "id" });
   const data = await Order.findAll({
-    attributes : ['id', 'PAYMENT', 'DETAIL'],
+    attributes: ["id", "PAYMENT", "DETAIL"],
     include: [
       {
         model: Transportation,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: false,
-      },{
+      },
+      {
         model: Destination,
-        attributes: { exclude: ['id'] },
+        attributes: { exclude: ["id"] },
         required: true,
-      },{
+      },
+      {
         model: Departure,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: true,
-      },{
+      },
+      {
         model: Product,
-        attributes: { exclude: ['ID', 'id'] },
+        attributes: { exclude: ["ID", "id"] },
         required: false,
-      }
+      },
     ],
   });
-  console.log(JSON.stringify(data, null, 2))
+  console.log(JSON.stringify(data, null, 2));
   res.send(data);
 }),
+  app.post("/orderlist", async (req: Request, res: Response) => {
+    let id: number  = parseInt(req.body.id);
+
+    console.log(id)
+    
+    Order.hasOne(Destination, { foreignKey: "id" });
+    Order.hasOne(Departure, { foreignKey: "id" });
+    Order.hasOne(Recipient, { foreignKey: "id" });
+    Order.hasOne(Sender, { foreignKey: "id" });
+
+    let instance = await Order.findOne({
+      where: { id: id },
+      attributes: ["id", "DETAIL"],
+      include: [
+        {
+          model: Destination,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Recipient,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Sender,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+      ],
+    })
+    
+    res.send(instance);
+  });
+
   app.get(
     "/CreateAssociatedOrdertableTable",
     async (req: Request, res: Response) => {
-      await Order.create({
-        ID_REQ: "checking_id",
-        DETAIL: "detail",
-        PAYMENT: 1,
-        CHECK_RES: 1,
-        PICTURE: "picture_adress",
-      });
-      await Destination.create({
-        X: 126.72197753053393,
-        Y: 37.54354049196439,
-        DETAIL: "디테일한 세부주소",
-      });
-      await Transportation.create({
-        WALKING: 1,
-        BICYCLE: 1,
-        SCOOTER: 1,
-        BIKE: 1,
-        CAR: 1,
-        TRUCK: 1,
-      });
-      await Departure.create({
-        X: 126.72197753053393,
-        Y: 37.54354049196439,
-        DETAIL: "디테일한 세부주소",
-      });
+     
     }
   ),
   app.post("/register", async (req: Request, res: Response) => {
@@ -154,20 +197,39 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
       const data = req.body
 
       console.log(data)
-      // await User.create(userInstance);
-      // await Birth_date.create(userBirthDate);
-      // await Join_date.create({
-      //   id: hashed,
-      //   timeStamp: Math.floor(Date.now() / 100),
-      // });
-      return res.send({ msg: "done" });
+      // 사용자의 아이디를 찾아서 ID_REQ에 집어 넣어야함 
+      let userId = await User.findOne({
+        attributes : ['id'],
+        where: { wallet_address: data.userWalletAddress },
+      });
+      if (userId){
+        console.log(userId)
+        data.Order.ID_REQ = userId.dataValues.id;
+        (async () => {
+          await Order.create(data.Order)
+          Transportation.create(data.Transportation)
+          Destination.create(data.Destination)
+          Departure.create(data.Departure)
+          Product.create(data.Product)
+          Sender.create(data.Sender)
+          Recipient.create(data.Recipient)
+        }) ()
+        res.send("done")
+      }
+      res.send("empty")
+      
+
+      return res.send({ msg: data });
     } catch (error) {
       // res.send(error);
     }
   });
-app.get("/conn", (req: Request, res: Response) => {
-  console.log("done");
-  res.redirect(`/`);
+app.get("/test", async (req: Request, res: Response) => {
+  const secret = process.env.cryptoKey;
+  //NOTE : 전화번호를 기반으로 암호화한 id 사용
+  const hashed = crypto.createHmac("sha256", secret).update("01053680895").digest("hex");
+  console.log(hashed)
+  res.send(hashed)
 });
 app.get("/del", async (req: Request, res: Response) => {
   let users = await User.findAll();
