@@ -25,6 +25,7 @@ function Orderlist() {
   const { address } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
+  const [reversedOrders, setReversedOrders] = useState<object[]>([])
 
   const { orderObj, setOrder, setOrderObj } = useOrderState();
 
@@ -61,7 +62,13 @@ function Orderlist() {
   useEffect(() => {
     setIsEmptyOrder(false);
     getOrderList();
-  });
+  }, []);
+
+  useEffect(() => {
+    if (orderObj !== null) {
+      setReversedOrders(orderObj.slice().reverse())
+    }
+  }, [orderObj])
 
   return (
     <>
@@ -100,7 +107,7 @@ function Orderlist() {
           <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
         )
       ) : (
-        orderObj.map((value) => (
+        reversedOrders.map((value) => (
           <Sc0 onClick={() => handleOpenModal(value)}>
             <OrderBox orderObj={value} />
           </Sc0>
