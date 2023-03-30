@@ -1,18 +1,26 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useSearchState } from '../pages/SearchPage';
 
 interface Props {
     clickOrder: (index: number) => void;
-}
+};
+
+type AccordionProps = {
+    isOpen: boolean;
+  };
 
 function Search({ clickOrder }:Props) {
 
     const { orders } = useSearchState()
+    const [isOpen, setIsOpen] = useState(false);
 
+    
     return (
     <>
     <Se0>
-        <Hr0/>
+    <Hr0 onClick={() => setIsOpen(!isOpen)} />
+    <Accordion isOpen={isOpen}>
         <Div0>
             <Div0_1>전체</Div0_1>
             <Div0_1>도보</Div0_1>
@@ -45,12 +53,17 @@ function Search({ clickOrder }:Props) {
             <Div1_2>{value.income}</Div1_2>
         </Div1>
         ))):(<>데이터를 조회중입니다...</>)}
+        </Accordion>
     </Se0>
     </>
   );
   }
   
   export default Search;
+
+  const Accordion = styled.div<AccordionProps>`
+  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+`;
 
   const Se0 = styled.section`
     position: fixed;

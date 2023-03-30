@@ -1,4 +1,5 @@
 import {BsBell} from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 const Maindiv = styled.div`
     display: flex;
@@ -21,11 +22,12 @@ const Mainbt = styled.button`
     font-size: var(--font-large);
 `;
 function Main_topbar() {
+    const navigate = useNavigate();
     return (
         <section>
             <Maindiv>
                 <MainSp>Quicker</MainSp>
-                <Mainbt><BsBell></BsBell></Mainbt>
+                <Mainbt><BsBell onClick={() => navigate('/notification')}></BsBell></Mainbt>
             </Maindiv>
         </section>
     );
