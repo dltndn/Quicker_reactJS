@@ -1,20 +1,7 @@
 import express, { Application, Request, Response } from "express";
-import connector from "./DataBaseConnector";
 import sequelize from "./sequelizeConnector";
-import {
-  initModels,
-  User,
-  Birth_date,
-  Join_date,
-  Order,
-  Destination,
-  Transportation,
-  Departure,
-  Product,
-  Pickup,
-  Sender,
-  Recipient
-} from "./models/DB/init-models";
+import {initModels,User,Birth_date,Join_date,Order,Destination,Transportation,Departure,Product,Pickup,Sender,Recipient} from "./models/DB/init-models";
+import UserController = require("./controllers/UserController");
 
 initModels(sequelize);
 
@@ -57,72 +44,11 @@ interface MessageObejct {
   data: String;
 }
 
-app.get("/", (req: Request, res: Response) => {
-  res.send(`
-    <button onclick="location.href='/del'">del</button>
-    <button onclick="location.href='/deleteAssociateOrder'">deleteAssociateOrder</button>
-    <button onclick="location.href='/CreateAssociatedOrdertableTable'">CreateAssociatedOrdertableTable</button>
-    <button onclick="location.href='/checkJoin'">checkJoin</button>
-  `);
-});
-app.get("/deleteAssociateOrder", async (req: Request, res: Response) => {
-  res.send(`
-  <form action="/deleteAssociateOrderProcess" method="POST">
-    <input type="text" name="id"></input>
-    <button type="submit" class="btn btn-outline-secondary">Submit</button>
-  </form>
-  `)
-})
-app.post("/deleteAssociateOrderProcess", async (req: Request, res: Response) => {
-  let data = parseInt(req.body.id);
-  (async () => {
-    await Transportation.destroy({where : {ID : data}})
-    await Sender.destroy({where : {ID : data}})
-    await Recipient.destroy({where : {id : data}})
-    await Destination.destroy({where : {id : data}})
-    await Departure.destroy({where : {ID : data}})
-    await Product.destroy({where : {ID : data}})
-    await Order.destroy({where : {id : data}})
-  }) ()
-
-  res.send("done")
-})
-app.get("/checkJoin", async (req: Request, res: Response) => {
-  // 객체 생성
-
-  Order.hasOne(Transportation, { foreignKey: "id" });
-  Order.hasOne(Destination, { foreignKey: "id" });
-  Order.hasOne(Departure, { foreignKey: "id" });
-  Order.hasOne(Product, { foreignKey: "id" });
-  const data = await Order.findAll({
-    attributes: ["id", "PAYMENT", "DETAIL"],
-    include: [
-      {
-        model: Transportation,
-        attributes: { exclude: ["ID", "id"] },
-        required: false,
-      },
-      {
-        model: Destination,
-        attributes: { exclude: ["id"] },
-        required: true,
-      },
-      {
-        model: Departure,
-        attributes: { exclude: ["ID", "id"] },
-        required: true,
-      },
-      {
-        model: Product,
-        attributes: { exclude: ["ID", "id"] },
-        required: false,
-      },
-    ],
-  });
-  console.log(JSON.stringify(data, null, 2));
-  res.send(data);
-}),
-  app.post("/orderlist", async (req: Request, res: Response) => {
+app.get("/", UserController.home);
+app.get("/deleteAssociateOrder",UserController.deleteAssociateOrder);
+app.post("/deleteAssociateOrderProcess", UserController.deleteAssociateOrderProcess);
+app.get("/checkJoin", UserController.checkJoin);
+app.post("/orderlist", async (req: Request, res: Response) => {
     let id: number  = parseInt(req.body.id);
 
     console.log(id)
@@ -224,33 +150,5 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
       // res.send(error);
     }
   });
-app.get("/test", async (req: Request, res: Response) => {
-  const secret = process.env.cryptoKey;
-  //NOTE : 전화번호를 기반으로 암호화한 id 사용
-  const hashed = crypto.createHmac("sha256", secret).update("01053680895").digest("hex");
-  console.log(hashed)
-  res.send(hashed)
-});
-app.get("/del", async (req: Request, res: Response) => {
-  let users = await User.findAll();
-  let firstUserId = users[0].dataValues.id;
-  console.log(firstUserId);
-  await Join_date.destroy({ where: { id: firstUserId } });
-  await Birth_date.destroy({ where: { id: firstUserId } });
-  await User.destroy({ where: { id: firstUserId } });
 
-  res.redirect(`/`);
-});
-
-app.get("/get", (req: Request, res: Response) => {
-  res.send({ msg: "Testmsg" });
-});
-
-app.post("/post", (req: Request, res: Response) => {
-  console.log(req.body);
-  res.send({ msg: "done" });
-});
-
-app.listen(port, () => {
-  console.log(`App is listening on port ${port} !`);
-});
+app.listen(port, () => {console.log(`App is listening on port ${port} !`);});

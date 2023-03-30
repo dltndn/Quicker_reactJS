@@ -6,7 +6,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import GetQkrwBalance from "../getQkrwBalance";
 import { Web3Button } from "@web3modal/react";
 import { useEffect } from "react";
-import Profile_settingPage from "../../pages/Profile_settingPage";
+// import Profile_settingPage from "../../pages/Profile_settingPage";
 import { useVerificationStore } from "../../App";
 
 const money = require('../../image/money.png')
