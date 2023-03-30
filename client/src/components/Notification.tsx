@@ -67,7 +67,7 @@ function Notification() {
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState("");
 
-  const handleSelectChange = (e) => {
+  const handleSelectChange = (e: any) => {
     setSelectedType(e.target.value);
   };
 
