@@ -1,24 +1,27 @@
-import { WagmiConfig, createClient, configureChains } from "wagmi";
+import { WagmiConfig, createClient, configureChains, useAccount } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import {
   EthereumClient,
   modalConnectors,
   walletConnectProvider,
 } from "@web3modal/ethereum";
-import { Web3Modal, useWeb3ModalTheme } from "@web3modal/react";
-// import { projectId } from "./contractInformation";
+import { Web3Modal, useWeb3ModalTheme, } from "@web3modal/react";
 import { Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CommissionPage from "./pages/commission";
 import MainPage from "./pages/mainPage";
 import SignUpPage from "./pages/SignUpPage";
-import RequestPage from "./pages/RequestPage";
 import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
-import TestPage from "./pages/TestPage";
-import React from "react";
+import TestPage2 from "./pages/TestPage2";
+import OrderlistPage from "./pages/OrderlistPage";
+import FulfillmentlistPage from "./pages/FulfillmentlistPage";
+import Profile_settingPage from "./pages/Profile_settingPage";
+import React, { useEffect } from "react";
+import Notification from "./components/Notification";
+import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -43,13 +46,38 @@ const wagmiClient = createClient({
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+interface UseVerifiaction {
+  isMember: boolean;
+  setIsMember: (newIsMember:boolean) => void;
+  userName: string | null;
+  setUserName: (newUserName:string) => void;
+}
+
+export const useVerificationStore = create<UseVerifiaction>((set) => ({
+  isMember: false,
+  setIsMember: (isMember: boolean) => set({isMember}),
+  userName: null,
+  setUserName: (userName: string) => set({userName}),
+}))
+
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
+  const { address } = useAccount()
+  const { isMember, setIsMember, setUserName } = useVerificationStore();
+
   setTheme({
     themeMode: "dark",
     themeColor: "default",
     themeBackground: "gradient",
   });
+
+  useEffect(() => {
+    // 지갑주소 유저 여부 조회
+    console.log("changed user wallet")
+    console.log(address)
+    setUserName("유저이름")
+    setIsMember(true)
+  }, [address])
 
   return (
     <>
@@ -58,12 +86,15 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
-            <Route path="/request" element={<RequestPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/chatting" element={<ChattingPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/commission" element={<CommissionPage />} />
-            <Route path="/test" element={<TestPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/test2" element={<TestPage2 />} />
+            <Route path="/orderlist" element={<OrderlistPage />} />
+            <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} />
+            <Route path="/profile/setting" element={<Profile_settingPage />} />
+            <Route path="/notification" element={<Notification />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
@@ -75,5 +106,6 @@ function App() {
     </>
   );
 }
+//temp
 
 export default App;

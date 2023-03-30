@@ -1,78 +1,107 @@
+import { BsChevronRight } from "react-icons/bs";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
 import { Web3Button } from "@web3modal/react";
-import { Icon } from "semantic-ui-react";
-import styles from "../../css/main_phrase.module.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useVerificationStore } from "../../App";
+
+const Div0 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Div1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+
+const Sp0 = styled.div`
+  padding: var(--padding) var(--padding) 0 var(--padding);
+  font-size: var(--font-md);
+  font-weight: bold;
+`;
+
+const Sp1 = styled.span`
+  padding-top: var(--padding);
+  padding-left: var(--padding);
+  padding-bottom: var(--padding);
+  font-size: var(--font-md);
+  font-weight: bold;
+`;
+
+const Sp2 = styled.span`
+  padding-right: var(--padding);
+`;
+
+const Bt0 = styled.button`
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: var(--white-color);
+  font-size: var(--font-small);
+  margin-left: 0.313rem;
+`;
 
 type isConnectToWallet = {
   isConnect: boolean;
 };
+
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
-  const [isMember, setIsMember] = useState<boolean>(false);
-  let userName = "member";
+  const { isMember, setIsMember, userName }  = useVerificationStore();
 
+  
   return (
     <>
       {isConnect ? (
         isMember ? (
-          <div>
-            <section>
-              <div className={styles.phrase_div}>
-                <span className={styles.phrase_1}>
-                  {userName}님!
-                  <br />
-                </span>
-                <span className={styles.phrase_2}>
-                  현재 배송원이 물건을 배송 중입니다.
-                </span>
-                <button
-                  className={styles.button}
-                  onClick={() => {
+          <section>
+            <Div0>
+              <Sp0>{userName}님!<br/></Sp0>
+            </Div0>
+            <Div1>
+              <Sp1>현재 배송원이 물건을 배송중입니다.
+              <Bt0 onClick={() => {
                     navigate("/");
-                  }}
-                >
-                  <Icon link name="angle right" />
-                </button>
-              </div>
-            </section>
-          </div>
+                  }}>
+                    <BsChevronRight />
+                </Bt0>
+              </Sp1>
+            </Div1>
+          </section>
         ) : (
-          <div>
-            <section>
-              <div className={styles.phrase_div}>
-                <span className={styles.phrase_1}>
-                  안녕하세요!
-                  <br />
-                </span>
-                <span className={styles.phrase_2}>
-                  회원가입을 진행해주세요.
-                </span>
-                <button
-                  className={styles.button}
-                  onClick={() => {
+          <section>
+            <Div0>
+              <Sp0 onClick={() => {
                     navigate("/signUp");
-                  }}
-                >
-                  <Icon link name="angle right" />
-                </button>
-              </div>
-            </section>
-          </div>
+                  }}>안녕하세요!<br/></Sp0>
+            </Div0>
+            <Div1>
+              <Sp1 onClick={() => {
+                    navigate("/signUp");
+                  }}>회원가입을 진행해주세요.
+              </Sp1>
+            </Div1>
+          </section>
         )
       ) : (
-        <div>
-          <section>
-            <div className={styles.phrase_div}>
-              <span className={styles.phrase_1}>
-                안녕하세요!
-                <br />
-              </span>
-              <span className={styles.phrase_2}>지갑을 연결해주세요.</span>
-              <Web3Button icon="hide" label="지갑연결" balance="hide" />
-            </div>
-          </section>
-        </div>
+        <section>
+        <Div0>
+          <Sp0>
+            안녕하세요!
+            <br />
+          </Sp0>
+        </Div0>
+        <Div1>
+          <Sp1>지갑을 연결해주세요.</Sp1>
+          <Sp2>
+            <Web3Button icon="hide" label="지갑연결" balance="hide" />
+          </Sp2>
+          
+        </Div1>
+      </section>
       )}
     </>
   );

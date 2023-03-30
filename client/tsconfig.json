@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "target": "es5",
     "lib": [
@@ -19,8 +20,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
-    
+    // "strictNullChecks": false,
   },
   "include": [
     "src"

@@ -1,66 +1,146 @@
-import { Icon } from "semantic-ui-react";
-import styles from "../css/main_bottombar.module.css";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useAccount } from "wagmi";
+
+import styled, { keyframes } from "styled-components";
+const white1 = require('../image/white1.png');
+const black1 = require('../image/black1.png');
+const white2 = require('../image/white2.png');
+const black2 = require('../image/black2.png');
+const white3 = require('../image/white3.png');
+const black3 = require('../image/black3.png');
+const white4 = require('../image/white4.png');
+const black4 = require('../image/black4.png');
+
+const Sc0 = styled.section`
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    width: 100%;
+    height: 3.875rem;
+    background-color: var(--white-color); 
+    align-items: center;
+    justify-content: center;
+    text-align:center;
+`;
+
+const Div0 = styled.div`
+    flex: 1 1 25%;
+`;
+
+const Div1 = styled.div`
+    margin-top: 5px;  
+`;
+
+const Sp0 = styled.div`
+    margin-top: -5px;
+    font-size: var(--font-micro);
+`;
+
+const Iconimg = styled.img`
+  width: 1.5rem;
+  height: 1.5rem;
+`;
+
+const wave = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
+const Container = styled.div`
+  font-weight: bold;
+`;
+
+const Letter = styled.span<{ delay: number }>`
+  display: inline-block;
+  animation: ${wave} 0.5s ease-in-out ${(props) => props.delay}s infinite;
+`;
 
 function BottomBar() {
   const navigate = useNavigate();
+  const { isConnected } = useAccount();
+  const [currentPage, setCurrentPage] = useState(window.location.pathname);
+  const [showDiv, setShowDiv] = useState(false);
+
+  const handleButtonClick = (page: string) => {
+    if (!isConnected) {
+      setShowDiv(true);
+      const timeoutId = setTimeout(() => {
+        setShowDiv(false);
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+    setCurrentPage(page);
+    navigate(page);
+  };
 
   return (
-    <div className={styles.btposition}>
-      <ul className={styles.btul}>
-        <li>
-          <button onClick={() => navigate(`/request`)}>
-            <span className={styles.icon}>
-              <Icon link name="plus square outline" />
-            </span>
-            <span>의뢰하기</span>
-          </button>
-        </li>
-        <li>
-          <button onClick={() => navigate(`/search`)}>
-            <span className={styles.icon}>
-              <Icon link name="truck" />
-            </span>
-            <span>검색</span>
-          </button>
-        </li>
-        <li>
-          <button onClick={() => navigate(`/chatting`)}>
-            <span className={styles.icon}>
-              <Icon link name="comment alternate outline" />
-            </span>
-            <span>채팅</span>
-          </button>
-        </li>
-        <li>
-          <button onClick={() => navigate(`/profile`)}>
-            <span className={styles.icon}>
-              <Icon link name="user outline" />
-            </span>
-            <span>내정보</span>
-          </button>
-        </li>
-      </ul>
-    </div>
+    <>
+      {showDiv ? (
+        <Sc0>
+           <Container>
+      {Array.from('지갑을 연결해주세요.').map((letter, index) => (
+        <Letter key={index} delay={index * 0.1}>
+          {letter}
+        </Letter>
+      ))}
+    </Container>
+        </Sc0>
+      ) : (
+        <Sc0>
+          <Div0 onClick={() => handleButtonClick("/commission")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/commission" ? black1 : white1}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>의뢰하기</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/search")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/search" ? black2 : white2}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>검색</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/chatting")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/chatting" ? black3 : white3}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>채팅</Sp0>
+          </Div0>
+          <Div0 onClick={() => handleButtonClick("/profile")}>
+            <Div1>
+              <Iconimg
+                src={currentPage === "/profile" ? black4 : white4}
+                alt="icon"
+              />
+            </Div1>
+            <Sp0>내정보</Sp0>
+          </Div0>
+        </Sc0>
+      )}
+    </>
   );
 }
 
 export default BottomBar;
-
-// type ContentName = {
-//     title : string;
-//     linkName : string;
-//     route : string;
-
-//   };
-// function test({title, linkName, route}:ContentName) {
-//     const navigate = useNavigate();
-//   return <><li>
-//   <button onClick={() => navigate({route})}>
-//     <span className={styles.icon}>
-//       <Icon link name={linkName} />
-//     </span>
-//     <span>{title}</span>
-//   </button>
-// </li></>;
-// }

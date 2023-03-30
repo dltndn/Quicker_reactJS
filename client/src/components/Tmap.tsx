@@ -1,48 +1,64 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
+import Map from "../lib/Tmap"
 
-// @ts-ignore
-const { Tmapv3 } = window;
+const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
 
-const TmapObject = {
+    const [map, setMap] = useState({})
+    const [startMarker, setStartMarker] = useState({})
+    const [arriveMarker, setArriveMarker] = useState({})
+    const [mapDIV, setMapDIV] = useState({})
 
-    initTmap: () => {
-        return new Tmapv3.Map("TMapApp", {
-            center: new Tmapv3.LatLng(37.56520450, 126.98702028),
-            width: "300px",	// 지도의 넓이
-            height: "300px",	// 지도의 높이
-            zoom: 16	// 지도 줌레벨
-        });
-    },
-
-    setMarker: (map: any, lat: number, lon: number) => {
-        new Tmapv3.Marker({
-            position: new Tmapv3.LatLng(lat, lon),
-            map: map
-        });
-    },
-
-    setViewMap: (map: any, lat: number, lon: number) => {
-        map.setCenter(new Tmapv3.LatLng(lat, lon));
-        map.setZoom(16);
-    }
-}
-
-const Tmap = () => {
     useEffect(() => {
-        let map = TmapObject.initTmap();
-        TmapObject.setMarker(map, 37.56520450, 126.98702028)
-        TmapObject.setMarker(map, 37.53367922, 126.81710807)
-        TmapObject.setViewMap(map, 37.56520450, 126.98607028)
+        setMap(Map.initTmap())
     }, [])
 
+    useEffect(() => {
+        if (isPosition(startPosition)) {
+            // @ts-ignore
+            setStartMarker(Map.Marker(map, startPosition.latitude, startPosition.longitude))
+        }
+        if (isPosition(arrivePosition)) {
+            // @ts-ignore
+            setArriveMarker(Map.Marker(map, arrivePosition.latitude, arrivePosition.longitude))
+        }
+    }, [startPosition, arrivePosition])
+
+    useEffect(() => {
+        if (isPosition(startPosition)) {
+            // @ts-ignore
+            Map.panTo(map, startMarker.getPosition())
+        }
+    }, [startMarker])
+
+    useEffect(() => {
+        if (isPosition(arrivePosition)) {
+            // @ts-ignore
+            Map.setViewMap(map, arriveMarker.getPosition())
+        }
+    }, [arriveMarker])
+
+    useEffect(() => {
+        if (isPosition(startPosition) && isPosition(arrivePosition)) {
+            // @ts-ignore
+            let centerLatLng = Map.LatLng((startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2)
+            // @ts-ignore
+            Map.autoZoom(map, centerLatLng, startMarker.getPosition(), arriveMarker.getPosition())
+            // @ts-ignore
+            Map.getRoutePlanJson(map, startMarker.getPosition(), arriveMarker.getPosition())
+        }
+    }, [startMarker, arriveMarker])
+    const isPosition = (position : position) => {
+        return (position.latitude && position.longitude)
+    }
+
     return (
-        <div>
+        <div id={containerId}>
             <div
                 id="TMapApp"
                 style={{
                     height: "300px",
-                    width: "300px",
+                    width: "100%",
                 }}
             />
         </div>
@@ -50,3 +66,14 @@ const Tmap = () => {
 }
 
 export default Tmap;
+
+interface position {
+    latitude?: number,
+    longitude?: number
+}
+
+interface props {
+    containerId: string
+    startPosition: position
+    arrivePosition: position
+}

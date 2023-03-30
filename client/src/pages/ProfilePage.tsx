@@ -1,20 +1,25 @@
-import { Web3Button } from "@web3modal/react";
-import { useAccount } from "wagmi";
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
-import GetQkrwBalance from "../components/getQkrwBalance";
+import { useNavigate } from "react-router-dom";
+import styled, { createGlobalStyle } from 'styled-components';
+import Imfo from "../components/orderComponents/imfo";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #efefef !important;
+    height: 100%;
+  }
+`;
 
 function ProfilePage() {
-  const { address, isConnected } = useAccount();
+  const navigate = useNavigate()
     return (
-      <div className="App">
-        <TopBarOthers title="프로필" redirect="/"></TopBarOthers>
-        <div>프로필 페이지</div>
-        <Web3Button icon="hide" label="지갑연결" balance="hide" />
-        <div>지갑주소: {address}</div>
-        <div>지갑잔액: {isConnected && address && <GetQkrwBalance address={address}/>}원</div>
-        <BottomBar></BottomBar>
-      </div>
+      <>
+        <GlobalStyle />
+        <TopBarOthers title="프로필" redirectLogic={function (){navigate("/")} }></TopBarOthers>
+        <Imfo/>
+        <BottomBar/>
+      </>
     );
   }
   
