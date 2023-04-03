@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import {
   getClientOrderList,
   getOrders,
-} from "../../utils/GetOrderFromBlockchain";
+} from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import Handler from "../../lib/Handler";
 import Kakao from "../../lib/Kakao";

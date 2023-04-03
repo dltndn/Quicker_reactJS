@@ -1,4 +1,4 @@
-import { readContract, readContracts, } from '@wagmi/core'
+import { readContract, readContracts, prepareWriteContract, writeContract } from '@wagmi/core'
 import { QKRW_CONTRACT_ABI,
   QKRW_ADDRESS, QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
@@ -8,6 +8,7 @@ const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
+// QKRW token 권한 확인
 export const getAllowance =async (address:`0x${string}` | undefined) => {
   const data = await readContract({
     address: Qkrw_address,
@@ -18,6 +19,7 @@ export const getAllowance =async (address:`0x${string}` | undefined) => {
   return data
 }
 
+// 오더 객체 배열 반환
 export const getOrders = async (orderNumList:string[]) => {
   const quickerContract = {
     address: Quicker_address,
@@ -44,6 +46,7 @@ export const getOrders = async (orderNumList:string[]) => {
   return orderList
 }
 
+// 오더 객체 반환
 export const getOrder = async(orderNum:string) => {
   const data = await readContract({
       address: Quicker_address,
@@ -54,6 +57,7 @@ export const getOrder = async(orderNum:string) => {
     return TemplateOrder(data)
 }
 
+// 오더 내역 번호 배열 반환
 export const getOrderList = async (address:`0x${string}` | undefined, isClient: boolean) => {
   if (address === undefined){
     return undefined
@@ -75,6 +79,7 @@ export const getOrderList = async (address:`0x${string}` | undefined, isClient: 
   return result
 }
 
+// 의뢰인 마지막 오더 번호 반환
 export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
   if (address === undefined){
     return undefined
@@ -87,6 +92,7 @@ export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
   return result
 }
 
+// 의뢰인 오더 번호 배열 반환
 export const getClientOrderList = async(address:`0x${string}` | undefined) => {
   if (address === undefined){
     return undefined
@@ -100,6 +106,18 @@ export const getClientOrderList = async(address:`0x${string}` | undefined) => {
   let result:string[] = []
   data.forEach((element: any) => result.push(BigInt(element._hex).toString()));  
   return result
+}
+
+// 의뢰인 오더 취소 함수
+export const cancelOrder =async (orderNum:string) => {
+  const config = await prepareWriteContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: 'cancelOrder',
+    args: [orderNum],
+  })
+  const data = await writeContract(config)
+  return data
 }
 
 const TemplateOrder = (data: any) => {

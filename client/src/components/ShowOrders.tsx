@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
-import { getOrderList, getOrders } from "../utils/GetOrderFromBlockchain";
+import { getOrderList, getOrders } from "../utils/ExecuteOrderFromBlockchain";
 import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";

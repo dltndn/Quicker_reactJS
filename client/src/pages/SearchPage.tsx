@@ -9,7 +9,7 @@ import Search from "../components/Search";
 import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
-import { getOrder } from "../utils/GetOrderFromBlockchain";
+import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../utils/ConvertTimestampToDate";
 import { calQuickerIncome, calSecurityDeposit, extractNumber } from "../utils/CalAny";
 

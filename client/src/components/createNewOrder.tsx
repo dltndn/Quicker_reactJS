@@ -7,7 +7,7 @@ import { useOrderStore } from "../pages/commission";
 import {
   getAllowance,
   getLastClientOrder,
-} from "../utils/GetOrderFromBlockchain";
+} from "../utils/ExecuteOrderFromBlockchain";
 import Handler from "../lib/Handler";
 
 //Qkrw token contract information - polygon mumbai network

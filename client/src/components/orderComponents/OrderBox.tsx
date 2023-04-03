@@ -1,6 +1,8 @@
 import React, { CSSProperties, useEffect } from "react";
 import styled from "styled-components";
+import { useAccount } from "wagmi";
 import { useOrderState } from "../ShowOrders";
+import { cancelOrder } from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import { calQuickerIncome, extractNumber } from "../../utils/CalAny";
 import {
@@ -99,6 +101,7 @@ interface OrderModalProps {
 }
 
 export function OrderModal({ isClient }: OrderModalProps) {
+  const { address } = useAccount()
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
   const handleCloseModal = () => {
@@ -227,7 +230,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Sp2>결제 일시</Sp2>
                     <Sp1>{formatedDate(order?.createdTime)}</Sp1>
                   </Div1>
-                  <BottomBtn order={order} />
+                  <BottomBtn order={order} address={address}/>
                 </>
               ) : (
                 <>
@@ -330,10 +333,17 @@ const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
   }
 };
 
+interface BottomBtnProps {
+    order: any;
+    address: `0x${string}` | undefined;
+}
 // 모달 하단 버튼 컴포넌트
-const BottomBtn = ({ order }: any) => {
-  const createdLogic = () => {
+const BottomBtn = ({ order, address }: BottomBtnProps) => {
+    // 주문 취소 로직
+  const createdLogic = async () => {
     console.log("주문 취소 로직 구현");
+    const result = await cancelOrder(order.orderNum)
+    console.log(result)
   };
   const acceptLogic = () => {
     console.log("배송 현황 확인 로직 구현");
