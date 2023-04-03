@@ -216,12 +216,9 @@ app.get("/checkJoin", async (req: Request, res: Response) => {
         }) ()
         res.send("done")
       }
-      res.send("empty")
-      
-
-      return res.send({ msg: data });
+      res.send({ msg: data });
     } catch (error) {
-      // res.send(error);
+      res.send(error);
     }
   });
 app.get("/test", async (req: Request, res: Response) => {

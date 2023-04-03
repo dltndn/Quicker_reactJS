@@ -16,6 +16,7 @@ import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
+import OrderLogPage from "./pages/OrderLogPage";
 import OrderlistPage from "./pages/OrderlistPage";
 import FulfillmentlistPage from "./pages/FulfillmentlistPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
@@ -91,9 +92,11 @@ function App() {
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/orderlist" element={<OrderlistPage />} />
-            <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} />
+            {/* <Route path="/orderlist" element={<OrderlistPage />} /> */}
+            {/* <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} /> */}
             <Route path="/profile/setting" element={<Profile_settingPage />} />
+            <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
+            <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
           </Routes>
         </BrowserRouter>

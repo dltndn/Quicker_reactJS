@@ -16,3 +16,16 @@ export const formatedDate = (data: any): string => {
   const min = data.minutes;
   return `${year}.${month}.${day} ${hours}:${min}`;
 };
+
+export const formatedDateYMD = (data: any): string => {
+  const year = data.year;
+  const month = data.month;
+  const day = data.day;
+  return `${year}.${month}.${day}`;
+};
+
+export const formatedDateHM = (data: any): string => {
+  const hours = data.hours;
+  const min = data.minutes;
+  return `${hours}:${min}`;
+};

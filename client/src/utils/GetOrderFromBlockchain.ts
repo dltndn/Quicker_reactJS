@@ -54,6 +54,27 @@ export const getOrder = async(orderNum:string) => {
     return TemplateOrder(data)
 }
 
+export const getOrderList = async (address:`0x${string}` | undefined, isClient: boolean) => {
+  if (address === undefined){
+    return undefined
+  }
+  let functionName = ""
+  if (isClient) {
+    functionName = "getClientOrderList"
+  } else {
+    functionName = "getQuickerOrderList"
+  }
+  const data:any = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: functionName,
+    args: [address],
+  })
+  let result:string[] = []
+  data.forEach((element: any) => result.push(BigInt(element._hex).toString()));  
+  return result
+}
+
 export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
   if (address === undefined){
     return undefined

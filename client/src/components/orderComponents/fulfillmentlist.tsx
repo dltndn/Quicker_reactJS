@@ -84,11 +84,11 @@ const DivStatus = styled(Div0)<DivStatusProps>`
   background-color: ${props => {
     switch (props.value) {
       case 1:
-        return '#79AFFF';
+        return '#79AFFF'; // 수행중
       case 2:
-        return '#0D6EFD';
+        return '#0D6EFD'; // 완료
       case 3:
-        return '#DC3545';
+        return '#DC3545'; // 실패
       default:
         return '';
     }
@@ -230,6 +230,7 @@ function Fulfillmentlist(){
                 </Bticon>
             </Divwallet>
         </Sc1>
+
         <Sc0 onClick={handleOpenModal}>
             <Div0>
                 <Sp0>오토바이</Sp0>
@@ -259,6 +260,7 @@ function Fulfillmentlist(){
                 <Spprofit3>배송 완료 20:00까지</Spprofit3>
             </Div1>
         </Sc0>
+        
         <Sc0>
             <Div0>
                 <Sp0>도보</Sp0>
