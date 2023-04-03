@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
-import { getOrderList, getOrders } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrderList, getOrders, getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";
@@ -17,6 +17,8 @@ interface OrderState {
   setOrdersObj: (newOrderObj: object[] | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (newData: boolean) => void;
+  reloadOrderNum: string |  null;
+  setReloadOrderNum: (newData: string | null) => void;
 }
 
 export const useOrderState = create<OrderState>((set) => ({
@@ -26,6 +28,8 @@ export const useOrderState = create<OrderState>((set) => ({
   setOrdersObj: (ordersObj: object[] | null) => set({ ordersObj }),
   isModalOpen: false,
   setIsModalOpen: (isModalOpen: boolean) => set({ isModalOpen }),
+  reloadOrderNum: null,
+  setReloadOrderNum: (reloadOrderNum: string | null) => set({reloadOrderNum}),
 }));
 
 interface ShowOrderProps {
@@ -37,8 +41,9 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const { address, isConnected } = useAccount();
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
+  const [newOrder, setNewOrder] = useState<object | null>(null)
 
-  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen } =
+  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } =
     useOrderState();
 
   const handleOpenModal = (order: object) => {
@@ -83,9 +88,58 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
       }
     });
 
-    // orderNumList로 DB정보 가져와서 데이터 셋팅
     setOrdersObj(cloneList);
   };
+
+  const reloadOrderBoxLogic = async (orderNum: string) => {
+    let cloneOrdersObj = ordersObj?.slice()
+    ordersObj?.map(async (element, index) => {
+        //@ts-ignore
+        if (element.orderNum === orderNum) {
+            let blockchainData = newOrder
+            if (cloneOrdersObj) {
+                //@ts-ignore
+                cloneOrdersObj[index] = blockchainData
+                console.log("새 데이터 주입 완료")
+                // 해당 오더 번호 db데이터 불러와서 적용
+            }
+        }
+    })
+    //@ts-ignore
+    if (cloneOrdersObj) {
+        setOrdersObj(cloneOrdersObj)
+    }
+    setNewOrder(null)
+  }
+
+  const getNewOrderObj = async (orderNum: string) => {
+    const originOrder = await getOrder(orderNum)
+    const intervalId = setInterval(async () => {
+        let newOrder = await getOrder(orderNum);
+        if (newOrder.state !== originOrder.state) {
+          console.log("새 오더 탐색 완료")
+          setNewOrder(newOrder)
+          clearInterval(intervalId);
+        } else {
+          console.log("새 오더 감지x")
+        }
+      }, 500);
+  }
+
+  useEffect(() => {
+    if (reloadOrderNum !== null) {
+        getNewOrderObj(reloadOrderNum)
+    }
+  }, [reloadOrderNum])
+
+  useEffect(() => {
+    if (newOrder !== null) {
+        if (reloadOrderNum !== null) {
+            reloadOrderBoxLogic(reloadOrderNum)
+            setReloadOrderNum(null)
+        }
+    }
+  }, [newOrder])
 
   useEffect(() => {
     if (ordersObj !== null) {

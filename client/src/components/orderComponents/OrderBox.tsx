@@ -339,11 +339,15 @@ interface BottomBtnProps {
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
+    const { setOrder, setIsModalOpen, setReloadOrderNum} = useOrderState()
     // 주문 취소 로직
   const createdLogic = async () => {
     console.log("주문 취소 로직 구현");
     const result = await cancelOrder(order.orderNum)
     console.log(result)
+    setReloadOrderNum(order.orderNum)
+    setIsModalOpen(false);
+    setOrder(null);
   };
   const acceptLogic = () => {
     console.log("배송 현황 확인 로직 구현");
