@@ -8,6 +8,7 @@ import { Web3Button } from "@web3modal/react";
 import { useEffect } from "react";
 import Profile_settingPage from "../../pages/Profile_settingPage";
 import { useVerificationStore } from "../../App";
+import { useOrderState } from "../ShowOrders";
 
 const money = require('../../image/money.png')
 
@@ -148,11 +149,14 @@ function Imfo(){
     const { address, isConnected } = useAccount();
     const { disconnect } = useDisconnect()
     const { isMember, userName } = useVerificationStore()
+    const { setOrdersObj } = useOrderState()
 
     const ClickOrderlist = () => {
+        setOrdersObj(null)
         navigate("/orderlist")
     }
     const ClickFulfillmentlist = () => {
+        setOrdersObj(null)
         navigate("/fulfillmentlist")
     }
     const ClickSettingPage = () => {

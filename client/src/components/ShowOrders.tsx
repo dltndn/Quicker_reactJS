@@ -149,7 +149,8 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   useEffect(() => {
     getOrderListFromBlochain();
-  }, []);
+  }, [isClient]);
+
 
   return (
     <>

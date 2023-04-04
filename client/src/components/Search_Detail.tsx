@@ -14,6 +14,7 @@ function Search_Detail() {
 
   const acceptOrder = () => {
     //수락하기 로직 구현
+    console.log("수락하기 로직")
   };
 
   return (
