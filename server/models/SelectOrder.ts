@@ -10,7 +10,7 @@ User,
 } from "./DB/init-models";
 
 export = {
-  checkJoin: () => {
+  getRequests: () => {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });

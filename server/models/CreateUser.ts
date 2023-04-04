@@ -1,4 +1,4 @@
-import { User, Birth_date, Join_date ,Order,Transportation,Destination,Departure,Product,Sender,Recipient} from "./DB/init-models";
+import { User, Birth_date, Join_date } from "./DB/init-models";
 
 export = {
   registerUser: (userInstance: any, userBirthDate: any, hashed: any) => {
@@ -14,19 +14,5 @@ export = {
       reject("fail");
     });
   },
-
-  Order: (data: any) => {
-    return new Promise((resolve, reject) => {
-      resolve(() => {
-        Order.create(data.Order);
-        Transportation.create(data.Transportation);
-        Destination.create(data.Destination);
-        Departure.create(data.Departure);
-        Product.create(data.Product);
-        Sender.create(data.Sender);
-        Recipient.create(data.Recipient);
-      });
-      reject("fail");
-    });
-  },
+  
 };

@@ -1,9 +1,7 @@
 import express, { Application, Request, Response } from "express";
-import sequelize from "./sequelizeConnector";
-import {initModels,User,Birth_date,Join_date,Order,Destination,Transportation,Departure,Product, Sender,Recipient} from "./models/DB/init-models";
+import AdminController = require("./controllers/AdminController");
+import OrderController = require("./controllers/OrderController");
 import UserController = require("./controllers/UserController");
-
-initModels(sequelize);
 
 const cors = require("cors");
 const http = require("http");
@@ -12,7 +10,6 @@ const app: Application = express();
 const port: Number = 9000;
 const httpServer = http.createServer(app).listen(9001);
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 
 const socketServer = io(httpServer, {
   cors: {
@@ -43,12 +40,12 @@ interface MessageObejct {
   data: String;
 }
 
-app.get("/", UserController.home);
-app.get("/checkJoin", UserController.checkJoin);
-app.get("/deleteAssociateOrder",UserController.deleteAssociateOrder);
-app.post("/deleteAssociateOrderProcess", UserController.deleteAssociateOrderProcess);
-app.post("/orderlist", UserController.orderlist);
+app.get("/", AdminController.home);
+app.get("/deleteAssociateOrder",AdminController.deleteAssociateOrder);
+app.post("/deleteAssociateOrderProcess", AdminController.deleteAssociateOrderProcess);
+app.get("/getRequests", UserController.getRequests);
+app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
-app.post("/request", UserController.request);
+app.post("/request", OrderController.request);
 
 app.listen(port, () => {console.log(`App is listening on port ${port} !`);});
