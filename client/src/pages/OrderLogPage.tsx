@@ -17,10 +17,16 @@ interface OrderLogProps {
 
 function OrderLogPage( { isClient }: OrderLogProps ) {
   const navigate = useNavigate()
+  let topBarTitle = ""
+  if (isClient) {
+    topBarTitle = "주문 내역"
+  } else {
+    topBarTitle = "수행 내역"
+  }
     return (
       <>
       <GlobalStyle/>
-      <TopBarOthers title="주문 내역" redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
+      <TopBarOthers title={topBarTitle} redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
       <ShowOrders isClient={isClient} />
       <BottomBar></BottomBar>
       </>
