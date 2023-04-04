@@ -168,7 +168,7 @@ function SearchPage() {
     
     const exec = async () => {
       try {
-        let data = await Handler.get("http://localhost:9000/checkJoin")
+        let data = await Handler.get("http://localhost:9000/getRequests")
         setRequestListContents(data)
       }catch (error) {
         console.error(error)

@@ -47,7 +47,7 @@ interface props {
 }
 
 
-function RequestPage({orderId, sendData, states, setStates} : props) {
+function RequestPage({ orderId, sendData, states, setStates} : props) {
   const { cost, setBtnContent, deadLine, showAllowance } = useOrderStore()
 
   useEffect(() => {

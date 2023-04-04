@@ -175,6 +175,7 @@ export default function CommissionPage() {
       setTitle("출발지 입력");
       startinputDiv.current!.style.display = "block";
       arriveinputDiv.current!.style.display = "none";
+      // requestinputDiv.current!.style.display = "block";
     } else if (title === "세부사항 입력") {
       setTitle("도착지 입력");
       startinputDiv.current!.style.display = "block";
