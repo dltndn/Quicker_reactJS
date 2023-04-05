@@ -12,6 +12,8 @@ import Kakao from "../lib/Kakao";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../utils/ConvertTimestampToDate";
 import { calQuickerIncome, calSecurityDeposit, extractNumber } from "../utils/CalAny";
+import { useOrderStore } from "./commission";
+import IncreaseAllowance from "../components/IncreaseAllowance";
 
 export interface OrderObj {
     orderNum: string;
@@ -77,6 +79,7 @@ const getOrderFromBlochchain = async (orderNum:string) => {
 function SearchPage() {
   
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } = useSearchState();
+  const { showAllowance } = useOrderStore()
   const requestListContainer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const [map, setMap] = useState({})
@@ -240,11 +243,13 @@ function SearchPage() {
           }}
         />
       </div>
-      {!isDetail ? (
+      {showAllowance ? (<IncreaseAllowance />
+      ):(
+      <>{!isDetail ? (
          <Search clickOrder={(index) => clickOrder(index)} />
        ) : (
          <Search_Detail />
-       )}
+       )}</>)}
        <BottomBar></BottomBar>
     </div>
   ) 

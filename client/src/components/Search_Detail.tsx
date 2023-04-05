@@ -5,11 +5,13 @@ import { useSearchState } from "../pages/SearchPage";
 import { useEffect } from "react";
 import { OrderObj } from "../pages/SearchPage";
 import { WriteTransactionToBlockchain } from "../utils/ExecuteOrderFromBlockchain";
+import { useOrderStore } from "../pages/commission";
 
 const money = require("../image/money.png");
 
 function Search_Detail() {
   const { orders, showOrder } = useSearchState();
+  const { setShowAllowance } = useOrderStore()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
 
@@ -27,10 +29,12 @@ function Search_Detail() {
             console.log("이미 매칭이 완료된 오더입니다.")
             //@ts-ignore
           } else if (e.reason === "execution reverted: ERC20: insufficient allowance") {
-            console.log("토큰 사용 권한 요청 필요")
+            setShowAllowance(true)
             //@ts-ignore
           } else if (e.reason === "execution reverted: ERC20: transfer amount exceeds balance") {
             console.log("보증금 송금을 위한 잔액이 부족합니다.")
+          } else {
+            console.log(e)
           }
         }
       }
