@@ -406,12 +406,12 @@ const Sp0 = styled.span`
 `;
 
 const Sp1 = styled.span`
-  font-size: var(--font-micro);
+  font-size: var(--font-md1);
   padding-left: 1rem;
 `;
 
 const Sp2 = styled.span`
-  font-size: var(--font-micro);
+font-size: var(--font-md1);
   color: #646464;
 `;
 
@@ -446,7 +446,7 @@ const Hr = styled.hr`
 const Button = styled.button`
   width: 100%;
   height: 4.313rem;
-  font-size: var(--font-md);
+  font-size: 30px;
   border-radius: 0.313rem;
   border-color: var(--black-color);
   border-width: thin;
@@ -501,6 +501,6 @@ const Spsc2 = styled(Spprofit2)`
 `;
 
 const Ic = styled.span`
-    font-size: var(--font-micro);
+    font-size: var(--font-md1);
     margin-left: 0.188rem;
 `;
