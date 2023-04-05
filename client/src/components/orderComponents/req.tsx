@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import {useEffect, useRef, useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
-import { useOrderStore } from '../../pages/commission';
+import { useOrderDataStore, useOrderStore } from '../../pages/commission';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -188,7 +188,7 @@ const CheckIcon = styled.span`
   font-size: var(--font-small);
 `;
 
-function Req({states, setStates} : props) {
+function Req({states} : props) {
 
     const widthRef = useRef<HTMLInputElement>(null)
     const heightRef = useRef<HTMLInputElement>(null)
@@ -200,10 +200,12 @@ function Req({states, setStates} : props) {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
+    const { setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, setWeight } = useOrderDataStore();
+
    
 
       const handleImgClick = (transport: Transport) => {
-        setStates.setIsChecked((prevState) => ({
+        setIsChecked((prevState : any) => ({
           ...prevState,
           [transport]: !prevState[transport],
         }));
@@ -212,12 +214,12 @@ function Req({states, setStates} : props) {
       const [isAMSelected, setIsAMSelected] = useState(true);
       const handleClickAM = () => {
         setIsAMSelected(true);
-        setStates.setAMPM("오전")
+        setAMPM("오전")
       };
     
       const handleClickPM = () => {
         setIsAMSelected(false);
-        setStates.setAMPM("오후")
+        setAMPM("오후")
       };
       
     const { setCost, errorMessage } = useOrderStore()
@@ -333,7 +335,7 @@ function Req({states, setStates} : props) {
                             onChange={
                                 () => {
                                 // ERROR : 타입이 String 타입임
-                                    setStates.setWidth(parseInt(widthRef.current!.value))
+                                    setWidth(parseInt(widthRef.current!.value))
                                     console.log(typeof(widthRef.current!.value))
                                 }
                             } placeholder='' ></Ipval>
@@ -344,7 +346,7 @@ function Req({states, setStates} : props) {
                         <Ipval ref={lengthRef} onChange={
                                 () => {
                                 // ERROR : 타입이 String 타입임
-                                    setStates.setLength(parseInt(lengthRef.current!.value))
+                                    setLength(parseInt(lengthRef.current!.value))
                                 }
                             } placeholder='' type='number'></Ipval>
                         <Sp1>cm</Sp1>
@@ -354,7 +356,7 @@ function Req({states, setStates} : props) {
                         <Ipval ref={heightRef} onChange={
                                 () => {
                                 // ERROR : 타입이 String 타입임
-                                    setStates.setHeight(parseInt(heightRef.current!.value))
+                                    setHeight(parseInt(heightRef.current!.value))
                                 }
                             }
                             placeholder='' type='number'></Ipval>
@@ -371,7 +373,7 @@ function Req({states, setStates} : props) {
             </div>
             <InputDiv>
             {/* ERROR : 타입이 String 타입임 */}
-            <SelectInput ref={weightRef} onChange={() => {setStates.setWeight(parseInt(weightRef.current!.value))}} name="weight">
+            <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value))}} name="weight">
                 <option value="10">10 이상</option>
                 <option value="20">20 이상</option>
             </SelectInput>
@@ -388,7 +390,7 @@ function Req({states, setStates} : props) {
                     <Leftli>
                         <BsCalendar3></BsCalendar3>
                     </Leftli>
-                    <Ip ref={dateRef} onChange={(e) => {setStates.setDate(dateRef.current!.value)}} type="date"></Ip>
+                    <Ip ref={dateRef} onChange={(e) => {setDate(dateRef.current!.value)}} type="date"></Ip>
                 </Btul>
                 <Btdiv>
                     <Btul>
@@ -401,12 +403,12 @@ function Req({states, setStates} : props) {
                         </li>
                         <li>
                             {/* ERROR : 타입이 String 타입임 */}
-                            <Ipval type='number' ref={hourRef} onChange={() => setStates.setHour(parseInt(hourRef.current!.value))}></Ipval>
+                            <Ipval type='number' ref={hourRef} onChange={() => setHour(parseInt(hourRef.current!.value))}></Ipval>
                             <Sp0> 시</Sp0>
                         </li>
                         <li>
                             {/* ERROR : 타입이 String 타입임 */}
-                            <Ipval type='number' ref={minuteRef} onChange={() => setStates.setMinute(parseInt(minuteRef.current!.value))}></Ipval>
+                            <Ipval type='number' ref={minuteRef} onChange={() => setMinute(parseInt(minuteRef.current!.value))}></Ipval>
                             <Sp0> 분</Sp0>
                         </li>
                     </Btul>
@@ -420,7 +422,7 @@ function Req({states, setStates} : props) {
                 <ReqFont>세부사항</ReqFont>
             </div>
             <div>
-                <Ipdet type="text" ref={detailsRef} onChange={() => setStates.setDetails(detailsRef.current!.value)} placeholder="내용을 입력해주세요"></Ipdet>
+                <Ipdet type="text" ref={detailsRef} onChange={() => setDetails(detailsRef.current!.value)} placeholder="내용을 입력해주세요"></Ipdet>
             </div>
         </Box>
     </Container>
@@ -432,7 +434,7 @@ function Req({states, setStates} : props) {
             <div>
                 {/* ERROR : 타입이 String 타입임 */}
                 <Ipdet type="number" ref={costRef} onChange={(e) => {
-                    setStates.setCost(parseInt(costRef.current!.value));
+                    setCost(parseInt(costRef.current!.value));
                      setCost(convertStrToNum(e.target.value))}} placeholder="지갑 잔액을 확인하세요" ></Ipdet>
             </div>
         </Box>
@@ -443,27 +445,6 @@ function Req({states, setStates} : props) {
   
   export default Req;
 
-  interface setStates {
-    setWidth: React.Dispatch<React.SetStateAction<number>>
-    setHeight: React.Dispatch<React.SetStateAction<number>>
-    setLength: React.Dispatch<React.SetStateAction<number>>
-    setWeight: React.Dispatch<React.SetStateAction<number>>
-    setDetails: React.Dispatch<React.SetStateAction<string>>
-    setCost: React.Dispatch<React.SetStateAction<number>>
-    setDate: React.Dispatch<React.SetStateAction<string>>
-    setHour: React.Dispatch<React.SetStateAction<number>>
-    setMinute: React.Dispatch<React.SetStateAction<number>>
-    setAMPM : React.Dispatch<React.SetStateAction<string>>
-    setIsChecked : React.Dispatch<React.SetStateAction<{
-        walk: boolean;
-        bike: boolean;
-        kickboard: boolean;
-        motorcycle: boolean;
-        car: boolean;
-        truck: boolean;
-    }>>
-  }
-  
   interface states{
     isChecked: {
         walk: boolean;
@@ -477,5 +458,4 @@ function Req({states, setStates} : props) {
 
   interface props {
     states : states
-    setStates : setStates
   }

@@ -3,7 +3,7 @@ import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
-import { useOrderStore } from "../pages/commission";
+import { useOrderDataStore, useOrderStore } from "../pages/commission";
 import {
   getAllowance,
   getLastClientOrder,
@@ -15,8 +15,6 @@ const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
 interface Props {
-  orderId: number;
-  setOrderId: React.Dispatch<React.SetStateAction<number>>;
   data: object;
   _orderPrice: string;
   _deadLine: string;
@@ -27,8 +25,6 @@ interface ErrorProps {
 }
 
 export default function CreateNewOrder({
-  orderId,
-  setOrderId,
   data,
   _orderPrice,
   _deadLine,
@@ -45,6 +41,7 @@ export default function CreateNewOrder({
   const { address } = useAccount();
   const navigate = useNavigate()
 
+  const {orderId, setOrderId} = useOrderDataStore();
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
     abi: Quicker_abi,

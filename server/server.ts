@@ -1,22 +1,7 @@
 import express, { Application, Request, Response } from "express";
-import connector from "./DataBaseConnector";
-import sequelize from "./sequelizeConnector";
-import {
-  initModels,
-  User,
-  Birth_date,
-  Join_date,
-  Order,
-  Destination,
-  Transportation,
-  Departure,
-  Product,
-  Pickup,
-  Sender,
-  Recipient
-} from "./models/DB/init-models";
-
-initModels(sequelize);
+import AdminController = require("./controllers/AdminController");
+import OrderController = require("./controllers/OrderController");
+import UserController = require("./controllers/UserController");
 
 const cors = require("cors");
 const http = require("http");
@@ -25,8 +10,6 @@ const app: Application = express();
 const port: Number = 9000;
 const httpServer = http.createServer(app).listen(9001);
 const bodyParser = require("body-parser");
-const { Sequelize, DataTypes, Op } = require("sequelize");
-const crypto = require("crypto");
 
 const socketServer = io(httpServer, {
   cors: {
@@ -57,34 +40,17 @@ interface MessageObejct {
   data: String;
 }
 
-app.get("/", (req: Request, res: Response) => {
-  res.send(`
-    <button onclick="location.href='/del'">del</button>
-    <button onclick="location.href='/deleteAssociateOrder'">deleteAssociateOrder</button>
-    <button onclick="location.href='/CreateAssociatedOrdertableTable'">CreateAssociatedOrdertableTable</button>
-    <button onclick="location.href='/checkJoin'">checkJoin</button>
-  `);
-});
-app.get("/deleteAssociateOrder", async (req: Request, res: Response) => {
-  res.send(`
-  <form action="/deleteAssociateOrderProcess" method="POST">
-    <input type="text" name="id"></input>
-    <button type="submit" class="btn btn-outline-secondary">Submit</button>
-  </form>
-  `)
-})
-app.post("/deleteAssociateOrderProcess", async (req: Request, res: Response) => {
-  let data = parseInt(req.body.id);
-  (async () => {
-    await Transportation.destroy({where : {ID : data}})
-    await Sender.destroy({where : {ID : data}})
-    await Recipient.destroy({where : {id : data}})
-    await Destination.destroy({where : {id : data}})
-    await Departure.destroy({where : {ID : data}})
-    await Product.destroy({where : {ID : data}})
-    await Order.destroy({where : {id : data}})
-  }) ()
+app.get("/", AdminController.home);
+app.get("/deleteAssociateOrder",AdminController.deleteAssociateOrder);
+app.post("/deleteAssociateOrderProcess", AdminController.deleteAssociateOrderProcess);
+app.get("/getRequests", UserController.getRequests);
+app.post("/orderlist", OrderController.orderlist);
+app.post("/register", UserController.register);
+app.post("/request", OrderController.request);
 
+<<<<<<< HEAD
+app.listen(port, () => {console.log(`App is listening on port ${port} !`);});
+=======
   res.send("done")
 })
 app.get("/checkJoin", async (req: Request, res: Response) => {
@@ -251,3 +217,4 @@ app.post("/post", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`App is listening on port ${port} !`);
 });
+>>>>>>> 2ae5c46a6c332b10d3e3a32c5c134e1f9bfdbb8c

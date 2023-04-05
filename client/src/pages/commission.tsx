@@ -46,6 +46,128 @@ export const useOrderStore = create<OrderState>((set) => ({
   setErrorMessage: (errorMessage: string) => set({errorMessage})
 }))
 
+interface useDivHandler {
+  showCommissionPage: boolean;
+  setShowCommissionPage: (showCommissionPage:boolean) => void;
+}
+
+export const useDivHandler = create<useDivHandler>(set => ({
+  showCommissionPage: true,
+  setShowCommissionPage : (showCommissionPage : boolean) =>  set({showCommissionPage})
+}))
+
+interface useOrderDataStore {
+  orderId : number;
+  setOrderId : (orderId: number) => void;
+  startPosition  : object;
+  setStartPosition : (startPosition: any) => void;
+  startAddress  : string;
+  setStartAddress : (startAddress: string) => void;
+  sender : string;
+  setSender : (sender: string) => void;
+  senderPhoneNumber : string;
+  setSenderPhoneNumber : (senderPhoneNumber: string) => void;
+
+  arrivePosition  : object;
+  setArrivePosition : (value: any) => void;
+  arriveAddress  : string;
+  setArriveAddress : (value: string) => void;
+  receiver  : string;
+  setReceiver : (value: string) => void;
+  receiverPhoneNumber  : string;
+  setReceiverPhoneNumber : (value: string) => void;
+
+  width   : number;
+  setWidth : (value: number) => void;
+  height   : number;
+  setHeight : (value: number) => void;
+  length   : number;
+  setLength : (value: number) => void;
+  weight  : number;
+  setWeight : (value: number) => void;
+
+  AMPM  : string;
+  setAMPM : (value: string) => void;
+  date  : string;
+  setDate : (value: string) => void;
+  hour  : number;
+  setHour : (value: number) => void;
+  minute  : number;
+  setMinute : (value: number) => void;
+
+  details  : string;
+  setDetails : (value: string) => void;
+  cost  : number;
+  setCost : (value: number) => void;
+
+  isChecked  : isChecked;
+  setIsChecked : (value: any) => void;
+}
+
+interface isChecked {
+    walk: boolean,
+    bike: boolean,
+    kickboard: boolean,
+    motorcycle: boolean,
+    car: boolean,
+    truck: boolean,
+}
+
+export const useOrderDataStore = create<useOrderDataStore>(set => ({
+  orderId : 0,
+  setOrderId : (orderId : number)  => set({orderId}),
+  startPosition  : {},
+  setStartPosition : (startPosition : any) => set({startPosition}),
+  startAddress  : "",
+  setStartAddress : (startAddress : string) => set({startAddress}),
+  sender   : "",
+  setSender : (sender : string) => set({sender}),
+  senderPhoneNumber   : "",
+  setSenderPhoneNumber : (senderPhoneNumber : string) => set({senderPhoneNumber}),
+
+  arrivePosition  : {},
+  setArrivePosition : (arrivePosition : any) => set({arrivePosition}),
+  arriveAddress  : "",
+  setArriveAddress : (arriveAddress : string) => set({arriveAddress}),
+  receiver  : "",
+  setReceiver : (receiver : string) => set({receiver}),
+  receiverPhoneNumber  : "",
+  setReceiverPhoneNumber : (receiverPhoneNumber : string) => set({receiverPhoneNumber}),
+
+  width   : 0,
+  setWidth : (width : number) => set({width}),
+  height   : 0,
+  setHeight : (height : number) => set({height}),
+  length   : 0,
+  setLength : (length : number) => set({length}),
+  weight  : 0,
+  setWeight : (weight : number) => set({weight}),
+
+  AMPM  : "",
+  setAMPM : (AMPM : string) => set({AMPM}),
+  date  : "",
+  setDate : (date : string) => set({date}),
+  hour  : 0,
+  setHour : (hour : number) => set({hour}),
+  minute  : 0,
+  setMinute : (minute : number) => set({minute}),
+
+  details  : "",
+  setDetails : (details : string) => set({details}),
+  cost  : 0,
+  setCost : (cost : number) => set({cost}),
+
+  isChecked  : {
+    walk: false,
+    bike: false,
+    kickboard: false,
+    motorcycle: false,
+    car: false,
+    truck: false,
+  },
+  setIsChecked : (isChecked : isChecked) => set({isChecked}),
+}))
+
 const GlobalStyle = createGlobalStyle`
   body {
     background-color: #efefef !important;
@@ -71,45 +193,58 @@ const getLatLon = () => {
 export default function CommissionPage() {
   const navigate = useNavigate();
   const { address } = useAccount();
+  const startinputDiv = useRef<HTMLInputElement>(null);
+  const arriveinputDiv = useRef<HTMLInputElement>(null);
+  const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const [showCommissionPage, setShowCommissionPage] = useState<boolean>(true);
-
-  const startinputDiv = useRef<HTMLDivElement>(null);
-  const arriveinputDiv = useRef<HTMLDivElement>(null);
+  const {
+    
+    orderId ,
+    setOrderId ,
+    startPosition  ,
+    setStartPosition ,
+    startAddress  ,
+    setStartAddress ,
+    sender ,
+    setSender ,
+    senderPhoneNumber ,
+    setSenderPhoneNumber ,
   
-  const [orderId, setOrderId] = useState(0)
-
-  const [startPosition, setStartPosition] = useState({});
-  const [startAddress, setStartAddress] = useState("");
-  const [sender , setSender] = useState("");
-  const [senderPhoneNumber , setSenderPhoneNumber] = useState("");
-
-  const [arrivePosition, setArrivePosition] = useState({});
-  const [arriveAddress, setArriveAddress] = useState("");
-  const [receiver , setReceiver] =useState("");
-  const [receiverPhoneNumber , setReceiverPhoneNumber] =useState("");
-
-  const [width , setWidth] = useState(0);
-  const [height , setHeight] = useState(0);
-  const [length , setLength] = useState(0);
-  const [weight, setWeight] = useState(0);
-
-  const [AMPM, setAMPM] = useState("")
-  const [date, setDate] = useState("")
-  const [hour, setHour] = useState(0)
-  const [minute, setMinute] = useState(0)
-
-  const [details , setDetails] =useState("");
-  const [cost , setCost] =useState(0);
-
-  const [isChecked, setIsChecked] = useState({
-    walk: false,
-    bike: false,
-    kickboard: false,
-    motorcycle: false,
-    car: false,
-    truck: false,
-  });
+    arrivePosition  ,
+    setArrivePosition ,
+    arriveAddress  ,
+    setArriveAddress ,
+    receiver  ,
+    setReceiver ,
+    receiverPhoneNumber  ,
+    setReceiverPhoneNumber ,
+  
+    width   ,
+    setWidth ,
+    height   ,
+    setHeight ,
+    length   ,
+    setLength ,
+    weight  ,
+    setWeight ,
+  
+    AMPM  ,
+    setAMPM ,
+    date  ,
+    setDate ,
+    hour  ,
+    setHour ,
+    minute  ,
+    setMinute ,
+  
+    details  ,
+    setDetails ,
+    cost  ,
+    setCost ,
+  
+    isChecked  ,
+    setIsChecked ,
+  } = useOrderDataStore();
 
   const forSendData = {
     userWalletAddress : address,
@@ -219,36 +354,15 @@ export default function CommissionPage() {
     <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
-        <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
-        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv, }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{
-          setStartPosition: setStartPosition, setArrivePosition: setArrivePosition, setStartAddress: setStartAddress,
-          setSender: setSender,
-          setSenderPhoneNumber: setSenderPhoneNumber,
-          setArriveAddress: setArriveAddress,
-          setReceiver: setReceiver,
-          setReceiverPhoneNumber: setReceiverPhoneNumber
-        }} title={title} hideCommissionPage={() => handleCommissionPage()} />
+        <Tmap containerId={"mapContainerBox"}/>
+        <Postcode refs={{startinputDiv : startinputDiv, arriveinputDiv : arriveinputDiv}} mapControls={{ showMap: showMap, hideMap: hideMap }} title={title} hideCommissionPage={() => handleCommissionPage()} />
       </div>
       <button onClick={() => test()}>값 확인</button>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage
         orderId={orderId}
         sendData={forSendData}
-        states={{isChecked}}
-          setStates={{
-            setWidth: setWidth,
-            setHeight: setHeight,
-            setLength: setLength,
-            setWeight: setWeight,
-            setDetails: setDetails,
-            setCost: setCost,
-            setDate: setDate,
-            setHour: setHour,
-            setMinute: setMinute,
-            setAMPM: setAMPM,
-            setIsChecked : setIsChecked,
-            setOrderId : setOrderId
-          }} />
+        states={{isChecked}}/>
       </div>
       <BottomBar />
     </>
