@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Orderlistmodal from "./orderlistmodal";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
-import { getClientOrderList, getOrders } from "../../utils/GetOrderFromBlockchain";
+import {
+  getClientOrderList,
+  getOrders,
+} from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import Handler from "../../lib/Handler";
 import Kakao from "../../lib/Kakao";
-
 
 interface OrderState {
   Order: object | null;
@@ -28,10 +30,10 @@ function Orderlist() {
   const { address } = useAccount();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
-  const [reversedOrders, setReversedOrders] = useState<object[]>([])
+  const [reversedOrders, setReversedOrders] = useState<object[]>([]);
 
   // const [dataBaseData, setDataBaseData] = useState([])
-  
+
   const { orderObj, setOrder, setOrderObj } = useOrderState();
 
   const handleOpenModal = (order: object) => {
@@ -44,15 +46,12 @@ function Orderlist() {
     setOrder(null);
   };
 
-  // 현재 연결된 지갑 주소의 오더 내역 번호 array를 반환
+  // 현재 연결된 지갑 주소의 오더 내역 번호 array값 불러오기
   const getOrderList = async () => {
     const orderNumList = await getClientOrderList(address);
     //getOrders 호출
     if (orderNumList !== undefined) {
       getOrderObj(orderNumList);
-      
-
-
     } else {
       setIsEmptyOrder(true);
       console.log("오더 내역 없음");
@@ -62,23 +61,28 @@ function Orderlist() {
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     let result = await getOrders(orderNumList);
-    let cloneList = result.slice()
+    let cloneList = result.slice();
     result.forEach(async (element, index) => {
-      
-      let data = await Handler.post({id : parseInt(element.orderNum) }, "http://localhost:9000/orderlist")
+      let data = await Handler.post(
+        { id: parseInt(element.orderNum) },
+        "http://localhost:9000/orderlist"
+      );
       if (data !== null) {
-        
-        let realdepartureAdress = await Kakao.reverseGeoCording(data.Departure.Y, data.Departure.X)
-        let realdestinationAdress = await Kakao.reverseGeoCording(data.Destination.Y, data.Destination.X)
+        let realdepartureAdress = await Kakao.reverseGeoCording(
+          data.Departure.Y,
+          data.Departure.X
+        );
+        let realdestinationAdress = await Kakao.reverseGeoCording(
+          data.Destination.Y,
+          data.Destination.X
+        );
 
-        
-                cloneList[index].dbData = data
-                cloneList[index].dbData.realdepartureAdress = realdepartureAdress
-                cloneList[index].dbData.realdestinationAdress = realdestinationAdress
+        cloneList[index].dbData = data;
+        cloneList[index].dbData.realdepartureAdress = realdepartureAdress;
+        cloneList[index].dbData.realdestinationAdress = realdestinationAdress;
       }
-      
     });
-    
+
     // orderNumList로 DB정보 가져와서 데이터 셋팅
     setOrderObj(cloneList);
   };
@@ -90,9 +94,9 @@ function Orderlist() {
 
   useEffect(() => {
     if (orderObj !== null) {
-      setReversedOrders(orderObj.slice().reverse())
+      setReversedOrders(orderObj.slice().reverse());
     }
-  }, [orderObj])
+  }, [orderObj]);
 
   return (
     <>
@@ -137,10 +141,7 @@ function Orderlist() {
           </Sc0>
         ))
       )}
-      <Orderlistmodal
-        isOpen={isModalOpen}
-        onRequestClose={handleCloseModal}
-      />
+      <Orderlistmodal isOpen={isModalOpen} onRequestClose={handleCloseModal} />
       <Divhid />
     </>
   );
@@ -180,17 +181,12 @@ const OrderBox = ({ orderObj }: any) => {
           </Div0>
           <Div1>
             <Sp2>출발지</Sp2>
-           
-              <Sp1>
-                               
-                </Sp1>
-            </Div1>
+
+            <Sp1></Sp1>
+          </Div1>
           <Div1>
             <Sp2>{orderObj.orderNum}</Sp2>
-            <Sp1>
-            
-            
-              </Sp1>
+            <Sp1></Sp1>
           </Div1>
           <Div1>
             <Sp2>금액</Sp2>

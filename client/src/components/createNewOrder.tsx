@@ -1,13 +1,13 @@
 import { useContractWrite, usePrepareContractWrite, useAccount } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
 import { useOrderDataStore, useOrderStore } from "../pages/commission";
 import {
   getAllowance,
   getLastClientOrder,
-} from "../utils/GetOrderFromBlockchain";
+} from "../utils/ExecuteOrderFromBlockchain";
 import Handler from "../lib/Handler";
 
 //Qkrw token contract information - polygon mumbai network
@@ -37,6 +37,7 @@ export default function CreateNewOrder({
     setCreatedOrderNum,
     setErrorMessage,
   } = useOrderStore();
+  const [lastOrder, setLastOrder] = useState<string>("")
   const { address } = useAccount();
   const navigate = useNavigate()
 
@@ -81,12 +82,24 @@ export default function CreateNewOrder({
   };
 
   const getCreatedOrderNum = async () => {
-    const timeoutId = setTimeout(async () => {
-      const newOrderNum = await getLastClientOrder(address);
-      setCreatedOrderNum(newOrderNum);
-    }, 4000);
-    return () => clearTimeout(timeoutId);
+    const intervalId = setInterval(async () => {
+      let newOrderNum = await getLastClientOrder(address);
+      if (newOrderNum !== lastOrder) {
+        setCreatedOrderNum(newOrderNum);
+        console.log("새 오더넘버 탐색 완료")
+        clearInterval(intervalId);
+      } else {
+        console.log("새 오더 번호 감지x")
+      }
+    }, 1000);
   };
+
+  const getLastOrderFromBlochain = async () => {
+    const result = await getLastClientOrder(address);
+    if (result !== undefined) {
+      setLastOrder(result)
+    }
+  }
 
   useEffect(() => {
     if (isSuccess) {
@@ -96,7 +109,6 @@ export default function CreateNewOrder({
           console.log("db 데이터 저장 로직");
           console.log("db에 저장할 오더번호: " + createdOrderNum);
           await setOrderId(parseInt(createdOrderNum));
-          console.log(typeof parseInt(createdOrderNum));
 
           // 로직 마지막은 프로필 오더 내역으로 리다이렉트
         })();
@@ -118,6 +130,11 @@ export default function CreateNewOrder({
       setBtnContent("지갑서명 대기중...");
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    getLastOrderFromBlochain()
+    console.log("한 번만 실행하는 라스트 오더: " + lastOrder)
+  }, [])
 
   return (
     <>

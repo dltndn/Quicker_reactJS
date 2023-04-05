@@ -14,6 +14,7 @@ function Search_Detail() {
 
   const acceptOrder = () => {
     //수락하기 로직 구현
+    console.log("수락하기 로직")
   };
 
   return (
@@ -128,7 +129,6 @@ const Circle = styled.div`
   background: #0047ff;
   border-radius: 50em;
   margin-bottom: 10px;
-  animation: ${scaleBounce} 1s alternate infinite;
 `;
 
 const Div0 = styled.div`
