@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState, useRef } from "react";
 import PostcodeInputs from "./PostcodeInput";
-import { useOrderStore } from "../pages/commission";
+import { useDivHandler, useOrderDataStore, useOrderStore } from "../pages/commission";
 //@ts-ignore
 const { daum } = window;
 
@@ -9,32 +9,29 @@ interface mapControl {
   hideMap : Function
 }
 
-interface setStates {
-  setStartPosition: React.Dispatch<React.SetStateAction<{}>>
-  setArrivePosition: React.Dispatch<React.SetStateAction<{}>>
-  setStartAddress : React.Dispatch<React.SetStateAction<string>>
-  setSender : React.Dispatch<React.SetStateAction<string>>
-  setSenderPhoneNumber : React.Dispatch<React.SetStateAction<string>>
-  setArriveAddress : React.Dispatch<React.SetStateAction<string>>
-  setReceiver : React.Dispatch<React.SetStateAction<string>>
-  setReceiverPhoneNumber : React.Dispatch<React.SetStateAction<string>>
-}
-
 interface refs {
-  startinputDiv: React.RefObject<HTMLDivElement>
-  arriveinputDiv: React.RefObject<HTMLDivElement>
+  startinputDiv :React.MutableRefObject<HTMLDivElement | null>
+  arriveinputDiv : React.MutableRefObject<HTMLDivElement | null>
 }
 
 interface props {
   refs : refs
   mapControls : mapControl
-  setStates: setStates
   title: string
   hideCommissionPage: () => void
 }
 
+
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
-const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) => {
+const Postcode = ({refs, mapControls , hideCommissionPage }: props) => {
+const {setArrivePosition, setStartPosition,
+  setStartAddress,
+  setSender,
+  setSenderPhoneNumber,
+  setArriveAddress,
+  setReceiver,
+  setReceiverPhoneNumber} = useOrderDataStore();
+
   //마지막 버튼 클릭 시 OrderPage의 showCommissionPage를 false로 변경
   const handleCompleteCommission = () => {
     hideCommissionPage()
@@ -74,7 +71,7 @@ const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) =
     }
     else if (title === "출발지 입력") {
       setTitle("도착지 입력")
-      refs.startinputDiv.current!.style.display = "none"
+      refs.startinputDiv.current!.style.display= "none"
       refs.arriveinputDiv.current!.style.display = "block"
     }
   }
@@ -94,11 +91,11 @@ const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) =
             // 주소 정보를 해당 필드에 넣는다.
             if (startinputBox.current!.value === "") {
               startinputBox.current!.value = addr
-              setStates.setStartPosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
+              setStartPosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
             }
             else {
               arriveinputBox.current!.value = addr
-              setStates.setArrivePosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
+              setArrivePosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
             }
 
             // iframe을 넣은 element를 안보이게 한다.
@@ -132,14 +129,14 @@ const Postcode = ({ refs, mapControls ,setStates, hideCommissionPage }: props) =
       </div>
           
       <PostcodeInputs refs={{ inputDiv: refs.startinputDiv, inputBox: startinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} setStates={{
-        setAddress : setStates.setStartAddress,
-        setTarget : setStates.setSender,
-        setPhoneNumber : setStates.setSenderPhoneNumber
+        setAddress : setStartAddress,
+        setTarget : setSender,
+        setPhoneNumber : setSenderPhoneNumber
       }} title={"출발지"} />
       <PostcodeInputs refs={{ inputDiv: refs.arriveinputDiv, inputBox: arriveinputBox }} controls={{ onFocus: onFocus, pageNext: pageNext }} setStates={{
-        setAddress : setStates.setArriveAddress,
-        setTarget : setStates.setReceiver,
-        setPhoneNumber : setStates.setReceiverPhoneNumber
+        setAddress : setArriveAddress,
+        setTarget : setReceiver,
+        setPhoneNumber : setReceiverPhoneNumber
       }} title={"도착지"} />
     </>
   );

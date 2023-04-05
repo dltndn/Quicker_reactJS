@@ -1,13 +1,15 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
 import Map from "../lib/Tmap"
+import { useOrderDataStore } from '../pages/commission';
 
-const Tmap = ({ containerId, startPosition, arrivePosition }: props) => {
+const Tmap = ({ containerId }: props) => {
 
     const [map, setMap] = useState({})
     const [startMarker, setStartMarker] = useState({})
     const [arriveMarker, setArriveMarker] = useState({})
-    const [mapDIV, setMapDIV] = useState({})
+    
+    const {startPosition, arrivePosition} = useOrderDataStore()
 
     useEffect(() => {
         setMap(Map.initTmap())
@@ -74,6 +76,4 @@ interface position {
 
 interface props {
     containerId: string
-    startPosition: position
-    arrivePosition: position
 }

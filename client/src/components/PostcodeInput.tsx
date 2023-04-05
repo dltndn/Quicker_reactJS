@@ -9,14 +9,14 @@ interface controls {
 }
 
 interface refs {
-    inputDiv: React.RefObject<HTMLDivElement>
-    inputBox: React.RefObject<HTMLInputElement>
+    inputDiv: React.MutableRefObject<HTMLDivElement | null>
+    inputBox: React.MutableRefObject<HTMLInputElement | null>
 }
 
 interface setStates {
-    setAddress : React.Dispatch<React.SetStateAction<string>>
-    setTarget : React.Dispatch<React.SetStateAction<string>>
-    setPhoneNumber : React.Dispatch<React.SetStateAction<string>>  
+    setAddress : (value: string) => void;
+    setTarget : (value: string) => void;
+    setPhoneNumber : (value: string) => void;  
 }
 
 interface PostcodeInputsType {
