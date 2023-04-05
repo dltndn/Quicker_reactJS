@@ -108,16 +108,32 @@ export const getClientOrderList = async(address:`0x${string}` | undefined) => {
   return result
 }
 
-// 의뢰인 오더 취소 함수
-export const cancelOrder =async (orderNum:string) => {
-  const config = await prepareWriteContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: 'cancelOrder',
-    args: [orderNum],
-  })
-  const data = await writeContract(config)
-  return data
+export class WriteTransactionToBlockchain {
+  private orderNum: string
+  private writeTransaction = async (funcName: string) => {
+    const config = await prepareWriteContract({
+      address: Quicker_address,
+      abi: Quicker_abi,
+      functionName: funcName,
+      args: [this.orderNum],
+    })
+    const data = await writeContract(config)
+    return data
+  }
+  constructor(orderNum: string) { this.orderNum = orderNum; }
+
+  // 의뢰인 오더 취소 함수
+  public cancelOrder = async () => {
+    const result = await this.writeTransaction('cancelOrder')
+    return result
+  }
+
+  // 배송원 오더 수락 함수
+  public acceptOrder = async () => {
+    const result = await this.writeTransaction('acceptOrder')
+    return result
+  }
+
 }
 
 const TemplateOrder = (data: any) => {

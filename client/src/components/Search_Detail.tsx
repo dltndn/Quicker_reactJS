@@ -4,6 +4,7 @@ import ConfirmBtn from "./confirmBtn";
 import { useSearchState } from "../pages/SearchPage";
 import { useEffect } from "react";
 import { OrderObj } from "../pages/SearchPage";
+import { WriteTransactionToBlockchain } from "../utils/ExecuteOrderFromBlockchain";
 
 const money = require("../image/money.png");
 
@@ -12,9 +13,28 @@ function Search_Detail() {
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
 
-  const acceptOrder = () => {
-    //수락하기 로직 구현
-    console.log("수락하기 로직")
+  // 수락하기 로직
+  const acceptOrder = async () => {
+    if (showOrder) {
+      const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
+      try {
+        const data = await wttb.acceptOrder()
+        // db 배송원 매칭 로직 작성
+      } catch(e) {
+        if (e) {
+          //@ts-ignore
+          if (e.reason === "execution reverted: Already matched with another quicker...") {
+            console.log("이미 매칭이 완료된 오더입니다.")
+            //@ts-ignore
+          } else if (e.reason === "execution reverted: ERC20: insufficient allowance") {
+            console.log("토큰 사용 권한 요청 필요")
+            //@ts-ignore
+          } else if (e.reason === "execution reverted: ERC20: transfer amount exceeds balance") {
+            console.log("보증금 송금을 위한 잔액이 부족합니다.")
+          }
+        }
+      }
+    }
   };
 
   return (

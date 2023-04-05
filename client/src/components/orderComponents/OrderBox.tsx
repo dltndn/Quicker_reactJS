@@ -2,7 +2,7 @@ import React, { CSSProperties, useEffect } from "react";
 import styled from "styled-components";
 import { useAccount } from "wagmi";
 import { useOrderState } from "../ShowOrders";
-import { cancelOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import { calQuickerIncome, extractNumber } from "../../utils/CalAny";
 import {
@@ -339,11 +339,11 @@ interface BottomBtnProps {
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
+  const wttb = new WriteTransactionToBlockchain(order.orderNum)
     const { setOrder, setIsModalOpen, setReloadOrderNum} = useOrderState()
     // 주문 취소 로직
   const createdLogic = async () => {
-    console.log("주문 취소 로직 구현");
-    const result = await cancelOrder(order.orderNum)
+    const result = await wttb.cancelOrder()
     console.log(result)
     setReloadOrderNum(order.orderNum)
     setIsModalOpen(false);
