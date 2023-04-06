@@ -188,7 +188,7 @@ const CheckIcon = styled.span`
   font-size: var(--font-small);
 `;
 
-function Req({states} : props) {
+function Req() {
 
     const widthRef = useRef<HTMLInputElement>(null)
     const heightRef = useRef<HTMLInputElement>(null)
@@ -200,15 +200,17 @@ function Req({states} : props) {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
-    const { setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, setWeight } = useOrderDataStore();
-
-   
+    const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, setWeight } = useOrderDataStore();
 
       const handleImgClick = (transport: Transport) => {
-        setIsChecked((prevState : any) => ({
-          ...prevState,
-          [transport]: !prevState[transport],
-        }));
+        let changeIsChecked = () => {
+            return ({
+                ...isChecked,
+                [transport]: !isChecked[transport],
+            })
+        }
+        let result = changeIsChecked()
+        setIsChecked(result)
       };
     
       const [isAMSelected, setIsAMSelected] = useState(true);
@@ -243,10 +245,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={walk} alt=""/>
                 <Checkbox
-                  checked={ states.isChecked.walk}
+                  checked={ isChecked.walk}
                   onChange={() => handleImgClick("walk")}
                 />
-                <CheckIcon>{states.isChecked.walk ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.walk ? "✔️" : ""}</CheckIcon>
               </ImgWrapper>
                     <Div2>
                     도보
@@ -256,10 +258,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={bike} alt=""/>
                 <Checkbox
-                    checked={states.isChecked.bike}
+                    checked={isChecked.bike}
                     onChange={() => handleImgClick("bike")}
                 />
-                <CheckIcon>{states.isChecked.bike ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.bike ? "✔️" : ""}</CheckIcon>
                 </ImgWrapper>
                     <Div2>
                     자전거
@@ -269,10 +271,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={kickboard} alt=""/>
                 <Checkbox
-                    checked={states.isChecked.kickboard}
+                    checked={isChecked.kickboard}
                     onChange={() => handleImgClick("kickboard")}
                 />
-                <CheckIcon>{states.isChecked.kickboard ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.kickboard ? "✔️" : ""}</CheckIcon>
                 </ImgWrapper>
                     <Div2>
                     킥보드
@@ -282,10 +284,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={motorcycle} alt=""/>
                 <Checkbox
-                    checked={states.isChecked.motorcycle}
+                    checked={isChecked.motorcycle}
                     onChange={() => handleImgClick("motorcycle")}
                 />
-                <CheckIcon>{states.isChecked.motorcycle ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.motorcycle ? "✔️" : ""}</CheckIcon>
                 </ImgWrapper>
                     <Div2>
                     오토바이
@@ -295,10 +297,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={car} alt=""/>
                 <Checkbox
-                    checked={states.isChecked.car}
+                    checked={isChecked.car}
                     onChange={() => handleImgClick("car")}
                 />
-                <CheckIcon>{states.isChecked.car ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.car ? "✔️" : ""}</CheckIcon>
                 </ImgWrapper>
                     <Div2>
                     승용차
@@ -308,10 +310,10 @@ function Req({states} : props) {
                 <ImgWrapper>
                 <Img src={truck} alt=""/>
                 <Checkbox
-                    checked={states.isChecked.truck}
+                    checked={isChecked.truck}
                     onChange={() => handleImgClick("truck")}
                 />
-                <CheckIcon>{states.isChecked.truck ? "✔️" : ""}</CheckIcon>
+                <CheckIcon>{isChecked.truck ? "✔️" : ""}</CheckIcon>
                 </ImgWrapper>
                     <Div2>
                     트럭
@@ -444,18 +446,3 @@ function Req({states} : props) {
   }
   
   export default Req;
-
-  interface states{
-    isChecked: {
-        walk: boolean;
-        bike: boolean;
-        kickboard: boolean;
-        motorcycle: boolean;
-        car: boolean;
-        truck: boolean;
-      }
-  }
-
-  interface props {
-    states : states
-  }

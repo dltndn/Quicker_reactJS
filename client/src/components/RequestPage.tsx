@@ -37,7 +37,7 @@ function RequestPage({ orderId, sendData, states} : props) {
         <IncreaseAllowance/>
       ) : (
         <div style={{ backgroundColor: "#efefef" }}>
-          <Req states={states}></Req>
+          <Req></Req>
           <CreateNewOrder
             data={sendData}
             _orderPrice={cost.toString()}
