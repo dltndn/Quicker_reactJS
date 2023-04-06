@@ -36,6 +36,7 @@ export default function CreateNewOrder({
     createdOrderNum,
     setCreatedOrderNum,
     setErrorMessage,
+    cost,
   } = useOrderStore();
   const [lastOrder, setLastOrder] = useState<string>("")
   const { address } = useAccount();
@@ -55,8 +56,19 @@ export default function CreateNewOrder({
           "execution reverted: ERC20: transfer amount exceeds balance"
         ) {
           setErrorMessage("QKRW토큰이 부족합니다.");
+        } else if (
+          result.reason ===
+          "execution reverted: The deadline must later than the current time!"
+        ) {
+          setErrorMessage("마감기한은 현재시간 이후로 설정해주세요.");
+        } else if (
+          result.reason ===
+          "execution reverted: Order price must bigger than 0!"
+        ) {
+          setErrorMessage("결제가격을 입력해주세요.");
         } else {
           setErrorMessage("");
+          console.log("error")
         }
       }
     },
@@ -130,6 +142,10 @@ export default function CreateNewOrder({
       setBtnContent("지갑서명 대기중...");
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    setErrorMessage("")
+  }, [cost])
 
   useEffect(() => {
     getLastOrderFromBlochain()
