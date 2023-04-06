@@ -4,27 +4,12 @@ import { useEffect, useState } from "react";
 import IncreaseAllowance from "./IncreaseAllowance";
 import CreateNewOrder from "./createNewOrder";
 import { useOrderDataStore, useOrderStore } from "../pages/commission";
-import Handler from "../lib/Handler";
-
-interface states {
-  isChecked: {
-    walk: boolean;
-    bike: boolean;
-    kickboard: boolean;
-    motorcycle: boolean;
-    car: boolean;
-    truck: boolean;
-  }
-}
 
 interface props {
-  orderId : number
   sendData : object
-  states: states
 }
 
-
-function RequestPage({ orderId, sendData, states} : props) {
+function RequestPage({sendData} : props) {
   const { cost, setBtnContent, deadLine, showAllowance } = useOrderStore()
   const {setOrderId} = useOrderDataStore();
   useEffect(() => {

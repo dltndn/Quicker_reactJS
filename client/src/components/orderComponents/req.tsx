@@ -338,7 +338,6 @@ function Req() {
                                 () => {
                                 // ERROR : 타입이 String 타입임
                                     setWidth(parseInt(widthRef.current!.value))
-                                    console.log(typeof(widthRef.current!.value))
                                 }
                             } placeholder='' ></Ipval>
                         <Sp1>cm</Sp1>
@@ -437,7 +436,7 @@ function Req() {
                 {/* ERROR : 타입이 String 타입임 */}
                 <Ipdet type="number" ref={costRef} onChange={(e) => {
                     setCost(parseInt(costRef.current!.value));
-                     setCost(convertStrToNum(e.target.value))}} placeholder="지갑 잔액을 확인하세요" ></Ipdet>
+                    setCost(convertStrToNum(e.target.value))}} placeholder="지갑 잔액을 확인하세요" ></Ipdet>
             </div>
         </Box>
     </Container>
