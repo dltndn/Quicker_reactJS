@@ -57,51 +57,51 @@ export const useDivHandler = create<useDivHandler>(set => ({
 }))
 
 interface useOrderDataStore {
-  orderId : number;
-  setOrderId : (orderId: number) => void;
-  startPosition  : object;
-  setStartPosition : (startPosition: any) => void;
-  startAddress  : string;
-  setStartAddress : (startAddress: string) => void;
-  sender : string;
-  setSender : (sender: string) => void;
-  senderPhoneNumber : string;
-  setSenderPhoneNumber : (senderPhoneNumber: string) => void;
+  orderId: number;
+  setOrderId: (orderId: number) => void;
+  startPosition: object;
+  setStartPosition: (startPosition: any) => void;
+  startAddress: string;
+  setStartAddress: (startAddress: string) => void;
+  sender: string;
+  setSender: (sender: string) => void;
+  senderPhoneNumber: string;
+  setSenderPhoneNumber: (senderPhoneNumber: string) => void;
 
-  arrivePosition  : object;
-  setArrivePosition : (value: any) => void;
-  arriveAddress  : string;
-  setArriveAddress : (value: string) => void;
-  receiver  : string;
-  setReceiver : (value: string) => void;
-  receiverPhoneNumber  : string;
-  setReceiverPhoneNumber : (value: string) => void;
+  arrivePosition: object;
+  setArrivePosition: (value: any) => void;
+  arriveAddress: string;
+  setArriveAddress: (value: string) => void;
+  receiver: string;
+  setReceiver: (value: string) => void;
+  receiverPhoneNumber: string;
+  setReceiverPhoneNumber: (value: string) => void;
 
-  width   : number;
-  setWidth : (value: number) => void;
-  height   : number;
-  setHeight : (value: number) => void;
-  length   : number;
-  setLength : (value: number) => void;
-  weight  : number;
-  setWeight : (value: number) => void;
+  width: number;
+  setWidth: (value: number) => void;
+  height: number;
+  setHeight: (value: number) => void;
+  length: number;
+  setLength: (value: number) => void;
+  weight: number;
+  setWeight: (value: number) => void;
 
-  AMPM  : string;
-  setAMPM : (value: string) => void;
-  date  : string;
-  setDate : (value: string) => void;
-  hour  : number;
-  setHour : (value: number) => void;
-  minute  : number;
-  setMinute : (value: number) => void;
+  AMPM: string;
+  setAMPM: (value: string) => void;
+  date: string;
+  setDate: (value: string) => void;
+  hour: number;
+  setHour: (value: number) => void;
+  minute: number;
+  setMinute: (value: number) => void;
 
-  details  : string;
-  setDetails : (value: string) => void;
-  cost  : number;
-  setCost : (value: number) => void;
+  details: string;
+  setDetails: (value: string) => void;
+  cost: number;
+  setCost: (value: number) => void;
 
-  isChecked  : isChecked;
-  setIsChecked : (value: any) => void;
+  isChecked: isChecked;
+  setIsChecked: (value: any) => void;
 }
 
 interface isChecked {
@@ -114,48 +114,48 @@ interface isChecked {
 }
 
 export const useOrderDataStore = create<useOrderDataStore>(set => ({
-  orderId : 0,
-  setOrderId : (orderId : number)  => set({orderId}),
-  startPosition  : {},
-  setStartPosition : (startPosition : any) => set({startPosition}),
-  startAddress  : "",
-  setStartAddress : (startAddress : string) => set({startAddress}),
-  sender   : "",
-  setSender : (sender : string) => set({sender}),
-  senderPhoneNumber   : "",
-  setSenderPhoneNumber : (senderPhoneNumber : string) => set({senderPhoneNumber}),
+  orderId: 0,
+  setOrderId: (orderId: number) => set({ orderId }),
+  startPosition: {},
+  setStartPosition: (startPosition: any) => set({ startPosition }),
+  startAddress: "",
+  setStartAddress: (startAddress: string) => set({ startAddress }),
+  sender: "",
+  setSender: (sender: string) => set({ sender }),
+  senderPhoneNumber: "",
+  setSenderPhoneNumber: (senderPhoneNumber: string) => set({ senderPhoneNumber }),
 
-  arrivePosition  : {},
-  setArrivePosition : (arrivePosition : any) => set({arrivePosition}),
-  arriveAddress  : "",
-  setArriveAddress : (arriveAddress : string) => set({arriveAddress}),
-  receiver  : "",
-  setReceiver : (receiver : string) => set({receiver}),
-  receiverPhoneNumber  : "",
-  setReceiverPhoneNumber : (receiverPhoneNumber : string) => set({receiverPhoneNumber}),
+  arrivePosition: {},
+  setArrivePosition: (arrivePosition: any) => set({ arrivePosition }),
+  arriveAddress: "",
+  setArriveAddress: (arriveAddress: string) => set({ arriveAddress }),
+  receiver: "",
+  setReceiver: (receiver: string) => set({ receiver }),
+  receiverPhoneNumber: "",
+  setReceiverPhoneNumber: (receiverPhoneNumber: string) => set({ receiverPhoneNumber }),
 
-  width   : 0,
-  setWidth : (width : number) => set({width}),
-  height   : 0,
-  setHeight : (height : number) => set({height}),
-  length   : 0,
-  setLength : (length : number) => set({length}),
-  weight  : 0,
-  setWeight : (weight : number) => set({weight}),
+  width: 0,
+  setWidth: (width: number) => set({ width }),
+  height: 0,
+  setHeight: (height: number) => set({ height }),
+  length: 0,
+  setLength: (length: number) => set({ length }),
+  weight: 0,
+  setWeight: (weight: number) => set({ weight }),
 
-  AMPM  : "",
-  setAMPM : (AMPM : string) => set({AMPM}),
-  date  : "",
-  setDate : (date : string) => set({date}),
-  hour  : 0,
-  setHour : (hour : number) => set({hour}),
-  minute  : 0,
-  setMinute : (minute : number) => set({minute}),
+  AMPM: "",
+  setAMPM: (AMPM: string) => set({ AMPM }),
+  date: "",
+  setDate: (date: string) => set({ date }),
+  hour: 0,
+  setHour: (hour: number) => set({ hour }),
+  minute: 0,
+  setMinute: (minute: number) => set({ minute }),
 
-  details  : "",
-  setDetails : (details : string) => set({details}),
-  cost  : 0,
-  setCost : (cost : number) => set({cost}),
+  details: "",
+  setDetails: (details: string) => set({ details }),
+  cost: 0,
+  setCost: (cost: number) => set({ cost }),
 
   isChecked  : {
     walk: false,
@@ -197,7 +197,27 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const { orderId, startPosition, startAddress, sender, senderPhoneNumber, arrivePosition, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+  const {setDate, orderId, startPosition, startAddress, sender, senderPhoneNumber, arrivePosition, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+
+  const fn = () =>{
+    console.log(AMPM, date, hour, minute)
+  }
+
+  // NOTE : 날자 => timeStamp
+  const parseTimeStamp = () =>{
+    let yearmonthdate = date.split("-")
+    let getYear = parseInt(yearmonthdate[0])
+    let getMonth = parseInt(yearmonthdate[1])
+    let getDate = parseInt(yearmonthdate[2])
+
+    if (AMPM == "오전") {
+      return new Date(getYear, getMonth - 1, getDate,hour,minute,0).getTime();
+    } else {
+      return new Date(getYear, getMonth - 1, getDate,hour + 12,minute,0).getTime();
+    }
+  }
+
+
   const forSendData = {
     userWalletAddress : address,
     Order : {
