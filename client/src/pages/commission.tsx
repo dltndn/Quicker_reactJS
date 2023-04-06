@@ -197,55 +197,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const {
-    
-    orderId ,
-    setOrderId ,
-    startPosition  ,
-    setStartPosition ,
-    startAddress  ,
-    setStartAddress ,
-    sender ,
-    setSender ,
-    senderPhoneNumber ,
-    setSenderPhoneNumber ,
-  
-    arrivePosition  ,
-    setArrivePosition ,
-    arriveAddress  ,
-    setArriveAddress ,
-    receiver  ,
-    setReceiver ,
-    receiverPhoneNumber  ,
-    setReceiverPhoneNumber ,
-  
-    width   ,
-    setWidth ,
-    height   ,
-    setHeight ,
-    length   ,
-    setLength ,
-    weight  ,
-    setWeight ,
-  
-    AMPM  ,
-    setAMPM ,
-    date  ,
-    setDate ,
-    hour  ,
-    setHour ,
-    minute  ,
-    setMinute ,
-  
-    details  ,
-    setDetails ,
-    cost  ,
-    setCost ,
-  
-    isChecked  ,
-    setIsChecked ,
-  } = useOrderDataStore();
-
+  const { orderId, startPosition, startAddress, sender, senderPhoneNumber, arrivePosition, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
   const forSendData = {
     userWalletAddress : address,
     Order : {
@@ -329,26 +281,6 @@ export default function CommissionPage() {
     setShowCommissionPage(false);
   };
 
-  const test = () => {
-    console.log(startPosition, arrivePosition, startAddress,
-      sender,
-      senderPhoneNumber,
-      arriveAddress,
-      receiver,
-      receiverPhoneNumber,
-      width,
-      height,
-      length,
-      weight,
-      details,
-      cost,
-      date,
-      hour,
-      minute,
-      AMPM
-    )
-  }
-
   return (
     <>
     <GlobalStyle/>
@@ -357,12 +289,9 @@ export default function CommissionPage() {
         <Tmap containerId={"mapContainerBox"}/>
         <Postcode refs={{startinputDiv : startinputDiv, arriveinputDiv : arriveinputDiv}} mapControls={{ showMap: showMap, hideMap: hideMap }} title={title} hideCommissionPage={() => handleCommissionPage()} />
       </div>
-      <button onClick={() => test()}>값 확인</button>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage
-        orderId={orderId}
-        sendData={forSendData}
-        states={{isChecked}}/>
+        sendData={forSendData}/>
       </div>
       <BottomBar />
     </>

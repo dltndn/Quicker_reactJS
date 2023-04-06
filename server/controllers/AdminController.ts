@@ -24,7 +24,7 @@ export = {
     try {
       let deleteTargetId = parseInt(req.body.id);
       DeleteOrder.deleteOrder(deleteTargetId);
-      res.send("done");
+      res.redirect("/deleteAssociateOrder");
     } catch (error) {
       res.send(error);
     }

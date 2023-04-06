@@ -24,13 +24,7 @@ interface props {
 
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
 const Postcode = ({refs, mapControls , hideCommissionPage }: props) => {
-const {setArrivePosition, setStartPosition,
-  setStartAddress,
-  setSender,
-  setSenderPhoneNumber,
-  setArriveAddress,
-  setReceiver,
-  setReceiverPhoneNumber} = useOrderDataStore();
+const {setArrivePosition, setStartPosition, setStartAddress, setSender, setSenderPhoneNumber, setArriveAddress, setReceiver, setReceiverPhoneNumber} = useOrderDataStore();
 
   //마지막 버튼 클릭 시 OrderPage의 showCommissionPage를 false로 변경
   const handleCompleteCommission = () => {

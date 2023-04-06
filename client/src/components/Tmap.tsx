@@ -8,7 +8,6 @@ const Tmap = ({ containerId }: props) => {
     const [map, setMap] = useState({})
     const [startMarker, setStartMarker] = useState({})
     const [arriveMarker, setArriveMarker] = useState({})
-    
     const {startPosition, arrivePosition} = useOrderDataStore()
 
     useEffect(() => {

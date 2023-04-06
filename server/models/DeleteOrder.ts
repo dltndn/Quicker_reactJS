@@ -1,14 +1,14 @@
 import {Transportation, Sender, Recipient, Destination, Departure, Product, Order } from "./DB/init-models";
 
 export = {
-  deleteOrder: (OrderId: number) => {
-    Transportation.destroy({ where: { ID: OrderId } });
-    Sender.destroy({ where: { ID: OrderId } });
-    Recipient.destroy({ where: { id: OrderId } });
-    Destination.destroy({ where: { id: OrderId } });
-    Departure.destroy({ where: { ID: OrderId } });
-    Product.destroy({ where: { ID: OrderId } });
-    Order.destroy({ where: { id: OrderId } });
+  deleteOrder: async (OrderId: number) => {
+    await Transportation.destroy({ where: { ID: OrderId } });
+    await Sender.destroy({ where: { ID: OrderId } });
+    await Recipient.destroy({ where: { id: OrderId } });
+    await Destination.destroy({ where: { id: OrderId } });
+    await Departure.destroy({ where: { ID: OrderId } });
+    await Product.destroy({ where: { ID: OrderId } });
+    await Order.destroy({ where: { id: OrderId } });
   },
 };
 
