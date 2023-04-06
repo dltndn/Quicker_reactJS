@@ -10,7 +10,7 @@ import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
 import { useAccount } from "wagmi";
 import { create } from 'zustand'
-
+import Time from "../lib/Time"
 
 interface OrderState {
   cost: number;
@@ -203,19 +203,9 @@ export default function CommissionPage() {
     console.log(AMPM, date, hour, minute)
   }
 
-  // NOTE : 날자 => timeStamp
-  const parseTimeStamp = () =>{
-    let yearmonthdate = date.split("-")
-    let getYear = parseInt(yearmonthdate[0])
-    let getMonth = parseInt(yearmonthdate[1])
-    let getDate = parseInt(yearmonthdate[2])
-
-    if (AMPM == "오전") {
-      return new Date(getYear, getMonth - 1, getDate,hour,minute,0).getTime();
-    } else {
-      return new Date(getYear, getMonth - 1, getDate,hour + 12,minute,0).getTime();
-    }
-  }
+  // NOTE : 타임 스탬프 구하는 함수 
+  let timeStamp = Time.parseTimeStamp(date , AMPM , hour , minute)
+  
 
 
   const forSendData = {
