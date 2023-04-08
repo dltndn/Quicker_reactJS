@@ -134,6 +134,29 @@ export class WriteTransactionToBlockchain {
     return result
   }
 
+  // 배송원 배달 완료 함수
+  public deliveredOrder = async () => {
+    const result = await this.writeTransaction('deliveredOrder')
+    return result
+  }
+
+  // 의뢰인 계약 확정 함수
+  public completeOrder = async () => {
+    const result = await this.writeTransaction('completeOrder')
+    return result
+  }
+
+  // 배송원 정산 함수
+  public withdrawFromOrder = async () => {
+    const result = await this.writeTransaction('withdrawFromOrder')
+    return result
+  }
+
+  // 의뢰인 배송 실패오더 환불 함수
+  public failedOrder = async () => {
+    const result = await this.writeTransaction('failedOrder')
+    return result
+  }
 }
 
 const TemplateOrder = (data: any) => {
