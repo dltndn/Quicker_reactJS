@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAccount } from "wagmi";
 import { useOrderState } from "../ShowOrders";
@@ -101,7 +101,7 @@ interface OrderModalProps {
 }
 
 export function OrderModal({ isClient }: OrderModalProps) {
-  const { address } = useAccount()
+  const { address } = useAccount();
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
   const handleCloseModal = () => {
@@ -113,15 +113,15 @@ export function OrderModal({ isClient }: OrderModalProps) {
   let income = "";
   if (order) {
     if (!isClient) {
-        if (order.orderPrice === null) {
-          orderPriceNum = 0;
-        } else {
-          orderPriceNum = extractNumber(order.orderPrice);
-        }
-        income = calQuickerIncome(orderPriceNum);
+      if (order.orderPrice === null) {
+        orderPriceNum = 0;
+      } else {
+        orderPriceNum = extractNumber(order.orderPrice);
       }
+      income = calQuickerIncome(orderPriceNum);
+    }
   }
-  
+
   const modalStyle: CSSProperties = {
     position: "fixed",
     top: 0,
@@ -230,7 +230,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Sp2>결제 일시</Sp2>
                     <Sp1>{formatedDate(order?.createdTime)}</Sp1>
                   </Div1>
-                  <BottomBtn order={order} address={address}/>
+                  <BottomBtn order={order} address={address} />
                 </>
               ) : (
                 <>
@@ -334,32 +334,44 @@ const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
 };
 
 interface BottomBtnProps {
-    order: any;
-    address: `0x${string}` | undefined;
+  order: any;
+  address: `0x${string}` | undefined;
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
-  const wttb = new WriteTransactionToBlockchain(order.orderNum)
-    const { setOrder, setIsModalOpen, setReloadOrderNum} = useOrderState()
-    // 주문 취소 로직
-  const createdLogic = async () => {
-    const result = await wttb.cancelOrder()
-    console.log(result)
-    setReloadOrderNum(order.orderNum)
+  const [iscomplete, setIscomplete] = useState<boolean>(false);
+  const wttb = new WriteTransactionToBlockchain(order.orderNum);
+  const { setOrder, setIsModalOpen, setReloadOrderNum } = useOrderState();
+
+  const closeModal = () => {
     setIsModalOpen(false);
     setOrder(null);
   };
+  // 주문 취소 로직
+  const createdLogic = async () => {
+    const result = await wttb.cancelOrder();
+    console.log(result);
+    setReloadOrderNum(order.orderNum);
+    closeModal()
+  };
+  // 배송 현황 확인 로직
   const acceptLogic = () => {
     console.log("배송 현황 확인 로직 구현");
+    // 배송 현황 페이지 리다이렉트
   };
-  const completeLogic = () => {
-    console.log("거래 확정 로직 구현");
+  // 거래 확인 로직
+  const completeLogic = async () => {
+    closeModal()
   };
-  const failLogic = () => {
-    console.log("실패 로직 구현");
+  // 실패 사유 확인 로직
+  const failLogic = async () => {
+    console.log("실패 사유 확인 로직")
+    // 배송 결과 페이지 리다이렉트
   };
+  // 다시 의뢰하기 로직
   const cancelLogic = () => {
     console.log("다시 의뢰하기 로직 구현");
+    // 의뢰하기 페이지 리다이렉트
   };
   switch (order?.state) {
     case "created":
@@ -367,9 +379,9 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
     case "matched":
       return <Button onClick={() => acceptLogic()}>배송 현황 확인</Button>;
     case "completed":
-      return <Button onClick={() => completeLogic()}>거래 확정</Button>;
+      return <Button onClick={() => completeLogic()}>거래완료</Button>;
     case "failed":
-      return <Button onClick={() => failLogic()}>결제금 환급</Button>;
+      return <Button onClick={() => failLogic()}>실패 사유 확인</Button>;
     case "canceled":
       return <Button onClick={() => cancelLogic()}>다시 의뢰하기</Button>;
     default:
@@ -411,7 +423,7 @@ const Sp1 = styled.span`
 `;
 
 const Sp2 = styled.span`
-font-size: var(--font-md1);
+  font-size: var(--font-md1);
   color: #646464;
 `;
 
@@ -501,6 +513,6 @@ const Spsc2 = styled(Spprofit2)`
 `;
 
 const Ic = styled.span`
-    font-size: var(--font-md1);
-    margin-left: 0.188rem;
+  font-size: var(--font-md1);
+  margin-left: 0.188rem;
 `;
