@@ -66,31 +66,29 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     let result = await getOrders(orderNumList);
-    // 블록체인에 저장된 오더의 세부정보 
-    
-    // 이거 문제다 
-
+    let cloneList = result.slice();
     result.forEach(async (element, index) => {
-      console.log(element)
       let data = await Handler.post(
         { id: parseInt(element.orderNum) },
         "http://localhost:9000/orderlist"
       );
-      console.log(data)
-      // if (data !== null) {
-      //   let realdepartureAdress = await Kakao.reverseGeoCording(
-      //     data.Departure.Y,
-      //     data.Departure.X
-      //   );
-      //   let realdestinationAdress = await Kakao.reverseGeoCording(
-      //     data.Destination.Y,
-      //     data.Destination.X
-      //   );
-      // }
-    });
-    console.log("end")
+      if (data !== null) {
+        let realdepartureAdress = await Kakao.reverseGeoCording(
+          data.Departure.Y,
+          data.Departure.X
+        );
+        let realdestinationAdress = await Kakao.reverseGeoCording(
+          data.Destination.Y,
+          data.Destination.X
+        );
 
-    // setOrdersObj(cloneList);
+        cloneList[index].dbData = data;
+        cloneList[index].dbData.realdepartureAdress = realdepartureAdress;
+        cloneList[index].dbData.realdestinationAdress = realdestinationAdress;
+      }
+    });
+
+    setOrdersObj(cloneList);
   };
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
