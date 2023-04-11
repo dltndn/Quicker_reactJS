@@ -12,7 +12,7 @@ export = {
   // NOTE : 이름 변경 필
   getRequests: async (req: Request, res: Response) => {
     const userWalletAdress =  req.body.userWalletAdress
-    console.log("userWalletAdress : ", userWalletAdress)
+    console.log("USER_WALLET_ADRESS : ", userWalletAdress)
     const userId = await SelectOrder.getUserId(userWalletAdress)
     
     try {

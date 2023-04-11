@@ -11,7 +11,7 @@ User,
 const { Op } = require("sequelize");
 export = {
   getRequests: (userId : string) => {
-    console.log(userId)
+    console.log("USER_ID : ",userId)
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
@@ -21,9 +21,18 @@ export = {
         Order.findAll({
           attributes: ["id", "PAYMENT", "DETAIL"],
           where: {
-            ID_REQ: {
-              [Op.ne]: userId
-            }
+            [Op.and]: [
+              {
+                ID_REQ: {
+                  [Op.ne]: userId,
+                },
+              },
+              {
+                ID_DVRY: {
+                  [Op.eq]: "",
+                },
+              },
+            ],
           },
           include: [
             {
