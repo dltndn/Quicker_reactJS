@@ -11,8 +11,13 @@ export = {
 
   // NOTE : 이름 변경 필
   getRequests: async (req: Request, res: Response) => {
+    const userWalletAdress =  req.body.userWalletAdress
+    console.log("userWalletAdress : ", userWalletAdress)
+    const userId = await SelectOrder.getUserId(userWalletAdress)
+    
     try {
-      let data = await SelectOrder.getRequests();
+      // @ts-ignore
+      let data = await SelectOrder.getRequests(userId.id);
       res.send(data);
     } catch (error) {
       res.send(error);

@@ -43,7 +43,7 @@ interface MessageObejct {
 app.get("/", AdminController.home);
 app.get("/deleteAssociateOrder",AdminController.deleteAssociateOrder);
 app.post("/deleteAssociateOrderProcess", AdminController.deleteAssociateOrderProcess);
-app.get("/getRequests", UserController.getRequests);
+app.post("/getRequests", UserController.getRequests);
 app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
 app.post("/request", OrderController.request);

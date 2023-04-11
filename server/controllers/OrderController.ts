@@ -25,11 +25,18 @@ export = {
       return res.send({ msg: error });
     }
   },
+
   orderlist: async (req: Request, res: Response) => {
     const id = parseInt(req.body.id);
+    
     try {
-      let instance = await SelectOrder.getOrderlist(id);
-      res.send(instance);
+      console.log(id)
+      // let instance = await SelectOrder.getOrderlist(id);
+      // console.log(id + "  ", JSON.stringify(instance, null, 2))
+      // console.log(instance !== null)
+      // if (instance === null) {
+      //   res.send(instance);
+      // }
     } catch {
       res.send("fail");
     }
