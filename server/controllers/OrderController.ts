@@ -29,6 +29,7 @@ export = {
     const id = parseInt(req.body.id);
     try {
       let instance = await SelectOrder.getOrderlist(id);
+      console.log(id)
       res.send(instance);
     } catch {
       res.send("fail");
