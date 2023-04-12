@@ -22,6 +22,7 @@ import FulfillmentlistPage from "./pages/FulfillmentlistPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
 import React, { useEffect } from "react";
 import Notification from "./components/Notification";
+import ExecutionPage from "./pages/ExecutionPage";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -98,6 +99,7 @@ function App() {
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/execution" element={<ExecutionPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

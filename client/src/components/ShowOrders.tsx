@@ -87,7 +87,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         cloneList[index].dbData.realdestinationAdress = realdestinationAdress;
       }
     });
-
     setOrdersObj(cloneList);
   };
 
