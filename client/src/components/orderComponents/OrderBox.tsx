@@ -45,11 +45,15 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               </Div0>
               <Div1>
                 <Sp2>출발지</Sp2>
-                <Sp1>-</Sp1>
+                <Sp1>{
+                  (orderObj.realdepartureAdress !== undefined) ? orderObj.realdepartureAdress.address_name : "없음"
+                }</Sp1>
               </Div1>
               <Div1>
                 <Sp2>도착지</Sp2>
-                <Sp1>-</Sp1>
+                <Sp1>{
+                  (orderObj.realdestinationAdress !== undefined) ? orderObj.realdestinationAdress.address_name : "없음"
+                }</Sp1>
               </Div1>
               <Div1>
                 <Sp2>금액</Sp2>
@@ -64,7 +68,9 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
                 <ViewState orderObj={orderObj} isClient={isClient} />
               </Div0>
               <Div1>
-                <Sp2>김포시 김포대로 926번길 46 </Sp2>
+                <Sp2>{
+                  (orderObj.realdepartureAdress !== undefined) ? orderObj.realdepartureAdress.address_name : "없음"
+                }</Sp2>
               </Div1>
               <DivBs>
                 <BsFillCircleFill />
@@ -72,7 +78,9 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
                 <BsFillCircleFill />
               </DivBs>
               <Div1>
-                <Sp2>김포시 김포대로 926번길 46 </Sp2>
+                <Sp2>{
+                  (orderObj.realdestinationAdress !== undefined) ? orderObj.realdestinationAdress.address_name : "없음"
+                }</Sp2>
               </Div1>
               <Div1>
                 <Spsc0>수익</Spsc0>

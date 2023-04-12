@@ -15,6 +15,7 @@ const socketServer = io(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials : true
   },
 });
 
@@ -43,9 +44,13 @@ interface MessageObejct {
 app.get("/", AdminController.home);
 app.get("/deleteAssociateOrder",AdminController.deleteAssociateOrder);
 app.post("/deleteAssociateOrderProcess", AdminController.deleteAssociateOrderProcess);
-app.get("/getRequests", UserController.getRequests);
+app.get("/deleteAssociateOrders",AdminController.deleteAssociateOrders);
+app.post("/deleteAssociateOrdersProcess", AdminController.deleteAssociateOrdersProcess);
+app.post("/getRequests", UserController.getRequests);
 app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
 app.post("/request", OrderController.request);
+app.post("/updateorder", OrderController.updateOrder);
+
 
 app.listen(port, () => {console.log(`App is listening on port ${port} !`);});

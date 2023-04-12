@@ -14,6 +14,7 @@ import { formatedDate } from "../utils/ConvertTimestampToDate";
 import { calQuickerIncome, calSecurityDeposit, extractNumber } from "../utils/CalAny";
 import { useOrderStore } from "./commission";
 import IncreaseAllowance from "../components/IncreaseAllowance";
+import {  useAccount } from "wagmi";
 
 export interface OrderObj {
     orderNum: string;
@@ -77,7 +78,7 @@ const getOrderFromBlochchain = async (orderNum:string) => {
 }
 
 function SearchPage() {
-  
+  const {address} = useAccount()
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } = useSearchState();
   const { showAllowance } = useOrderStore()
   const requestListContainer = useRef<HTMLDivElement>(null)
@@ -171,8 +172,13 @@ function SearchPage() {
     
     const exec = async () => {
       try {
-        let data = await Handler.get("http://localhost:9000/getRequests")
+        
+        let data = await Handler.post({
+          userWalletAdress : address
+        },
+          "http://localhost:9000/getRequests")
         setRequestListContents(data)
+        console.log(data)
       }catch (error) {
         console.error(error)
       }

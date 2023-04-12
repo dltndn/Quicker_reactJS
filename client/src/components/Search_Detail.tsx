@@ -6,22 +6,31 @@ import { useEffect } from "react";
 import { OrderObj } from "../pages/SearchPage";
 import { WriteTransactionToBlockchain } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderStore } from "../pages/commission";
+import Handler from "../lib/Handler";
+import { useAccount } from "wagmi";
 
 const money = require("../image/money.png");
 
 function Search_Detail() {
+  const navigator = useNavigate()
+  const { address } = useAccount()
   const { orders, showOrder } = useSearchState();
   const { setShowAllowance } = useOrderStore()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
-
+  
   // 수락하기 로직
   const acceptOrder = async () => {
     if (showOrder) {
       const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
       try {
         const data = await wttb.acceptOrder()
-        // db 배송원 매칭 로직 작성
+        console.log(order?.orderNum)
+        Handler.post({
+          orderId : order!.orderNum,
+          userWalletAddress : address
+        }, "http://localhost:9000/updateorder")
+        navigator("/")
       } catch(e) {
         if (e) {
           //@ts-ignore

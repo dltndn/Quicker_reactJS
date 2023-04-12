@@ -1,6 +1,6 @@
 import {
-User,
-    Transportation,
+  User,
+  Transportation,
   Sender,
   Recipient,
   Destination,
@@ -8,9 +8,10 @@ User,
   Product,
   Order,
 } from "./DB/init-models";
-
+const { Op } = require("sequelize");
 export = {
-  getRequests: () => {
+  getRequests: (userId : string) => {
+    console.log("USER_ID : ",userId)
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
@@ -19,6 +20,20 @@ export = {
       resolve(
         Order.findAll({
           attributes: ["id", "PAYMENT", "DETAIL"],
+          where: {
+            [Op.and]: [
+              {
+                ID_REQ: {
+                  [Op.ne]: userId,
+                },
+              },
+              {
+                ID_DVRY: {
+                  [Op.eq]: "",
+                },
+              },
+            ],
+          },
           include: [
             {
               model: Transportation,
@@ -52,10 +67,9 @@ export = {
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
-
     return new Promise((resolve, reject) => {
       resolve(
-        Order.findOne({
+        Order.findAll({
           where: { id: id },
           attributes: ["id", "DETAIL"],
           include: [
@@ -83,16 +97,16 @@ export = {
         })
       );
 
-      reject("fail");
+      reject( new Error ("message : fail"));
     });
   },
 
-  getUserId : (data : any) => {
+  getUserId : (userWalletAddress : string) => {
     return new Promise ((resolve, reject) => {
         resolve(
             User.findOne({
                 attributes : ['id'],
-                where: { wallet_address: data.userWalletAddress },
+                where: { wallet_address: userWalletAddress },
             })
         )
         reject("fail")
