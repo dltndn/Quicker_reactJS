@@ -39,4 +39,8 @@ export = {
       res.send("fail");
     }
   },
+
+  updateOrder: async (req: Request, res: Response) => {
+    const data = req.body.list;
+  },
 };

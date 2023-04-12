@@ -48,5 +48,7 @@ app.post("/getRequests", UserController.getRequests);
 app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
 app.post("/request", OrderController.request);
+app.post("/updateorder", OrderController.updateOrder);
+
 
 app.listen(port, () => {console.log(`App is listening on port ${port} !`);});
