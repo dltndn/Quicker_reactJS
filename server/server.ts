@@ -44,6 +44,8 @@ interface MessageObejct {
 app.get("/", AdminController.home);
 app.get("/deleteAssociateOrder",AdminController.deleteAssociateOrder);
 app.post("/deleteAssociateOrderProcess", AdminController.deleteAssociateOrderProcess);
+app.get("/deleteAssociateOrders",AdminController.deleteAssociateOrders);
+app.post("/deleteAssociateOrdersProcess", AdminController.deleteAssociateOrdersProcess);
 app.post("/getRequests", UserController.getRequests);
 app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
