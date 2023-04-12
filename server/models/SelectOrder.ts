@@ -1,6 +1,6 @@
 import {
-User,
-    Transportation,
+  User,
+  Transportation,
   Sender,
   Recipient,
   Destination,
@@ -67,10 +67,9 @@ export = {
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
-
     return new Promise((resolve, reject) => {
       resolve(
-        Order.findOne({
+        Order.findAll({
           where: { id: id },
           attributes: ["id", "DETAIL"],
           include: [

@@ -31,16 +31,10 @@ export = {
   },
 
   orderlist: async (req: Request, res: Response) => {
-    const id = parseInt(req.body.id);
-    
+    const data = req.body.list;
     try {
-      console.log(id)
-      // let instance = await SelectOrder.getOrderlist(id);
-      // console.log(id + "  ", JSON.stringify(instance, null, 2))
-      // console.log(instance !== null)
-      // if (instance === null) {
-      //   res.send(instance);
-      // }
+      let instance = await SelectOrder.getOrderlist(data);
+      res.send(instance)
     } catch {
       res.send("fail");
     }

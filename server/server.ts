@@ -15,6 +15,7 @@ const socketServer = io(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
+    credentials : true
   },
 });
 
