@@ -3,6 +3,7 @@ import SelectOrder from "../models/SelectOrder"
 import CreateOrder from "../models/CreateOrder"
 import sequelize from "../SequelizeConnector"
 import {initModels} from "../models/DB/init-models";
+import UpdateOrder from "../models/UpdateOrder";
 
 initModels(sequelize);
 
@@ -41,6 +42,15 @@ export = {
   },
 
   updateOrder: async (req: Request, res: Response) => {
-    const data = req.body.list;
+    const userWalletAddress = req.body.userWalletAddress;
+    const orderId = req.body.orderId;
+    const userId = await SelectOrder.getUserId(userWalletAddress);
+    try {
+      // @ts-ignore
+      await UpdateOrder.updateOrder(userId.dataValues.id, orderId)
+      return res.send({msg : "done"})
+    } catch {
+      return res.send({msg : "fail"})
+    }
   },
 };
