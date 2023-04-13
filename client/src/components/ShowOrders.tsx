@@ -45,6 +45,7 @@ const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
 }
 
 const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  console.log(index)
   let realdepartureAdress = await Kakao.reverseGeoCording(
     orderListInDBElement.Departure.Y,
     orderListInDBElement.Departure.X
@@ -53,10 +54,32 @@ const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any,
     orderListInDBElement.Destination.Y,
     orderListInDBElement.Destination.X
   );
-  // @ts-ignore
+  
   dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
-  // @ts-ignore
   dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
+
+  dataInBlockChain[index].realdepartureAdress.DETAIL = orderListInDBElement.Departure.DETAIL;
+  dataInBlockChain[index].realdestinationAdress.DETAIL = orderListInDBElement.Destination.DETAIL;
+}
+
+const setSender = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Sender = {}
+
+  dataInBlockChain[index].Sender.NAME = orderListInDBElement.Sender.NAME;
+  dataInBlockChain[index].Sender.PHONE = orderListInDBElement.Sender.PHONE;
+}
+
+const setRecipient = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Recipient = {}
+
+  dataInBlockChain[index].Recipient.NAME = orderListInDBElement.Recipient.NAME;
+  dataInBlockChain[index].Recipient.PHONE = orderListInDBElement.Recipient.PHONE;
+}
+
+const setDetail = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].DETAIL = {}
+
+  dataInBlockChain[index].DETAIL = orderListInDBElement.DETAIL;
 }
 
 // isClient ? (오더 내역):(수행 내역)
@@ -84,6 +107,14 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     }
   };
 
+  const conbineDBBlockChain = async (orderListInDBElement: any, dataInBlockChain: any, index: number) =>{
+    await setRealLocation(orderListInDBElement, dataInBlockChain, index)
+    setSender(orderListInDBElement, dataInBlockChain, index)
+    setRecipient(orderListInDBElement, dataInBlockChain, index)
+    setDetail(orderListInDBElement, dataInBlockChain, index)
+    console.log(dataInBlockChain)
+  }
+
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     const dataInBlockChain = await getOrders(orderNumList);
@@ -96,8 +127,9 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     // @ts-ignore
     for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
       for (const orderListInDBElement of orderListInDB) {
-        if (parseInt(BlockChainElement.orderNum) !== orderListInDBElement.id) break;
-        await setRealLocation(orderListInDBElement, dataInBlockChain, index)
+        if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
+          await conbineDBBlockChain(orderListInDBElement, dataInBlockChain, index);
+        }
       }
     }
     setOrdersObj(dataInBlockChain);
