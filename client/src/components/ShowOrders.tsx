@@ -45,14 +45,8 @@ const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
 }
 
 const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  let realdepartureAdress = await Kakao.reverseGeoCording(
-    orderListInDBElement.Departure.Y,
-    orderListInDBElement.Departure.X
-  );
-  let realdestinationAdress = await Kakao.reverseGeoCording(
-    orderListInDBElement.Destination.Y,
-    orderListInDBElement.Destination.X
-  );
+  let realdepartureAdress = await Kakao.reverseGeoCording(orderListInDBElement.Departure.Y, orderListInDBElement.Departure.X);
+  let realdestinationAdress = await Kakao.reverseGeoCording(orderListInDBElement.Destination.Y, orderListInDBElement.Destination.X);
   
   dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
   dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
@@ -62,22 +56,14 @@ const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any,
 }
 
 const setSender = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  dataInBlockChain[index].Sender = {}
-
-  dataInBlockChain[index].Sender.NAME = orderListInDBElement.Sender.NAME;
-  dataInBlockChain[index].Sender.PHONE = orderListInDBElement.Sender.PHONE;
+  dataInBlockChain[index].Sender = orderListInDBElement.Sender;
 }
 
 const setRecipient = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  dataInBlockChain[index].Recipient = {}
-
-  dataInBlockChain[index].Recipient.NAME = orderListInDBElement.Recipient.NAME;
-  dataInBlockChain[index].Recipient.PHONE = orderListInDBElement.Recipient.PHONE;
+  dataInBlockChain[index].Recipient = orderListInDBElement.Recipient;
 }
 
 const setDetail = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  dataInBlockChain[index].DETAIL = {}
-
   dataInBlockChain[index].DETAIL = orderListInDBElement.DETAIL;
 }
 
