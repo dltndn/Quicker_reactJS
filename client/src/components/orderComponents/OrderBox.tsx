@@ -234,7 +234,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Sp1>{
                       (order.DETAIL !== undefined) ? order.DETAIL : "없음"
                     }<br />
-                      <Sp3>60kg</Sp3>
+                      <Sp3>{
+                      (order.Product !== undefined) ? order.Product.WEIGHT : "없음"
+                    }kg</Sp3>
                     </Sp1>
                   </Div1>
                   <Hr />

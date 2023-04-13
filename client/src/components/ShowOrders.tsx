@@ -45,7 +45,6 @@ const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
 }
 
 const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  console.log(index)
   let realdepartureAdress = await Kakao.reverseGeoCording(
     orderListInDBElement.Departure.Y,
     orderListInDBElement.Departure.X
@@ -82,6 +81,11 @@ const setDetail = async (orderListInDBElement: any, dataInBlockChain: any, index
   dataInBlockChain[index].DETAIL = orderListInDBElement.DETAIL;
 }
 
+const setProduct = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Product = orderListInDBElement.Product;
+}
+
+
 // isClient ? (오더 내역):(수행 내역)
 export default function ShowOrders({ isClient }: ShowOrderProps) {
   const { address, isConnected } = useAccount();
@@ -112,7 +116,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     setSender(orderListInDBElement, dataInBlockChain, index)
     setRecipient(orderListInDBElement, dataInBlockChain, index)
     setDetail(orderListInDBElement, dataInBlockChain, index)
-    console.log(dataInBlockChain)
+    setProduct(orderListInDBElement, dataInBlockChain, index)
   }
 
   // orderNumList -> 오더번호
