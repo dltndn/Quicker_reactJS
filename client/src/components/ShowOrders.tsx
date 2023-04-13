@@ -126,22 +126,9 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   }
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
-    let cloneOrdersObj = ordersObj?.slice()
-    ordersObj?.map(async (element, index) => {
-        //@ts-ignore
-        if (element.orderNum === orderNum) {
-            let blockchainData = newOrder
-            if (cloneOrdersObj) {
-                //@ts-ignore
-                cloneOrdersObj[index] = blockchainData
-                console.log("새 데이터 주입 완료")
-                // 해당 오더 번호 db데이터 불러와서 적용
-            }
-        }
-    })
-    //@ts-ignore
-    if (cloneOrdersObj) {
-        setOrdersObj(cloneOrdersObj)
+    const orderNumList = await getOrderList(address, isClient);
+    if (orderNumList) {
+      getOrderObj(orderNumList);
     }
     setNewOrder(null)
   }
