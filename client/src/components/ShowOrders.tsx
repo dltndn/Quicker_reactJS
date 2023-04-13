@@ -36,6 +36,29 @@ interface ShowOrderProps {
   isClient: boolean;
 }
 
+const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
+  let list: any = []
+  dataInBlockChain.forEach((element: any) => {
+    list.push(parseInt(element.orderNum))
+  });
+  return list
+}
+
+const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  let realdepartureAdress = await Kakao.reverseGeoCording(
+    orderListInDBElement.Departure.Y,
+    orderListInDBElement.Departure.X
+  );
+  let realdestinationAdress = await Kakao.reverseGeoCording(
+    orderListInDBElement.Destination.Y,
+    orderListInDBElement.Destination.X
+  );
+  // @ts-ignore
+  dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
+  // @ts-ignore
+  dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
+}
+
 // isClient ? (오더 내역):(수행 내역)
 export default function ShowOrders({ isClient }: ShowOrderProps) {
   const { address, isConnected } = useAccount();
@@ -43,9 +66,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
   const [newOrder, setNewOrder] = useState<object | null>(null)
 
-  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } =
-    useOrderState();
-
+  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } = useOrderState();
   const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
     setOrder(order);
@@ -65,56 +86,21 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
-    // let result = [];
-    let dataInBlockChain = await getOrders(orderNumList);
-
-    const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
-      let list: any = []
-      dataInBlockChain.forEach((element: any) => {
-        list.push(parseInt(element.orderNum))
-      });
-      return list
-    }
+    const dataInBlockChain = await getOrders(orderNumList);
     const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain)
-
     let orderListInDB = await Handler.post(
       { list: intLisBlockChainId },
       "http://localhost:9000/orderlist"
     );
 
-    const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-      console.log(orderListInDBElement)
-      let realdepartureAdress = await Kakao.reverseGeoCording(
-        orderListInDBElement.Departure.Y,
-        orderListInDBElement.Departure.X
-      );
-      let realdestinationAdress = await Kakao.reverseGeoCording(
-        orderListInDBElement.Destination.Y,
-        orderListInDBElement.Destination.X
-      );
-      // @ts-ignore
-      dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
-      // @ts-ignore
-      dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
+    // @ts-ignore
+    for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
+      for (const orderListInDBElement of orderListInDB) {
+        if (parseInt(BlockChainElement.orderNum) !== orderListInDBElement.id) break;
+        await setRealLocation(orderListInDBElement, dataInBlockChain, index)
+      }
     }
-
-    if (dataInBlockChain !== null) {
-      (async () => {
-        for (let index = 0; index < dataInBlockChain.length; index++) {
-          const BlockChainElement = dataInBlockChain[index];
-
-          (async () => {
-            for (const orderListInDBElement of orderListInDB) {
-              if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
-                setRealLocation(orderListInDBElement, dataInBlockChain, index)
-              }
-            }
-          })()
-        }
-      })()
-      // @ts-ignore
-      setOrdersObj(dataInBlockChain);
-    }
+    setOrdersObj(dataInBlockChain);
   }
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
@@ -171,7 +157,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     if (ordersObj !== null) {
       setReversedOrders(ordersObj.slice().reverse());
     }
-    console.log(ordersObj)
   }, [ordersObj]);
 
   useEffect(() => {
