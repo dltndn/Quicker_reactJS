@@ -114,6 +114,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
       })()
       // @ts-ignore
       setOrdersObj(dataInBlockChain);
+      console.log(dataInBlockChain)
     }
   }
 
@@ -171,7 +172,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     if (ordersObj !== null) {
       setReversedOrders(ordersObj.slice().reverse());
     }
-    console.log(ordersObj)
   }, [ordersObj]);
 
   useEffect(() => {

@@ -21,7 +21,7 @@ function Search_Detail() {
   
   // 수락하기 로직
   const acceptOrder = async () => {
-    if (showOrder) {
+    if (showOrder !== undefined) {
       const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
       try {
         const data = await wttb.acceptOrder()
