@@ -36,6 +36,42 @@ interface ShowOrderProps {
   isClient: boolean;
 }
 
+const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
+  let list: any = []
+  dataInBlockChain.forEach((element: any) => {
+    list.push(parseInt(element.orderNum))
+  });
+  return list
+}
+
+const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  let realdepartureAdress = await Kakao.reverseGeoCording(orderListInDBElement.Departure.Y, orderListInDBElement.Departure.X);
+  let realdestinationAdress = await Kakao.reverseGeoCording(orderListInDBElement.Destination.Y, orderListInDBElement.Destination.X);
+  
+  dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
+  dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
+
+  dataInBlockChain[index].realdepartureAdress.DETAIL = orderListInDBElement.Departure.DETAIL;
+  dataInBlockChain[index].realdestinationAdress.DETAIL = orderListInDBElement.Destination.DETAIL;
+}
+
+const setSender = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Sender = orderListInDBElement.Sender;
+}
+
+const setRecipient = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Recipient = orderListInDBElement.Recipient;
+}
+
+const setDetail = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].DETAIL = orderListInDBElement.DETAIL;
+}
+
+const setProduct = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+  dataInBlockChain[index].Product = orderListInDBElement.Product;
+}
+
+
 // isClient ? (오더 내역):(수행 내역)
 export default function ShowOrders({ isClient }: ShowOrderProps) {
   const { address, isConnected } = useAccount();
@@ -43,9 +79,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
   const [newOrder, setNewOrder] = useState<object | null>(null)
 
-  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } =
-    useOrderState();
-
+  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } = useOrderState();
   const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
     setOrder(order);
@@ -63,59 +97,32 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     }
   };
 
+  const conbineDBBlockChain = async (orderListInDBElement: any, dataInBlockChain: any, index: number) =>{
+    await setRealLocation(orderListInDBElement, dataInBlockChain, index)
+    setSender(orderListInDBElement, dataInBlockChain, index)
+    setRecipient(orderListInDBElement, dataInBlockChain, index)
+    setDetail(orderListInDBElement, dataInBlockChain, index)
+    setProduct(orderListInDBElement, dataInBlockChain, index)
+  }
+
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
-    // let result = [];
-    let dataInBlockChain = await getOrders(orderNumList);
-
-    const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
-      let list: any = []
-      dataInBlockChain.forEach((element: any) => {
-        list.push(parseInt(element.orderNum))
-      });
-      return list
-    }
+    const dataInBlockChain = await getOrders(orderNumList);
     const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain)
-
     let orderListInDB = await Handler.post(
       { list: intLisBlockChainId },
       "http://localhost:9000/orderlist"
     );
 
-    const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-      console.log(orderListInDBElement)
-      let realdepartureAdress = await Kakao.reverseGeoCording(
-        orderListInDBElement.Departure.Y,
-        orderListInDBElement.Departure.X
-      );
-      let realdestinationAdress = await Kakao.reverseGeoCording(
-        orderListInDBElement.Destination.Y,
-        orderListInDBElement.Destination.X
-      );
-      // @ts-ignore
-      dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
-      // @ts-ignore
-      dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
-    }
-
-    if (dataInBlockChain !== null) {
-      (async () => {
-        for (let index = 0; index < dataInBlockChain.length; index++) {
-          const BlockChainElement = dataInBlockChain[index];
-
-          (async () => {
-            for (const orderListInDBElement of orderListInDB) {
-              if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
-                setRealLocation(orderListInDBElement, dataInBlockChain, index)
-              }
-            }
-          })()
+    // @ts-ignore
+    for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
+      for (const orderListInDBElement of orderListInDB) {
+        if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
+          await conbineDBBlockChain(orderListInDBElement, dataInBlockChain, index);
         }
-      })()
-      // @ts-ignore
-      setOrdersObj(dataInBlockChain);
-      console.log(dataInBlockChain)
+      }
     }
+    setOrdersObj(dataInBlockChain);
   }
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
@@ -205,7 +212,10 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         )
       ) : (
         reversedOrders.map((value) => (
-          <Sc0 onClick={() => handleOpenModal(value)}>
+          <Sc0 onClick={() => {  
+            // @ts-ignore
+            (value.Product !== undefined) ? handleOpenModal(value) : alert("db정보 없음")
+          }}>
             <OrderBox orderObj={value} isClient={isClient} />
           </Sc0>
         ))

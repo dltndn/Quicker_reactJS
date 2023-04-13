@@ -199,34 +199,44 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>출발지</Sp2>
-                    <Sp1>
-                      김포시 김포대로 926번길 46
-                      <br />
-                      <Sp3>주소 세부사항</Sp3>
+                    <Sp1>{
+                      (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.address_name : "없음"
+                    }<br />
+                      <Sp3>{
+                        (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.DETAIL : "없음"
+                      }</Sp3>
                     </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>발송인</Sp2>
-                    <Sp1>발송인</Sp1>
+                    <Sp1>{
+                      (order.Sender.NAME !== undefined) ? order.Sender.NAME : "없음"
+                    }</Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>도착지</Sp2>
-                    <Sp1>
-                      김포시 김포대로 926번길 46
-                      <br />
-                      <Sp3>주소 세부사항</Sp3>
+                    <Sp1>{
+                      (order.realdestinationAdress.address_name !== undefined) ? order.realdestinationAdress.address_name : "없음"
+                    }<br />
+                      <Sp3>{
+                        (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.DETAIL : "없음"
+                      }</Sp3>
                     </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>수령인</Sp2>
-                    <Sp1>이름</Sp1>
+                    <Sp1>{
+                      (order.Recipient.NAME !== undefined) ? order.Recipient.NAME : "없음"
+                    }</Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>
-                      포카칩 5봉지
-                      <br />
-                      <Sp3>60kg</Sp3>
+                    <Sp1>{
+                      (order.DETAIL !== undefined) ? order.DETAIL : "없음"
+                    }<br />
+                      <Sp3>{
+                      (order.Product !== undefined) ? order.Product.WEIGHT : "없음"
+                    }kg</Sp3>
                     </Sp1>
                   </Div1>
                   <Hr />
@@ -252,10 +262,12 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>출발지</Sp2>
-                    <Sp1>
-                      김포시 김포대로 926번길 46
-                      <br />
-                      <Sp3>주소 세부사항</Sp3>
+                    <Sp1>{
+                      (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.address_name : "없음"
+                    }<br />
+                      <Sp3>{
+                        (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.DETAIL : "없음"
+                        }</Sp3>
                     </Sp1>
                     <Ic>
                       <BsStickies />
@@ -263,11 +275,15 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>발송인</Sp2>
-                    <Sp1>이름</Sp1>
+                    <Sp1>{
+                      (order.Sender.NAME !== undefined) ? order.Sender.NAME : "없음"
+                    }</Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>연락처</Sp2>
-                    <Sp1>0505-0987-XXXX</Sp1>
+                    <Sp1>{
+                      (order.Sender.PHONE !== undefined) ? order.Sender.PHONE : "없음"
+                    }</Sp1>
                     <Ic>
                       <BsStickies />
                     </Ic>
@@ -275,10 +291,12 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>도착지</Sp2>
-                    <Sp1>
-                      김포시 김포대로 926번길 46
-                      <br />
-                      <Sp3>주소 세부사항</Sp3>
+                    <Sp1>{
+                      (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.address_name : "없음"
+                    }<br />
+                      <Sp3>{
+                        (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.DETAIL : "없음"
+                        }</Sp3>
                     </Sp1>
                     <Ic>
                       <BsStickies />
@@ -286,11 +304,15 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>수령인</Sp2>
-                    <Sp1>이름</Sp1>
+                    <Sp1>{
+                      (order.Recipient.NAME !== undefined) ? order.Recipient.NAME : "없음"
+                    }</Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>연락처</Sp2>
-                    <Sp1>0505-0987-XXXX</Sp1>
+                    <Sp1>{
+                      (order.Recipient.PHONE !== undefined) ? order.Recipient.PHONE : "없음"
+                    }</Sp1>
                     <Ic>
                       <BsStickies />
                     </Ic>
@@ -298,9 +320,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>
-                      포카칩 5봉지
-                      <br />
+                    <Sp1>{
+                      (order.DETAIL !== undefined) ? order.DETAIL : "없음"
+                    }<br />
                       <Sp3>60kg</Sp3>
                     </Sp1>
                   </Div1>

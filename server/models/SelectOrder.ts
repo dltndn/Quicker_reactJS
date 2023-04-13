@@ -67,6 +67,7 @@ export = {
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
+    Order.hasOne(Product, {foreignKey: "id"})
     return new Promise((resolve, reject) => {
       resolve(
         Order.findAll({
@@ -90,6 +91,11 @@ export = {
             },
             {
               model: Sender,
+              attributes: { exclude: ["ID", "id"] },
+              required: false,
+            },
+            {
+              model: Product,
               attributes: { exclude: ["ID", "id"] },
               required: false,
             },
