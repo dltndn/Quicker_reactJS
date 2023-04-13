@@ -11,6 +11,7 @@ import {
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import Handler from "../../lib/Handler";
 import Kakao from "../../lib/Kakao";
+import loader from "../animation/loader.gif"
 
 interface OrderState {
   Order: object | null;
@@ -132,7 +133,7 @@ function Orderlist() {
         isEmptyOrder ? (
           <Div0>오더 내역이 없습니다</Div0>
         ) : (
-          <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
+          <Div0>asdfasdf</Div0>
         )
       ) : (
         reversedOrders.map((value) => (
@@ -170,7 +171,7 @@ const OrderBox = ({ orderObj }: any) => {
     <>
       {orderObj === undefined ? (
         <>
-          <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
+          <Div0></Div0>
         </>
       ) : (
         <>
@@ -197,6 +198,10 @@ const OrderBox = ({ orderObj }: any) => {
     </>
   );
 };
+
+const Img1 = styled.img`
+    width: 55%;
+`;
 
 const SelectInput = styled.select`
   width: 6rem;
