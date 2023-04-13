@@ -100,17 +100,4 @@ export = {
       reject( new Error ("message : fail"));
     });
   },
-
-  getUserId : (userWalletAddress : string) => {
-    return new Promise ((resolve, reject) => {
-        resolve(
-            User.findOne({
-                attributes : ['id'],
-                where: { wallet_address: userWalletAddress },
-            })
-        )
-        reject("fail")
-    })
-  }
-  
 };
