@@ -39,7 +39,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
           {isClient ? (
             <>
               <Div0>
-                <Sp0>접수 중</Sp0>
+                <Sp0>접수중</Sp0>
                 <Sp1>{formatedDate(orderObj.createdTime)}</Sp1>
                 <ViewState orderObj={orderObj} isClient={isClient} />
               </Div0>
@@ -243,7 +243,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
               ) : (
                 <>
                   <Div0>
-                    <Sp0>접수 중</Sp0>
+                    <Sp0>세부 정보</Sp0>
                   </Div0>
                   <Div1>
                     <Sp2>배송 기한</Sp2>
@@ -347,7 +347,6 @@ interface BottomBtnProps {
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
-  const [iscomplete, setIscomplete] = useState<boolean>(false);
   const wttb = new WriteTransactionToBlockchain(order.orderNum);
   const { setOrder, setIsModalOpen, setReloadOrderNum } = useOrderState();
 

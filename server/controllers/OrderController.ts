@@ -13,10 +13,15 @@ export = {
   request: async (req: Request, res: Response) => {
     try {
       const data = req.body;
-      console.log(data)
+      console.log("data: ", data)
       // 사용자의 아이디를 찾아서 ID_REQ에 집어 넣어야함
+<<<<<<< HEAD
       let userId = await SelectUser.getUserId(data.userWalletAddress);
       console.log(userId)
+=======
+      let userId = await SelectOrder.getUserId(data.userWalletAddress);
+      console.log("userId: ", userId)
+>>>>>>> 9f5aea92e3cf96abe18278c4c640371cbac4eb9a
       if (userId) {
         // @ts-ignore
         data.Order.ID_REQ = userId.dataValues.id;
