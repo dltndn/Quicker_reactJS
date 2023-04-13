@@ -3,6 +3,7 @@ import SelectOrder = require("../models/SelectOrder");
 import CreateUser = require("../models/CreateUser");
 import sequelize from "../SequelizeConnector"
 import {initModels} from "../models/DB/init-models";
+import SelectUser = require("../models/SelectUser");
 
 initModels(sequelize);
 const crypto = require("crypto");
@@ -13,7 +14,7 @@ export = {
   getRequests: async (req: Request, res: Response) => {
     const userWalletAdress =  req.body.userWalletAdress
     console.log("USER_WALLET_ADRESS : ", userWalletAdress)
-    const userId = await SelectOrder.getUserId(userWalletAdress)
+    const userId = await SelectUser.getUserId(userWalletAdress)
     
     try {
       // @ts-ignore

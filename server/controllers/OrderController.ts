@@ -4,6 +4,8 @@ import CreateOrder from "../models/CreateOrder"
 import sequelize from "../SequelizeConnector"
 import {initModels} from "../models/DB/init-models";
 import UpdateOrder from "../models/UpdateOrder";
+import CreateChatRoom from "../models/CreateChatRoom";
+import SelectUser = require("../models/SelectUser");
 
 initModels(sequelize);
 
@@ -13,8 +15,13 @@ export = {
       const data = req.body;
       console.log("data: ", data)
       // 사용자의 아이디를 찾아서 ID_REQ에 집어 넣어야함
+<<<<<<< HEAD
+      let userId = await SelectUser.getUserId(data.userWalletAddress);
+      console.log(userId)
+=======
       let userId = await SelectOrder.getUserId(data.userWalletAddress);
       console.log("userId: ", userId)
+>>>>>>> 9f5aea92e3cf96abe18278c4c640371cbac4eb9a
       if (userId) {
         // @ts-ignore
         data.Order.ID_REQ = userId.dataValues.id;
@@ -44,10 +51,14 @@ export = {
   updateOrder: async (req: Request, res: Response) => {
     const userWalletAddress = req.body.userWalletAddress;
     const orderId = req.body.orderId;
-    const userId = await SelectOrder.getUserId(userWalletAddress);
+    const deliver = await SelectUser.getUserId(userWalletAddress);
     try {
       // @ts-ignore
-      await UpdateOrder.updateOrder(userId.dataValues.id, orderId)
+      await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
+      // @ts-ignore
+      let requesterId = await SelectUser.getRequesterId(orderId);
+      // @ts-ignore
+      await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.id)
       return res.send({msg : "done"})
     } catch {
       return res.send({msg : "fail"})
