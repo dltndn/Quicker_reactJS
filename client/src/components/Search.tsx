@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useSearchState } from "../pages/SearchPage";
 
@@ -6,19 +6,34 @@ interface Props {
   clickOrder: (index: number) => void;
 }
 
+
 type AccordionProps = {
   isOpen: boolean;
 };
 
+const AccordionWrapper = styled.div<AccordionProps>`
+  overflow: hidden;
+  max-height: ${(props) => (props.isOpen ? "100vh" : "0")};
+  transition: max-height 0.5s ease-in-out;
+`;
+
 function Search({ clickOrder }: Props) {
   const { orders } = useSearchState();
   const [isOpen, setIsOpen] = useState(false);
+  const accordionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      accordionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isOpen]);
+
 
   return (
     <>
       <Se0>
         <Hr0 onClick={() => setIsOpen(!isOpen)} />
-        <Accordion isOpen={isOpen}>
+        <AccordionWrapper isOpen={isOpen} ref={accordionRef}>
           <Div0>
             <Div0_1>전체</Div0_1>
             <Div0_1>도보</Div0_1>
@@ -60,7 +75,7 @@ function Search({ clickOrder }: Props) {
           ) : (
             <>데이터를 조회중입니다...</>
           )}
-        </Accordion>
+        </AccordionWrapper>
       </Se0>
     </>
   );
@@ -68,9 +83,6 @@ function Search({ clickOrder }: Props) {
 
 export default Search;
 
-const Accordion = styled.div<AccordionProps>`
-  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-`;
 
 const Se0 = styled.section`
   position: fixed;
