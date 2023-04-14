@@ -41,7 +41,7 @@ const Tmap = ({states, containerId }: props) => {
     useEffect(() => {
         if (isPosition(states.startPosition) && isPosition(states.arrivePosition)) {
             // @ts-ignore
-            let centerLatLng = Map.LatLng((startPosition.latitude + arrivePosition.latitude) / 2, (arrivePosition.longitude + startPosition.longitude) / 2)
+            let centerLatLng = Map.LatLng((states.startPosition.latitude + states.arrivePosition.latitude) / 2, (states.arrivePosition.longitude + states.startPosition.longitude) / 2)
             // @ts-ignore
             Map.autoZoom(map, centerLatLng, startMarker.getPosition(), arriveMarker.getPosition())
             // @ts-ignore
