@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
 import { getOrderList, getOrders, getOrder } from "../utils/ExecuteOrderFromBlockchain";
@@ -7,8 +7,10 @@ import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";
 import { OrderBox, OrderModal } from "./orderComponents/OrderBox";
+import Loading from "./animation/ready.gif";
 
 import money from "../image/money.png";
+
 
 interface OrderState {
   order: object | null;
@@ -172,7 +174,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     getOrderListFromBlochain();
   }, [isClient]);
 
-
   return (
     <>
       <SelectionTags />
@@ -195,7 +196,8 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         isEmptyOrder ? (
           <Div0>오더 내역이 없습니다</Div0>
         ) : (
-          <Div0>블록체인에서 데이터를 가져오고 있어요</Div0>
+          <Div0><Divimg><LoadingImg src={Loading}/></Divimg></Div0>
+
         )
       ) : (
         reversedOrders.map((value) => (
@@ -315,4 +317,16 @@ const Bticon = styled.button`
 
 const Bticonimg = styled.img`
     width: 1.875rem;
+`;
+
+const Divimg = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%
+`;
+
+const LoadingImg = styled.img`
+    width: 300px;
+
+    margin-top: 200px;
 `;
