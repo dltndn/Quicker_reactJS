@@ -189,7 +189,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const {setOrderId, orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+  const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
   
   const [arrivePosition, setArrivePosition] = useState({})
   const [startPosition, setStartPosition] = useState({})
