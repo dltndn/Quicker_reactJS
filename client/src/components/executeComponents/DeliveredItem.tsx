@@ -4,6 +4,7 @@ import { useExecutionState } from "../../pages/ExecutionPage";
 import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
+import CompletedDelivery from "./CompletedDelivery";
 
 const Div0 = styled.div`
     display: flex;
@@ -37,7 +38,7 @@ export default function DeliveredItem() {
     const { setTitle, setShowComponent } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
     const deliveredRogic = () => {
-
+        setShowComponent(<CompletedDelivery />)
     }
 
     useEffect(() => {

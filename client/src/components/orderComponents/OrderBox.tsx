@@ -10,6 +10,7 @@ import {
   formatedDateYMD,
 } from "../../utils/ConvertTimestampToDate";
 import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 interface OrderBoxProps {
   orderObj: any;
@@ -45,15 +46,19 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               </Div0>
               <Div1>
                 <Sp2>출발지</Sp2>
-                <Sp1>{
-                  (orderObj.realdepartureAdress !== undefined) ? orderObj.realdepartureAdress.address_name : "없음"
-                }</Sp1>
+                <Sp1>
+                  {orderObj.realdepartureAdress !== undefined
+                    ? orderObj.realdepartureAdress.address_name
+                    : "없음"}
+                </Sp1>
               </Div1>
               <Div1>
                 <Sp2>도착지</Sp2>
-                <Sp1>{
-                  (orderObj.realdestinationAdress !== undefined) ? orderObj.realdestinationAdress.address_name : "없음"
-                }</Sp1>
+                <Sp1>
+                  {orderObj.realdestinationAdress !== undefined
+                    ? orderObj.realdestinationAdress.address_name
+                    : "없음"}
+                </Sp1>
               </Div1>
               <Div1>
                 <Sp2>금액</Sp2>
@@ -68,9 +73,11 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
                 <ViewState orderObj={orderObj} isClient={isClient} />
               </Div0>
               <Div1>
-                <Sp2>{
-                  (orderObj.realdepartureAdress !== undefined) ? orderObj.realdepartureAdress.address_name : "없음"
-                }</Sp2>
+                <Sp2>
+                  {orderObj.realdepartureAdress !== undefined
+                    ? orderObj.realdepartureAdress.address_name
+                    : "없음"}
+                </Sp2>
               </Div1>
               <DivBs>
                 <BsFillCircleFill />
@@ -78,9 +85,11 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
                 <BsFillCircleFill />
               </DivBs>
               <Div1>
-                <Sp2>{
-                  (orderObj.realdestinationAdress !== undefined) ? orderObj.realdestinationAdress.address_name : "없음"
-                }</Sp2>
+                <Sp2>
+                  {orderObj.realdestinationAdress !== undefined
+                    ? orderObj.realdestinationAdress.address_name
+                    : "없음"}
+                </Sp2>
               </Div1>
               <Div1>
                 <Spsc0>수익</Spsc0>
@@ -199,44 +208,59 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>출발지</Sp2>
-                    <Sp1>{
-                      (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.address_name : "없음"
-                    }<br />
-                      <Sp3>{
-                        (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.DETAIL : "없음"
-                      }</Sp3>
+                    <Sp1>
+                      {order.realdepartureAdress !== undefined
+                        ? order.realdepartureAdress.address_name
+                        : "없음"}
+                      <br />
+                      <Sp3>
+                        {order.realdepartureAdress !== undefined
+                          ? order.realdepartureAdress.DETAIL
+                          : "없음"}
+                      </Sp3>
                     </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>발송인</Sp2>
-                    <Sp1>{
-                      (order.Sender.NAME !== undefined) ? order.Sender.NAME : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Sender.NAME !== undefined
+                        ? order.Sender.NAME
+                        : "없음"}
+                    </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>도착지</Sp2>
-                    <Sp1>{
-                      (order.realdestinationAdress.address_name !== undefined) ? order.realdestinationAdress.address_name : "없음"
-                    }<br />
-                      <Sp3>{
-                        (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.DETAIL : "없음"
-                      }</Sp3>
+                    <Sp1>
+                      {order.realdestinationAdress.address_name !== undefined
+                        ? order.realdestinationAdress.address_name
+                        : "없음"}
+                      <br />
+                      <Sp3>
+                        {order.realdestinationAdress !== undefined
+                          ? order.realdestinationAdress.DETAIL
+                          : "없음"}
+                      </Sp3>
                     </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>수령인</Sp2>
-                    <Sp1>{
-                      (order.Recipient.NAME !== undefined) ? order.Recipient.NAME : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Recipient.NAME !== undefined
+                        ? order.Recipient.NAME
+                        : "없음"}
+                    </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>{
-                      (order.DETAIL !== undefined) ? order.DETAIL : "없음"
-                    }<br />
-                      <Sp3>{
-                      (order.Product !== undefined) ? order.Product.WEIGHT : "없음"
-                    }kg</Sp3>
+                    <Sp1>
+                      {order.DETAIL !== undefined ? order.DETAIL : "없음"}
+                      <br />
+                      <Sp3>
+                        {order.Product !== undefined
+                          ? order.Product.WEIGHT
+                          : "없음"}
+                        kg
+                      </Sp3>
                     </Sp1>
                   </Div1>
                   <Hr />
@@ -262,12 +286,16 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>출발지</Sp2>
-                    <Sp1>{
-                      (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.address_name : "없음"
-                    }<br />
-                      <Sp3>{
-                        (order.realdepartureAdress !== undefined) ? order.realdepartureAdress.DETAIL : "없음"
-                        }</Sp3>
+                    <Sp1>
+                      {order.realdepartureAdress !== undefined
+                        ? order.realdepartureAdress.address_name
+                        : "없음"}
+                      <br />
+                      <Sp3>
+                        {order.realdepartureAdress !== undefined
+                          ? order.realdepartureAdress.DETAIL
+                          : "없음"}
+                      </Sp3>
                     </Sp1>
                     <Ic>
                       <BsStickies />
@@ -275,15 +303,19 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>발송인</Sp2>
-                    <Sp1>{
-                      (order.Sender.NAME !== undefined) ? order.Sender.NAME : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Sender.NAME !== undefined
+                        ? order.Sender.NAME
+                        : "없음"}
+                    </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>연락처</Sp2>
-                    <Sp1>{
-                      (order.Sender.PHONE !== undefined) ? order.Sender.PHONE : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Sender.PHONE !== undefined
+                        ? order.Sender.PHONE
+                        : "없음"}
+                    </Sp1>
                     <Ic>
                       <BsStickies />
                     </Ic>
@@ -291,12 +323,16 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>도착지</Sp2>
-                    <Sp1>{
-                      (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.address_name : "없음"
-                    }<br />
-                      <Sp3>{
-                        (order.realdestinationAdress !== undefined) ? order.realdestinationAdress.DETAIL : "없음"
-                        }</Sp3>
+                    <Sp1>
+                      {order.realdestinationAdress !== undefined
+                        ? order.realdestinationAdress.address_name
+                        : "없음"}
+                      <br />
+                      <Sp3>
+                        {order.realdestinationAdress !== undefined
+                          ? order.realdestinationAdress.DETAIL
+                          : "없음"}
+                      </Sp3>
                     </Sp1>
                     <Ic>
                       <BsStickies />
@@ -304,15 +340,19 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Div1>
                   <Div1>
                     <Sp2>수령인</Sp2>
-                    <Sp1>{
-                      (order.Recipient.NAME !== undefined) ? order.Recipient.NAME : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Recipient.NAME !== undefined
+                        ? order.Recipient.NAME
+                        : "없음"}
+                    </Sp1>
                   </Div1>
                   <Div1>
                     <Sp2>연락처</Sp2>
-                    <Sp1>{
-                      (order.Recipient.PHONE !== undefined) ? order.Recipient.PHONE : "없음"
-                    }</Sp1>
+                    <Sp1>
+                      {order.Recipient.PHONE !== undefined
+                        ? order.Recipient.PHONE
+                        : "없음"}
+                    </Sp1>
                     <Ic>
                       <BsStickies />
                     </Ic>
@@ -320,9 +360,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Hr />
                   <Div1>
                     <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>{
-                      (order.DETAIL !== undefined) ? order.DETAIL : "없음"
-                    }<br />
+                    <Sp1>
+                      {order.DETAIL !== undefined ? order.DETAIL : "없음"}
+                      <br />
                       <Sp3>60kg</Sp3>
                     </Sp1>
                   </Div1>
@@ -331,7 +371,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Sp4>수익</Sp4>
                     <Sp5>{income}</Sp5>
                   </Div1>
-                  <Button>배송 현황 확인(Quicker 버전)</Button>
+                  <QuickerBottomBtn />
                 </>
               )}
             </>
@@ -381,7 +421,7 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
     const result = await wttb.cancelOrder();
     console.log(result);
     setReloadOrderNum(order.orderNum);
-    closeModal()
+    closeModal();
   };
   // 배송 현황 확인 로직
   const acceptLogic = () => {
@@ -390,11 +430,11 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
   };
   // 거래 확인 로직
   const completeLogic = async () => {
-    closeModal()
+    closeModal();
   };
   // 실패 사유 확인 로직
   const failLogic = async () => {
-    console.log("실패 사유 확인 로직")
+    console.log("실패 사유 확인 로직");
     // 배송 결과 페이지 리다이렉트
   };
   // 다시 의뢰하기 로직
@@ -415,6 +455,39 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
       return <Button onClick={() => cancelLogic()}>다시 의뢰하기</Button>;
     default:
       return <Button onClick={() => cancelLogic()}>주문 취소</Button>;
+  }
+};
+
+const QuickerBottomBtn = ({ order }: any) => {
+  const navigate = useNavigate();
+  const { setOrder, setIsModalOpen } = useOrderState();
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setOrder(null);
+  };
+
+  const acceptLogic = () => {
+    closeModal();
+    navigate("/execution");
+  };
+
+  // 배송원 정산 진행 ? (모달닫기):(수행내역 이동)
+  const completeLogic = () => {
+    // 정산 여부 확인 함수 boolean 타입 리턴
+    if (true) {
+      closeModal(); // 정산 완료
+    } else {
+      navigate("/execution"); // 정산하는 창으로 리다이렉트
+    }
+  };
+  switch (order?.state) {
+    case "completed":
+      return <Button onClick={() => completeLogic()}>수행완료</Button>;
+    case "failed":
+      return <Button onClick={() => closeModal()}>확인</Button>;
+    default:
+      return <Button onClick={() => acceptLogic()}>수행 현황</Button>;
   }
 };
 
