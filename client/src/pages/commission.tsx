@@ -189,6 +189,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
+  const { title, setTitle, setDeadLine } = useOrderStore()
   const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
 
 

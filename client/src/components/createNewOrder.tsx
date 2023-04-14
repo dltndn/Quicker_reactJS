@@ -117,7 +117,6 @@ export default function CreateNewOrder({
 
   useEffect(() => {
     getLastOrderFromBlochain()
-    console.log("한 번만 실행하는 라스트 오더: " + lastOrder)
   }, [])
 
   useEffect(() => {
