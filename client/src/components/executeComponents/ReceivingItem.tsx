@@ -1,6 +1,8 @@
 import ConfirmBtn from "../confirmBtn"
 import styled from "styled-components";
 import ready from "../animation/ready.gif"
+import { useExecutionState } from "../../pages/ExecutionPage";
+import DeliveredItem from "./DeliveredItem";
 
 const Div0 = styled.div`
     display: flex;
@@ -33,8 +35,9 @@ const Ready = styled.img`
     width: 40%;
 `;
 export default function ReceivingItem() {
+    const { setTitle, setShowComponent } = useExecutionState()
     const receivedRogic = () => {
-
+        setShowComponent(<DeliveredItem />)
     }
     return(
         <>

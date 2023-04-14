@@ -36,7 +36,7 @@ export const useOrderStore = create<OrderState>((set) => ({
   setTitle: (title: string) => set({title}),
   btnContent: "결제하기",
   setBtnContent: (btnContent: string) => set({btnContent}),
-  deadLine: "1682562868", //임시
+  deadLine: "1869353472", //2029년
   setDeadLine: (deadLine: string) => set({deadLine}),
   showAllowance: false,
   setShowAllowance: (showAllowance:boolean) => set({showAllowance}),
@@ -82,13 +82,13 @@ interface useOrderDataStore {
   weight: number;
   setWeight: (value: number) => void;
 
-  AMPM: string;
+  AMPM: string | null;
   setAMPM: (value: string) => void;
-  date: string;
+  date: string | null;
   setDate: (value: string) => void;
-  hour: number;
+  hour: number | null;
   setHour: (value: number) => void;
-  minute: number;
+  minute: number | null;
   setMinute: (value: number) => void;
 
   details: string;
@@ -135,13 +135,13 @@ export const useOrderDataStore = create<useOrderDataStore>(set => ({
   weight: 0,
   setWeight: (weight: number) => set({ weight }),
 
-  AMPM: "",
+  AMPM: "오전",
   setAMPM: (AMPM: string) => set({ AMPM }),
-  date: "",
+  date: null,
   setDate: (date: string) => set({ date }),
-  hour: 0,
+  hour: null,
   setHour: (hour: number) => set({ hour }),
-  minute: 0,
+  minute: null,
   setMinute: (minute: number) => set({ minute }),
 
   details: "",
@@ -190,17 +190,18 @@ export default function CommissionPage() {
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
   const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+
+
   
   const [arrivePosition, setArrivePosition] = useState({})
   const [startPosition, setStartPosition] = useState({})
-  const fn = () =>{
-    console.log(AMPM, date, hour, minute)
+
+  const setDeadlineToProp = () => {
+    if (date !== null && AMPM !== null && hour !== null && minute !== null) {
+      const timeStamp = Time.parseTimeStamp(date , AMPM , hour , minute).toString()
+      setDeadLine(timeStamp)
+    }
   }
-
-  // NOTE : 타임 스탬프 구하는 함수 
-  let timeStamp = Time.parseTimeStamp(date , AMPM , hour , minute)
-  
-
 
   const forSendData = {
     userWalletAddress : address,
@@ -257,8 +258,6 @@ export default function CommissionPage() {
     }
   }
 
-  const { title, setTitle } = useOrderStore()
-
   const pageBack = () => {
     if (title === "출발지 입력") {
       navigate("/");
@@ -285,6 +284,9 @@ export default function CommissionPage() {
     setShowCommissionPage(false);
   };
 
+  useEffect(() => {
+    setDeadlineToProp()
+  }, [date, AMPM, hour, minute])
   return (
     <>
     <GlobalStyle/>

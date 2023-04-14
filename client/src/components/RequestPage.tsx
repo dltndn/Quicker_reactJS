@@ -25,7 +25,7 @@ function RequestPage({sendData} : props) {
           <CreateNewOrder
             data={sendData}
             _orderPrice={cost.toString()}
-            _deadLine={deadLine}
+            _deadline={deadLine}
             />
         </div>
       )}

@@ -17,7 +17,7 @@ const Quicker_address = QUICKER_ADDRESS;
 interface Props {
   data: object;
   _orderPrice: string;
-  _deadLine: string;
+  _deadline: string;
 }
 
 interface ErrorProps {
@@ -27,7 +27,7 @@ interface ErrorProps {
 export default function CreateNewOrder({
   data,
   _orderPrice,
-  _deadLine,
+  _deadline
 }: Props) {
   const {
     btnContent,
@@ -37,6 +37,7 @@ export default function CreateNewOrder({
     setCreatedOrderNum,
     setErrorMessage,
     cost,
+    deadLine
   } = useOrderStore();
   const [lastOrder, setLastOrder] = useState<string>("")
   const { address } = useAccount();
@@ -47,7 +48,7 @@ export default function CreateNewOrder({
     address: Quicker_address,
     abi: Quicker_abi,
     functionName: "createOrder",
-    args: [_orderPrice, _deadLine],
+    args: [_orderPrice, _deadline],
     onSettled(data: any, error: any) {
       if (error) {
         let result: ErrorProps = JSON.parse(JSON.stringify(error));
@@ -85,6 +86,7 @@ export default function CreateNewOrder({
   });
 
   const writeContract = async () => {
+
     // 토큰 사용 권한 체크 로직
     const allowanceData: any = await getAllowance(address);
     if (allowanceData._hex === "0x00") {
@@ -152,6 +154,10 @@ export default function CreateNewOrder({
   useEffect(() => {
     setErrorMessage("")
   }, [cost])
+
+  useEffect(() => {
+    setErrorMessage("")
+  }, [deadLine])
 
 
   return (

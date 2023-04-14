@@ -72,6 +72,7 @@
     ]
   },
   "devDependencies": {
+    "@types/dropzone": "^5.7.4",
     "@types/node": "^18.14.1",
     "@types/react-modal": "^3.13.1",
     "@types/styled-components": "^5.1.26",
