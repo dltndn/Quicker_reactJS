@@ -7,7 +7,7 @@ import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";
 import { OrderBox, OrderModal } from "./orderComponents/OrderBox";
-import Loading from "./animation/loading.gif";
+import Loading from "./animation/ready.gif";
 
 import money from "../image/money.png";
 
@@ -196,7 +196,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         isEmptyOrder ? (
           <Div0>오더 내역이 없습니다</Div0>
         ) : (
-          <Div0><LoadingImg src={Loading}/></Div0>
+          <Div0><Divimg><LoadingImg src={Loading}/></Divimg></Div0>
 
         )
       ) : (
@@ -319,7 +319,14 @@ const Bticonimg = styled.img`
     width: 1.875rem;
 `;
 
+const Divimg = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%
+`;
+
 const LoadingImg = styled.img`
-    width: 100px;
-    height: 100px;
+    width: 300px;
+
+    margin-top: 200px;
 `;
