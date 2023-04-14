@@ -11,7 +11,6 @@ interface props {
 
 function RequestPage({sendData} : props) {
   const { cost, setBtnContent, deadLine, showAllowance } = useOrderStore()
-  const {setOrderId} = useOrderDataStore();
   useEffect(() => {
     setBtnContent(cost.toString() + "원 결제하기")
   }, [cost])

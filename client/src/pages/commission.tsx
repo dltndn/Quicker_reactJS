@@ -59,8 +59,6 @@ export const useDivHandler = create<useDivHandler>(set => ({
 interface useOrderDataStore {
   orderId: number;
   setOrderId: (orderId: number) => void;
-  startPosition: object;
-  setStartPosition: (startPosition: any) => void;
   startAddress: string;
   setStartAddress: (startAddress: string) => void;
   sender: string;
@@ -68,8 +66,6 @@ interface useOrderDataStore {
   senderPhoneNumber: string;
   setSenderPhoneNumber: (senderPhoneNumber: string) => void;
 
-  arrivePosition: object;
-  setArrivePosition: (value: any) => void;
   arriveAddress: string;
   setArriveAddress: (value: string) => void;
   receiver: string;
@@ -116,8 +112,6 @@ interface isChecked {
 export const useOrderDataStore = create<useOrderDataStore>(set => ({
   orderId: 0,
   setOrderId: (orderId: number) => set({ orderId }),
-  startPosition: {},
-  setStartPosition: (startPosition: any) => set({ startPosition }),
   startAddress: "",
   setStartAddress: (startAddress: string) => set({ startAddress }),
   sender: "",
@@ -125,8 +119,6 @@ export const useOrderDataStore = create<useOrderDataStore>(set => ({
   senderPhoneNumber: "",
   setSenderPhoneNumber: (senderPhoneNumber: string) => set({ senderPhoneNumber }),
 
-  arrivePosition: {},
-  setArrivePosition: (arrivePosition: any) => set({ arrivePosition }),
   arriveAddress: "",
   setArriveAddress: (arriveAddress: string) => set({ arriveAddress }),
   receiver: "",
@@ -197,8 +189,10 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const {setDate, orderId, startPosition, startAddress, sender, senderPhoneNumber, arrivePosition, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
-
+  const {setOrderId, orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+  
+  const [arrivePosition, setArrivePosition] = useState({})
+  const [startPosition, setStartPosition] = useState({})
   const fn = () =>{
     console.log(AMPM, date, hour, minute)
   }
@@ -296,8 +290,8 @@ export default function CommissionPage() {
     <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
-        <Tmap containerId={"mapContainerBox"}/>
-        <Postcode refs={{startinputDiv : startinputDiv, arriveinputDiv : arriveinputDiv}} mapControls={{ showMap: showMap, hideMap: hideMap }} title={title} hideCommissionPage={() => handleCommissionPage()} />
+        <Tmap states={{startPosition : startPosition , arrivePosition : arrivePosition}}containerId={"mapContainerBox"}/>
+        <Postcode setStates={{setStartPosition : setStartPosition, setArrivePosition : setArrivePosition}} refs={{startinputDiv : startinputDiv, arriveinputDiv : arriveinputDiv}} mapControls={{ showMap: showMap, hideMap: hideMap }} title={title} hideCommissionPage={() => handleCommissionPage()} />
       </div>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage

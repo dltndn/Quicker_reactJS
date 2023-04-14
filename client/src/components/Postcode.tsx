@@ -14,7 +14,13 @@ interface refs {
   arriveinputDiv : React.MutableRefObject<HTMLDivElement | null>
 }
 
+interface setStates {
+  setStartPosition : React.Dispatch<React.SetStateAction<{}>>,
+  setArrivePosition : React.Dispatch<React.SetStateAction<{}>>
+}
+
 interface props {
+  setStates : setStates,
   refs : refs
   mapControls : mapControl
   title: string
@@ -23,8 +29,8 @@ interface props {
 
 
 // MEMO 이전 버튼 클릭시 데이터 날릴지 말지
-const Postcode = ({refs, mapControls , hideCommissionPage }: props) => {
-const {setArrivePosition, setStartPosition, setStartAddress, setSender, setSenderPhoneNumber, setArriveAddress, setReceiver, setReceiverPhoneNumber} = useOrderDataStore();
+const Postcode = ({setStates, refs, mapControls , hideCommissionPage }: props) => {
+const { setStartAddress, setSender, setSenderPhoneNumber, setArriveAddress, setReceiver, setReceiverPhoneNumber} = useOrderDataStore();
 
   //마지막 버튼 클릭 시 OrderPage의 showCommissionPage를 false로 변경
   const handleCompleteCommission = () => {
@@ -85,11 +91,11 @@ const {setArrivePosition, setStartPosition, setStartAddress, setSender, setSende
             // 주소 정보를 해당 필드에 넣는다.
             if (startinputBox.current!.value === "") {
               startinputBox.current!.value = addr
-              setStartPosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
+              setStates.setStartPosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
             }
             else {
               arriveinputBox.current!.value = addr
-              setArrivePosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
+              setStates.setArrivePosition({ "latitude": Number(result.y), "longitude": Number(result.x) })
             }
 
             // iframe을 넣은 element를 안보이게 한다.
