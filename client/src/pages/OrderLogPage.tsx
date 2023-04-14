@@ -28,7 +28,6 @@ function OrderLogPage( { isClient }: OrderLogProps ) {
       <GlobalStyle/>
       <TopBarOthers title={topBarTitle} redirectLogic={function (){navigate("/profile")} }></TopBarOthers>
       <ShowOrders isClient={isClient} />
-      <BottomBar></BottomBar>
       </>
     );
   }
