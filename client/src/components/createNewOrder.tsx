@@ -114,16 +114,20 @@ export default function CreateNewOrder({
   }
 
   useEffect(() => {
+    getLastOrderFromBlochain()
+    console.log("한 번만 실행하는 라스트 오더: " + lastOrder)
+  }, [])
+
+  useEffect(() => {
     if (isSuccess) {
       if (createdOrderNum !== undefined) {
         // db 데이터 저장 로직 수행
-        (async () => {
+        (() => {
           console.log("db 데이터 저장 로직");
           console.log("db에 저장할 오더번호: " + createdOrderNum);
-          await setOrderId(parseInt(createdOrderNum));
-
+          setOrderId(parseInt(createdOrderNum));
           // 로직 마지막은 프로필 오더 내역으로 리다이렉트
-        })();
+        })()
       } else {
         console.log("createdOrderNum is null");
       }
@@ -132,7 +136,9 @@ export default function CreateNewOrder({
 
   useEffect(() => {
     if (orderId !== 0) {
+      console.log("호출됨")
       Handler.post(data, "http://localhost:9000/request");
+      setOrderId(0)
       navigate("/")
     }
   }, [orderId]);
@@ -147,10 +153,6 @@ export default function CreateNewOrder({
     setErrorMessage("")
   }, [cost])
 
-  useEffect(() => {
-    getLastOrderFromBlochain()
-    console.log("한 번만 실행하는 라스트 오더: " + lastOrder)
-  }, [])
 
   return (
     <>
