@@ -6,9 +6,9 @@ export default {
         let getDate = parseInt(yearmonthdate[2])
     
         if (AMPM == "오전") {
-          return new Date(getYear, getMonth - 1, getDate,hour,minute,0).getTime();
+          return new Date(getYear, getMonth - 1, getDate,hour,minute,0).getTime() / 1000;
         } else {
-          return new Date(getYear, getMonth - 1, getDate,hour + 12,minute,0).getTime();
+          return new Date(getYear, getMonth - 1, getDate,hour + 12,minute,0).getTime() / 1000;
         }
       }
 }
