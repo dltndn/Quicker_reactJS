@@ -371,7 +371,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Sp4>수익</Sp4>
                     <Sp5>{income}</Sp5>
                   </Div1>
-                  <QuickerBottomBtn />
+                  <QuickerBottomBtn order={order}/>
                 </>
               )}
             </>
@@ -469,7 +469,7 @@ const QuickerBottomBtn = ({ order }: any) => {
 
   const acceptLogic = () => {
     closeModal();
-    navigate("/execution");
+    navigate(`/execution/${order.orderNum}`);
   };
 
   // 배송원 정산 진행 ? (모달닫기):(수행내역 이동)
@@ -478,7 +478,7 @@ const QuickerBottomBtn = ({ order }: any) => {
     if (true) {
       closeModal(); // 정산 완료
     } else {
-      navigate("/execution"); // 정산하는 창으로 리다이렉트
+      navigate(`/execution/${12}`); // 정산하는 창으로 리다이렉트
     }
   };
   switch (order?.state) {

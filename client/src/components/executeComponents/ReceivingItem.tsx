@@ -34,10 +34,14 @@ const Btwal = styled.button`
 const Ready = styled.img`
     width: 40%;
 `;
-export default function ReceivingItem() {
+
+interface ReceiviingItemProps {
+    orderNum: string | undefined;
+}
+export default function ReceivingItem({ orderNum }: ReceiviingItemProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const receivedRogic = () => {
-        setShowComponent(<DeliveredItem />)
+        setShowComponent(<DeliveredItem orderNum={orderNum}/>)
     }
     return(
         <>

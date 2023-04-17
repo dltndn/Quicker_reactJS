@@ -95,7 +95,7 @@ function App() {
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
-            <Route path="/execution" element={<ExecutionPage />} />
+            <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
