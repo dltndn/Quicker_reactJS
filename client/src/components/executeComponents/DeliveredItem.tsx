@@ -4,6 +4,7 @@ import { useExecutionState } from "../../pages/ExecutionPage";
 import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 
 const Div0 = styled.div`
@@ -31,16 +32,13 @@ const Btwal = styled.button`
     border-bottom: 0.125rem solid #0070f3;
   }
 `;
-interface DeliveredItemProps {
-    orderNum: string | undefined;
-}
 
-export default function DeliveredItem({ orderNum }: DeliveredItemProps) {
+export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
   const { setTitle, setShowComponent } = useExecutionState();
   const [isFace, setIsFace] = useState<boolean>(true);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const confirmLogic = async () => {
-    if (orderNum) {
+    if (orderNum !== undefined) {
         const wttb = new WriteTransactionToBlockchain(orderNum)
         try {
             const result = await wttb.deliveredOrder()

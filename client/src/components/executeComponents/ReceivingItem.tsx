@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ready from "../animation/ready.gif"
 import { useExecutionState } from "../../pages/ExecutionPage";
 import DeliveredItem from "./DeliveredItem";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 
 const Div0 = styled.div`
     display: flex;
@@ -35,10 +36,7 @@ const Ready = styled.img`
     width: 40%;
 `;
 
-interface ReceiviingItemProps {
-    orderNum: string | undefined;
-}
-export default function ReceivingItem({ orderNum }: ReceiviingItemProps) {
+export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const receivedRogic = () => {
         setShowComponent(<DeliveredItem orderNum={orderNum}/>)

@@ -45,8 +45,6 @@ export default function RemoteDelivery() {
 
   
     const { setTitle } = useExecutionState()
-    const deliveredRogic = () => {
-    }
 
     useEffect(() => {
         setTitle("물품전달")

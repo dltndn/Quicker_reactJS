@@ -16,6 +16,10 @@ interface ExecutionState {
   setShowComponent: (newData: JSX.Element) => void;
 }
 
+export interface ExecutionComponentProps {
+  orderNum: string | undefined;
+}
+
 export const useExecutionState = create<ExecutionState>((set) => ({
   title: "물품 인계",
   setTitle: (title: string) => set({title}),
@@ -27,6 +31,9 @@ export default function ExecutionPage() {
   const { orderNumber } = useParams()
   const navigate = useNavigate()
   const { title, showComponent, setShowComponent} = useExecutionState()
+
+  // 마감기한 12시간 경과 시 배송 실패 컴포넌트 활성화
+
 
   useEffect(() => {
     setShowComponent(<ReceivingItem orderNum={orderNumber}/>)
@@ -43,7 +50,7 @@ export default function ExecutionPage() {
       ></TopBarOthers>
       {showComponent}
       <button onClick={() => setShowComponent(<DeliveredItem orderNum={orderNumber}/>)}>물품전달 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<CompletedDelivery />)}>배송완료 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)}>배송완료 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<FailedDelivery />)}>배송실패 컴포넌트 이동</button>
       <BottomBar></BottomBar>
     </>

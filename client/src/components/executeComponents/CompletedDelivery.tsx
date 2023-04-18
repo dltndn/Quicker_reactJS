@@ -5,6 +5,60 @@ import Dropzone from "react-dropzone";
 import { isMobileOnly } from "react-device-detect";
 import styled, { createGlobalStyle } from "styled-components";
 import money1 from "../../image/money1.gif"
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+
+export default function CompletedDelivery({ orderNum }: ExecutionComponentProps) {
+
+    const { setTitle } = useExecutionState()
+    const confirmLogic = async () => {
+        if (orderNum !== undefined) {
+            // 의뢰인 확인 or 배송 완료 후 12시간 경과
+            const wttb = new WriteTransactionToBlockchain(orderNum)
+            try {
+                const result = await wttb.withdrawFromOrder()
+                console.log(result)
+                // 배송원 사진 업로드 로직 작성
+            } catch(e) {
+                console.log(e)
+            }
+        }
+        
+    }
+
+    useEffect(() => {
+        setTitle("배송결과")
+    }, [])
+
+
+    return(
+        <>
+        <GlobalStyle/>
+        <Div0>
+            <Div1>
+            <Btwal>배송완료</Btwal> 
+            </Div1>
+        </Div0>
+        <Divback>
+            <Div2>
+                <MoneyGifImg src={money1} />
+            </Div2>
+        </Divback>
+        <Div3>
+        <Div5>
+            <div>수익<br/><Div5_1>보증금</Div5_1><br/><Div4>총액</Div4></div>
+            <Divpo>20,000원<br/><Div5_1>5,000원</Div5_1><br/><Div4>25,000원</Div4></Divpo>
+        </Div5>
+        </Div3>
+            <ConfirmBtn
+            content="확인"
+            confirmLogic={() => {
+                confirmLogic();
+            }}
+          />
+        </>
+    )
+}
 
 const Div0 = styled.div`
     display: flex;
@@ -87,44 +141,3 @@ const Div5 = styled.div`
     padding: 10px 20px 20px 20px;
     border-radius: 0 0 10px 10px;
 `;
-
-export default function CompletedDelivery() {
-
-    const { setTitle } = useExecutionState()
-    const deliveredRogic = () => {
-
-    }
-
-    useEffect(() => {
-        setTitle("배송결과")
-    }, [])
-
-
-    return(
-        <>
-        <GlobalStyle/>
-        <Div0>
-            <Div1>
-            <Btwal>배송완료</Btwal> 
-            </Div1>
-        </Div0>
-        <Divback>
-            <Div2>
-                <MoneyGifImg src={money1} />
-            </Div2>
-        </Divback>
-        <Div3>
-        <Div5>
-            <div>수익<br/><Div5_1>보증금</Div5_1><br/><Div4>총액</Div4></div>
-            <Divpo>20,000원<br/><Div5_1>5,000원</Div5_1><br/><Div4>25,000원</Div4></Divpo>
-        </Div5>
-        </Div3>
-            <ConfirmBtn
-            content="확인"
-            confirmLogic={() => {
-                deliveredRogic();
-            }}
-          />
-        </>
-    )
-}
