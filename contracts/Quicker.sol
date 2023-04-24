@@ -32,6 +32,10 @@
 //     ERC20 public qkrwToken;
 //     // Qkrw public token;
 
+//     event OrderCreated(uint256 orderNum);
+//     event OrderResult(bool result);
+//     event DepositedFee(bool result);
+
 //     /**
 //      * @dev indicating the current status of order
 //      */
@@ -239,8 +243,6 @@
 //         return getterOrders;
 //     }
 
-//     event OrderCreated(uint256 orderNum);
-//     event OrderResult(bool result);
 //     /**
 //      * @dev 의뢰인이 새로운 Order를 생성하며 컨트랙에 QKRW 토큰을 입금한다
 //      * @param _orderPrice 의뢰인의 결제 금액
@@ -393,6 +395,7 @@
 //         order.state = State.completed;
 //         order.securityDeposit = 0;
 //         emit OrderResult(true);
+//         emit DepositedFee(true);
 //     }
 
 //     // failedOrder 함수
@@ -428,8 +431,6 @@
 //         order.state = State.failed;
 //         order.securityDeposit = 0;
 //         emit OrderResult(true);
+//         emit DepositedFee(true);
 //     }
-
-//     // todo list
-//     // 
 // }
