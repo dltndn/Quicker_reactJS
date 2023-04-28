@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -111,7 +112,7 @@ const Camera = () => {
     }
   };
 
-export default function FailedDelivery() {
+export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
 
     const videoRef = useRef<HTMLVideoElement>(null);
 

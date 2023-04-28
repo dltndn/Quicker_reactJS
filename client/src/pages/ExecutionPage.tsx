@@ -8,6 +8,9 @@ import ReceivingItem from "../components/executeComponents/ReceivingItem";
 import DeliveredItem from "../components/executeComponents/DeliveredItem";
 import CompletedDelivery from "../components/executeComponents/CompletedDelivery";
 import FailedDelivery from "../components/executeComponents/FailedDelivery";
+import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm";
+import LoadingExecution from "../components/executeComponents/LoadingExecution";
+import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
 
 interface ExecutionState {
   title: string;
@@ -32,11 +35,80 @@ export default function ExecutionPage() {
   const navigate = useNavigate()
   const { title, showComponent, setShowComponent} = useExecutionState()
 
-  // 마감기한 12시간 경과 시 배송 실패 컴포넌트 활성화
+  const isClientConfirmBefore = (order: any) => {
+    if (order.state === 1 && order.deliveredTime.toNumber() !== 0)
+      return true
 
+    return false
+  }
+
+  const isDeliveryFailed = (order: any) => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    const twelveHoursToSec = 12 * 60 * 60
+    if (order.deliveredTime.toNumber() === 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime)
+      return true
+
+    return false
+  }
+
+  const isCLientConfirm = (order: any) => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    const twelveHoursToSec = 12 * 60 * 60
+    if (order.state === 2 || (order.deliveredTime.toNumber() !== 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime))
+      return true
+    
+    return false
+  }
+
+  const isDeliveryItemReceived = async () => {
+    // 물품인계 여부 확인 후 boolean 반환
+    // 물품인계 완료 -> true
+    // 물품인계 x -> false
+    await timeOutFunc() // test용
+    return true
+  }
+
+  const timeOutFunc = async () => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true)
+        console.log("timeout 내부")
+      }, 3000)
+    })
+  }
+
+  const setComponentLogic = async () => {
+    if (orderNumber !== undefined) {
+      try {
+        const blockchainOrder = await getOrderLawData(orderNumber)
+        if (isCLientConfirm(blockchainOrder)) {
+          setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)
+          return
+        } else if (isDeliveryFailed(blockchainOrder)) {
+          setShowComponent(<FailedDelivery orderNum={orderNumber}/>)
+          return
+        } else if (isClientConfirmBefore(blockchainOrder)) {
+          setShowComponent(<WaitClientConfirm />)
+          return
+        }
+      } catch(e) {
+        console.log(e)
+      }
+      // isDeliveryItemReceived() 테스트 할 때 try, catch 블록 주석처리
+      if (await isDeliveryItemReceived()) {
+        setShowComponent(<DeliveredItem orderNum={orderNumber}/>)
+        return
+      } else {
+        setShowComponent(<ReceivingItem orderNum={orderNumber}/>)
+        return
+      }
+    }
+  }
 
   useEffect(() => {
-    setShowComponent(<ReceivingItem orderNum={orderNumber}/>)
+    setShowComponent(<LoadingExecution />)
+
+    setComponentLogic()
   }, [])
 
   return (
@@ -51,7 +123,8 @@ export default function ExecutionPage() {
       {showComponent}
       <button onClick={() => setShowComponent(<DeliveredItem orderNum={orderNumber}/>)}>물품전달 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)}>배송완료 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<FailedDelivery />)}>배송실패 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<FailedDelivery orderNum={orderNumber}/>)}>배송실패 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<WaitClientConfirm />)}>의뢰인 확인 컴포넌트 이동</button>
       <BottomBar></BottomBar>
     </>
   );

@@ -57,6 +57,16 @@ export const getOrder = async(orderNum:string) => {
     return TemplateOrder(data)
 }
 
+export const getOrderLawData = async(orderNum: string) => {
+  const data = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: "getOrder",
+    args: [orderNum],
+  })
+  return data
+}
+
 // 오더 내역 번호 배열 반환
 export const getOrderList = async (address:`0x${string}` | undefined, isClient: boolean) => {
   if (address === undefined){

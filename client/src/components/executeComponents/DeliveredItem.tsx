@@ -6,6 +6,7 @@ import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+import WaitClientConfirm from "./WaitClientConfirm";
 
 const Div0 = styled.div`
   display: flex;
@@ -36,7 +37,6 @@ const Btwal = styled.button`
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
   const { setTitle, setShowComponent } = useExecutionState();
   const [isFace, setIsFace] = useState<boolean>(true);
-  const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const confirmLogic = async () => {
     if (orderNum !== undefined) {
         const wttb = new WriteTransactionToBlockchain(orderNum)
@@ -47,8 +47,8 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
         } catch(e) {
             console.log(e)
         }
+        setShowComponent(<WaitClientConfirm />)
     }
-    setIsConfirm(true)
   };
 
   useEffect(() => {
@@ -57,8 +57,6 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
 
   return (
     <>
-      {!isConfirm ? (
-        <>
           <Div0>
             <Div1>
               <Btwal onClick={() => setIsFace(true)}>대면</Btwal>
@@ -75,9 +73,5 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
             }}
           />
         </>
-      ) : (
-        <><div>수취인 및 의뢰인이 확인중입니다...</div></>
-      )}
-    </>
   );
 }
