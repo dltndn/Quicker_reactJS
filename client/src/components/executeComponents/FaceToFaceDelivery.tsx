@@ -2,6 +2,10 @@ import ConfirmBtn from "../confirmBtn"
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+import WaitClientConfirm from "./WaitClientConfirm";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { useExecutionState } from "../../pages/ExecutionPage";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -48,10 +52,22 @@ const Camera = () => {
   };
   
 
-export default function FaceToFaceDelivery() {
-
+export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
+  const { setShowComponent } = useExecutionState()
     const videoRef = useRef<HTMLVideoElement>(null);
-
+    const confirmLogic = async () => {
+      if (orderNum !== undefined) {
+          const wttb = new WriteTransactionToBlockchain(orderNum)
+          try {
+              const result = await wttb.deliveredOrder()
+              console.log(result)
+              // 배송원 전달완료 로직 작성(QR인증)
+          } catch(e) {
+              console.log(e)
+          }
+          setShowComponent(<WaitClientConfirm />)
+      }
+    };
   return (
     <>
     <Div0>
@@ -61,6 +77,12 @@ export default function FaceToFaceDelivery() {
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
         <Camera />
+        <ConfirmBtn
+            content="확인"
+            confirmLogic={() => {
+              confirmLogic();
+            }}
+          />
     </>
   );
 };

@@ -13,19 +13,16 @@ export default function CompletedDelivery({ orderNum }: ExecutionComponentProps)
     const { setTitle } = useExecutionState()
     const confirmLogic = async () => {
         if (orderNum !== undefined) {
-            // 의뢰인 확인 or 배송 완료 후 12시간 경과
             const wttb = new WriteTransactionToBlockchain(orderNum)
             try {
                 const result = await wttb.withdrawFromOrder()
                 console.log(result)
-                // 배송원 사진 업로드 로직 작성
             } catch(e) {
                 console.log(e)
             }
+            // 메인으로 리다이렉트
         }
-        
     }
-
     useEffect(() => {
         setTitle("배송결과")
     }, [])

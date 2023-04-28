@@ -4,6 +4,7 @@ import ready from "../animation/ready.gif"
 import { useExecutionState } from "../../pages/ExecutionPage";
 import DeliveredItem from "./DeliveredItem";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { useEffect } from "react";
 
 const Div0 = styled.div`
     display: flex;
@@ -38,9 +39,18 @@ const Ready = styled.img`
 
 export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
-    const receivedRogic = () => {
-        setShowComponent(<DeliveredItem orderNum={orderNum}/>)
+    const receivedRogic = async () => {
+        try {
+            // 물품인계 완료 로직 작성
+            setShowComponent(<DeliveredItem orderNum={orderNum}/>)
+        } catch(e) {
+            console.log(e)
+        }
     }
+
+    useEffect(() => {
+        setTitle("물품인계")
+    }, [])
     return(
         <>
         <Div0>
@@ -53,8 +63,8 @@ export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
         </Div3>
             <ConfirmBtn
             content="확인"
-            confirmLogic={() => {
-              receivedRogic();
+            confirmLogic={async() => {
+              await receivedRogic();
             }}
           />
         </>

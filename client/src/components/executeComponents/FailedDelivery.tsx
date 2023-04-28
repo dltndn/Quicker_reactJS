@@ -117,8 +117,13 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const { setTitle } = useExecutionState()
-    const deliveredRogic = () => {
-
+    const failedRogic = async () => {
+      try {
+        // 배송 실패 사진 업로드 로직 작성
+      } catch(e) {
+        console.log(e)
+      }
+      // 메인으로 리다이렉트
     }
 
     useEffect(() => {
@@ -148,8 +153,8 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     </Container>
             <ConfirmBtn
             content="확인"
-            confirmLogic={() => {
-                deliveredRogic();
+            confirmLogic={async() => {
+                await failedRogic();
             }}
           />
         </>

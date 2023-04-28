@@ -35,21 +35,8 @@ const Btwal = styled.button`
 `;
 
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
-  const { setTitle, setShowComponent } = useExecutionState();
+  const { setTitle } = useExecutionState();
   const [isFace, setIsFace] = useState<boolean>(true);
-  const confirmLogic = async () => {
-    if (orderNum !== undefined) {
-        const wttb = new WriteTransactionToBlockchain(orderNum)
-        try {
-            const result = await wttb.deliveredOrder()
-            console.log(result)
-            // 배송원 사진 업로드 로직 작성
-        } catch(e) {
-            console.log(e)
-        }
-        setShowComponent(<WaitClientConfirm />)
-    }
-  };
 
   useEffect(() => {
     setTitle("물품전달");
@@ -65,13 +52,7 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
               <Btwal onClick={() => setIsFace(false)}>비대면</Btwal>
             </Div1>
           </Div0>
-          {isFace ? <FaceToFaceDelivery /> : <RemoteDelivery />}
-          <ConfirmBtn
-            content="확인"
-            confirmLogic={() => {
-              confirmLogic();
-            }}
-          />
+          {isFace ? <FaceToFaceDelivery orderNum={orderNum}/> : <RemoteDelivery orderNum={orderNum}/>}
         </>
   );
 }

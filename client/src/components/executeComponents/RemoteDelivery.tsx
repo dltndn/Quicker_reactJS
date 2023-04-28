@@ -4,7 +4,9 @@ import { isMobileOnly } from "react-device-detect";
 import React, { useState, useEffect, ChangeEvent  } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import styled from "styled-components";
-
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+import WaitClientConfirm from "./WaitClientConfirm";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 
 const Div0 = styled.div`
     display: flex;
@@ -17,8 +19,9 @@ font-size: var(--font-md1);
 font-weight: bold;
 `;
 
-export default function RemoteDelivery() {
+export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
     const [file, setFile] = useState<File | null>(null);
+    const { setShowComponent } = useExecutionState()
 
     const handleDrop = (acceptedFiles: File[]) => {
       const imageFile = acceptedFiles.find(
@@ -43,12 +46,19 @@ export default function RemoteDelivery() {
         }
       };
 
-  
-    const { setTitle } = useExecutionState()
-
-    useEffect(() => {
-        setTitle("물품전달")
-    }, [])
+    const confirmLogic = async () => {
+      if (orderNum !== undefined) {
+          const wttb = new WriteTransactionToBlockchain(orderNum)
+          try {
+              const result = await wttb.deliveredOrder()
+              console.log(result)
+              // 배송원 사진 업로드 로직 작성
+          } catch(e) {
+              console.log(e)
+          }
+          setShowComponent(<WaitClientConfirm />)
+      }
+    };
 
     return(
         <>
@@ -67,6 +77,12 @@ export default function RemoteDelivery() {
           </div>
         )}
       </Dropzone> 
+      <ConfirmBtn
+            content="확인"
+            confirmLogic={() => {
+              confirmLogic();
+            }}
+          />
         </>
     )
 }
