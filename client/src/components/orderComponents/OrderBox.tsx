@@ -472,18 +472,9 @@ const QuickerBottomBtn = ({ order }: any) => {
     navigate(`/execution/${order.orderNum}`);
   };
 
-  // 배송원 정산 진행 ? (모달닫기):(수행내역 이동)
-  const completeLogic = () => {
-    // 정산 여부 확인 함수 boolean 타입 리턴
-    if (true) {
-      closeModal(); // 정산 완료
-    } else {
-      navigate(`/execution/${12}`); // 정산하는 창으로 리다이렉트
-    }
-  };
   switch (order?.state) {
     case "completed":
-      return <Button onClick={() => completeLogic()}>수행완료</Button>;
+      return <Button onClick={() => closeModal()}>확인</Button>;
     case "failed":
       return <Button onClick={() => closeModal()}>확인</Button>;
     default:

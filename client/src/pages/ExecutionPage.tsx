@@ -3,7 +3,6 @@ import { createGlobalStyle } from "styled-components";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
-import BottomBar from "../components/BottomBar";
 import ReceivingItem from "../components/executeComponents/ReceivingItem";
 import DeliveredItem from "../components/executeComponents/DeliveredItem";
 import CompletedDelivery from "../components/executeComponents/CompletedDelivery";
