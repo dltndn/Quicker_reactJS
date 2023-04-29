@@ -411,6 +411,7 @@ interface BottomBtnProps {
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
   const wttb = new WriteTransactionToBlockchain(order.orderNum);
   const { setOrder, setIsModalOpen, setReloadOrderNum } = useOrderState();
+  const navigate = useNavigate()
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -418,43 +419,43 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
   };
   // 주문 취소 로직
   const createdLogic = async () => {
-    const result = await wttb.cancelOrder();
-    console.log(result);
+    try {
+      const result = await wttb.cancelOrder();
+      console.log(result);
+    } catch(e) {
+      console.log(e)
+    }
     setReloadOrderNum(order.orderNum);
     closeModal();
   };
-  // 배송 현황 확인 로직
-  const acceptLogic = () => {
-    console.log("배송 현황 확인 로직 구현");
-    // 배송 현황 페이지 리다이렉트
-  };
+
   // 거래 확인 로직
-  const completeLogic = async () => {
+  const completeLogic = () => {
     closeModal();
   };
-  // 실패 사유 확인 로직
-  const failLogic = async () => {
-    console.log("실패 사유 확인 로직");
-    // 배송 결과 페이지 리다이렉트
-  };
+
+  const redirectExecutionPage = () => {
+    navigate(`/client_confirm/${order.orderNum}`)
+  }
   // 다시 의뢰하기 로직
   const cancelLogic = () => {
     console.log("다시 의뢰하기 로직 구현");
     // 의뢰하기 페이지 리다이렉트
+    navigate("/commission")
   };
   switch (order?.state) {
     case "created":
-      return <Button onClick={() => createdLogic()}>주문 취소</Button>;
+      return <Button onClick={() => createdLogic()}>주문취소</Button>;
     case "matched":
-      return <Button onClick={() => acceptLogic()}>배송 현황 확인</Button>;
+      return <Button onClick={() => redirectExecutionPage()}>배송현황확인</Button>;
     case "completed":
       return <Button onClick={() => completeLogic()}>거래완료</Button>;
     case "failed":
-      return <Button onClick={() => failLogic()}>실패 사유 확인</Button>;
+      return <Button onClick={() => redirectExecutionPage()}>실패사유확인</Button>;
     case "canceled":
-      return <Button onClick={() => cancelLogic()}>다시 의뢰하기</Button>;
+      return <Button onClick={() => cancelLogic()}>다시의뢰하기</Button>;
     default:
-      return <Button onClick={() => cancelLogic()}>주문 취소</Button>;
+      return <Button onClick={() => cancelLogic()}>주문취소</Button>;
   }
 };
 
