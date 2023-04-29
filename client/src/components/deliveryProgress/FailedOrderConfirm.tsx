@@ -1,12 +1,14 @@
 import { ExecutionComponentProps } from "../../pages/ExecutionPage"
 import { useClientConfirmState } from "../../pages/ClientConfirmPage"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
+import { getOrderLawData } from "../../utils/ExecuteOrderFromBlockchain"
 
 export default function FailedOrderConfirm({ orderNum }: ExecutionComponentProps) {
     const { setTitle } = useClientConfirmState()
+    const [returned, setReturned] = useState<boolean>(false)
     const navigate = useNavigate()
 
     const confirmLogic = async () => {
@@ -22,16 +24,29 @@ export default function FailedOrderConfirm({ orderNum }: ExecutionComponentProps
       }
     }
 
+    const isReturned = async () => {
+      if (orderNum !== undefined) {
+        try {
+          const blockchainOrder: any = await getOrderLawData(orderNum)
+          if(blockchainOrder.securityDeposit.toNumber() === 0) {
+            setReturned(true)
+          }
+        } catch(e) {
+          console.log(e)
+        }
+      }
+    }
+
     useEffect(() => {
         setTitle("배송결과")
-        // 보증금 === 0 확인버튼 비활성화
+        isReturned()
     }, [])
     
     return <><div>배송실패</div>
         <div>첨부사진</div>
         <div>실패사유</div>
         <ConfirmBtn
-            isDisabled={true}
+            isDisabled={returned}
             content="확인"
             confirmLogic={async() => {
               await confirmLogic();
