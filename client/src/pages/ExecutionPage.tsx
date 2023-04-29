@@ -126,7 +126,6 @@ export default function ExecutionPage() {
       <button onClick={() => setShowComponent(<WaitClientConfirm />)}>의뢰인 확인 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)}>배송완료 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<FailedDelivery orderNum={orderNumber}/>)}>배송실패 컴포넌트 이동</button>
-      <BottomBar></BottomBar>
     </>
   );
 }
