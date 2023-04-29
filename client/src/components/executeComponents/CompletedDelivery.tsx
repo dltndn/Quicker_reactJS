@@ -25,6 +25,7 @@ export default function CompletedDelivery({ orderNum }: ExecutionComponentProps)
     }
     useEffect(() => {
         setTitle("배송결과")
+        // 보증금 === 0 -> 확인버튼 비활성화
     }, [])
 
 

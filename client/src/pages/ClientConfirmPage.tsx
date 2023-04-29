@@ -5,6 +5,8 @@ import TopBarOthers from "../components/topBarOthers";
 import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
 import CompletedOrderConfirm from "../components/deliveryProgress/CompletedOrderConfirm";
 import FailedOrderConfirm from "../components/deliveryProgress/FailedOrderConfirm";
+import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
+import { LoadingDeliveryProgress } from "../components/LoadingAnimation";
 
 interface ClientConfirmState {
     title: string;
@@ -25,15 +27,34 @@ export default function ClientConfirmPage() {
   const navigate = useNavigate();
   const { title, showComponent, setShowComponent} = useClientConfirmState()
 
-  const showComponentLogic = async () => {
+  const setComponentLogic = async () => {
     // order.deliveredTime !== null -> 배송완료
     // (deadline + 12h < currentTime && deliveredTime === null) -> 배송실패
     // (deadLine + 12h >= currentTime && deliveredTime === null) -> 배송현황
-    
+    const currentTime = Math.floor(Date.now() / 1000)
+    const twelveHoursToSec = 12 * 60 * 60
+    if (orderNumber !== undefined) {
+        try {
+            const blockchainOrder: any = await getOrderLawData(orderNumber)
+            if (blockchainOrder.deliveredTime.toNumber() === 0) {
+                if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
+                    setShowComponent(<FailedOrderConfirm orderNum={orderNumber} />)
+                } else {
+                    setShowComponent(<DeliveryStatus orderNum={orderNumber} />)
+                }
+            } else {
+                setShowComponent(<CompletedOrderConfirm orderNum={orderNumber} />)
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
   }
 
   useEffect(() => {
-    showComponentLogic()
+    setShowComponent(<LoadingDeliveryProgress />)    
+
+    setComponentLogic()
   }, [])
 
   return <>

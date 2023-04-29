@@ -9,7 +9,7 @@ import DeliveredItem from "../components/executeComponents/DeliveredItem";
 import CompletedDelivery from "../components/executeComponents/CompletedDelivery";
 import FailedDelivery from "../components/executeComponents/FailedDelivery";
 import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm";
-import LoadingExecution from "../components/executeComponents/LoadingExecution";
+import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
 
 interface ExecutionState {

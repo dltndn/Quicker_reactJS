@@ -9,5 +9,5 @@ export default function DeliveryStatus({ orderNum }: ExecutionComponentProps) {
         setTitle("배송현황")
     }, [])
 
-    return <>실시간 배송원 위치 조회 컴포넌트</>
+    return <>실시간 배송원 위치 지도</>
 }
