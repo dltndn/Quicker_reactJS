@@ -152,6 +152,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
         </Box>
     </Container>
             <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={async() => {
                 await failedRogic();

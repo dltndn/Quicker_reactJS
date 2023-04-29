@@ -159,7 +159,7 @@ const PostcodeInputs = ({ refs, controls, setStates, title }: PostcodeInputsType
             </Div0>
         </Box>
         </Container>
-            <ConfirmBtn content={"다음단계"} confirmLogic={controls.pageNext} />
+            <ConfirmBtn isDisabled={false} content={"다음단계"} confirmLogic={controls.pageNext} />
         </>
     )
 }

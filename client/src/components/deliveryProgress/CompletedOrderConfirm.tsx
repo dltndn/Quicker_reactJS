@@ -33,6 +33,7 @@ export default function CompletedOrderConfirm({
       <div>배송완료</div>
       <div>배송완료 애니메이션</div>
       <ConfirmBtn
+      isDisabled={false}
         content="확인"
         confirmLogic={async () => {
           await confirmLogic();

@@ -66,7 +66,7 @@ function SignUpPage() {
         navigate("/")
       }} />
       <Join_input refs={{ name, birthday, preEmail, lastEmail, prePhoneNumber, middlePhoneNumber, lastPhoneNumber }}></Join_input>
-      <ConfirmBtn content="확인" confirmLogic={() => {
+      <ConfirmBtn isDisabled={false} content="확인" confirmLogic={() => {
         onClick()
         }} />
       <BottomBar></BottomBar>

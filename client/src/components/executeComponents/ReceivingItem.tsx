@@ -62,6 +62,7 @@ export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
           <Ready src={ready}></Ready>
         </Div3>
             <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={async() => {
               await receivedRogic();

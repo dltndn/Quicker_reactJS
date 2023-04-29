@@ -31,6 +31,7 @@ export default function FailedOrderConfirm({ orderNum }: ExecutionComponentProps
         <div>첨부사진</div>
         <div>실패사유</div>
         <ConfirmBtn
+            isDisabled={true}
             content="확인"
             confirmLogic={async() => {
               await confirmLogic();

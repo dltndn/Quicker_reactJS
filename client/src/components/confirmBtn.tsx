@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components';
 
 interface Props {
     content: string;
-    confirmLogic: ()=> void
+    confirmLogic: ()=> void;
+    isDisabled: boolean;
   }
   
   const Button = styled.button`
@@ -14,7 +15,7 @@ interface Props {
   border-radius: 0.313rem;
   border: 0;
   outline: #efefef;
-  background-color: #0D6EFD;
+  background-color: ${props => props.disabled ? "#bbbfbc" : "#0D6EFD"};
   color: var(--white-color);
   margin-bottom: 0.313rem;
   transition: all 0.2s ease-in-out;
@@ -29,10 +30,11 @@ const Container = styled.section`
   justify-content: center;
 `;
 
-function ConfirmBtn({ content, confirmLogic  }: Props){
+function ConfirmBtn({ content, confirmLogic, isDisabled  }: Props){
+
     return(
         <Container>
-                <Button onClick={() => confirmLogic()}>{content}</Button>
+                <Button disabled={isDisabled} onClick={() => confirmLogic()}>{content}</Button>
         </Container>
     );
 }

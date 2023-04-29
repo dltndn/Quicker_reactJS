@@ -49,6 +49,7 @@ export default function CompletedDelivery({ orderNum }: ExecutionComponentProps)
         </Div5>
         </Div3>
             <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={() => {
                 confirmLogic();

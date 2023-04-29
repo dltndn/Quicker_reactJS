@@ -129,6 +129,7 @@ function Search_Detail() {
             </Div5>
           </Se0>
           <ConfirmBtn
+            isDisabled={false}
             content="수락하기"
             confirmLogic={() => {
               acceptOrder();

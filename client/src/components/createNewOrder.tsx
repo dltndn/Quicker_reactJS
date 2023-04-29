@@ -161,7 +161,7 @@ export default function CreateNewOrder({
 
   return (
     <>
-      <ConfirmBtn content={btnContent} confirmLogic={() => writeContract()} />
+      <ConfirmBtn isDisabled={false} content={btnContent} confirmLogic={() => writeContract()} />
     </>
   );
 }

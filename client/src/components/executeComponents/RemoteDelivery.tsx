@@ -78,6 +78,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
         )}
       </Dropzone> 
       <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={() => {
               confirmLogic();

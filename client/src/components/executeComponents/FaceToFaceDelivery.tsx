@@ -78,6 +78,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
         <Camera />
         <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={() => {
               confirmLogic();
