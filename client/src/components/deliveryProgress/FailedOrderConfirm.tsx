@@ -1,13 +1,25 @@
 import { ExecutionComponentProps } from "../../pages/ExecutionPage"
 import { useClientConfirmState } from "../../pages/ClientConfirmPage"
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
 
 export default function FailedOrderConfirm({ orderNum }: ExecutionComponentProps) {
     const { setTitle } = useClientConfirmState()
+    const navigate = useNavigate()
 
     const confirmLogic = async () => {
-
+      if (orderNum !== undefined) {
+        const wttb = new WriteTransactionToBlockchain(orderNum);
+        try {
+          const reult = await wttb.failedOrder();
+          console.log(reult);
+          navigate("/");
+        } catch (e) {
+          console.log(e);
+        }
+      }
     }
 
     useEffect(() => {
