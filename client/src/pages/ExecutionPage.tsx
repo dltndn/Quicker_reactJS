@@ -117,7 +117,7 @@ export default function ExecutionPage() {
       <TopBarOthers
         title={title}
         redirectLogic={function () {
-          navigate("/profile");
+          navigate("/fulfillmentlist");
         }}
       ></TopBarOthers>
       {showComponent}
