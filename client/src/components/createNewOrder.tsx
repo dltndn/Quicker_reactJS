@@ -138,7 +138,7 @@ export default function CreateNewOrder({
   useEffect(() => {
     if (orderId !== 0) {
       console.log("호출됨")
-      Handler.post(data, "http://localhost:9000/request");
+      Handler.post(data, process.env.REACT_APP_SERVER_URL + "request");
       setOrderId(0)
       navigate("/")
     }

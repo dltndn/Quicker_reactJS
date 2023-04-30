@@ -28,7 +28,7 @@ function Search_Detail() {
         Handler.post({
           orderId : order!.orderNum,
           userWalletAddress : address
-        }, "http://localhost:9000/updateorder")
+        }, process.env.REACT_APP_SERVER_URL + "updateorder")
         navigator("/")
       } catch(e) {
         if (e) {

@@ -176,7 +176,7 @@ function SearchPage() {
         let data = await Handler.post({
           userWalletAdress : address
         },
-          "http://localhost:9000/getRequests")
+        process.env.REACT_APP_SERVER_URL + "getRequests")
         setRequestListContents(data)
         console.log(data)
       }catch (error) {
