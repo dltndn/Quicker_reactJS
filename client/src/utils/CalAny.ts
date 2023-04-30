@@ -3,6 +3,24 @@ const platformFeeRate = 0.01
 const insuranceFeeRate = 0.01
 const securityDepositRate = 0.1
 
+export const calQuickerIncomeNum = (orderPrice: number): number => {
+    if (orderPrice === 0) {
+        return 0
+    }
+    const platformFee = orderPrice * platformFeeRate
+    const insuranceFee = orderPrice * insuranceFeeRate 
+    let result = orderPrice - platformFee - insuranceFee
+    return Math.floor(result)
+}
+
+export const calSecurityDepositNum = (orderPrice: number): number => {
+    if (orderPrice === 0) {
+        return 0
+    }
+    let result = orderPrice * securityDepositRate
+    return Math.floor(result)
+}
+
 export const calQuickerIncome = (orderPrice: number): string => {
     if (orderPrice === 0) {
         return "0"

@@ -5,12 +5,21 @@ import Dropzone from "react-dropzone";
 import { isMobileOnly } from "react-device-detect";
 import styled, { createGlobalStyle } from "styled-components";
 import money1 from "../../image/money1.gif"
-import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+import { useNavigate } from "react-router-dom";
 
-export default function CompletedDelivery({ orderNum }: ExecutionComponentProps) {
+interface CompletedDeliveryProps {
+    income: number;
+    securityDeposit: number;
+    orderNum : string | undefined;
+}
 
+export default function CompletedDelivery({ orderNum, income, securityDeposit}: CompletedDeliveryProps) {
     const { setTitle } = useExecutionState()
+    const [incomeString] = useState(income.toLocaleString())
+    const [securityDpositString] = useState(securityDeposit.toLocaleString())
+    const [total] = useState((income + securityDeposit).toLocaleString())
+    const navigate = useNavigate()
     const confirmLogic = async () => {
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
@@ -20,12 +29,11 @@ export default function CompletedDelivery({ orderNum }: ExecutionComponentProps)
             } catch(e) {
                 console.log(e)
             }
-            // 메인으로 리다이렉트
+            navigate("/")
         }
     }
     useEffect(() => {
         setTitle("배송결과")
-        // 보증금 === 0 -> 확인버튼 비활성화
     }, [])
 
 
@@ -45,7 +53,7 @@ export default function CompletedDelivery({ orderNum }: ExecutionComponentProps)
         <Div3>
         <Div5>
             <div>수익<br/><Div5_1>보증금</Div5_1><br/><Div4>총액</Div4></div>
-            <Divpo>20,000원<br/><Div5_1>5,000원</Div5_1><br/><Div4>25,000원</Div4></Divpo>
+            <Divpo>{incomeString}원<br/><Div5_1>{securityDpositString === "0" ? (" - "):(securityDpositString)}원</Div5_1><br/><Div4>{total}원</Div4></Divpo>
         </Div5>
         </Div3>
             <ConfirmBtn

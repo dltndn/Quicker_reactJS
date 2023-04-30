@@ -10,6 +10,7 @@ import FailedDelivery from "../components/executeComponents/FailedDelivery";
 import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm";
 import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
+import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
 
 interface ExecutionState {
   title: string;
@@ -34,6 +35,9 @@ export default function ExecutionPage() {
   const navigate = useNavigate()
   const { title, showComponent, setShowComponent} = useExecutionState()
 
+  const currentTime = Math.floor(Date.now() / 1000)
+  const twelveHoursToSec = 12 * 60 * 60
+
   const isClientConfirmBefore = (order: any) => {
     if (order.state === 1 && order.deliveredTime.toNumber() !== 0)
       return true
@@ -42,8 +46,6 @@ export default function ExecutionPage() {
   }
 
   const isDeliveryFailed = (order: any) => {
-    const currentTime = Math.floor(Date.now() / 1000)
-    const twelveHoursToSec = 12 * 60 * 60
     if (order.deliveredTime.toNumber() === 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime)
       return true
 
@@ -51,8 +53,7 @@ export default function ExecutionPage() {
   }
 
   const isCLientConfirm = (order: any) => {
-    const currentTime = Math.floor(Date.now() / 1000)
-    const twelveHoursToSec = 12 * 60 * 60
+    
     if (order.state === 2 || (order.deliveredTime.toNumber() !== 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime))
       return true
     
@@ -79,9 +80,17 @@ export default function ExecutionPage() {
   const setComponentLogic = async () => {
     if (orderNumber !== undefined) {
       try {
-        const blockchainOrder = await getOrderLawData(orderNumber)
+        const blockchainOrder: any = await getOrderLawData(orderNumber)
         if (isCLientConfirm(blockchainOrder)) {
-          setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)
+          console.log(blockchainOrder.orderPrice.toNumber())
+          let securityDeposit: number
+          if (blockchainOrder.deliveredTime.toNumber() > blockchainOrder.limitedTime.toNumber()) {
+            securityDeposit = 0
+          } else {
+            securityDeposit = calSecurityDepositNum(blockchainOrder.orderPrice.toNumber())
+          }
+          const income = calQuickerIncomeNum(blockchainOrder.orderPrice.toNumber())
+          setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit}/>)
           return
         } else if (isDeliveryFailed(blockchainOrder)) {
           setShowComponent(<FailedDelivery orderNum={orderNumber}/>)
@@ -123,7 +132,7 @@ export default function ExecutionPage() {
       <button onClick={() => setShowComponent(<ReceivingItem orderNum={orderNumber}/>)}>물품인계 확인 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<DeliveredItem orderNum={orderNumber}/>)}>물품전달 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<WaitClientConfirm />)}>의뢰인 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber}/>)}>배송완료 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber} income={9800} securityDeposit={0}/>)}>배송완료 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<FailedDelivery orderNum={orderNumber}/>)}>배송실패 컴포넌트 이동</button>
     </>
   );

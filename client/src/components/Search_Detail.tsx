@@ -25,7 +25,6 @@ function Search_Detail() {
       const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
       try {
         const data = await wttb.acceptOrder()
-        console.log(order?.orderNum)
         Handler.post({
           orderId : order!.orderNum,
           userWalletAddress : address
