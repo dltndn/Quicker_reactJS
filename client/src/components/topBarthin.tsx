@@ -37,6 +37,7 @@ const Tbtleft = styled(Tbt)`
 const Tbhome = styled(Tbt)`
     margin-left: auto;
     margin-right: 0.625rem;
+    font-size: var(--font-md1)
 `;
 
 const Tbsp = styled.div`
@@ -46,13 +47,13 @@ const Tbsp = styled.div`
     margin-left: 0.313rem;
 `;
 
-
 interface Props {
-    title: string
+    title: string;
+    title2: string;
     redirectLogic: ()=> void
-  }
+  };
 
-function TopBarThin({ title, redirectLogic }: Props) {
+function TopBarThin({ title, title2, redirectLogic }: Props) {
     const navigate = useNavigate();
 
     return (
@@ -61,6 +62,7 @@ function TopBarThin({ title, redirectLogic }: Props) {
             <Tdiv>
                 <Tbtleft onClick={() => redirectLogic()}><BsChevronLeft></BsChevronLeft></Tbtleft>
                 <Tbsp>{title}</Tbsp>
+                <Tbhome>{title2}</Tbhome>
             </Tdiv>
         </section>
     );

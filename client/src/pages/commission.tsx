@@ -10,7 +10,7 @@ import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
 import { useAccount } from "wagmi";
 import { create } from 'zustand'
-
+import Time from "../lib/Time"
 
 interface OrderState {
   cost: number;
@@ -36,7 +36,7 @@ export const useOrderStore = create<OrderState>((set) => ({
   setTitle: (title: string) => set({title}),
   btnContent: "결제하기",
   setBtnContent: (btnContent: string) => set({btnContent}),
-  deadLine: "1682562868", //임시
+  deadLine: "1869353472", //2029년
   setDeadLine: (deadLine: string) => set({deadLine}),
   showAllowance: false,
   setShowAllowance: (showAllowance:boolean) => set({showAllowance}),
@@ -44,6 +44,120 @@ export const useOrderStore = create<OrderState>((set) => ({
   setCreatedOrderNum: (createdOrderNum:string|undefined) => set({createdOrderNum}),
   errorMessage: undefined,
   setErrorMessage: (errorMessage: string) => set({errorMessage})
+}))
+
+interface useDivHandler {
+  showCommissionPage: boolean;
+  setShowCommissionPage: (showCommissionPage:boolean) => void;
+}
+
+export const useDivHandler = create<useDivHandler>(set => ({
+  showCommissionPage: true,
+  setShowCommissionPage : (showCommissionPage : boolean) =>  set({showCommissionPage})
+}))
+
+interface useOrderDataStore {
+  orderId: number;
+  setOrderId: (orderId: number) => void;
+  startAddress: string;
+  setStartAddress: (startAddress: string) => void;
+  sender: string;
+  setSender: (sender: string) => void;
+  senderPhoneNumber: string;
+  setSenderPhoneNumber: (senderPhoneNumber: string) => void;
+
+  arriveAddress: string;
+  setArriveAddress: (value: string) => void;
+  receiver: string;
+  setReceiver: (value: string) => void;
+  receiverPhoneNumber: string;
+  setReceiverPhoneNumber: (value: string) => void;
+
+  width: number;
+  setWidth: (value: number) => void;
+  height: number;
+  setHeight: (value: number) => void;
+  length: number;
+  setLength: (value: number) => void;
+  weight: number;
+  setWeight: (value: number) => void;
+
+  AMPM: string | null;
+  setAMPM: (value: string) => void;
+  date: string | null;
+  setDate: (value: string) => void;
+  hour: number | null;
+  setHour: (value: number) => void;
+  minute: number | null;
+  setMinute: (value: number) => void;
+
+  details: string;
+  setDetails: (value: string) => void;
+  cost: number;
+  setCost: (value: number) => void;
+
+  isChecked: isChecked;
+  setIsChecked: (value: any) => void;
+}
+
+interface isChecked {
+    walk: boolean,
+    bike: boolean,
+    kickboard: boolean,
+    motorcycle: boolean,
+    car: boolean,
+    truck: boolean,
+}
+
+export const useOrderDataStore = create<useOrderDataStore>(set => ({
+  orderId: 0,
+  setOrderId: (orderId: number) => set({ orderId }),
+  startAddress: "",
+  setStartAddress: (startAddress: string) => set({ startAddress }),
+  sender: "",
+  setSender: (sender: string) => set({ sender }),
+  senderPhoneNumber: "",
+  setSenderPhoneNumber: (senderPhoneNumber: string) => set({ senderPhoneNumber }),
+
+  arriveAddress: "",
+  setArriveAddress: (arriveAddress: string) => set({ arriveAddress }),
+  receiver: "",
+  setReceiver: (receiver: string) => set({ receiver }),
+  receiverPhoneNumber: "",
+  setReceiverPhoneNumber: (receiverPhoneNumber: string) => set({ receiverPhoneNumber }),
+
+  width: 0,
+  setWidth: (width: number) => set({ width }),
+  height: 0,
+  setHeight: (height: number) => set({ height }),
+  length: 0,
+  setLength: (length: number) => set({ length }),
+  weight: 0,
+  setWeight: (weight: number) => set({ weight }),
+
+  AMPM: "오전",
+  setAMPM: (AMPM: string) => set({ AMPM }),
+  date: null,
+  setDate: (date: string) => set({ date }),
+  hour: null,
+  setHour: (hour: number) => set({ hour }),
+  minute: null,
+  setMinute: (minute: number) => set({ minute }),
+
+  details: "",
+  setDetails: (details: string) => set({ details }),
+  cost: 0,
+  setCost: (cost: number) => set({ cost }),
+
+  isChecked  : {
+    walk: false,
+    bike: false,
+    kickboard: false,
+    motorcycle: false,
+    car: false,
+    truck: false,
+  },
+  setIsChecked : (isChecked : isChecked) => set({isChecked}),
 }))
 
 const GlobalStyle = createGlobalStyle`
@@ -71,45 +185,24 @@ const getLatLon = () => {
 export default function CommissionPage() {
   const navigate = useNavigate();
   const { address } = useAccount();
+  const startinputDiv = useRef<HTMLInputElement>(null);
+  const arriveinputDiv = useRef<HTMLInputElement>(null);
+  const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
-  const [showCommissionPage, setShowCommissionPage] = useState<boolean>(true);
+  const { title, setTitle, setDeadLine } = useOrderStore()
+  const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
 
-  const startinputDiv = useRef<HTMLDivElement>(null);
-  const arriveinputDiv = useRef<HTMLDivElement>(null);
+
   
-  const [orderId, setOrderId] = useState(0)
+  const [arrivePosition, setArrivePosition] = useState({})
+  const [startPosition, setStartPosition] = useState({})
 
-  const [startPosition, setStartPosition] = useState({});
-  const [startAddress, setStartAddress] = useState("");
-  const [sender , setSender] = useState("");
-  const [senderPhoneNumber , setSenderPhoneNumber] = useState("");
-
-  const [arrivePosition, setArrivePosition] = useState({});
-  const [arriveAddress, setArriveAddress] = useState("");
-  const [receiver , setReceiver] =useState("");
-  const [receiverPhoneNumber , setReceiverPhoneNumber] =useState("");
-
-  const [width , setWidth] = useState(0);
-  const [height , setHeight] = useState(0);
-  const [length , setLength] = useState(0);
-  const [weight, setWeight] = useState(0);
-
-  const [AMPM, setAMPM] = useState("")
-  const [date, setDate] = useState("")
-  const [hour, setHour] = useState(0)
-  const [minute, setMinute] = useState(0)
-
-  const [details , setDetails] =useState("");
-  const [cost , setCost] =useState(0);
-
-  const [isChecked, setIsChecked] = useState({
-    walk: false,
-    bike: false,
-    kickboard: false,
-    motorcycle: false,
-    car: false,
-    truck: false,
-  });
+  const setDeadlineToProp = () => {
+    if (date !== null && AMPM !== null && hour !== null && minute !== null) {
+      const timeStamp = Time.parseTimeStamp(date , AMPM , hour , minute).toString()
+      setDeadLine(timeStamp)
+    }
+  }
 
   const forSendData = {
     userWalletAddress : address,
@@ -166,8 +259,6 @@ export default function CommissionPage() {
     }
   }
 
-  const { title, setTitle } = useOrderStore()
-
   const pageBack = () => {
     if (title === "출발지 입력") {
       navigate("/");
@@ -194,61 +285,20 @@ export default function CommissionPage() {
     setShowCommissionPage(false);
   };
 
-  const test = () => {
-    console.log(startPosition, arrivePosition, startAddress,
-      sender,
-      senderPhoneNumber,
-      arriveAddress,
-      receiver,
-      receiverPhoneNumber,
-      width,
-      height,
-      length,
-      weight,
-      details,
-      cost,
-      date,
-      hour,
-      minute,
-      AMPM
-    )
-  }
-
+  useEffect(() => {
+    setDeadlineToProp()
+  }, [date, AMPM, hour, minute])
   return (
     <>
     <GlobalStyle/>
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       <div style={showCommissionPage ? { display: "block" } : { display: "none" }}>
-        <Tmap containerId={"mapContainerBox"} startPosition={startPosition} arrivePosition={arrivePosition}/>
-        <Postcode refs={{ startinputDiv: startinputDiv, arriveinputDiv: arriveinputDiv, }} mapControls={{ showMap: showMap, hideMap: hideMap }} setStates={{
-          setStartPosition: setStartPosition, setArrivePosition: setArrivePosition, setStartAddress: setStartAddress,
-          setSender: setSender,
-          setSenderPhoneNumber: setSenderPhoneNumber,
-          setArriveAddress: setArriveAddress,
-          setReceiver: setReceiver,
-          setReceiverPhoneNumber: setReceiverPhoneNumber
-        }} title={title} hideCommissionPage={() => handleCommissionPage()} />
+        <Tmap states={{startPosition : startPosition , arrivePosition : arrivePosition}}containerId={"mapContainerBox"}/>
+        <Postcode setStates={{setStartPosition : setStartPosition, setArrivePosition : setArrivePosition}} refs={{startinputDiv : startinputDiv, arriveinputDiv : arriveinputDiv}} mapControls={{ showMap: showMap, hideMap: hideMap }} title={title} hideCommissionPage={() => handleCommissionPage()} />
       </div>
-      <button onClick={() => test()}>값 확인</button>
       <div style={showCommissionPage ? { display: "none" } : { display: "block" }}>
         <RequestPage
-        orderId={orderId}
-        sendData={forSendData}
-        states={{isChecked}}
-          setStates={{
-            setWidth: setWidth,
-            setHeight: setHeight,
-            setLength: setLength,
-            setWeight: setWeight,
-            setDetails: setDetails,
-            setCost: setCost,
-            setDate: setDate,
-            setHour: setHour,
-            setMinute: setMinute,
-            setAMPM: setAMPM,
-            setIsChecked : setIsChecked,
-            setOrderId : setOrderId
-          }} />
+        sendData={forSendData}/>
       </div>
       <BottomBar />
     </>

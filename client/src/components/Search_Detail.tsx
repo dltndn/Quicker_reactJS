@@ -4,16 +4,49 @@ import ConfirmBtn from "./confirmBtn";
 import { useSearchState } from "../pages/SearchPage";
 import { useEffect } from "react";
 import { OrderObj } from "../pages/SearchPage";
+import { WriteTransactionToBlockchain } from "../utils/ExecuteOrderFromBlockchain";
+import { useOrderStore } from "../pages/commission";
+import Handler from "../lib/Handler";
+import { useAccount } from "wagmi";
 
 const money = require("../image/money.png");
 
 function Search_Detail() {
+  const navigator = useNavigate()
+  const { address } = useAccount()
   const { orders, showOrder } = useSearchState();
+  const { setShowAllowance } = useOrderStore()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
-
-  const acceptOrder = () => {
-    //수락하기 로직 구현
+  
+  // 수락하기 로직
+  const acceptOrder = async () => {
+    if (showOrder !== undefined) {
+      const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
+      try {
+        const data = await wttb.acceptOrder()
+        Handler.post({
+          orderId : order!.orderNum,
+          userWalletAddress : address
+        }, process.env.REACT_APP_SERVER_URL + "updateorder")
+        navigator("/")
+      } catch(e) {
+        if (e) {
+          //@ts-ignore
+          if (e.reason === "execution reverted: Already matched with another quicker...") {
+            console.log("이미 매칭이 완료된 오더입니다.")
+            //@ts-ignore
+          } else if (e.reason === "execution reverted: ERC20: insufficient allowance") {
+            setShowAllowance(true)
+            //@ts-ignore
+          } else if (e.reason === "execution reverted: ERC20: transfer amount exceeds balance") {
+            console.log("보증금 송금을 위한 잔액이 부족합니다.")
+          } else {
+            console.log(e)
+          }
+        }
+      }
+    }
   };
 
   return (
@@ -95,6 +128,7 @@ function Search_Detail() {
             </Div5>
           </Se0>
           <ConfirmBtn
+            isDisabled={false}
             content="수락하기"
             confirmLogic={() => {
               acceptOrder();

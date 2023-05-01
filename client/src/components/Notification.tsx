@@ -76,6 +76,7 @@ function Notification() {
       <GlobalStyle />
       <TopBarThin
         title="알림"
+        title2=""
         redirectLogic={() => {
           navigate("/");
         }}

@@ -9,9 +9,12 @@ import Search from "../components/Search";
 import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
-import { getOrder } from "../utils/GetOrderFromBlockchain";
+import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../utils/ConvertTimestampToDate";
 import { calQuickerIncome, calSecurityDeposit, extractNumber } from "../utils/CalAny";
+import { useOrderStore } from "./commission";
+import IncreaseAllowance from "../components/IncreaseAllowance";
+import {  useAccount } from "wagmi";
 
 export interface OrderObj {
     orderNum: string;
@@ -75,8 +78,9 @@ const getOrderFromBlochchain = async (orderNum:string) => {
 }
 
 function SearchPage() {
-  
+  const {address} = useAccount()
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } = useSearchState();
+  const { showAllowance } = useOrderStore()
   const requestListContainer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const [map, setMap] = useState({})
@@ -168,8 +172,13 @@ function SearchPage() {
     
     const exec = async () => {
       try {
-        let data = await Handler.get("http://localhost:9000/checkJoin")
+        
+        let data = await Handler.post({
+          userWalletAdress : address
+        },
+        process.env.REACT_APP_SERVER_URL + "getRequests")
         setRequestListContents(data)
+        console.log(data)
       }catch (error) {
         console.error(error)
       }
@@ -240,11 +249,13 @@ function SearchPage() {
           }}
         />
       </div>
-      {!isDetail ? (
+      {showAllowance ? (<IncreaseAllowance />
+      ):(
+      <>{!isDetail ? (
          <Search clickOrder={(index) => clickOrder(index)} />
        ) : (
          <Search_Detail />
-       )}
+       )}</>)}
        <BottomBar></BottomBar>
     </div>
   ) 

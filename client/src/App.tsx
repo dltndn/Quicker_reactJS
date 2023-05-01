@@ -16,11 +16,12 @@ import SearchPage from "./pages/SearchPage";
 import ChattingPage from "./pages/ChattingPage";
 import ProfilePage from "./pages/ProfilePage";
 import TestPage2 from "./pages/TestPage2";
-import OrderlistPage from "./pages/OrderlistPage";
-import FulfillmentlistPage from "./pages/FulfillmentlistPage";
+import OrderLogPage from "./pages/OrderLogPage";
 import Profile_settingPage from "./pages/Profile_settingPage";
 import React, { useEffect } from "react";
 import Notification from "./components/Notification";
+import ExecutionPage from "./pages/ExecutionPage";
+import ClientConfirmPage from "./pages/ClientConfirmPage";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -91,10 +92,12 @@ function App() {
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/orderlist" element={<OrderlistPage />} />
-            <Route path="/fulfillmentlist" element={<FulfillmentlistPage />} />
             <Route path="/profile/setting" element={<Profile_settingPage />} />
+            <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
+            <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
+            <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

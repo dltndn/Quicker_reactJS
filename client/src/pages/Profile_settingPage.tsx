@@ -17,7 +17,7 @@ function Profile_settingPage() {
     return (
       <>
         <GlobalStyle />
-        <TopBarThin title="내 정보" redirectLogic={function (){navigate("/profile")} }/>
+        <TopBarThin title="내 정보" title2="수정" redirectLogic={function (){navigate("/profile")} }/>
         <Profilesetting/>
 
       </>
