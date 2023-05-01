@@ -38,9 +38,9 @@ export default function ClientConfirmPage() {
             const blockchainOrder: any = await getOrderLawData(orderNumber)
             if (blockchainOrder.deliveredTime.toNumber() === 0) {
                 if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
-                    setShowComponent(<FailedOrderConfirm orderNum={orderNumber} />)
-                } else {
                     setShowComponent(<DeliveryStatus orderNum={orderNumber} />)
+                } else {
+                  setShowComponent(<FailedOrderConfirm orderNum={orderNumber} />)
                 }
             } else {
                 setShowComponent(<CompletedOrderConfirm orderNum={orderNumber} />)
