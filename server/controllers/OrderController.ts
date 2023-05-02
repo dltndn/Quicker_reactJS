@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import SelectOrder from "../models/SelectOrder"
 import CreateOrder from "../models/CreateOrder"
-import sequelize from "../SequelizeConnector"
+import sequelize from "../sequelizeConnector"
 import {initModels} from "../models/DB/init-models";
 import UpdateOrder from "../models/UpdateOrder";
 import CreateChatRoom from "../models/CreateChatRoom";

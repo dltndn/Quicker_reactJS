@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import SelectOrder = require("../models/SelectOrder");
 import CreateUser = require("../models/CreateUser");
-import sequelize from "../SequelizeConnector"
+import sequelize from "../sequelizeConnector"
 import {initModels} from "../models/DB/init-models";
 import SelectUser = require("../models/SelectUser");
 
