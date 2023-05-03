@@ -82,7 +82,6 @@ export default function ExecutionPage() {
       try {
         const blockchainOrder: any = await getOrderLawData(orderNumber)
         if (isCLientConfirm(blockchainOrder)) {
-          console.log(blockchainOrder.orderPrice.toNumber())
           let securityDeposit: number
           if (blockchainOrder.deliveredTime.toNumber() > blockchainOrder.limitedTime.toNumber()) {
             securityDeposit = 0

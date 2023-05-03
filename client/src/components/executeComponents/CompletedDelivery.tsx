@@ -28,6 +28,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit}: 
                 console.log(result)
             } catch(e) {
                 console.log(e)
+                alert("정산이 완료됐습니다.")
             }
             navigate("/")
         }
