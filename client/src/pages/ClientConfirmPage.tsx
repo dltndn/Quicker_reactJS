@@ -40,7 +40,11 @@ export default function ClientConfirmPage() {
                 if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
                     setShowComponent(<DeliveryStatus orderNum={orderNumber} />)
                 } else {
-                  setShowComponent(<FailedOrderConfirm orderNum={orderNumber} />)
+                  let isReceived: boolean = false
+                  if(blockchainOrder.securityDeposit.toNumber() === 0) {
+                    isReceived = true
+                  }
+                  setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={isReceived}/>)
                 }
             } else {
                 setShowComponent(<CompletedOrderConfirm orderNum={orderNumber} />)
@@ -67,6 +71,6 @@ export default function ClientConfirmPage() {
       {showComponent}
       <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber}/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<CompletedOrderConfirm orderNum={orderNumber}/>)}>배송성공 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber}/>)}>배송실패 확인 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={false}/>)}>배송실패 확인 컴포넌트 이동</button>
   </>;
 }
