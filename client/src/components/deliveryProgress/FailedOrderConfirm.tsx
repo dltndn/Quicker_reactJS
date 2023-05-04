@@ -6,8 +6,7 @@ import ConfirmBtn from "../confirmBtn"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
 import { getOrderLawData } from "../../utils/ExecuteOrderFromBlockchain"
 
-interface FailedOrderConfirmProps {
-  orderNum: string|undefined;
+interface FailedOrderConfirmProps extends ExecutionComponentProps{
   isReceived: boolean;
 }
 
