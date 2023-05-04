@@ -12,14 +12,16 @@ interface CompletedDeliveryProps {
     income: number;
     securityDeposit: number;
     orderNum : string | undefined;
+    isReceived: boolean
 }
 
-export default function CompletedDelivery({ orderNum, income, securityDeposit}: CompletedDeliveryProps) {
+export default function CompletedDelivery({ orderNum, income, securityDeposit, isReceived}: CompletedDeliveryProps) {
     const { setTitle } = useExecutionState()
     const [incomeString] = useState(income.toLocaleString())
     const [securityDpositString] = useState(securityDeposit.toLocaleString())
     const [total] = useState((income + securityDeposit).toLocaleString())
     const navigate = useNavigate()
+
     const confirmLogic = async () => {
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
@@ -33,6 +35,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit}: 
             navigate("/")
         }
     }
+
     useEffect(() => {
         setTitle("배송결과")
     }, [])
@@ -58,7 +61,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit}: 
         </Div5>
         </Div3>
             <ConfirmBtn
-            isDisabled={false}
+            isDisabled={isReceived}
             content="확인"
             confirmLogic={() => {
                 confirmLogic();
