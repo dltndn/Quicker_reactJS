@@ -475,7 +475,7 @@ const QuickerBottomBtn = ({ order }: any) => {
 
   switch (order?.state) {
     case "completed":
-      return <Button onClick={() => closeModal()}>확인</Button>;
+      return <Button onClick={() => acceptLogic()}>확인</Button>;
     case "failed":
       return <Button onClick={() => closeModal()}>확인</Button>;
     default:

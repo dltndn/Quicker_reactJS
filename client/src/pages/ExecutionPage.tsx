@@ -11,6 +11,7 @@ import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm
 import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
 import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
+import { formatedDateHM, getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
 
 interface ExecutionState {
   title: string;
@@ -82,15 +83,18 @@ export default function ExecutionPage() {
       try {
         const blockchainOrder: any = await getOrderLawData(orderNumber)
         if (isCLientConfirm(blockchainOrder)) {
-          console.log(blockchainOrder.orderPrice.toNumber())
           let securityDeposit: number
+          let isReceived: boolean = false
           if (blockchainOrder.deliveredTime.toNumber() > blockchainOrder.limitedTime.toNumber()) {
             securityDeposit = 0
           } else {
             securityDeposit = calSecurityDepositNum(blockchainOrder.orderPrice.toNumber())
           }
           const income = calQuickerIncomeNum(blockchainOrder.orderPrice.toNumber())
-          setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit}/>)
+          if(blockchainOrder.securityDeposit.toNumber() === 0) {
+            isReceived = true
+          }
+          setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit} isReceived={isReceived}/>)
           return
         } else if (isDeliveryFailed(blockchainOrder)) {
           setShowComponent(<FailedDelivery orderNum={orderNumber}/>)
@@ -132,7 +136,7 @@ export default function ExecutionPage() {
       <button onClick={() => setShowComponent(<ReceivingItem orderNum={orderNumber}/>)}>물품인계 확인 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<DeliveredItem orderNum={orderNumber}/>)}>물품전달 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<WaitClientConfirm />)}>의뢰인 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber} income={9800} securityDeposit={0}/>)}>배송완료 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<CompletedDelivery orderNum={orderNumber} income={9800} securityDeposit={0} isReceived={false}/>)}>배송완료 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<FailedDelivery orderNum={orderNumber}/>)}>배송실패 컴포넌트 이동</button>
     </>
   );

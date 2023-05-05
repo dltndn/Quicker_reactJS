@@ -139,6 +139,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     const originOrder = await getOrder(orderNum)
     const intervalId = setInterval(async () => {
         let newOrder = await getOrder(orderNum);
+        // 서명 거부시 인터벌 탈출기능 추가
         if (newOrder.state !== originOrder.state) {
           console.log("새 오더 탐색 완료")
           setNewOrder(newOrder)

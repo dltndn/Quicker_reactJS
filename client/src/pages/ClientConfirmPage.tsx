@@ -7,6 +7,7 @@ import CompletedOrderConfirm from "../components/deliveryProgress/CompletedOrder
 import FailedOrderConfirm from "../components/deliveryProgress/FailedOrderConfirm";
 import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
 import { LoadingDeliveryProgress } from "../components/LoadingAnimation";
+import { getDateFromTimestamp, formatedDateHM } from "../utils/ConvertTimestampToDate";
 
 interface ClientConfirmState {
     title: string;
@@ -38,9 +39,14 @@ export default function ClientConfirmPage() {
             const blockchainOrder: any = await getOrderLawData(orderNumber)
             if (blockchainOrder.deliveredTime.toNumber() === 0) {
                 if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
-                    setShowComponent(<FailedOrderConfirm orderNum={orderNumber} />)
+                    let deadlineHM = formatedDateHM(getDateFromTimestamp(blockchainOrder.limitedTime.toNumber()))
+                    setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline={deadlineHM}/>)
                 } else {
-                    setShowComponent(<DeliveryStatus orderNum={orderNumber} />)
+                  let isReceived: boolean = false
+                  if(blockchainOrder.securityDeposit.toNumber() === 0) {
+                    isReceived = true
+                  }
+                  setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={isReceived}/>)
                 }
             } else {
                 setShowComponent(<CompletedOrderConfirm orderNum={orderNumber} />)
@@ -65,8 +71,8 @@ export default function ClientConfirmPage() {
         }}
       ></TopBarOthers>
       {showComponent}
-      <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber}/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline="20:00"/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<CompletedOrderConfirm orderNum={orderNumber}/>)}>배송성공 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber}/>)}>배송실패 확인 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={false}/>)}>배송실패 확인 컴포넌트 이동</button>
   </>;
 }

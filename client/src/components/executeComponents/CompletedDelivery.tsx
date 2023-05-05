@@ -7,19 +7,21 @@ import styled, { createGlobalStyle } from "styled-components";
 import money1 from "../../image/money1.gif"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { useNavigate } from "react-router-dom";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 
-interface CompletedDeliveryProps {
+interface CompletedDeliveryProps extends ExecutionComponentProps{
     income: number;
     securityDeposit: number;
-    orderNum : string | undefined;
+    isReceived: boolean
 }
 
-export default function CompletedDelivery({ orderNum, income, securityDeposit}: CompletedDeliveryProps) {
+export default function CompletedDelivery({ orderNum, income, securityDeposit, isReceived}: CompletedDeliveryProps) {
     const { setTitle } = useExecutionState()
     const [incomeString] = useState(income.toLocaleString())
     const [securityDpositString] = useState(securityDeposit.toLocaleString())
     const [total] = useState((income + securityDeposit).toLocaleString())
     const navigate = useNavigate()
+
     const confirmLogic = async () => {
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
@@ -28,10 +30,12 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit}: 
                 console.log(result)
             } catch(e) {
                 console.log(e)
+                alert("정산이 완료됐습니다.")
             }
             navigate("/")
         }
     }
+
     useEffect(() => {
         setTitle("배송결과")
     }, [])
@@ -57,7 +61,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit}: 
         </Div5>
         </Div3>
             <ConfirmBtn
-            isDisabled={false}
+            isDisabled={isReceived}
             content="확인"
             confirmLogic={() => {
                 confirmLogic();
