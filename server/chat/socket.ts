@@ -1,12 +1,10 @@
-import io from "./Config/SocketController";
+import io from "./Config/SocketConnector";
 import socketHandler from "./Controller/Handler";
 
-
-
+// 임의의 채팅방 이름
 const roomName = "testroom";
 
 const main = () => {
-  // 임의의 채팅방 이름
 
   // 이벤트 설정
   io.on("connect", (socket: any) => {
@@ -17,8 +15,7 @@ const main = () => {
     socket.on("sendMessage", socketHandler.sendMessage(socket, roomName));
     socket.on("disconnect", () => socketHandler.disconnect(socket));
   });
+
 };
-
-
 
 export = main;

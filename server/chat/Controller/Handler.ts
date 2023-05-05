@@ -1,4 +1,4 @@
-import io from "../Config/SocketController";
+import io from "../Config/SocketConnector";
 
 const socketHandler = {
 
