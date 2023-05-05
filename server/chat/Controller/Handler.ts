@@ -16,12 +16,21 @@ const socketHandler = {
   sendMessage: (socket: any, roomName: string) => (receiveMessage: Message, done : Function) => {
     // 해당 방에 전부 메세지 보냄
     socket.in(roomName).emit("sendMessage", receiveMessage.data);
-    console.log(receiveMessage);
-
+    console.log("현재 접속 방 정보 : ", roomName)
     console.log("수신 메세지 : ", receiveMessage.data);
     done();
   },
+
+  joinRoom: (socket: any, originRoomName : String) => (roomName: roomName, done : Function) => {
+    // 해당 방에 전부 메세지 보냄
+    console.log("접속 방 이름 : ", roomName);
+    done();
+  },
 };
+
+interface roomName {
+  roomName : String
+}
 
 interface Message {
   data: String;
