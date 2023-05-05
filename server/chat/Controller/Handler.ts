@@ -13,12 +13,13 @@ const socketHandler = {
     console.log("disconnected");
   },
 
-  sendMessage: (socket: any, roomName: string) => (receiveMessage: Message) => {
+  sendMessage: (socket: any, roomName: string) => (receiveMessage: Message, done : Function) => {
     // 해당 방에 전부 메세지 보냄
     socket.in(roomName).emit("sendMessage", receiveMessage.data);
     console.log(receiveMessage);
 
     console.log("수신 메세지 : ", receiveMessage.data);
+    done();
   },
 };
 
