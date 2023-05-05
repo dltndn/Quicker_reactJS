@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
+import Chat from "../components/chat";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 
@@ -43,6 +44,7 @@ function ChattingPage() {
           navigate("/")
         } }></TopBarOthers>
       <Div0 className="App">
+        <Chat></Chat>
         <div>
         <Img src={nochat}/>
         </div>
