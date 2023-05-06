@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import SelectOrder from "../models/SelectOrder"
 import CreateOrder from "../models/CreateOrder"
-import sequelize from "../sequelizeConnector"
+import sequelize from "../models/Controller/SequelizeConnector"
 import {initModels} from "../models/DB/init-models";
 import UpdateOrder from "../models/UpdateOrder";
 import CreateChatRoom from "../models/CreateChatRoom";
@@ -53,7 +53,7 @@ export = {
       // @ts-ignore
       let requesterId = await SelectUser.getRequesterId(orderId);
       // @ts-ignore
-      await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.id)
+      await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
       return res.send({msg : "done"})
     } catch {
       return res.send({msg : "fail"})
