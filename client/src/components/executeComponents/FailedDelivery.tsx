@@ -1,4 +1,4 @@
-import ConfirmBtn from "../confirmBtn"
+import BottomConfirmBtn from "../bottomconfirmBtn"
 import { useEffect, useRef } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import styled from "styled-components";
@@ -151,7 +151,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
             </div>
         </Box>
     </Container>
-            <ConfirmBtn
+            <BottomConfirmBtn
             isDisabled={false}
             content="확인"
             confirmLogic={async() => {
