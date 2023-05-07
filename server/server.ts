@@ -14,6 +14,7 @@ require("dotenv").config();
 app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json());
 
+
 // socket
 chat()
 
