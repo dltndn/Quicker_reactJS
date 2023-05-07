@@ -1,5 +1,5 @@
 import io from "../Config/SocketConnector";
-import mongoDB from "../../models/mongo/mongo";
+import mongoDB from "../../models/mongo/SaveMessage";
 const socketHandler = {
 
   printRoomInfo : () => {

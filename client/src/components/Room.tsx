@@ -11,6 +11,7 @@ export default function (data : any) {
 
     // 이벤트 처리
     const addMessage = (message: string) => {
+        console.log(message)
         const div = messageDiv.current
         const text = document.createElement("div");
         text.innerText = message;
@@ -28,17 +29,25 @@ export default function (data : any) {
     };
 
     const joinRoom = (roomId : number) => {
-        socket.emit("joinRoom", { roomName : roomId }, () => {alert("enter")});
+        socket.emit("joinRoom", { roomName : roomId });
+    }
+
+    const loadMessage = (messages : any []) => {
+        for (let index = 0; index < messages.length; index++) {
+            const element = messages[index];
+            addMessage(element.message)    
+        }
+        
     }
 
     useEffect(() => {
         socket.on("connect", () => setSocketId(socket.id))
         socket.on("joinRoom", joinRoom)
         socket.on("sendMessage", addMessage);
+        socket.on("loadMessage", loadMessage)
     }, [socket]);
 
     useEffect(() => {
-        console.log(data)
         if (socketId !== undefined) {
             console.log(socketId)
         }
