@@ -6,6 +6,8 @@ import {initModels} from "../models/DB/init-models";
 import UpdateOrder from "../models/UpdateOrder";
 import CreateChatRoom from "../models/CreateChatRoom";
 import SelectUser = require("../models/SelectUser");
+import SelectRoomInfo = require("../models/SelectRoomInfo");
+
 
 initModels(sequelize);
 
@@ -59,4 +61,17 @@ export = {
       return res.send({msg : "fail"})
     }
   },
+
+  getRoomInfo : async (req: Request, res: Response) => {
+    const orderNum = req.body.orderNum;
+    try {
+      let data = await SelectRoomInfo.getRoomInfo(orderNum)
+      return res.send(JSON.stringify(data))
+    } catch {
+      return res.send({msg : "fail"})
+    }
+  },
 };
+
+
+

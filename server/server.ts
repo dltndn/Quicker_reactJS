@@ -3,6 +3,7 @@ import chat from "./chat/socket";
 import AdminController = require("./controllers/AdminController");
 import OrderController = require("./controllers/OrderController");
 import UserController = require("./controllers/UserController");
+import ChatController = require("./controllers/ChatController");
 
 const cors = require("cors");
 const app: Application = express();
@@ -28,6 +29,9 @@ app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
 app.post("/request", OrderController.request);
 app.post("/updateorder", OrderController.updateOrder);
+app.post("/getRecentMessage", ChatController.getRecentMessage);
+app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
+app.post("/getRoomInfo", OrderController.getRoomInfo);
 
 
 app.listen(port, () => {console.log(`App is listening on port ${port} !`);});
