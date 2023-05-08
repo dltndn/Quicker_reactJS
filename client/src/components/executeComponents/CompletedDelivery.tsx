@@ -23,6 +23,10 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
     const navigate = useNavigate()
 
     const confirmLogic = async () => {
+        if (isReceived) {
+            navigate("/")
+            return
+        }
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
             try {
@@ -61,7 +65,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
         </Div5>
         </Div3>
             <ConfirmBtn
-            isDisabled={isReceived}
+            isDisabled={false}
             content="확인"
             confirmLogic={() => {
                 confirmLogic();
