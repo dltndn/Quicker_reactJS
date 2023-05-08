@@ -2,6 +2,7 @@ import { readContract, readContracts, prepareWriteContract, writeContract } from
 import { QKRW_CONTRACT_ABI,
   QKRW_ADDRESS, QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
+import { stat } from 'fs';
 
 const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
@@ -115,6 +116,25 @@ export const getClientOrderList = async(address:`0x${string}` | undefined) => {
   })
   let result:string[] = []
   data.forEach((element: any) => result.push(BigInt(element._hex).toString()));  
+  return result
+}
+
+// 오더 상태에 해당하는 오더정보 배열 반환
+// 오더 상태별 오더 데이터들 배열로 반환
+//     created -> 0
+//     matched -> 1
+//     completed -> 2
+//     failed -> 3
+//     canceled -> 4
+export const getOrdersForState =async (_state: number) => {
+  const data:any = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: "getOrdersForState",
+    args: [_state.toString()],
+  })
+  let result:any[] = []
+  data.forEach((element:any) => result.push(TemplateOrder(element)))
   return result
 }
 
