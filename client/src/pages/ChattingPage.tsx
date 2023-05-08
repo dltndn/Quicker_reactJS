@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef, ReactNode } from "react";
 import TopBarOthers from "../components/topBarOthers"
 import BottomBar from "../components/BottomBar";
-import Chat from "../components/chat";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
-import { getOrderList, getOrders } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrderList, getOrders, getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { useAccount } from "wagmi";
-import Room from "../components/Room";
+import Room from "../components/chatComponents/Room";
+import Chat from "../components/chatComponents/Chat";
+
+
 
 const nochat = require('../image/nochat.png');
 
@@ -41,61 +43,33 @@ const Div1 = styled.div`
 function ChattingPage() {
   const navigate = useNavigate()
   
-  const { address, isConnected } = useAccount();
-
+  const [isRoomClicked, setIsRoomClicked] = useState<boolean>(false);
+  const [selectedOrderNum, setSelectedOrderNum] = useState<number | undefined>(undefined);
   const [blockChainData, setBlockChainData] = useState<any>();
   const [combinedBlockChainData, setCombinedBlockChainData] = useState<ReactNode[] | undefined>();
 
-  const combineClientDeliverOrderList = (clientOrderList : string[] | undefined, deliverOrderList : string[]| undefined) => {
-    
-    if((clientOrderList && deliverOrderList) === undefined) return
-    else if(clientOrderList === undefined) return deliverOrderList?.map(Number)
-    else if (deliverOrderList === undefined) return clientOrderList?.map(Number)
-    else {
-      const parsedIntClientOrderList = clientOrderList?.map(Number)
-      const parsedIntDeliverOrderList = deliverOrderList?.map(Number)
-      console.log(parsedIntClientOrderList, parsedIntDeliverOrderList)
-      let clientIndex = 0;
-      let deliverIndex = 0;
-      const list = []
-      for (let index = 0; index < parsedIntClientOrderList.length + parsedIntDeliverOrderList.length; index++) {
-        if(parsedIntClientOrderList[clientIndex] === undefined) {
-          list.unshift(parsedIntDeliverOrderList[deliverIndex])
-          deliverIndex++;
-        } else if (parsedIntDeliverOrderList[deliverIndex] === undefined) {
-          list.unshift(parsedIntClientOrderList[clientIndex])
-          clientIndex++;
-        } else if(parsedIntClientOrderList[clientIndex] > parsedIntDeliverOrderList[deliverIndex]){ 
-          list.unshift(parsedIntDeliverOrderList[deliverIndex])
-          deliverIndex++
-        } else {
-          list.unshift(parsedIntClientOrderList[clientIndex])
-          clientIndex++
-        }
-      }
-
-      return list
-    }
-  }
-
   const getOrderListFromBlochain = async () => {
-    const clientOrderList = await getOrderList(address, true);
-    const deliverOrderList = await getOrderList(address, false);
- 
-    const list = combineClientDeliverOrderList(clientOrderList,deliverOrderList);
-    console.log(list)
-    setBlockChainData(list)
+    const result = await getOrdersForState(1).then(list => list.reverse())
+    console.log(result)
+    setBlockChainData(result)
   };
 
   useEffect(() => {
     getOrderListFromBlochain()
   }, []);
 
+// state 값 확인 용
+  useEffect(() => {
+    if ((selectedOrderNum) !== undefined) {
+      console.log(isRoomClicked)
+      console.log(selectedOrderNum)
+    }
+  }, [isRoomClicked, selectedOrderNum]);
+
   useEffect(() => {
     if (blockChainData !== undefined) {
       (async () => {
-        let combineData = await getOrders(blockChainData)
-        setCombinedBlockChainData(combineData);
+        setCombinedBlockChainData(blockChainData);
       })()
     }
   }, [blockChainData]);
@@ -106,10 +80,12 @@ function ChattingPage() {
         navigate("/")
       }}></TopBarOthers>
       <Div0 className="App">
-        {
-          (combinedBlockChainData !== undefined) ?
-            combinedBlockChainData.map((data: any) => {
-              return (<Room roomData={data} ></Room>)
+        {((isRoomClicked === true) && (selectedOrderNum !== undefined)) ? 
+          (<Chat roomName={selectedOrderNum} realAddress={{receiver : "수취인 주소", sender : "발송인 주소"}} phoneNumbers={{receiver : "수취인 번호", sender : "발송인 번호"}} />) :
+          ((combinedBlockChainData !== undefined) ?
+            combinedBlockChainData.map((blockchainElement: any) => {
+              let orderNum = parseInt(blockchainElement.orderNum)
+              return (<Room setStates={{ setSelectedOrderNum: setSelectedOrderNum, setIsRoomClicked: setIsRoomClicked }} orderNum={orderNum} blockchainElement={blockchainElement}></Room>)
             }) :
             <div>
               <div>
@@ -117,12 +93,13 @@ function ChattingPage() {
               </div>
               <Div1>현재 진행 중인 채팅이 없습니다.<br></br>
                 거래를 시작하여 채팅을 활성화 시켜보세요!</Div1>
-            </div>
+            </div>)
         }
       </Div0>
       <BottomBar></BottomBar>
     </>
   );
 }
+
 
 export default ChattingPage;

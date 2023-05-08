@@ -1,11 +1,7 @@
 import io from "./Config/SocketConnector";
 import socketHandler from "./Controller/Handler";
-import mongoDB from "../models/mongo/SaveMessage";
 import saveMessage from "../models/mongo/SaveMessage";
-import findMessage from "../models/mongo/FindMessage";
-
-
-
+import findMessage from "../models/mongo/FindMessages";
 
 const main = () => {
   // 임의의 채팅방 이름
