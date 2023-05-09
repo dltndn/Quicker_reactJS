@@ -68,6 +68,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                   }}>
                     <BsChevronRight />
                 </Bt0>
+                <button onClick={()=> navigate("/execution/205")}>임시배송페이지이동버튼</button>
               </Sp1>
             </Div1>
           </section>

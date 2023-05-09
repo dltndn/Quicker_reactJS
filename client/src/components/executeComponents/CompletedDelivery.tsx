@@ -23,6 +23,10 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
     const navigate = useNavigate()
 
     const confirmLogic = async () => {
+        if (isReceived) {
+            navigate("/")
+            return
+        }
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
             try {
@@ -60,8 +64,8 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
             <Divpo>{incomeString}원<br/><Div5_1>{securityDpositString === "0" ? (" - "):(securityDpositString)}원</Div5_1><br/><Div4>{total}원</Div4></Divpo>
         </Div5>
         </Div3>
-            <BottomConfirmBtn
-            isDisabled={isReceived}
+            <ConfirmBtn
+            isDisabled={false}
             content="확인"
             confirmLogic={() => {
                 confirmLogic();

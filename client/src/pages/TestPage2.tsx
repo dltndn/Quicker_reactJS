@@ -6,6 +6,7 @@ import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
 import { useContractEvent, useTransaction, useAccount } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
+import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
@@ -42,10 +43,22 @@ export default function TestPage2() {
     },
   });
 
+  // 오더 상태별 오더 데이터들 배열로 반환
+//     created -> 0
+//     matched -> 1
+//     completed -> 2
+//     failed -> 3
+//     canceled -> 4
+  const getOrdersForStateTest = async (_state: number) => {
+    const result = await getOrdersForState(_state)
+    console.log(result)
+  }
+
   return (
     <>
       <TopDiv>
         <div>
+          <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"
