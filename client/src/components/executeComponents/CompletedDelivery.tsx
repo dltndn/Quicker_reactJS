@@ -8,6 +8,7 @@ import money1 from "../../image/money1.gif"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { useNavigate } from "react-router-dom";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import ConfirmBtn from "../confirmBtn";
 
 interface CompletedDeliveryProps extends ExecutionComponentProps{
     income: number;

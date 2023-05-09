@@ -41,7 +41,7 @@ const Tbhome = styled(Tbt)`
 `;
 
 const Tbsp = styled.div`
-    font-size: var(--font-md);
+    font-size: var(--font-md1);
     font-weight: thin;
     margin-top: 0.125rem;
     margin-left: 0.313rem;

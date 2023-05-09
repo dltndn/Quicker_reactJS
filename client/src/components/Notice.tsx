@@ -20,7 +20,6 @@ const Topimg = styled.div`
 
 const Sc0 = styled.section`
     display: flex;
-    margin: 0 0.563rem;
     flex-direction: column;
     justify-content: center;
     height: 3rem;
@@ -83,7 +82,7 @@ const Hr = styled.hr`
 `;
 
 
-function Profilesetting(){
+function Notice(){
     const navigate = useNavigate();
 
     return(
@@ -136,4 +135,4 @@ function Profilesetting(){
 }
 
 
-export default Profilesetting;
+export default Notice;

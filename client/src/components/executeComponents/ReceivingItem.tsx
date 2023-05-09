@@ -54,6 +54,7 @@ const Ft1 = styled.div`
   font-size: var(--font-md1);
   color: #000000;
 `;
+
 export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const receivedRogic = async () => {
