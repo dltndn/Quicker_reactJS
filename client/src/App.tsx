@@ -22,7 +22,7 @@ import React, { useEffect } from "react";
 import Notification from "./components/Notification";
 import ExecutionPage from "./pages/ExecutionPage";
 import ClientConfirmPage from "./pages/ClientConfirmPage";
-import Notice from "./components/Notice";
+import Profile_noticePage from "./pages/Profile_noticePage";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -94,7 +94,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/test2" element={<TestPage2 />} />
             <Route path="/profile/:setting" element={<Profile_settingPage />} />
-            <Route path="/profile/:notice" element={<Notice />} />
+            <Route path="/profile/:notice" element={<Profile_noticePage />} />
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />

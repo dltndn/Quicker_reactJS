@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import Lottie from 'lottie-react';
 import LotteData1 from '../../Lottie/8G0Py794pT.json';
 
+
+
 const Div0 = styled.div`
     display: flex;
     height: 3.875rem;
