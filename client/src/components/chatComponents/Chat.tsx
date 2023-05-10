@@ -1,7 +1,7 @@
 import { MouseEventHandler, ReactNode, useEffect, useRef, useState } from "react";
 import { socket } from "./socket";
 import { useAccount } from "wagmi";
-import { ChatInterface } from "./ChatInterface";
+import { ChatInterface } from "./interface/ChatInterface";
 import getName from "./getName";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
 import Kakao from "../../lib/Kakao";
