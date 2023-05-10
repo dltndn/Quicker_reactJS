@@ -1,4 +1,4 @@
-import ConfirmBtn from "../confirmBtn"
+import BottomConfirmBtn from "../bottomconfirmBtn"
 import Dropzone from "react-dropzone";
 import { isMobileOnly } from "react-device-detect";
 import React, { useState, useEffect, ChangeEvent  } from "react";
@@ -77,7 +77,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
           </div>
         )}
       </Dropzone> 
-      <ConfirmBtn
+      <BottomConfirmBtn
             isDisabled={false}
             content="확인"
             confirmLogic={() => {

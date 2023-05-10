@@ -1,4 +1,4 @@
-import ConfirmBtn from "../confirmBtn"
+import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useState, useEffect } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import Dropzone from "react-dropzone";
@@ -8,6 +8,7 @@ import money1 from "../../image/money1.gif"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { useNavigate } from "react-router-dom";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+
 
 interface CompletedDeliveryProps extends ExecutionComponentProps{
     income: number;
@@ -64,7 +65,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
             <Divpo>{incomeString}원<br/><Div5_1>{securityDpositString === "0" ? (" - "):(securityDpositString)}원</Div5_1><br/><Div4>{total}원</Div4></Divpo>
         </Div5>
         </Div3>
-            <ConfirmBtn
+            <BottomConfirmBtn
             isDisabled={false}
             content="확인"
             confirmLogic={() => {

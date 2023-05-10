@@ -79,7 +79,7 @@ const Hr = styled.hr`
     width: 95%;
     height: 0.063rem;
     border: 0;
-    background: #e6e6e6;
+    background: #efefef;
 `;
 
 
@@ -91,7 +91,7 @@ function Profilesetting(){
         <Topdiv>
             <Topimg></Topimg>
         </Topdiv>
-
+        <br><br></br></br>
         <Sc0>
             <Div0>
                 <Sp2>이름</Sp2>
@@ -102,28 +102,27 @@ function Profilesetting(){
         <Sc2>
             <Div0>
                 <Sp2>생년월일</Sp2>
-                <Sp0>000</Sp0>
+                <Sp0>2001/02/13</Sp0>
             </Div0>
         </Sc2>
         <Hr></Hr>
         <Sc2>
             <Div0>
                 <Sp2>이메일</Sp2>
-                <Sp0>000</Sp0>
+                <Sp0>dudwns0213@naver.com</Sp0>
             </Div0>
         </Sc2>
         <Hr></Hr>
         <Sc2>
             <Div0>
                 <Sp2>연락처</Sp2>
-                <Sp0>000</Sp0>
+                <Sp0>000-0000-0000</Sp0>
             </Div0>
         </Sc2>
         <Hr></Hr>
         <Sc1>
             <Div0>
                 <Sp2>탈퇴하기</Sp2>
-                <Sp0>000</Sp0>
             </Div0>
         </Sc1>
         <Sc3>

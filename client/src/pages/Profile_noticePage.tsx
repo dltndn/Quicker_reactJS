@@ -1,7 +1,8 @@
-
+import TopBarOthers from "../components/topBarOthers"
+import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from 'styled-components';
-import Profilesetting from "../components/Profilesetting";
+import Notice from "../components/Notice";
 import TopBarThin from "../components/topBarthin";
 
 const GlobalStyle = createGlobalStyle`
@@ -11,16 +12,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-function Profile_settingPage() {
+function Profile_noticePage() {
     const navigate = useNavigate()
     return (
       <>
         <GlobalStyle />
-        <TopBarThin title=" 내정보" title2="수정" redirectLogic={function (){navigate("/profile")} }/>
-        <Profilesetting/>
+        <TopBarThin title="공지사항" title2="" redirectLogic={function (){navigate("/profile")} }/>
+        <Notice/>
 
       </>
     );
   }
   
-  export default Profile_settingPage;
+  export default Profile_noticePage;

@@ -1,4 +1,4 @@
-import ConfirmBtn from "../confirmBtn"
+import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
@@ -77,7 +77,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
         <Camera />
-        <ConfirmBtn
+        <BottomConfirmBtn
             isDisabled={false}
             content="확인"
             confirmLogic={() => {

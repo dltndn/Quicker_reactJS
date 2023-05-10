@@ -1,10 +1,14 @@
-import ConfirmBtn from "../confirmBtn"
+import BottomConfirmBtn from "../bottomconfirmBtn"
 import styled from "styled-components";
 import ready from "../animation/ready.gif"
 import { useExecutionState } from "../../pages/ExecutionPage";
 import DeliveredItem from "./DeliveredItem";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useEffect } from "react";
+import Lottie from 'lottie-react';
+import LotteData1 from '../../Lottie/8G0Py794pT.json';
+
+
 
 const Div0 = styled.div`
     display: flex;
@@ -37,6 +41,22 @@ const Ready = styled.img`
     width: 40%;
 `;
 
+const Con = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+    
+`;
+const Ft1 = styled.div`
+  display:flex;
+  justify-content: center;
+  flex-direction:column;
+  text-align:center;
+  font-size: var(--font-md1);
+  color: #000000;
+`;
+
 export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const receivedRogic = async () => {
@@ -58,10 +78,13 @@ export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
             <Btwal>물품 인계</Btwal> 
             </Div1>
         </Div0>
-        <Div3>
-          <Ready src={ready}></Ready>
-        </Div3>
-            <ConfirmBtn
+        <Con>
+            <Lottie animationData={LotteData1}/>
+        </Con>
+        <Ft1>
+            물품을 인계받으면 확인 버튼을 눌러주세요.
+        </Ft1>
+            <BottomConfirmBtn
             isDisabled={false}
             content="확인"
             confirmLogic={async() => {
