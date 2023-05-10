@@ -93,8 +93,8 @@ function App() {
             <Route path="/commission" element={<CommissionPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/profile/:setting" element={<Profile_settingPage />} />
-            <Route path="/profile/:notice" element={<Profile_noticePage />} />
+            <Route path="/profile/setting" element={<Profile_settingPage />} />
+            <Route path="/profile/notice" element={<Profile_noticePage />} />
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />

@@ -4,6 +4,7 @@ import { useExecutionState } from "../../pages/ExecutionPage";
 import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
+import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 
 const Div0 = styled.div`
     display: flex;
@@ -32,7 +33,7 @@ text-align: center;
 `;
 
 
-export default function DeliveredItem() {
+export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
     const deliveredRogic = () => {
@@ -53,7 +54,7 @@ export default function DeliveredItem() {
             <Btwal onClick={() => setIsFace(false)}>비대면</Btwal>
             </Div1>
         </Div0>
-            {isFace ? (<FaceToFaceDelivery orderNum={undefined} />):(<RemoteDelivery orderNum={undefined} />)}
+            {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery orderNum={orderNum} />)}
             <BottomConfirmBtn
                 content="확인"
                 confirmLogic={() => {

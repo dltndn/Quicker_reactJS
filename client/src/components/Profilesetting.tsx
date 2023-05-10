@@ -91,7 +91,6 @@ function Profilesetting(){
         <Topdiv>
             <Topimg></Topimg>
         </Topdiv>
-        <br><br></br></br>
         <Sc0>
             <Div0>
                 <Sp2>이름</Sp2>

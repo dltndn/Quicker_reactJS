@@ -160,11 +160,11 @@ function Imfo(){
         navigate("/fulfillmentlist")
     }
     const ClickSettingPage = () => {
-        navigate("/profile/:setting")
+        navigate("/profile/setting")
     }
 
     const ClicknoticePage = () => {
-        navigate("/profile/:notice")
+        navigate("/profile/notice")
     }
 
 
