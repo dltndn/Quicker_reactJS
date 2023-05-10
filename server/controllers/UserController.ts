@@ -43,10 +43,7 @@ export = {
 
   getUserNameUseByWalletAddress: async (req: Request, res: Response) => {
     try {
-      const deleteEscape = (walletAddress : string) =>{
-        return walletAddress.substring(1,walletAddress.length-1)
-      }
-      const walletAddress = deleteEscape(req.body.walletAddress)
+      const walletAddress = req.body.walletAddress
       let data = await SelectUser.getUserName(walletAddress) as { name: string | null}
       res.send({ name: data.name });
     } catch (error) {

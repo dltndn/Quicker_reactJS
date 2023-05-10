@@ -1,5 +1,5 @@
 import { SetStateAction, useEffect, useRef, useState } from "react"
-import type { RoomInterface } from "./RoomInterface"
+import type { RoomInterface } from "./interface/RoomInterface"
 import Handler from "../../lib/Handler"
 import { useAccount } from "wagmi"
 import getName from "./getName"
