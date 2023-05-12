@@ -5,6 +5,8 @@ import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
+import WaitClientConfirm from "./WaitClientConfirm";
 
 const Div0 = styled.div`
     display: flex;
@@ -36,8 +38,18 @@ text-align: center;
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
-    const deliveredRogic = () => {
-
+    const deliveredRogic = async () => {
+        if (orderNum !== undefined) {
+            const wttb = new WriteTransactionToBlockchain(orderNum)
+            try {
+                const result = await wttb.deliveredOrder()
+                console.log(result)
+                // 배송원 사진 업로드 로직 작성
+            } catch(e) {
+                console.log(e)
+            }
+            setShowComponent(<WaitClientConfirm />)
+        }
     }
 
     useEffect(() => {
