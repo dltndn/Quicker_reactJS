@@ -35,6 +35,7 @@
 //     event OrderCreated(uint256 orderNum);
 //     event OrderResult(bool result);
 //     event DepositedFee(bool result);
+//     event ChangedBalance(bool result);
 
 //     /**
 //      * @dev indicating the current status of order
@@ -199,6 +200,10 @@
 //         setCommissionRate(_num, _changedRate);
 //     }
 
+//     function getCommissionRate() view public returns(Commission memory){
+//         return commissionRate;
+//     }
+
 //     function transferTokensToOtherAddress(address _to, uint256 _amount)
 //         internal
 //     {
@@ -274,6 +279,8 @@
 //         orderList.push(newOrder);
 //         clientOrderList[msg.sender].push(orderNum);
 //         emit OrderCreated(orderNum);
+//         emit ChangedBalance(true);
+//         emit OrderResult(true);
 //     }
 
 //     /**
@@ -294,6 +301,7 @@
 //             orderList[_orderNum].orderPrice
 //         );
 //         transferTokensToOtherAddress(msg.sender, refundAmount);
+//         emit ChangedBalance(true);
 //         emit OrderResult(true);
 //     }
 
@@ -316,6 +324,7 @@
 //         uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
 //         recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
 //         emit OrderResult(true);
+//         emit ChangedBalance(true);
 //     }
 
 //     // 배송원 배달완료 시간 입력 함수
@@ -394,8 +403,8 @@
 //         );
 //         order.state = State.completed;
 //         order.securityDeposit = 0;
-//         emit OrderResult(true);
 //         emit DepositedFee(true);
+//         emit ChangedBalance(true);
 //     }
 
 //     // failedOrder 함수
@@ -432,5 +441,6 @@
 //         order.securityDeposit = 0;
 //         emit OrderResult(true);
 //         emit DepositedFee(true);
+//         emit ChangedBalance(true);
 //     }
 // }
