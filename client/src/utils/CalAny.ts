@@ -44,6 +44,12 @@ export const extractNumber = (priceChar: string) => {
   }
 
 export const changeBalanceToForm = (balance:BigInt):string => {
+    if (Number(balance) === 0) 
+        return "0"
     let result = parseInt(balance.toString().slice(0, -18))
     return result.toLocaleString()
   }
+
+export const sliceAddress = (address: string):string => {
+    return address.slice(0, 8) + "..."
+}
