@@ -42,3 +42,8 @@ export const extractNumber = (priceChar: string) => {
     const numStr = priceChar.replace(/[^\d]/g, ''); 
     return parseInt(numStr, 10);
   }
+
+export const changeBalanceToForm = (balance:BigInt):string => {
+    let result = parseInt(balance.toString().slice(0, -18))
+    return result.toLocaleString()
+  }

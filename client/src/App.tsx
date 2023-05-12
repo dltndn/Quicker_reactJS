@@ -23,6 +23,7 @@ import Notification from "./components/Notification";
 import ExecutionPage from "./pages/ExecutionPage";
 import ClientConfirmPage from "./pages/ClientConfirmPage";
 import Profile_noticePage from "./pages/Profile_noticePage";
+import ExplorerPage from "./pages/ExplorerPage";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -101,6 +102,7 @@ function App() {
             <Route path="/notification" element={<Notification />} />
             <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
             <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
+            <Route path="/explorer" element={<ExplorerPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

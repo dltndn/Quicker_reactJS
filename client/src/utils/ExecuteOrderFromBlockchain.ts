@@ -2,12 +2,22 @@ import { readContract, readContracts, prepareWriteContract, writeContract } from
 import { QKRW_CONTRACT_ABI,
   QKRW_ADDRESS, QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
-import { stat } from 'fs';
 
 const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
+
+// QKRW balance 확인
+export const getQkrwBalance =async (address: string) => {
+  const data = await readContract({
+    address: Qkrw_address,
+    abi: Qkrw_abi,
+    functionName: "balanceOf",
+    args: [address],
+  })
+  return data
+}
 
 // QKRW token 권한 확인
 export const getAllowance =async (address:`0x${string}` | undefined) => {
