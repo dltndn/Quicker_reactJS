@@ -8,6 +8,16 @@ const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
+// 수수료 조회
+export const getCommissionRate =async () => {
+  const data = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: "getCommissionRate",
+  })
+  return data
+}
+
 // QKRW balance 확인
 export const getQkrwBalance =async (address: string) => {
   const data = await readContract({

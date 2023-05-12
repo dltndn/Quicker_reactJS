@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { create } from "zustand";
 import { useState, useEffect } from "react";
-import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
+import { getQkrwBalance, getCommissionRate} from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import { useContractEvent } from "wagmi";
 
@@ -24,13 +24,13 @@ export default function ExplorerPage() {
   const [contractBal, setContractBal] = useState<string>("0");
   const [platformBal, setPlatformBal] = useState<string>("0");
   const [insuaBal, setInsuaBal] = useState<string>("0");
+  const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"])
 
   const getQkrwBalanceFunc = async (address: string) => {
     const result: any = await getQkrwBalance(address);
     const balance = changeBalanceToForm(BigInt(result._hex));
     switch (address) {
       case CONTRACT_ADDRESS:
-        console.log(result)
         setContractBal(balance);
         break;
       case PLATFORM_ADDRESS:
@@ -43,6 +43,15 @@ export default function ExplorerPage() {
         console.log("error");
     }
   };
+
+  const getCommissionLateFunc = async() => {
+    let arr:string[] = []
+    const result:any = await getCommissionRate()
+    for (const element of result) {
+        arr.push(formatCommissionRate(element))
+    }
+    setFeeArr(arr)
+  }
 
   // 배송원 정산, 의뢰인 정산시 동작
   useContractEvent({
@@ -97,6 +106,10 @@ export default function ExplorerPage() {
     }
   }, [transactTrigger]);
 
+  useEffect(() => {
+    getCommissionLateFunc()
+  }, [])
+
   return (
     <>
       <GlobalStyle />
@@ -108,13 +121,13 @@ export default function ExplorerPage() {
       ></TopBarOthers>
       <div>현재 수수료</div>
       <div>플랫폼</div>
-      <div>수수료</div>
+      <div>{feeArr[0]}</div>
       <br />
       <div>보험</div>
-      <div>수수료</div>
+      <div>{feeArr[1]}</div>
       <br />
       <div>보증금</div>
-      <div>수수료</div>
+      <div>{feeArr[2]}</div>
       <br />
       <div>Contract지갑</div>
       <div>({sliceAddress(QUICKER_ADDRESS)})</div>
@@ -165,3 +178,8 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
+
+const formatCommissionRate = (rate: number):string => {
+    const result = (rate / 10).toString()
+    return result + "%"
+}
