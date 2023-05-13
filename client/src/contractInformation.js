@@ -955,6 +955,163 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "getOrdersForLatest",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "orderNumber",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "quicker",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Quicker.State",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "orderPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "securityDeposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "limitedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "matchedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deliveredTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Quicker.Order[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_bundleNum",
+				"type": "uint256"
+			}
+		],
+		"name": "getOrdersForLatest",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "orderNumber",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "client",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "quicker",
+						"type": "address"
+					},
+					{
+						"internalType": "enum Quicker.State",
+						"name": "state",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "orderPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "securityDeposit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "limitedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "matchedTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deliveredTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Quicker.Order[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "enum Quicker.State",
 				"name": "_state",
 				"type": "uint8"
@@ -1163,4 +1320,4 @@ export const QUICKER_CONTRACT_ABI = [
 	}
 ]
 
-export const QUICKER_ADDRESS = "0x78444D0cF106314dC9B3563bA36F3b22b91D0560"
+export const QUICKER_ADDRESS = "0x034dB524D1b95BcdB4f341Ffa1B616968A6DC5a7"

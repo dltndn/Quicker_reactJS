@@ -144,8 +144,6 @@ export default function ExplorerPage() {
       <br />
       <div>{insuaBal}원</div>
       <br />
-      <br />
-      <br />
       <div>거래현황</div>
       <table>
         <thead>
@@ -164,6 +162,13 @@ export default function ExplorerPage() {
             <td>0x1233ef123...</td>
             <td>0x1e1864802...</td>
             <td>125,000</td>
+            <td>state</td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td>0xfb30c3123...</td>
+            <td>0x1e1864802...</td>
+            <td>298,000</td>
             <td>state</td>
           </tr>
         </tbody>

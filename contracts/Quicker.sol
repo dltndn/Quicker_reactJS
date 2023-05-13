@@ -160,6 +160,49 @@
 //         return orderList[_orderNum];
 //     }
 
+//     /**
+//     @dev To get latest orders based on the specified number of orders.
+//     @param _amount The number of orders to return.
+//     @return An array of Order objects representing the latest orders in the orderList.
+//     */
+//     function getOrdersForLatest(uint256 _amount) public view returns (Order[] memory) {
+//         require(_amount > 0, "_amount must be bigger than 0!");
+//         uint256 arrSize;
+//         if (_amount > orderList.length) 
+//             arrSize = orderList.length;
+//         arrSize = _amount;
+//         uint256 lastOrderNum = orderList.length - 1;
+//         Order[] memory getterOrders = new Order[](arrSize);
+//         uint256 j = 0;
+//         for (uint256 i=lastOrderNum; i>=orderList.length-arrSize; i--) {
+//             getterOrders[j] = orderList[i];
+//             j++;
+//         }
+//         return getterOrders;
+//     }
+
+//     /**
+//     @dev Returns an array of orders in bundles of _amount, starting from the most recent order and going backwards.
+//     @param _amount The number of orders per bundle.
+//     @param _bundleNum The index of the bundle to return, starting from 1.
+//     @return An array of _amount orders starting from the (_amount * (_bundleNum - 1) + 1)-th most recent order.
+//     */
+//     function getOrdersForLatest(uint256 _amount, uint256 _bundleNum) public view returns (Order[] memory) {
+//         require(_amount > 0, "_amount must be bigger than 0!");
+//         require(_amount <= orderList.length, "_amount is wrong!");
+//         require(_bundleNum > 0, "_bundleNum must be bigger than 0!");
+//         require(_bundleNum <= orderList.length / _amount, "_bundleNum is wrong!");
+//         uint256 lastOrderNum = orderList.length - 1;
+//         Order[] memory getterOrders = new Order[](_amount);
+//         uint256 j = 0;
+//         uint256 sIndex = lastOrderNum - (_amount * (_bundleNum - 1));
+//         for (uint256 i=sIndex; i>=sIndex+1-_amount; i--) {
+//             getterOrders[j] = orderList[i];
+//             j++;
+//         }
+//         return getterOrders;
+//     }
+
 //     function getClientOrderList(address _client)
 //         public
 //         view
@@ -249,9 +292,13 @@
 //     }
 
 //     /**
-//      * @dev 의뢰인이 새로운 Order를 생성하며 컨트랙에 QKRW 토큰을 입금한다
-//      * @param _orderPrice 의뢰인의 결제 금액
-//      * @param _limitedTime 배송 기한의 Timestamp값(초단위)
+//     @dev Creates a new Order by the client and deposits QKRW tokens to the contract
+//     @param _orderPrice The payment amount of the client
+//     @param _limitedTime Timestamp value (in seconds) for the delivery deadline
+//     @notice This function is used by the client to create a new Order and deposit QKRW tokens.
+//     @notice _orderPrice must be greater than or equal to 0, and _limitedTime must be later than the current time.
+//     @notice After the Order object is created and a new order number is issued, it is added to the list associated with the client account and the overall order list.
+//     @notice Finally, QKRW tokens are transferred from the client address to this contract account.
 //      */
 //     function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
 //         require(
@@ -284,10 +331,13 @@
 //     }
 
 //     /**
-//      * @dev 의뢰인이 Order를 취소하는 함수
-//      *      배송원과 매칭시 취소 불가
-//      * @param _orderNum Order number
-//      */
+//     @dev Function for a client to cancel an Order
+//     Cannot be canceled once matched with a delivery person
+//     @param _orderNum Order number
+//     @notice This function allows clients to cancel their Orders.
+//     Orders that have been matched with a delivery person cannot be canceled.
+//     @notice If the order is canceled successfully, the corresponding QKRW tokens will be refunded to the client's wallet.
+//     */
 //     function cancelOrder(uint256 _orderNum)
 //         public
 //         isClientOfOrder(_orderNum, msg.sender)
@@ -305,12 +355,23 @@
 //         emit OrderResult(true);
 //     }
 
+//     /**
+//     @dev Function executed when a delivery person accepts an order created by a client
+//     @param _orderNum Order number
+//     @notice This function is used when a delivery person accepts an order created by a client.
+//     @notice It cannot be executed if the order is already matched with another delivery person or canceled.
+//     @notice It cannot be executed if the delivery deadline for the order has already passed.
+//     @notice The security deposit fee is calculated based on the price of the order and transferred from the delivery person's account to the contract account.
+//     @notice When the delivery person accepts the order, the information for the order is updated and the order is changed to a matched state with the current delivery person.
+//     @notice The security deposit is entrusted to the delivery person's account and will be returned when the order is completed and settled.
+//     */
 //     function acceptOrder(uint256 _orderNum) public {
 //         Order storage order = orderList[_orderNum];
 //         require(
 //             order.state == State.created,
 //             "Already matched with another quicker..."
 //         );
+//         require(order.limitedTime < getCurrentTime(), "Already canceled");
 //         uint256 _securityDeposit = calculateFee(
 //             order.orderPrice,
 //             commissionRate.securityDepositRate
@@ -327,7 +388,7 @@
 //         emit ChangedBalance(true);
 //     }
 
-//     // 배송원 배달완료 시간 입력 함수
+//     // 배송원 배달완료 시간 기입 함수
 //     function deliveredOrder(uint256 _orderNum)
 //         public
 //         isQuickerOfOrder(_orderNum, msg.sender)
@@ -357,7 +418,15 @@
 //         emit OrderResult(true);
 //     }
 
-//     // quicker 정산 함수
+//     /**
+//     @dev Function for the settlement of quicker.
+//     @param _orderNum : The order number
+//     @notice This function is used when the quicker requests to withdraw the security deposit after the order is completed.
+//     @notice Quicker can withdraw the security deposit only after the order is completed or when the limited time for the order has passed.
+//     @notice If the delivery is made after the limited time, the security deposit is returned to the client, and the order price minus platform fee and insurance fee is transferred to the quicker.
+//     @notice If the delivery is made before the limited time, the security deposit and the order price minus platform fee and insurance fee is transferred to the quicker.
+//     @notice The information related to function execution can be confirmed through events.
+//     */
 //     function withdrawFromOrder(uint256 _orderNum)
 //         public
 //         isQuickerOfOrder(_orderNum, msg.sender)
@@ -407,9 +476,13 @@
 //         emit ChangedBalance(true);
 //     }
 
-//     // failedOrder 함수
-//     // 상황: 배달원 물건 전달 x -> client가 실행
-//     // 조건: 마감기한 + 12 hours < 현재시간 일 때 deliverdTime == 0 이면 작동 가능
+//     /**
+//     @dev failedOrder function
+//     @param _orderNum order number
+//     @notice This function is executed when the delivery person fails to deliver the package and the client executes the function.
+//     @notice If the deadline + 12 hours is less than the current time and deliveredTime is 0, the function can be executed.
+//     @notice The security deposit and order price (excluding commission) are returned to the client.
+//     */
 //     function failedOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
 //         Order storage order = orderList[_orderNum];
 //         require(order.state == State.matched, "State is not matched");
