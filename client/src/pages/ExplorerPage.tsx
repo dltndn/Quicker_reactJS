@@ -71,7 +71,7 @@ export default function ExplorerPage() {
     if (Number.isInteger(amount) && amount >= 1) {
       try {
         const result: any = await getOrdersForLatest(amount.toString());
-        setOrderArr(result);     
+        setOrderArr(result.slice().reverse());
       } catch (e) {
         console.log(e);
       }
@@ -126,8 +126,6 @@ export default function ExplorerPage() {
 
   useEffect(() => {
     if (transactTrigger) {
-      // 거래 현황 리로드 로직
-      console.log("거래현황 리로드");
       getOrders(20);
       setTransactTrigger(false);
     }

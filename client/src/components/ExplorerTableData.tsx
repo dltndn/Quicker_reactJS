@@ -10,8 +10,10 @@ interface ExplorerTableProps {
 }
 // 오더번호, 지갑주소 2개, 의뢰가격, 상태
 export default function ExplorerTableData({ orderNum, clientAddress, quickerAddress, orderPrice, state}: ExplorerTableProps) {
-    if(sliceAddress(quickerAddress.slice(1)) === "0x000000...")
+    quickerAddress = sliceAddress(quickerAddress.slice(1))
+    if(quickerAddress === "0x000000...")
         quickerAddress = "-"
+    
   return (
     <>
       <tr>

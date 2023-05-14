@@ -372,7 +372,7 @@
 //             order.state == State.created,
 //             "Already matched with another quicker..."
 //         );
-//         require(order.limitedTime < getCurrentTime(), "Already canceled");
+//         require(order.limitedTime > getCurrentTime(), "Already canceled");
 //         uint256 _securityDeposit = calculateFee(
 //             order.orderPrice,
 //             commissionRate.securityDepositRate
