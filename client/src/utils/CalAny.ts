@@ -1,6 +1,6 @@
 
-const platformFeeRate = 0.01
-const insuranceFeeRate = 0.01
+const platformFeeRate = 0.02
+const insuranceFeeRate = 0.02
 const securityDepositRate = 0.1
 
 export const calQuickerIncomeNum = (orderPrice: number): number => {

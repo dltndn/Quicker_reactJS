@@ -521,68 +521,6 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "acceptOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8",
-				"name": "_num",
-				"type": "uint8"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_changedRate",
-				"type": "uint16"
-			}
-		],
-		"name": "changeCommissionRate",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_limitedTime",
-				"type": "uint256"
-			}
-		],
-		"name": "createOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint16",
 				"name": "_platFormFee",
 				"type": "uint16"
@@ -630,32 +568,6 @@ export const QUICKER_CONTRACT_ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "completeOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "deliveredOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -667,19 +579,6 @@ export const QUICKER_CONTRACT_ABI = [
 		],
 		"name": "DepositedFee",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "failedOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -727,47 +626,14 @@ export const QUICKER_CONTRACT_ABI = [
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_newAddress",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
 			}
 		],
-		"name": "setFeeCollectionAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_newAddress",
-				"type": "address"
-			}
-		],
-		"name": "setInsuranceFeeCollection",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
+		"name": "acceptOrder",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -780,7 +646,25 @@ export const QUICKER_CONTRACT_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "withdrawFromOrder",
+		"name": "cancelOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8",
+				"name": "_num",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_changedRate",
+				"type": "uint16"
+			}
+		],
+		"name": "changeCommissionRate",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -825,6 +709,63 @@ export const QUICKER_CONTRACT_ABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "completeOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_limitedTime",
+				"type": "uint256"
+			}
+		],
+		"name": "createOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "deliveredOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "failedOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -1041,7 +982,7 @@ export const QUICKER_CONTRACT_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "getOrdersForLatest",
+		"name": "getOrdersForLatestBundle",
 		"outputs": [
 			{
 				"components": [
@@ -1317,7 +1258,66 @@ export const QUICKER_CONTRACT_ABI = [
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "setFeeCollectionAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newAddress",
+				"type": "address"
+			}
+		],
+		"name": "setInsuranceFeeCollection",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawFromOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	}
 ]
 
-export const QUICKER_ADDRESS = "0x034dB524D1b95BcdB4f341Ffa1B616968A6DC5a7"
+export const QUICKER_ADDRESS = "0x35A04d8dC2e15e6f76C6a81b439748324F2f7932"

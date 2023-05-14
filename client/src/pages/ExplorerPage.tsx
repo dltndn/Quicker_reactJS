@@ -4,9 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { create } from "zustand";
 import { useState, useEffect } from "react";
-import { getQkrwBalance, getCommissionRate} from "../utils/ExecuteOrderFromBlockchain";
+import {
+  getQkrwBalance,
+  getCommissionRate,
+  getOrdersForLatest,
+} from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import { useContractEvent } from "wagmi";
+import ExplorerTableData from "../components/ExplorerTableData";
 
 const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
 const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
@@ -20,38 +25,59 @@ export default function ExplorerPage() {
   const navigate = useNavigate();
   const [feeDepositTrigger, setFeeDepositTrigger] = useState<boolean>(true);
   const [contractBalTrigger, setContractBalTrigger] = useState<boolean>(true);
-  const [transactTrigger, setTransactTrigger] = useState<boolean>(false);
+  const [transactTrigger, setTransactTrigger] = useState<boolean>(true);
   const [contractBal, setContractBal] = useState<string>("0");
   const [platformBal, setPlatformBal] = useState<string>("0");
   const [insuaBal, setInsuaBal] = useState<string>("0");
-  const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"])
+  const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"]);
+  const [orderArr, setOrderArr] = useState<any[]>([]);
 
   const getQkrwBalanceFunc = async (address: string) => {
-    const result: any = await getQkrwBalance(address);
-    const balance = changeBalanceToForm(BigInt(result._hex));
-    switch (address) {
-      case CONTRACT_ADDRESS:
-        setContractBal(balance);
-        break;
-      case PLATFORM_ADDRESS:
-        setPlatformBal(balance);
-        break;
-      case INSUARANCE_ADDRESS:
-        setInsuaBal(balance);
-        break;
-      default:
-        console.log("error");
+    try {
+      const result: any = await getQkrwBalance(address);
+      const balance = changeBalanceToForm(BigInt(result._hex));
+      switch (address) {
+        case CONTRACT_ADDRESS:
+          setContractBal(balance);
+          break;
+        case PLATFORM_ADDRESS:
+          setPlatformBal(balance);
+          break;
+        case INSUARANCE_ADDRESS:
+          setInsuaBal(balance);
+          break;
+        default:
+          console.log("error");
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  const getCommissionLateFunc = async() => {
-    let arr:string[] = []
-    const result:any = await getCommissionRate()
-    for (const element of result) {
-        arr.push(formatCommissionRate(element))
+  const getCommissionLateFunc = async () => {
+    let arr: string[] = [];
+    try {
+      const result: any = await getCommissionRate();
+      for (const element of result) {
+        arr.push(formatCommissionRate(element));
+      }
+      setFeeArr(arr);
+    } catch (e) {
+      console.log(e);
     }
-    setFeeArr(arr)
-  }
+  };
+
+  const getOrders = async (amount: number) => {
+    if (Number.isInteger(amount) && amount >= 1) {
+      try {
+        const result: any = await getOrdersForLatest(amount.toString());
+        setOrderArr(result);     
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return [];
+  };
 
   // 배송원 정산, 의뢰인 정산시 동작
   useContractEvent({
@@ -59,19 +85,19 @@ export default function ExplorerPage() {
     abi: QUICKER_CONTRACT_ABI,
     eventName: "DepositedFee",
     async listener(node: any, label: any, owner) {
-        setFeeDepositTrigger(true)
+      setFeeDepositTrigger(true);
     },
-  })
-  
+  });
+
   // contract QKRW토큰 입출금시 동작
   useContractEvent({
     address: QUICKER_ADDRESS,
     abi: QUICKER_CONTRACT_ABI,
     eventName: "ChangedBalance",
     async listener(node: any, label: any, owner) {
-        setContractBalTrigger(true)
+      setContractBalTrigger(true);
     },
-  })
+  });
 
   // contract 오더관련 함수 실행 성공시 동작
   useContractEvent({
@@ -79,9 +105,9 @@ export default function ExplorerPage() {
     abi: QUICKER_CONTRACT_ABI,
     eventName: "OrderResult",
     async listener(node: any, label: any, owner) {
-        setTransactTrigger(true)
+      setTransactTrigger(true);
     },
-  })
+  });
 
   useEffect(() => {
     if (feeDepositTrigger) {
@@ -100,15 +126,16 @@ export default function ExplorerPage() {
 
   useEffect(() => {
     if (transactTrigger) {
-        // 거래 현황 리로드 로직
-        console.log("거래현황 리로드")
-        setTransactTrigger(false)
+      // 거래 현황 리로드 로직
+      console.log("거래현황 리로드");
+      getOrders(20);
+      setTransactTrigger(false);
     }
   }, [transactTrigger]);
 
   useEffect(() => {
-    getCommissionLateFunc()
-  }, [])
+    getCommissionLateFunc();
+  }, []);
 
   return (
     <>
@@ -156,21 +183,21 @@ export default function ExplorerPage() {
           </tr>
         </thead>
         <tbody>
-          {/* component화 */}
-          <tr>
-            <td>12</td>
-            <td>0x1233ef123...</td>
-            <td>0x1e1864802...</td>
-            <td>125,000</td>
-            <td>state</td>
-          </tr>
-          <tr>
-            <td>11</td>
-            <td>0xfb30c3123...</td>
-            <td>0x1e1864802...</td>
-            <td>298,000</td>
-            <td>state</td>
-          </tr>
+          {orderArr.length !== 0 ? (
+            <>
+              {orderArr.map((element: any) => (
+                <ExplorerTableData
+                  orderNum={element.orderNum}
+                  clientAddress={element.client}
+                  quickerAddress={element.quicker}
+                  orderPrice={element.orderPrice}
+                  state={element.state}
+                />
+              ))}
+            </>
+          ) : (
+            <>로딩컴포넌트</>
+          )}
         </tbody>
       </table>
     </>
@@ -184,7 +211,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const formatCommissionRate = (rate: number):string => {
-    const result = (rate / 10).toString()
-    return result + "%"
-}
+const formatCommissionRate = (rate: number): string => {
+  const result = (rate / 10).toString();
+  return result + "%";
+};

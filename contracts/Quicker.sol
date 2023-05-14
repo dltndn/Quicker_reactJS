@@ -168,8 +168,9 @@
 //     function getOrdersForLatest(uint256 _amount) public view returns (Order[] memory) {
 //         require(_amount > 0, "_amount must be bigger than 0!");
 //         uint256 arrSize;
-//         if (_amount > orderList.length) 
-//             arrSize = orderList.length;
+//         if (_amount >= orderList.length) {
+//             return orderList;
+//         }
 //         arrSize = _amount;
 //         uint256 lastOrderNum = orderList.length - 1;
 //         Order[] memory getterOrders = new Order[](arrSize);
@@ -187,7 +188,7 @@
 //     @param _bundleNum The index of the bundle to return, starting from 1.
 //     @return An array of _amount orders starting from the (_amount * (_bundleNum - 1) + 1)-th most recent order.
 //     */
-//     function getOrdersForLatest(uint256 _amount, uint256 _bundleNum) public view returns (Order[] memory) {
+//     function getOrdersForLatestBundle(uint256 _amount, uint256 _bundleNum) public view returns (Order[] memory) {
 //         require(_amount > 0, "_amount must be bigger than 0!");
 //         require(_amount <= orderList.length, "_amount is wrong!");
 //         require(_bundleNum > 0, "_bundleNum must be bigger than 0!");

@@ -8,6 +8,19 @@ const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
 
+// 최신순 오더 배열 반환
+export const getOrdersForLatest =async (amount:string) => {
+  let result:any[] = [];
+  const data: any = await readContract({
+    address: Quicker_address,
+    abi: Quicker_abi,
+    functionName: "getOrdersForLatest",
+    args: [amount],
+  })
+  data.forEach((element: any) => result.push(TemplateOrder(element)));
+  return result
+}
+
 // 수수료 조회
 export const getCommissionRate =async () => {
   const data = await readContract({
