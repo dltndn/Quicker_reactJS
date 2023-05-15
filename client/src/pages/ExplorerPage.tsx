@@ -144,27 +144,29 @@ export default function ExplorerPage() {
           navigate("/profile");
         }}
       ></TopBarOthers>
-      <div>현재 수수료</div>
+      <div>수수료 현황</div>
       <div>플랫폼</div>
-      <div>{feeArr[0]}</div>
+      <div>{feeArr[0]}%</div>
       <br />
       <div>보험</div>
-      <div>{feeArr[1]}</div>
+      <div>{feeArr[1]}%</div>
       <br />
       <div>보증금</div>
-      <div>{feeArr[2]}</div>
+      <div>{feeArr[2]}%</div>
       <br />
-      <div>Contract지갑</div>
+      <div>잔액현황</div>
+      <br />
+      <div>컨트랙트</div>
       <div>({sliceAddress(QUICKER_ADDRESS)})</div>
       <br />
       <div>{contractBal}원</div>
       <br />
-      <div>플랫폼지갑</div>
+      <div>플랫폼</div>
       <div>({sliceAddress(PLATFORM_ADDRESS)})</div>
       <br />
       <div>{platformBal}원</div>
       <br />
-      <div>보험지갑</div>
+      <div>보험</div>
       <div>({sliceAddress(INSUARANCE_ADDRESS)})</div>
       <br />
       <div>{insuaBal}원</div>
@@ -174,9 +176,9 @@ export default function ExplorerPage() {
         <thead>
           <tr>
             <th>오더번호</th>
-            <th>Client</th>
-            <th>Quicker</th>
-            <th>의뢰금액</th>
+            <th>의뢰인</th>
+            <th>배송원</th>
+            <th>의뢰금</th>
             <th>상태</th>
           </tr>
         </thead>
@@ -211,5 +213,5 @@ const GlobalStyle = createGlobalStyle`
 
 const formatCommissionRate = (rate: number): string => {
   const result = (rate / 10).toString();
-  return result + "%";
+  return result;
 };
