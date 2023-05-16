@@ -54,6 +54,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   const { isMember, setIsMember, userName }  = useVerificationStore();
   const { address } = useAccount()
   
+  const testVal:boolean = true
   return (
     <>
       {isConnect ? (
@@ -71,6 +72,8 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 </Bt0>
                 <button onClick={()=> navigate("/execution/205")}>임시배송페이지이동버튼</button>
                 <button onClick={()=> window.location.href = `quicker://link?walletAddress=${address?.toString()}`}>지갑주소앱으로전송</button>
+                <button onClick={()=> window.location.href = `quicker://link?isDelivering=${testVal.toString()}`}>배송여부true전송</button>
+                <button onClick={()=> window.location.href = `quicker://link?isDelivering=${!testVal.toString()}`}>배송여부false전송</button>
               </Sp1>
             </Div1>
           </section>
