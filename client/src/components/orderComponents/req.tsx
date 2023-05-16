@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import {useEffect, useRef, useState } from "react";
+import { useAccount } from 'wagmi';
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 import { useOrderDataStore, useOrderStore } from '../../pages/commission';
+import GetQkrwBalance from '../getQkrwBalance';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -13,6 +15,7 @@ const truck = require('../../image/truck.png')
 type Transport = "walk" | "bike" | "kickboard" | "motorcycle" | "car" | "truck";
 type CheckedState = Record<Transport, boolean>;
 
+const money = require('../../image/money.png')
 
 const Container = styled.section`
   display: flex;
@@ -188,6 +191,17 @@ const CheckIcon = styled.span`
   font-size: var(--font-small);
 `;
 
+const Bticon = styled.button`
+    border: none;
+    background-color: var(--white-color);
+    margin-right: 0.625rem;
+`;
+
+const Bticonimg = styled.img`
+    width: 1.875rem;
+    height: 1.875rem;
+`;
+
 function Req() {
 
     const widthRef = useRef<HTMLInputElement>(null)
@@ -200,6 +214,7 @@ function Req() {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
+    const { address, isConnected } = useAccount();
     const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, setWeight } = useOrderDataStore();
 
       const handleImgClick = (transport: Transport) => {
@@ -438,6 +453,17 @@ function Req() {
                     setCost(parseInt(costRef.current!.value));
                     setCost(convertStrToNum(e.target.value))}} placeholder="지갑 잔액을 확인하세요" ></Ipdet>
             </div>
+        </Box>
+    </Container>
+    <Container>
+        <Box>
+            
+        <span>지갑 잔액</span>
+                <Sp1>{isConnected && address && <GetQkrwBalance address={address}/>}</Sp1>
+                <Bticon>
+                    <Bticonimg src={money} alt="" />
+                </Bticon>
+                
         </Box>
     </Container>
     </>

@@ -101,6 +101,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           <Sp1>지갑을 연결해주세요.</Sp1>
           <Sp2>
             <Web3Button icon="hide" label="지갑연결" balance="hide" />
+            <button onClick={()=> navigate("/execution/205")}>임시배송페이지이동버튼</button>
           </Sp2>
           
         </Div1>
