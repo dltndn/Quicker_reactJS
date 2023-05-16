@@ -17,6 +17,7 @@ import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
 import { HiPaperAirplane } from "react-icons/hi2";
 import styled from "styled-components";
 
+
 const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
 
