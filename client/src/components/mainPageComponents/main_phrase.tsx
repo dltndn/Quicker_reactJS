@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Web3Button } from "@web3modal/react";
 import { useVerificationStore } from "../../App";
 import { useAccount } from "wagmi";
+import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 
 const Div0 = styled.div`
   display: flex;
@@ -54,6 +55,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   const { isMember, setIsMember, userName }  = useVerificationStore();
   const { address } = useAccount()
   
+  const sdta = new SendDataToAndroid(address)
   const testVal:boolean = true
   return (
     <>
@@ -72,8 +74,8 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 </Bt0>
                 <button onClick={()=> navigate("/execution/205")}>임시배송페이지이동버튼</button>
                 <button onClick={()=> window.location.href = `quicker://link?walletAddress=${address?.toString()}`}>지갑주소앱으로전송</button>
-                <button onClick={()=> window.location.href = `quicker://link?isDelivering=${testVal.toString()}`}>배송여부true전송</button>
-                <button onClick={()=> window.location.href = `quicker://link?isDelivering=${!testVal.toString()}`}>배송여부false전송</button>
+                <button onClick={()=> sdta.sendIsDelivering(true)}>배송여부true전송</button>
+                <button onClick={()=> sdta.sendIsDelivering(false)}>배송여부false전송</button>
                 <button onClick={()=> window.location.href = `quicker://link?testData=true`}>Android 로컬스토리지 확인</button>
               </Sp1>
             </Div1>
