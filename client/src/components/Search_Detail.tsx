@@ -8,6 +8,7 @@ import { WriteTransactionToBlockchain } from "../utils/ExecuteOrderFromBlockchai
 import { useOrderStore } from "../pages/commission";
 import Handler from "../lib/Handler";
 import { useAccount } from "wagmi";
+import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
 const money = require("../image/money.png");
 
@@ -23,12 +24,15 @@ function Search_Detail() {
   const acceptOrder = async () => {
     if (showOrder !== undefined) {
       const wttb = new WriteTransactionToBlockchain(orders[showOrder].orderNum.toString())
+      const sdta = new SendDataToAndroid(address)
       try {
         const data = await wttb.acceptOrder()
         Handler.post({
           orderId : order!.orderNum,
           userWalletAddress : address
         }, process.env.REACT_APP_SERVER_URL + "updateorder")
+        // Android로 isDelivering 데이터 true값 전송
+        sdta.sendIsDelivering(true)
         navigator("/")
       } catch(e) {
         if (e) {

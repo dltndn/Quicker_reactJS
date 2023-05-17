@@ -78,7 +78,6 @@ function App() {
     // 지갑주소 유저 여부 조회
     console.log("changed user wallet")
     console.log(address)
-    window.location.href = `quicker://link?walletAddress=${address?.toString()}`
     setUserName("유저이름")
     setIsMember(true)
   }, [address])

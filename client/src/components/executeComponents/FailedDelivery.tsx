@@ -4,6 +4,8 @@ import { useExecutionState } from "../../pages/ExecutionPage";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
+import { useAccount } from "wagmi";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -113,12 +115,14 @@ const Camera = () => {
   };
 
 export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
-
     const videoRef = useRef<HTMLVideoElement>(null);
-
+    const { address } = useAccount()
     const { setTitle } = useExecutionState()
+
     const failedRogic = async () => {
+      const sdta = new SendDataToAndroid(address)
       try {
+        sdta.sendIsDelivering(false)
         // 배송 실패 사진 업로드 로직 작성
       } catch(e) {
         console.log(e)

@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import WaitClientConfirm from "./WaitClientConfirm";
+import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
+import { useAccount } from "wagmi";
 
 const Div0 = styled.div`
     display: flex;
@@ -38,12 +40,17 @@ text-align: center;
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
+
+    const { address } = useAccount()
+
     const deliveredRogic = async () => {
         if (orderNum !== undefined) {
             const wttb = new WriteTransactionToBlockchain(orderNum)
+            const sdta = new SendDataToAndroid(address)
             try {
                 const result = await wttb.deliveredOrder()
                 console.log(result)
+                sdta.sendIsDelivering(false)
                 // 배송원 사진 업로드 로직 작성
             } catch(e) {
                 console.log(e)
