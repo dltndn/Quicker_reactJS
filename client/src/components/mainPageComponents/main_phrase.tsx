@@ -74,6 +74,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <button onClick={()=> window.location.href = `quicker://link?walletAddress=${address?.toString()}`}>지갑주소앱으로전송</button>
                 <button onClick={()=> window.location.href = `quicker://link?isDelivering=${testVal.toString()}`}>배송여부true전송</button>
                 <button onClick={()=> window.location.href = `quicker://link?isDelivering=${!testVal.toString()}`}>배송여부false전송</button>
+                <button onClick={()=> window.location.href = `quicker://link?testData=true`}>Android 로컬스토리지 확인</button>
               </Sp1>
             </Div1>
           </section>

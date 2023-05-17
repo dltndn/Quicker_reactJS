@@ -29,7 +29,6 @@ export default function ({
   phoneNumbers,
 }: ChatInterface) {
   const inputbox = useRef<HTMLInputElement>(null);
-  // const messageDiv = useRef<JSX.Element[]>(null);
   const [messageData, setMessageData] = useState<string[]>([])
   const [timeData, setTimeData] = useState<string[]>([])
   const [socketId, setSocketId] = useState<String>();
