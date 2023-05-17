@@ -16,6 +16,8 @@ import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
 
 import { HiPaperAirplane } from "react-icons/hi2";
 import styled from "styled-components";
+import MessageTemplate from "./ChatMessageTemplate";
+import React from "react";
 
 
 const Chatdot = require("../../image/Chatdot.png");
@@ -27,7 +29,9 @@ export default function ({
   phoneNumbers,
 }: ChatInterface) {
   const inputbox = useRef<HTMLInputElement>(null);
-  const messageDiv = useRef<HTMLDivElement>(null);
+  // const messageDiv = useRef<JSX.Element[]>(null);
+  const [messageData, setMessageData] = useState<string[]>([])
+  const [timeData, setTimeData] = useState<string[]>([])
   const [socketId, setSocketId] = useState<String>();
   // const [blockChainData, setBlockChainData] = useState<any>(undefined);
   const [opponentName, setOponentName] = useState<string>("");
@@ -41,12 +45,8 @@ export default function ({
   // 이벤트 처리
   const addMessage = (message: string) => {
     console.log(message);
-    const div = messageDiv.current;
-    const text = document.createElement("div");
-    text.innerText = "채팅 메세지 : " + message;
-    if (div !== null) {
-      div.appendChild(text);
-    }
+    setMessageData((prevMessageData) => [...prevMessageData, message]);
+  setTimeData((prevTimeData) => [...prevTimeData, "time"]);
   };
 
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
@@ -147,66 +147,63 @@ export default function ({
     }
   }, [socketId]);
 
+  useEffect(() => {
+  
+  }, [messageData]);
+
   return (
     <>
       상대방 이름 : {opponentName}
-      <br></br>
-      수취인 주소 : {receiverAddress}
-      <br></br>
-      수취인 전화번호 : {receiverPhoneNumber}
-      <br></br>
-      발송인 주소 : {senderAddress}
-      <br></br>
-      발송인 전화번호 : {senderPhoneNumber}
-      <br></br>
-      <br></br>
-      <br></br>
-      <div></div>
+      <Div0>
+        <Div1>
+          {receiverAddress}
+          <Div2>
+            <BsTelephone /> {receiverPhoneNumber} <BsStickies />
+          </Div2>
+        </Div1>
+        <div>
+          <Img1 src={Chatdot}></Img1>
+        </div>
+        <Div1>
+          {senderAddress}{" "}
+          <Div2>
+            <BsTelephone /> {senderPhoneNumber} <BsStickies />
+          </Div2>
+        </Div1>
+      </Div0>
       <>
-        <div ref={messageDiv}></div>
-        <form onSubmit={sendMessage} action="">
-          <input ref={inputbox} type="text" />ç
-          <button type="submit">전송</button>
-        </form>
+        {messageData.map((element) => (
+          <MessageTemplate message={element} time=""/>
+        ))}
         
-        <Div0>
-          <Div1>
-            {receiverAddress}
-            <Div2>
-              <BsTelephone /> {receiverPhoneNumber} <BsStickies />
-            </Div2>
-          </Div1>
-          <div>
-            <Img1 src={Chatdot}></Img1>
-          </div>
-          <Div1>
-            {senderAddress}{" "}
-            <Div2>
-              <BsTelephone /> {senderPhoneNumber} <BsStickies />
-            </Div2>
-          </Div1>
-        </Div0>
-        <Div3>
-          <Img2 src={Chatman}></Img2>{" "}
-          <DivChat>
-            <span>대화내용 1</span>
-          </DivChat>{" "}
-          <Divclock>오전 00:00</Divclock>
-        </Div3>
-        <Divdate>0000년 00월 00일</Divdate>
-        <Div4>
-          <Divclock>오전 00:00</Divclock>
-          <DivChat2>
-            <span>대화내용 1</span>
-          </DivChat2>
-        </Div4>
-        <Sc0>
-          <div>
-            <Ip1>메세지 보내기</Ip1>
-          </div>
-          <HiPaperAirplane />
-        </Sc0>
+        {/* <div ref={messageDiv}>
+          <Div3>
+            <Img2 src={Chatman}></Img2>{" "}
+            <DivChat>
+              <span>대화내용 1</span>
+            </DivChat>{" "}
+            <Divclock>오전 00:00</Divclock>
+          </Div3>
+          <Divdate>0000년 00월 00일</Divdate>
+          <Div4>
+            <Divclock>오전 00:00</Divclock>
+            <DivChat2>
+              <span>대화내용 1</span>
+            </DivChat2>
+          </Div4>
+        </div> */}
+        
       </>
+      <Sc0>
+          <form onSubmit={sendMessage} action="">
+            <div>
+              <Ip1 ref={inputbox} placeholder="메세지 보내기"></Ip1>
+            </div>
+            <button type="submit">
+              <HiPaperAirplane />
+            </button>
+          </form>
+        </Sc0>
     </>
   );
 }
