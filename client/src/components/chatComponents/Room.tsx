@@ -42,57 +42,18 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
             setStates.setSelectedOrderNum(orderNum);
           }}
         >
-          채팅방 영역
-          <br></br>
-          이름 : {opponentName}
-          <br></br>
-          최근 메세지 : {message}
+        <Div0>
+          <Div1>
+            <Img1 src={Chatman}></Img1>
+          </Div1>
+          <Div2>
+            <Sp0>
+            {opponentName} <Sp1>1분 전</Sp1>
+            </Sp0>
+            <Sp2>{message}</Sp2>
+          </Div2>
+        </Div0>
         </div>
-        <br></br>
-        <Div0>
-          <Div1>
-            <Img1 src={Chatman}></Img1>
-          </Div1>
-          <Div2>
-            <Sp0>
-            {opponentName} <Sp1>1분 전</Sp1>
-            </Sp0>
-            <Sp2>{message}</Sp2>
-          </Div2>
-        </Div0>
-        <Div0>
-          <Div1>
-            <Img1 src={Chatman}></Img1>
-          </Div1>
-          <Div2>
-            <Sp0>
-            {opponentName} <Sp1>1분 전</Sp1>
-            </Sp0>
-            <Sp2>{message}</Sp2>
-          </Div2>
-        </Div0>
-        <Div0>
-          <Div1>
-            <Img1 src={Chatman}></Img1>
-          </Div1>
-          <Div2>
-            <Sp0>
-            {opponentName} <Sp1>1분 전</Sp1>
-            </Sp0>
-            <Sp2>{message}</Sp2>
-          </Div2>
-        </Div0>
-        <Div0>
-          <Div1>
-            <Img1 src={Chatman}></Img1>
-          </Div1>
-          <Div2>
-            <Sp0>
-            {opponentName} <Sp1>1분 전</Sp1>
-            </Sp0>
-            <Sp2>{message}</Sp2>
-          </Div2>
-        </Div0>
         <BottomBar></BottomBar>
       </>
     );

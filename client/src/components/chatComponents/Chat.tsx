@@ -165,9 +165,10 @@ export default function ({
       <>
         <div ref={messageDiv}></div>
         <form onSubmit={sendMessage} action="">
-          <input ref={inputbox} type="text" />
+          <input ref={inputbox} type="text" />ç
           <button type="submit">전송</button>
         </form>
+        
         <Div0>
           <Div1>
             {receiverAddress}
