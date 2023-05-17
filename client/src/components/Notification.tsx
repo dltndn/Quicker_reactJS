@@ -2,7 +2,12 @@ import TopBarThin from './topBarthin';
 import styled, { createGlobalStyle } from 'styled-components';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BsChatLeftDots } from "react-icons/bs";
+import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
+
+import { HiPaperAirplane } from "react-icons/hi2";
+
+const Chatdot = require('../image/Chatdot.png')
+const Chatman = require('../image/Chatman.png')
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -63,6 +68,7 @@ const Div1_3 = styled.div`
   font-weight: thin;
 `;
 
+
 function Notification() {
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState("");
@@ -73,7 +79,7 @@ function Notification() {
 
   return (
     <>
-      <GlobalStyle />
+ <GlobalStyle />
       <TopBarThin
         title="알림"
         title2=""
@@ -127,3 +133,4 @@ function Notification() {
 }
 
 export default Notification;
+
