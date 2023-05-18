@@ -9,6 +9,7 @@ import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockc
 import WaitClientConfirm from "./WaitClientConfirm";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { useAccount } from "wagmi";
+import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 
 const Div0 = styled.div`
     display: flex;
@@ -50,7 +51,10 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
             try {
                 const result = await wttb.deliveredOrder()
                 console.log(result)
-                sdta.sendIsDelivering(false)
+                // 배송원 수행 중인 오더 확인 후 false값 전송
+                if (!(await checkIsDelivering(address))) {
+                    sdta.sendIsDelivering(false)
+                }
                 // 배송원 사진 업로드 로직 작성
             } catch(e) {
                 console.log(e)

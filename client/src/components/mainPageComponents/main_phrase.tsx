@@ -6,6 +6,7 @@ import { Web3Button } from "@web3modal/react";
 import { useVerificationStore } from "../../App";
 import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
+import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 
 const Div0 = styled.div`
   display: flex;
@@ -76,7 +77,6 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <button onClick={()=> window.location.href = `quicker://link?walletAddress=${address?.toString()}`}>지갑주소앱으로전송</button>
                 <button onClick={()=> sdta.sendIsDelivering(true)}>배송여부true전송</button>
                 <button onClick={()=> sdta.sendIsDelivering(false)}>배송여부false전송</button>
-                <button onClick={()=> window.location.href = `quicker://link?testData=true`}>Android 로컬스토리지 확인</button>
               </Sp1>
             </Div1>
           </section>

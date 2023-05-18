@@ -5,7 +5,7 @@ import TopBarOthers from "../components/topBarOthers";
 import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
 import CompletedOrderConfirm from "../components/deliveryProgress/CompletedOrderConfirm";
 import FailedOrderConfirm from "../components/deliveryProgress/FailedOrderConfirm";
-import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { LoadingDeliveryProgress } from "../components/LoadingAnimation";
 import { getDateFromTimestamp, formatedDateHM } from "../utils/ConvertTimestampToDate";
 
@@ -36,7 +36,7 @@ export default function ClientConfirmPage() {
     const twelveHoursToSec = 12 * 60 * 60
     if (orderNumber !== undefined) {
         try {
-            const blockchainOrder: any = await getOrderLawData(orderNumber)
+            const blockchainOrder: any = await getOrderRawData(orderNumber)
             if (blockchainOrder.deliveredTime.toNumber() === 0) {
                 if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
                     let deadlineHM = formatedDateHM(getDateFromTimestamp(blockchainOrder.limitedTime.toNumber()))

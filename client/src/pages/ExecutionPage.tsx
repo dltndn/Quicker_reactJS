@@ -9,7 +9,7 @@ import CompletedDelivery from "../components/executeComponents/CompletedDelivery
 import FailedDelivery from "../components/executeComponents/FailedDelivery";
 import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm";
 import { LoadingExecution } from "../components/LoadingAnimation";
-import { getOrderLawData } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
 import { formatedDateHM, getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
 
@@ -81,7 +81,7 @@ export default function ExecutionPage() {
   const setComponentLogic = async () => {
     if (orderNumber !== undefined) {
       try {
-        const blockchainOrder: any = await getOrderLawData(orderNumber)
+        const blockchainOrder: any = await getOrderRawData(orderNumber)
         if (isCLientConfirm(blockchainOrder)) {
           let securityDeposit: number
           let isReceived: boolean = false

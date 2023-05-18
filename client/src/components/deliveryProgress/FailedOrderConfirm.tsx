@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
-import { getOrderLawData } from "../../utils/ExecuteOrderFromBlockchain"
 
 interface FailedOrderConfirmProps extends ExecutionComponentProps{
   isReceived: boolean;

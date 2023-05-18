@@ -91,7 +91,8 @@ export const getOrder = async(orderNum:string) => {
     return TemplateOrder(data)
 }
 
-export const getOrderLawData = async(orderNum: string) => {
+// 오더 객체 반환(블록체인 raw 값)
+export const getOrderRawData = async(orderNum: string) => {
   const data = await readContract({
     address: Quicker_address,
     abi: Quicker_abi,
@@ -128,7 +129,7 @@ export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
   if (address === undefined){
     return undefined
   }
-  let orderList = await getClientOrderList(address)
+  let orderList = await getOrderList(address, true)
   if (orderList === undefined) {
     return undefined
   }
@@ -136,20 +137,22 @@ export const getLastClientOrder = async (address:`0x${string}` | undefined) => {
   return result
 }
 
-// 의뢰인 오더 번호 배열 반환
-export const getClientOrderList = async(address:`0x${string}` | undefined) => {
-  if (address === undefined){
-    return undefined
+// 배송원 배송 여부 확인 
+export const checkIsDelivering = async (address:`0x${string}` | undefined) => {
+  let orderNumArr: string[] | undefined
+  try {
+    orderNumArr = await getOrderList(address, false)
+    if (orderNumArr) {
+      if (orderNumArr?.length !== 0) {
+        const orderArr: any[] = await getOrders(orderNumArr)
+        return orderArr.some((element: any) => element.state === "matched");
+      }
+    }
+    return false
+  } catch(e) {
+    console.log(e)
   }
-  const data:any = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getClientOrderList",
-    args: [address],
-  })
-  let result:string[] = []
-  data.forEach((element: any) => result.push(BigInt(element._hex).toString()));  
-  return result
+  return false
 }
 
 // 오더 상태에 해당하는 오더정보 배열 반환

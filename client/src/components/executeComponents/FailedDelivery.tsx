@@ -6,6 +6,7 @@ import { isMobile } from "react-device-detect";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { useAccount } from "wagmi";
+import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -122,7 +123,9 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     const failedRogic = async () => {
       const sdta = new SendDataToAndroid(address)
       try {
-        sdta.sendIsDelivering(false)
+        if (!(await checkIsDelivering(address))) {
+          sdta.sendIsDelivering(false)
+        }
         // 배송 실패 사진 업로드 로직 작성
       } catch(e) {
         console.log(e)
