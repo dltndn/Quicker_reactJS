@@ -16,9 +16,11 @@ import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
 
 import { HiPaperAirplane } from "react-icons/hi2";
 import styled from "styled-components";
-import MessageTemplate from "./ChatMessageTemplate";
+import OtherMessageTemplate from "./OtherMessageTemplate";
+import MyMessageTemplate from "./MyMessageTemplate";
 import React from "react";
 
+import { MessageInfo } from "./interface/MessageInfo";
 
 const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
@@ -30,32 +32,32 @@ export default function ({
 }: ChatInterface) {
   const inputbox = useRef<HTMLInputElement>(null);
 
-  const [messageData, setMessageData] = useState<string[]>([])
+  const [messageData, setMessageData] = useState<MessageInfo[]>([])
   const [timeData, setTimeData] = useState<string[]>([])
   const [socketId, setSocketId] = useState<String>();
-  // const [blockChainData, setBlockChainData] = useState<any>(undefined);
   const [opponentName, setOponentName] = useState<string>("");
   const [senderPhoneNumber, setSenderPhoneNumber] = useState();
   const [senderAddress, setSenderAddress] = useState();
   const [receiverPhoneNumber, setReceiverPhoneNumber] = useState();
   const [receiverAddress, setReceiverAddress] = useState();
+  const [parsedAddress, setParsedAddress] = useState();
 
   const { address } = useAccount();
 
   // 이벤트 처리
-  const addMessage = (message: string) => {
-    console.log(message);
-    setMessageData((prevMessageData) => [...prevMessageData, message]);
-  setTimeData((prevTimeData) => [...prevTimeData, "time"]);
+  const addMessage = (messageInfo: MessageInfo) => {
+    console.log(messageInfo);
+    setMessageData((prevMessageData) => [...prevMessageData, messageInfo]);
   };
 
+  // 메세지를 보내는 이벤트를 발생시킬때 DB에서 데이터를 가지고 오도록?
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    socket.emit(
-      "sendMessage",
-      { data: inputbox.current!.value, sender: address },
-      () => {
-        addMessage(inputbox.current!.value);
+    socket.emit("sendMessage", { data: inputbox.current!.value, sender: address }, () => {
+      const message = inputbox.current!.value
+      const id =  "" + address
+      const date = new Date().toISOString()
+      addMessage({id, date, message});
         inputbox.current!.value = "";
       }
     );
@@ -65,18 +67,20 @@ export default function ({
     socket.emit("joinRoom", { roomName: roomId });
   };
 
-  const loadMessages = (messages: any[]) => {
+  const loadMessages = (messages: MessageInfo[]) => {
     for (let index = 0; index < messages.length; index++) {
       const element = messages[index];
-      addMessage(element.message);
+  
+      const id = element.id
+      const message = element.message
+      const date = element.date
+  
+      addMessage({id, message, date});
     }
   };
 
   const getRealLocation = async (location: any) => {
-    const realAddress = (await Kakao.reverseGeoCording(
-      location.Y,
-      location.X
-    )) as any;
+    const realAddress = (await Kakao.reverseGeoCording(location.Y,location.X)) as any;
     if (realAddress !== undefined) {
       return realAddress.address_name;
     }
@@ -148,7 +152,7 @@ export default function ({
   }, [socketId]);
 
   useEffect(() => {
-  
+    console.log(messageData)
   }, [messageData]);
 
   return (
@@ -172,27 +176,10 @@ export default function ({
         </Div1>
       </Div0>
       <>
-        {messageData.map((element) => (
-          <MessageTemplate message={element} time=""/>
+      {/* address 타입 확인 필요 타입 변환 없이 string 타입으로 판별됨 */}
+        {messageData.map((element: MessageInfo) => (
+          (address === element.id) ? <MyMessageTemplate message={element.message} date={element.date} /> : <OtherMessageTemplate message={element.message} date={element.date} />
         ))}
-        
-        {/* <div ref={messageDiv}>
-          <Div3>
-            <Img2 src={Chatman}></Img2>{" "}
-            <DivChat>
-              <span>대화내용 1</span>
-            </DivChat>{" "}
-            <Divclock>오전 00:00</Divclock>
-          </Div3>
-          <Divdate>0000년 00월 00일</Divdate>
-          <Div4>
-            <Divclock>오전 00:00</Divclock>
-            <DivChat2>
-              <span>대화내용 1</span>
-            </DivChat2>
-          </Div4>
-        </div> */}
-        
       </>
       <Sc0>
           <form onSubmit={sendMessage} action="">
@@ -297,3 +284,5 @@ const Ip1 = styled.input`
   height: auto;
   color: #a0a0a0;
 `;
+
+
