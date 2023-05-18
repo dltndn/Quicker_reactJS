@@ -29,7 +29,7 @@ app.post("/orderlist", OrderController.orderlist);
 app.post("/register", UserController.register);
 app.post("/request", OrderController.request);
 app.post("/updateorder", OrderController.updateOrder);
-app.post("/getRecentMessage", ChatController.getRecentMessage);
+app.post("/getRecentMessageInfo", ChatController.getRecentMessageInfo);
 app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
 app.post("/getRoomInfo", OrderController.getRoomInfo);
 

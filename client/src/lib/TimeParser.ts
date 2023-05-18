@@ -12,3 +12,4 @@ const TimeParser = (date : string) =>{
 }
 
 export default TimeParser;
+

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { MessageInfoForComponent } from "./interface/MessageComponentInfo";
-import TimeParser from "./TimeParser";
+import TimeParser from "../../lib/TimeParser";
 
 export default function MyMessageTemplate({ message, date } : MessageInfoForComponent) {
 
