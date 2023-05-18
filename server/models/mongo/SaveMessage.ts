@@ -4,7 +4,7 @@ import connectMongo from "./connector";
 
 require("dotenv").config();
 
-async function saveMessage(messageObjcet: any) {
+async function saveMessage(messageObjcet : MessageObject) {
   try {
     const Message = mongoose.model((String)(messageObjcet.roomName), MessageModel);
     connectMongo();
@@ -17,6 +17,12 @@ async function saveMessage(messageObjcet: any) {
   } catch (error) {
     console.error(error);
   }
+}
+
+interface MessageObject {
+  id: string;
+  roomName: string;
+  receiveMessage: string;
 }
 
 export = saveMessage;

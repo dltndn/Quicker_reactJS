@@ -37,8 +37,8 @@ const main = () => {
 };
 
 interface Message {
-  data: String;
-  sender: String;
+  data: string;
+  sender: string;
 }
 
 interface receiveRoomName {
