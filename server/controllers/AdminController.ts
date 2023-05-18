@@ -8,6 +8,7 @@ export = {
       DeleteOrder.deleteOrder(deleteTargetId);
       res.redirect("/");
     } catch (error) {
+      console.log(error)
       res.send(error);
     }
   },
@@ -23,6 +24,7 @@ export = {
       }
       res.redirect("/");
     } catch (error) {
+      console.log(error)
       res.send(error);
     }
   },

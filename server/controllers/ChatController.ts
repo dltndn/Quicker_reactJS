@@ -13,7 +13,8 @@ export = {
       const recentMessage = await Message.findOne().sort({ $natural: -1 });
       console.log(recentMessage?.message);
       res.send({ recentMessage: recentMessage?.message });
-    } catch {
+    } catch (error) {
+      console.error(error);
       return res.send({ msg: "fail" });
     }
   },

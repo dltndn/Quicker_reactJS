@@ -31,17 +31,18 @@ export = {
       }
       return res.send({ msg: "fail" });
     } catch (error) {
+      console.log(error)
       return res.send({ msg: error });
     }
   },
 
   orderlist: async (req: Request, res: Response) => {
-    
     try {
       const data = req.body.list;
       let instance = await SelectOrder.getOrderlist(data);
       res.send(instance)
-    } catch {
+    } catch (error){
+      console.log(error)
       res.send("fail");
     }
   },
@@ -49,8 +50,8 @@ export = {
   updateOrder: async (req: Request, res: Response) => {
     try {
       const userWalletAddress = req.body.userWalletAddress;
-    const orderId = req.body.orderId;
-    const deliver = await SelectUser.getUserId(userWalletAddress);
+      const orderId = req.body.orderId;
+      const deliver = await SelectUser.getUserId(userWalletAddress);
     
       // @ts-ignore
       await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
@@ -59,17 +60,19 @@ export = {
       // @ts-ignore
       await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
       return res.send({msg : "done"})
-    } catch {
+    } catch (error){
+      console.log(error)
       return res.send({msg : "fail"})
     }
   },
 
   getRoomInfo : async (req: Request, res: Response) => {
-    const orderNum = req.body.orderNum;
     try {
+      const orderNum = req.body.orderNum;
       let data = await SelectRoomInfo.getRoomInfo(orderNum)
       return res.send(JSON.stringify(data))
-    } catch {
+    } catch (error) {
+      console.log(error)
       return res.send({msg : "fail"})
     }
   },

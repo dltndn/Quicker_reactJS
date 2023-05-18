@@ -19,6 +19,7 @@ export = {
       let data = await SelectOrder.getRequests(userId.id);
       res.send(data);
     } catch (error) {
+      console.log(error)
       res.send(error);
     }
   },
@@ -38,6 +39,7 @@ export = {
       await CreateUser.registerUser(userInstance, userBirthDate, hashed);
       res.send({ msg: "done" });
     } catch (error) {
+      console.log(error)
       res.send(error);
     }
   },
@@ -50,6 +52,7 @@ export = {
       };
       res.send({ name: data.name });
     } catch (error) {
+      console.log(error)
       res.send(error);
     }
   },
