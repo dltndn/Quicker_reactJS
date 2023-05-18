@@ -36,8 +36,9 @@ export = {
   },
 
   orderlist: async (req: Request, res: Response) => {
-    const data = req.body.list;
+    
     try {
+      const data = req.body.list;
       let instance = await SelectOrder.getOrderlist(data);
       res.send(instance)
     } catch {
@@ -46,10 +47,11 @@ export = {
   },
 
   updateOrder: async (req: Request, res: Response) => {
-    const userWalletAddress = req.body.userWalletAddress;
+    try {
+      const userWalletAddress = req.body.userWalletAddress;
     const orderId = req.body.orderId;
     const deliver = await SelectUser.getUserId(userWalletAddress);
-    try {
+    
       // @ts-ignore
       await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
       // @ts-ignore

@@ -1,6 +1,5 @@
 import express, { Application, Request, Response } from "express";
 import chat from "./chat/socket";
-import AdminController = require("./controllers/AdminController");
 import OrderController = require("./controllers/OrderController");
 import UserController = require("./controllers/UserController");
 import ChatController = require("./controllers/ChatController");
