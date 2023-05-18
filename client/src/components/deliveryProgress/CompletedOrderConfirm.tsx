@@ -15,8 +15,9 @@ export default function CompletedOrderConfirm({
     if (orderNum !== undefined) {
       const wttb = new WriteTransactionToBlockchain(orderNum);
       try {
-        const reult = await wttb.completeOrder();
-        console.log(reult);
+        const result = await wttb.completeOrder();
+        console.log(result);
+        // 채팅방 폭파 기능 
         navigate("/");
       } catch (e) {
         console.log(e);

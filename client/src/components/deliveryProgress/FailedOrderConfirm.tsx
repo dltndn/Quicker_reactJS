@@ -23,6 +23,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
         try {
           const reult = await wttb.failedOrder();
           console.log(reult);
+          // 채팅방 폭파 기능 
           navigate("/");
         } catch (e) {
           console.log(e);

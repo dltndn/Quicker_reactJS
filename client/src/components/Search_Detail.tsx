@@ -9,6 +9,7 @@ import { useOrderStore } from "../pages/commission";
 import Handler from "../lib/Handler";
 import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
+import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 
 const money = require("../image/money.png");
 
@@ -19,7 +20,12 @@ function Search_Detail() {
   const { setShowAllowance } = useOrderStore()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
-  
+
+  const getClientAddress =async (showOrder: number) => {
+    const result = await getOrder(orders[showOrder].orderNum)
+    return result.client
+  }
+
   // 수락하기 로직
   const acceptOrder = async () => {
     if (showOrder !== undefined) {
@@ -31,9 +37,13 @@ function Search_Detail() {
           orderId : order!.orderNum,
           userWalletAddress : address
         }, process.env.REACT_APP_SERVER_URL + "updateorder")
+        // 의뢰인 지갑주소
+        const clientAddress = await getClientAddress(showOrder)
+        // 채팅방 생성 기능 추가
+        
         // Android로 isDelivering 데이터 true값 전송
         sdta.sendIsDelivering(true)
-        navigator("/")
+        navigator("/fulfillmentlist")
       } catch(e) {
         if (e) {
           //@ts-ignore
