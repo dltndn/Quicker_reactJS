@@ -5,6 +5,7 @@ import {
   modalConnectors,
   walletConnectProvider,
 } from "@web3modal/ethereum";
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { Web3Modal, useWeb3ModalTheme, } from "@web3modal/react";
 import { Buffer } from "buffer";
 
@@ -33,7 +34,7 @@ const chains = [polygonMumbai];
 const projectId = process.env.REACT_APP_PROJECTID
 
 const { provider } = configureChains(chains, [
-  walletConnectProvider({ projectId: projectId ?? "" }),
+  alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY ?? "" }),
 ]);
 
 const wagmiClient = createClient({
