@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
@@ -17,9 +17,15 @@ const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
 const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
 const CONTRACT_ADDRESS = QUICKER_ADDRESS;
 
-interface ExplorerState {}
+interface ExplorerState {
+  blinkOrderArrIndex: number[];
+  setBlinkOrderArrIndex: (indexArr: number[]) => void;
+}
 
-export const useExplorerState = create<ExplorerState>((set) => ({}));
+export const useExplorerState = create<ExplorerState>((set) => ({
+  blinkOrderArrIndex: [],
+  setBlinkOrderArrIndex: (blinkOrderArrIndex: number[]) => set({blinkOrderArrIndex}),
+}));
 
 export default function ExplorerPage() {
   const navigate = useNavigate();
@@ -31,6 +37,11 @@ export default function ExplorerPage() {
   const [insuaBal, setInsuaBal] = useState<string>("0");
   const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"]);
   const [orderArr, setOrderArr] = useState<any[]>([]);
+  const [isBlink, setIsBlink] = useState<boolean>(false)
+  const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
+  const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
+
+  const { setBlinkOrderArrIndex } = useExplorerState()
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -71,6 +82,21 @@ export default function ExplorerPage() {
     if (Number.isInteger(amount) && amount >= 1) {
       try {
         const result: any = await getOrdersForLatest(amount.toString());
+        // 바뀐 부분 확인
+        const newOrderArr = result.slice().reverse()
+        let changedIndex:number[] = []
+        for (const [index, element] of newOrderArr.entries()) {
+          if (orderArr[index] !== undefined) {
+            if (orderArr[index].orderNum !== element.orderNum) {
+              changedIndex.push(index);
+              console.log("new order");
+              break; // 중간에 종료
+            } else if (orderArr[index].state !== element.state) {
+              changedIndex.push(index);
+            }
+          }
+        }
+        setBlinkOrderArrIndex(changedIndex)
         setOrderArr(result.slice().reverse());
       } catch (e) {
         console.log(e);
@@ -86,6 +112,7 @@ export default function ExplorerPage() {
     eventName: "DepositedFee",
     async listener(node: any, label: any, owner) {
       setFeeDepositTrigger(true);
+      await setBlinkState(setIsBlinkPI);
     },
   });
 
@@ -96,6 +123,7 @@ export default function ExplorerPage() {
     eventName: "ChangedBalance",
     async listener(node: any, label: any, owner) {
       setContractBalTrigger(true);
+      await setBlinkState(setIsBlinkCo);
     },
   });
 
@@ -106,6 +134,7 @@ export default function ExplorerPage() {
     eventName: "OrderResult",
     async listener(node: any, label: any, owner) {
       setTransactTrigger(true);
+      await setBlinkState(setIsBlink);
     },
   });
 
@@ -134,6 +163,12 @@ export default function ExplorerPage() {
   useEffect(() => {
     getCommissionLateFunc();
   }, []);
+
+  const setBlinkState = async (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setter(true);
+    await new Promise((resolve) => {const timeId =  setTimeout(resolve, 1000); return () => clearTimeout(timeId);});
+    setter(false);
+  };
 
   return (
     <>
@@ -170,17 +205,19 @@ export default function ExplorerPage() {
           <Div0>
             <span>컨트랙트</span>
             <div>({sliceAddress(QUICKER_ADDRESS)})</div>
-            <Sp1>{contractBal}원</Sp1>
+            <Sp1>{isBlinkCo ? (<BlinkDiv>{contractBal}원</BlinkDiv>):(<>{contractBal}원</>)}</Sp1>
           </Div0>
           <Div0>
             <span>플랫폼</span>
             <span>({sliceAddress(PLATFORM_ADDRESS)})</span>
-            <Sp1>{platformBal}원</Sp1>
+            
+            <Sp1>{isBlinkPI ? (<BlinkDiv>{platformBal}원</BlinkDiv>):(<>{platformBal}원</>)}</Sp1>
+            
           </Div0>
           <Div0>
             <span>보험</span>
             <span>({sliceAddress(INSUARANCE_ADDRESS)})</span>
-            <Sp1>{insuaBal}원</Sp1>
+            <Sp1>{isBlinkPI ? (<BlinkDiv>{insuaBal}원</BlinkDiv>):(<>{insuaBal}원</>)}</Sp1>
           </Div0>
         </Box>
       </Container>
@@ -198,13 +235,14 @@ export default function ExplorerPage() {
           </Div1>
           {orderArr.length !== 0 ? (
             <>
-              {orderArr.map((element: any) => (
+              {orderArr.map((element: any, index: number) => (
                 <ExplorerTableData
                   orderNum={element.orderNum}
                   clientAddress={element.client}
                   quickerAddress={element.quicker}
                   orderPrice={element.orderPrice}
                   state={element.state}
+                  blinkIndex={index}
                 />
               ))}
             </>
@@ -216,6 +254,22 @@ export default function ExplorerPage() {
     </>
   );
 }
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const BlinkDiv = styled.div`
+  animation: ${blinkAnimation} 1s;
+`
 
 const GlobalStyle = createGlobalStyle`
   body {

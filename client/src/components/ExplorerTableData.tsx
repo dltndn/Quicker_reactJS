@@ -1,5 +1,7 @@
 import { sliceAddress } from "../utils/CalAny";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import { useEffect, useState } from "react";
+import { useExplorerState } from "../pages/ExplorerPage";
 
 interface ExplorerTableProps {
   orderNum: string;
@@ -7,6 +9,7 @@ interface ExplorerTableProps {
   quickerAddress: string;
   orderPrice: string;
   state: string;
+  blinkIndex: number;
 }
 // 오더번호, 지갑주소 2개, 의뢰가격, 상태
 export default function ExplorerTableData({
@@ -15,21 +18,47 @@ export default function ExplorerTableData({
   quickerAddress,
   orderPrice,
   state,
+  blinkIndex,
 }: ExplorerTableProps) {
   quickerAddress = sliceAddress(quickerAddress.slice(1));
   if (quickerAddress === "0x000000...") quickerAddress = "-";
 
+  const { blinkOrderArrIndex } = useExplorerState();
+  const [isBlink, setIsblink] = useState<boolean>(false)
+
+  useEffect(() => {
+    blinkOrderArrIndex.forEach((val) => {
+      if (blinkIndex === val) {
+        setIsblink(true)
+      }
+    });
+  });
+
   return (
     <>
-      <Div1>
-        <Div1_2>{orderNum}</Div1_2>
-        <Div1_2>{sliceAddress(clientAddress.slice(1))}</Div1_2>
-        <Div1_2>{quickerAddress}</Div1_2>
-        <Div1_2>{orderPrice}</Div1_2>
-        <Div1_2>
-          <ViewState state={state} />
-        </Div1_2>
-      </Div1>
+      {isBlink ? (
+        <BlinkDiv>
+          <Div1>
+            <Div1_2>{orderNum}</Div1_2>
+            <Div1_2>{sliceAddress(clientAddress.slice(1))}</Div1_2>
+            <Div1_2>{quickerAddress}</Div1_2>
+            <Div1_2>{orderPrice}</Div1_2>
+            <Div1_2>
+              <ViewState state={state} />
+            </Div1_2>
+          </Div1>
+        </BlinkDiv>
+      ) : (
+        <Div1>
+          <Div1_2>{orderNum}</Div1_2>
+          <Div1_2>{sliceAddress(clientAddress.slice(1))}</Div1_2>
+          <Div1_2>{quickerAddress}</Div1_2>
+          <Div1_2>{orderPrice}</Div1_2>
+          <Div1_2>
+            <ViewState state={state} />
+          </Div1_2>
+        </Div1>
+      )}
     </>
   );
 }
@@ -52,6 +81,22 @@ const ViewState = ({ state }: ViewStateProp) => {
       return <StateDiv color="#9d9d9d">대기</StateDiv>;
   }
 };
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const BlinkDiv = styled.div`
+  animation: ${blinkAnimation} 1s;
+`;
 
 const Div0 = styled.div`
   display: flex;
