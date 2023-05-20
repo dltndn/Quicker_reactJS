@@ -168,19 +168,19 @@ export default function ExplorerPage() {
             <ReqFont>잔액 현황</ReqFont>
           </div>
           <Div0>
-                <span>컨트랙트</span>
-                <div>({sliceAddress(QUICKER_ADDRESS)})</div>
-                <Sp1>{contractBal}원</Sp1>
+            <span>컨트랙트</span>
+            <div>({sliceAddress(QUICKER_ADDRESS)})</div>
+            <Sp1>{contractBal}원</Sp1>
           </Div0>
           <Div0>
-                <span>플랫폼</span>
-                <span>({sliceAddress(PLATFORM_ADDRESS)})</span>
-                <Sp1>{platformBal}원</Sp1>
+            <span>플랫폼</span>
+            <span>({sliceAddress(PLATFORM_ADDRESS)})</span>
+            <Sp1>{platformBal}원</Sp1>
           </Div0>
           <Div0>
-                <span>보험</span>
-                <span>({sliceAddress(INSUARANCE_ADDRESS)})</span>
-                <Sp1>{insuaBal}원</Sp1>
+            <span>보험</span>
+            <span>({sliceAddress(INSUARANCE_ADDRESS)})</span>
+            <Sp1>{insuaBal}원</Sp1>
           </Div0>
         </Box>
       </Container>
@@ -196,30 +196,6 @@ export default function ExplorerPage() {
             <Dvi1_1>의뢰금</Dvi1_1>
             <Dvi1_1>상태</Dvi1_1>
           </Div1>
-          {orderArr.map((element: any) => (
-          <Div1>
-            <Div1_2>{element.orderNum}</Div1_2>
-            <Div1_2>{element.client}</Div1_2>
-            <Div1_2>{element.quicker}</Div1_2>
-            <Div1_2>{element.orderPrice}</Div1_2>
-            <Div1_2>{element.state}</Div1_2>
-          </Div1>
-          ))}
-        </Box>
-      </Container>
-      
-      {/* <div>거래현황</div>
-      <table>
-        <thead>
-          <tr>
-            <th>오더번호</th>
-            <th>의뢰인</th>
-            <th>배송원</th>
-            <th>의뢰금</th>
-            <th>상태</th>
-          </tr>
-        </thead>
-        <tbody>
           {orderArr.length !== 0 ? (
             <>
               {orderArr.map((element: any) => (
@@ -233,10 +209,10 @@ export default function ExplorerPage() {
               ))}
             </>
           ) : (
-            <>로딩컴포넌트</>
+            <>로딩애니메이션</>
           )}
-        </tbody>
-      </table> */}
+        </Box>
+      </Container>
     </>
   );
 }
@@ -274,13 +250,12 @@ const Dvi1_3 = styled.div`
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 20px;
-`
+`;
 
 const Div1_2 = styled(Dvi1_1)`
   font-size: 16px;
   align-items: center;
 `;
-
 
 const Box = styled.div`
   border-radius: 0.313rem;
@@ -302,26 +277,26 @@ const ReqFont = styled.div`
   margin: 10px 0px 5px 16px;
 `;
 const Div0 = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: var(--font-md1);
-    font-weight: bold;
-    margin: 10px 16px 10px 16px;
+  display: flex;
+  align-items: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+  margin: 10px 16px 10px 16px;
 `;
 const Sp0 = styled.div`
-    margin-left: auto;
-    margin-right: 0.625rem;
+  margin-left: auto;
+  margin-right: 0.625rem;
 `;
 
 const Sp1 = styled(Sp0)`
-    font-size: var(--font-md1);
-    font-weight: bold;
+  font-size: var(--font-md1);
+  font-weight: bold;
 `;
 
 const Divnum = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: var(--font-md1);
-    font-weight: bold;
-    margin: 10px 16px 10px 16px;
-`
+  display: flex;
+  align-items: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+  margin: 10px 16px 10px 16px;
+`;
