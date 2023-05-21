@@ -37,10 +37,6 @@ function Search_Detail() {
           orderId : order!.orderNum,
           userWalletAddress : address
         }, process.env.REACT_APP_SERVER_URL + "updateorder")
-        // 의뢰인 지갑주소
-        const clientAddress = await getClientAddress(showOrder)
-        // 채팅방 생성 기능 추가
-        
         // Android로 isDelivering 데이터 true값 전송
         sdta.sendIsDelivering(true)
         navigator("/fulfillmentlist")

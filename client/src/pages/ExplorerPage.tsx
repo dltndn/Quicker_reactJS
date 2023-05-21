@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
@@ -17,9 +17,15 @@ const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
 const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
 const CONTRACT_ADDRESS = QUICKER_ADDRESS;
 
-interface ExplorerState {}
+interface ExplorerState {
+  blinkOrderArrIndex: number[];
+  setBlinkOrderArrIndex: (indexArr: number[]) => void;
+}
 
-export const useExplorerState = create<ExplorerState>((set) => ({}));
+export const useExplorerState = create<ExplorerState>((set) => ({
+  blinkOrderArrIndex: [],
+  setBlinkOrderArrIndex: (blinkOrderArrIndex: number[]) => set({blinkOrderArrIndex}),
+}));
 
 export default function ExplorerPage() {
   const navigate = useNavigate();
@@ -31,6 +37,11 @@ export default function ExplorerPage() {
   const [insuaBal, setInsuaBal] = useState<string>("0");
   const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"]);
   const [orderArr, setOrderArr] = useState<any[]>([]);
+  const [isBlink, setIsBlink] = useState<boolean>(false)
+  const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
+  const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
+
+  const { setBlinkOrderArrIndex } = useExplorerState()
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -71,6 +82,21 @@ export default function ExplorerPage() {
     if (Number.isInteger(amount) && amount >= 1) {
       try {
         const result: any = await getOrdersForLatest(amount.toString());
+        // 바뀐 부분 확인
+        const newOrderArr = result.slice().reverse()
+        let changedIndex:number[] = []
+        for (const [index, element] of newOrderArr.entries()) {
+          if (orderArr[index] !== undefined) {
+            if (orderArr[index].orderNum !== element.orderNum) {
+              changedIndex.push(index);
+              console.log("new order");
+              break; // 중간에 종료
+            } else if (orderArr[index].state !== element.state) {
+              changedIndex.push(index);
+            }
+          }
+        }
+        setBlinkOrderArrIndex(changedIndex)
         setOrderArr(result.slice().reverse());
       } catch (e) {
         console.log(e);
@@ -86,6 +112,7 @@ export default function ExplorerPage() {
     eventName: "DepositedFee",
     async listener(node: any, label: any, owner) {
       setFeeDepositTrigger(true);
+      await setBlinkState(setIsBlinkPI);
     },
   });
 
@@ -96,6 +123,7 @@ export default function ExplorerPage() {
     eventName: "ChangedBalance",
     async listener(node: any, label: any, owner) {
       setContractBalTrigger(true);
+      await setBlinkState(setIsBlinkCo);
     },
   });
 
@@ -106,6 +134,7 @@ export default function ExplorerPage() {
     eventName: "OrderResult",
     async listener(node: any, label: any, owner) {
       setTransactTrigger(true);
+      await setBlinkState(setIsBlink);
     },
   });
 
@@ -135,6 +164,12 @@ export default function ExplorerPage() {
     getCommissionLateFunc();
   }, []);
 
+  const setBlinkState = async (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setter(true);
+    await new Promise((resolve) => {const timeId =  setTimeout(resolve, 1000); return () => clearTimeout(timeId);});
+    setter(false);
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -144,65 +179,97 @@ export default function ExplorerPage() {
           navigate("/profile");
         }}
       ></TopBarOthers>
-      <div>수수료 현황</div>
-      <div>플랫폼</div>
-      <div>{feeArr[0]}%</div>
-      <br />
-      <div>보험</div>
-      <div>{feeArr[1]}%</div>
-      <br />
-      <div>보증금</div>
-      <div>{feeArr[2]}%</div>
-      <br />
-      <div>잔액현황</div>
-      <br />
-      <div>컨트랙트</div>
-      <div>({sliceAddress(QUICKER_ADDRESS)})</div>
-      <br />
-      <div>{contractBal}원</div>
-      <br />
-      <div>플랫폼</div>
-      <div>({sliceAddress(PLATFORM_ADDRESS)})</div>
-      <br />
-      <div>{platformBal}원</div>
-      <br />
-      <div>보험</div>
-      <div>({sliceAddress(INSUARANCE_ADDRESS)})</div>
-      <br />
-      <div>{insuaBal}원</div>
-      <br />
-      <div>거래현황</div>
-      <table>
-        <thead>
-          <tr>
-            <th>오더번호</th>
-            <th>의뢰인</th>
-            <th>배송원</th>
-            <th>의뢰금</th>
-            <th>상태</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Container>
+        <Box>
+          <div>
+            <ReqFont>수수료 현황</ReqFont>
+          </div>
+          <Div1>
+            <Dvi1_1>플랫폼</Dvi1_1>
+            <Dvi1_1>보험</Dvi1_1>
+            <Dvi1_1>보증금</Dvi1_1>
+          </Div1>
+          <Div1>
+            <Dvi1_3>{feeArr[0]}%</Dvi1_3>
+            <Dvi1_3>{feeArr[1]}%</Dvi1_3>
+            <Dvi1_3>{feeArr[2]}%</Dvi1_3>
+          </Div1>
+        </Box>
+      </Container>
+
+      <Container>
+        <Box>
+          <div>
+            <ReqFont>잔액 현황</ReqFont>
+          </div>
+          <Div0>
+            <span>컨트랙트</span>
+            <div>({sliceAddress(QUICKER_ADDRESS)})</div>
+            <Sp1>{isBlinkCo ? (<BlinkDiv>{contractBal}원</BlinkDiv>):(<>{contractBal}원</>)}</Sp1>
+          </Div0>
+          <Div0>
+            <span>플랫폼</span>
+            <span>({sliceAddress(PLATFORM_ADDRESS)})</span>
+            
+            <Sp1>{isBlinkPI ? (<BlinkDiv>{platformBal}원</BlinkDiv>):(<>{platformBal}원</>)}</Sp1>
+            
+          </Div0>
+          <Div0>
+            <span>보험</span>
+            <span>({sliceAddress(INSUARANCE_ADDRESS)})</span>
+            <Sp1>{isBlinkPI ? (<BlinkDiv>{insuaBal}원</BlinkDiv>):(<>{insuaBal}원</>)}</Sp1>
+          </Div0>
+        </Box>
+      </Container>
+      <Container>
+        <Box>
+          <div>
+            <ReqFont>거래 현황</ReqFont>
+          </div>
+          <Div1>
+            <Dvi1_1>오더번호</Dvi1_1>
+            <Dvi1_1>의뢰인</Dvi1_1>
+            <Dvi1_1>배송원</Dvi1_1>
+            <Dvi1_1>의뢰금</Dvi1_1>
+            <Dvi1_1>상태</Dvi1_1>
+          </Div1>
           {orderArr.length !== 0 ? (
             <>
-              {orderArr.map((element: any) => (
+              {orderArr.map((element: any, index: number) => (
                 <ExplorerTableData
                   orderNum={element.orderNum}
                   clientAddress={element.client}
                   quickerAddress={element.quicker}
                   orderPrice={element.orderPrice}
                   state={element.state}
+                  blinkIndex={index}
                 />
               ))}
             </>
           ) : (
-            <>로딩컴포넌트</>
+            <>로딩애니메이션</>
           )}
-        </tbody>
-      </table>
+        </Box>
+      </Container>
     </>
   );
 }
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const BlinkDiv = styled.div`
+  animation: ${blinkAnimation} 1s;
+`
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -215,3 +282,75 @@ const formatCommissionRate = (rate: number): string => {
   const result = (rate / 10).toString();
   return result;
 };
+
+const Div1 = styled.div`
+  display: flex;
+  background-color: var(--white-color);
+  padding: 10px;
+`;
+
+const Dvi1_1 = styled.div`
+  display: flex;
+  flex: 1 1 20%;
+  justify-content: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+`;
+
+const Dvi1_3 = styled.div`
+  display: flex;
+  flex: 1 1 20%;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
+
+const Div1_2 = styled(Dvi1_1)`
+  font-size: 16px;
+  align-items: center;
+`;
+
+const Box = styled.div`
+  border-radius: 0.313rem;
+  margin-top: 0.5rem;
+  width: 97%;
+  background-color: #ffffff;
+  margin: 0.313rem;
+`;
+
+const Container = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ReqFont = styled.div`
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 0px 5px 16px;
+`;
+const Div0 = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+  margin: 10px 16px 10px 16px;
+`;
+const Sp0 = styled.div`
+  margin-left: auto;
+  margin-right: 0.625rem;
+`;
+
+const Sp1 = styled(Sp0)`
+  font-size: var(--font-md1);
+  font-weight: bold;
+`;
+
+const Divnum = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+  margin: 10px 16px 10px 16px;
+`;
