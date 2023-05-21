@@ -1,5 +1,5 @@
 import BottomConfirmBtn from "../bottomconfirmBtn"
-import { useEffect, useRef } from "react";
+import { ChangeEventHandler, SetStateAction, useEffect, useRef, useState } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
@@ -116,7 +116,10 @@ const Camera = () => {
   };
 
 export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const textArea = useRef(null)
+    const file = useRef<HTMLInputElement>(null);
+    const [fileImage, setFileImage] = useState<File | undefined | null>(undefined);
+    const [ImageURL, setImageURL] = useState("");
     const { address } = useAccount()
     const { setTitle } = useExecutionState()
 
@@ -127,10 +130,21 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
           sdta.sendIsDelivering(false)
         }
         // 배송 실패 사진 업로드 로직 작성
+
       } catch(e) {
         console.log(e)
       }
       // 메인으로 리다이렉트
+    }
+
+    const onChange = () =>{
+      if (file.current?.files?.[0]) {
+        setFileImage(file.current.files[0]);
+      }
+    }
+
+    const clickPlusIcon = () => {
+      file.current?.click();
     }
 
     useEffect(() => {
@@ -138,26 +152,35 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     }, [])
     return(
         <>
-            <Divv>
-            <Div1>
-            <Btwal>배송실패</Btwal> 
-            </Div1>
-            </Divv>
-            <Div0>
-                <CameraContainer>
-                    <video autoPlay ref={videoRef} />
-                </CameraContainer>
-            </Div0>
-            <Container>
-        <Box>
+        <Divv>
+          <Div1>
+            <Btwal>배송실패</Btwal>
+          </Div1>
+        </Divv>
+        <Div0>
+          {/* 컴포넌트 수정 필요 */}
+          
+          <input ref={file} type="file" name="file" accept="image/*" capture="environment" onChange={onChange} style={{display : "none"}}/>
+          {(fileImage === undefined || fileImage === null) ? 
+          <div>
+            <span onClick={clickPlusIcon}>플러스 아이콘 추가</span>
+          </div> :
             <div>
-                <ReqFont>배송 실패 사유</ReqFont>
+              <img onClick={clickPlusIcon} src={URL.createObjectURL(fileImage)} alt="uploaded photo" />
+            </div>
+          }
+          
+        </Div0>
+        <Container>
+          <Box>
+            <div>
+              <ReqFont>배송 실패 사유</ReqFont>
             </div>
             <div>
-                <Ipdet></Ipdet>
+              <Ipdet ref={textArea}></Ipdet>
             </div>
-        </Box>
-    </Container>
+          </Box>
+        </Container>
             <BottomConfirmBtn
             isDisabled={false}
             content="확인"
