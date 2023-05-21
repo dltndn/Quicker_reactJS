@@ -11,7 +11,7 @@ async function findMessage(roomName: string) {
     const messages = await Message.find();
     return messages
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 

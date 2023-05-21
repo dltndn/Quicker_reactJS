@@ -5,6 +5,7 @@ import { useAccount } from "wagmi"
 import getName from "./getName"
 import styled from "styled-components"
 import BottomBar from "../BottomBar"
+import Time from "../../lib/Time"
 
 const Chatman = require('../../image/Chatman.png')
 const operator = require('../../image/operator.png')
@@ -14,11 +15,16 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
     const [opponentName, setOponentName] = useState("");
+    const [time ,setTime] = useState("");
 
     const getRecentMessage = async () => {
-        const chatRoom = await Handler.post({ orderNum: orderNum }, process.env.REACT_APP_SERVER_URL + "getRecentMessage")
-        if (chatRoom.recentMessage !== undefined) {
-            setMessage(chatRoom.recentMessage)
+        const recentMessageInfo = await Handler.post({ orderNum: orderNum }, process.env.REACT_APP_SERVER_URL + "getRecentMessageInfo")
+        
+        const parsedTime = Time.getDiff(recentMessageInfo.date)
+        setTime(parsedTime);
+
+        if (recentMessageInfo.message !== undefined) {
+            setMessage(recentMessageInfo.message)
         } else {
             setMessage("")
         }
@@ -48,7 +54,7 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
           </Div1>
           <Div2>
             <Sp0>
-            {opponentName} <Sp1>1분 전</Sp1>
+            {opponentName} <Sp1>{time}</Sp1>
             </Sp0>
             <Sp2>{message}</Sp2>
           </Div2>

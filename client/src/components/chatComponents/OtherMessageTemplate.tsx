@@ -1,11 +1,10 @@
 import styled from "styled-components";
+import { MessageInfoForComponent } from "./interface/MessageComponentInfo";
+import TimeParser from "../../lib/TimeParser";
 
-interface MessageTemplateProps {
-    message: string;
-    time: string;
-}
+export default function OtherMessageTemplate ({message , date} : MessageInfoForComponent) {
 
-export default function MessageTemplate ({ message, time } : MessageTemplateProps) {
+  const time = TimeParser(date)
 
     return (
     <Div3>
@@ -13,7 +12,7 @@ export default function MessageTemplate ({ message, time } : MessageTemplateProp
       <DivChat>
         <span>{message}</span>
       </DivChat>{" "}
-      <Divclock>오전 00:00</Divclock>
+      <Divclock>{time}</Divclock>
     </Div3>
   );
 };
