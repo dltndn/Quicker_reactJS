@@ -8,7 +8,7 @@ export = {
     try {
       const orderNum = req.body.orderNum;
       console.log(String(orderNum));
-      connectMongo();
+      connectMongo("chat");
       const Message = mongoose.model(String(orderNum), MessageModel);
       const recentMessage = await Message.findOne().sort({ $natural: -1 });
       res.send(recentMessage);

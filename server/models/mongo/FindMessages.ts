@@ -6,7 +6,7 @@ require("dotenv").config();
 
 async function findMessage(roomName: string) {
   try {
-    connectMongo();
+    connectMongo("chat");
     const Message = mongoose.model((String)(roomName), MessageModel);
     const messages = await Message.find();
     return messages
