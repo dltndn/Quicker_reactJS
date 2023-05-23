@@ -1,7 +1,7 @@
 import io from "./Config/SocketConnector";
 import socketHandler from "./Controller/Handler";
-import saveMessage from "../models/mongo/SaveMessage";
-import findMessage from "../models/mongo/FindMessages";
+import saveMessage from "../Mongo/Command/SaveMessage";
+import findMessage from "../Mongo/Command/FindMessages";
 
 const main = () => {
   try {
@@ -46,4 +46,4 @@ interface receiveRoomName {
   roomName : string
 }
 
-export = main;
+export default main;

@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 require("dotenv").config();
-const { createServer } = require("http");
+import { createServer } from "http";
+
 const { Server } = require("socket.io");
 
 const app = express();
@@ -16,4 +17,4 @@ const io = new Server(httpServer, {
 
 httpServer.listen(process.env.SOCKET_PORT);
 
-export = io
+export default io

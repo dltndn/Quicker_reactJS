@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import DeleteOrder from "../models/DeleteOrder"
+import DeleteOrder from "../Maria/Commands/DeleteOrder";
 
-export = {
+export default {
   deleteAssociateOrderProcess: async (req: Request, res: Response) => {
     try {
       let deleteTargetId = parseInt(req.body.id);

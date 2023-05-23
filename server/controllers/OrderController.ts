@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
-import SelectOrder from "../models/SelectOrder"
-import CreateOrder from "../models/CreateOrder"
-import sequelize from "../models/Controller/SequelizeConnector"
-import {initModels} from "../models/DB/init-models";
-import UpdateOrder from "../models/UpdateOrder";
-import CreateChatRoom from "../models/CreateChatRoom";
-import SelectUser = require("../models/SelectUser");
-import SelectRoomInfo = require("../models/SelectRoomInfo");
+import SelectOrder from "../Maria/Commands/SelectOrder";
+import CreateOrder from "../Maria/Commands/CreateOrder";
+import sequelize from "../Maria/Connectors/SequelizeConnector"
+import {initModels} from "../Maria/Models/init-models";
+import UpdateOrder from "../Maria/Commands/UpdateOrder";
+import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
+import SelectUser from "../Maria/Commands/SelectUser";
+import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 
 initModels(sequelize);
 
-export = {
+export default {
   request: async (req: Request, res: Response) => {
     try {
       const data = req.body;

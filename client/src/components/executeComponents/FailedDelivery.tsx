@@ -133,16 +133,18 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
         } else {
           formData.append("reason" , "")
         }
-  
-        await fetch(process.env.REACT_APP_SERVER_URL + "orderFail", {
+        
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-fail-image", {
           method: 'POST', 
           body: formData
         });
+        const message = await response.json()
+        if (message.msg === "done") {
+          alert("전송완료")
+        }
       }
     }
     
-    
-
     const failedRogic = async () => {
       const sdta = new SendDataToAndroid(address)
       try {
@@ -206,8 +208,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
             isDisabled={false}
             content="확인"
             confirmLogic={async() => {
-              await postImage();
-              // await failedRogic();
+              await failedRogic();
             }}
           />
         </>

@@ -50,10 +50,14 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
         if (file !== null && file !== undefined && orderNum !== undefined) {
             formData.append('uploadImage', file);
             formData.append('orderNum', orderNum);
-            await fetch(process.env.REACT_APP_SERVER_URL + "orderComplete", {
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-complete-image", {
                 method: 'POST',
                 body: formData,
             })
+            const message = await response.json()
+            if (message.msg === "done") {
+                alert("전송완료")
+            }
         } else {
             alert("사진이 없습니다.")
         }
@@ -98,7 +102,7 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
             {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery state={file} setState={setFile} orderNum={orderNum} />)}
             <BottomConfirmBtn
                 content="확인"
-                confirmLogic={() => {
+                confirmLogic={ () => {
                     deliveredRogic();
                 }} isDisabled={false}
             />

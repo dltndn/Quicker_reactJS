@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import MessageModel from "../models/mongo/Message";
-import connectMongo from "../models/mongo/connector";
+import MessageModel from "../Mongo/Schemas/Message";
+import connectMongo from "../Mongo/Connector";
 
-export = {
+export default {
   getRecentMessageInfo: async (req: Request, res: Response) => {
     try {
       const orderNum = req.body.orderNum;

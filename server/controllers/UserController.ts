@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import SelectOrder = require("../models/SelectOrder");
-import CreateUser = require("../models/CreateUser");
-import sequelize = require("../models/Controller/SequelizeConnector");
-import { initModels } from "../models/DB/init-models";
-import SelectUser = require("../models/SelectUser");
+import SelectOrder from "../Maria/Commands/SelectOrder";
+import CreateUser from "../Maria/Commands/CreateUser";
+import sequelize from "../Maria/Connectors/SequelizeConnector";
+import { initModels } from "../Maria/Models/init-models";
+import SelectUser from "../Maria/Commands/SelectUser";
 
 initModels(sequelize);
 const crypto = require("crypto");
 
-export = {
+export default {
   // NOTE : 이름 변경 필
   getRequests: async (req: Request, res: Response) => {
     try {

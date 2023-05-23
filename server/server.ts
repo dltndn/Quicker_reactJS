@@ -1,26 +1,23 @@
 // 필요한 모듈 import
 import express, { Application, NextFunction, Request, Response } from "express";
 import chat from "./chat/socket";
-import multer from "multer";
 
 // 라우터 처리 미완료
-import OrderController = require("./controllers/OrderController");
-import UserController = require("./controllers/UserController");
-import ChatController = require("./controllers/ChatController");
+import OrderController from "./Controllers/OrderController";
+import UserController from "./Controllers/UserController";
+import ChatController from "./Controllers/ChatController";
+import OrderCompleteImage from "./routes/OrderCompleteImage";
+import OrderFailImage from "./routes/OrderFailImage";
 
 // 라우터 처리 완료
 import AssociateOrder from "./routes/AssociateOrder";
-import Home from "./routes/Home"; 
-import connectMongo = require("./models/mongo/connector");
-import mongoose from "mongoose";
+import Home from "./routes/Home";
 
 // 설정
 const cors = require("cors");
 const app: Application = express();
 const port: Number = 9000;
 const bodyParser = require("body-parser");
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
 
 require("dotenv").config();
 app.use(cors());
@@ -47,78 +44,10 @@ app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWallet
 app.post("/getRoomInfo", OrderController.getRoomInfo);
 // 테스트 중
 
-const ImageFileSchema = new mongoose.Schema({
-  image : Buffer,    
-});
+// app.use("/order-complete-image", OrderCompleteImage);
+// app.use("/order-fail-image", OrderFailImage);
 
-app.get("/orderComplete", async (req: Request, res: Response): Promise<any> => {
-    try {
-      const imageModel = mongoose.model("1", ImageFileSchema);
-      await connectMongo("orderComplete");
-      const images = await imageModel.find({});
-      console.log(images)
-      res.send({imageBuffer : images[0].image})
-    } catch (error) {
-      console.log(error)
-    }  
-  })
-  .post("/orderComplete" , upload.single('uploadImage'), async (req: Request, res: Response): Promise<any> => {
-  try {
-    const documentFile = (req as MulterRequest).file;
-    const bufferImage = documentFile.buffer
-    
-    const orderNum = req.body.orderNum
-    
-    await connectMongo("orderFail");
-    
-    const uploadImage = mongoose.model(orderNum, ImageFileSchema);
-    
-    const adef = new uploadImage({
-      image : bufferImage,  
-    });
-    await adef.save();
-    res.send({msg : "done"})
-  } catch (error) {
-    console.log(error)
-  }
-})
+app.use("/order-complete-image", OrderCompleteImage);
+app.use("/order-fail-image", OrderFailImage);
 
-app.get("/orderFail", async (req: Request, res: Response): Promise<any> => {
-    try {
-      const uploadImage = mongoose.model("1", ImageFileSchema);
-      await connectMongo("orderFail");
-      const data = await uploadImage.find({});
-      console.log(data);
-      res.send({ imageBuffer: data[0].image });
-    } catch (error) {
-      console.log(error);
-    }
-  })
-  .post("/orderFail", upload.single("image"), async (req: Request, res: Response): Promise<any> => {
-      try {
-        const documentFile = (req as MulterRequest).file;
-        const bufferImage = documentFile.buffer;
-        const orderNum = req.body.orderNum;
-
-        await connectMongo("orderFail");
-
-        const uploadImage = mongoose.model(orderNum, ImageFileSchema);
-
-        const image = new uploadImage({
-          image: bufferImage,
-        });
-        await image.save();
-        res.send({ msg: "done" });
-      } catch (error) {
-        console.log(error);
-      }    
-    }
-  );
-
-interface MulterRequest extends Request {
-  file: any;
-}
-
-app.listen(port, () => {
-  console.log(`App is listening on port ${port} !`);
-});
+app.listen(port, () => console.log(`App is listening on port ${port} !`));
