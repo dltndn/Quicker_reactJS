@@ -47,42 +47,78 @@ app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWallet
 app.post("/getRoomInfo", OrderController.getRoomInfo);
 // 테스트 중
 
-const Image = new mongoose.Schema({
+const ImageFileSchema = new mongoose.Schema({
   image : Buffer,    
 });
 
 app.get("/orderComplete", async (req: Request, res: Response): Promise<any> => {
     try {
-      const uploadImage = mongoose.model("1", Image);
+      const imageModel = mongoose.model("1", ImageFileSchema);
       await connectMongo("orderComplete");
-      const data = await uploadImage.find({});
-      console.log(data)
-      res.send({imageBuffer : data[0].image})
+      const images = await imageModel.find({});
+      console.log(images)
+      res.send({imageBuffer : images[0].image})
     } catch (error) {
       console.log(error)
     }  
-
   })
   .post("/orderComplete" , upload.single('uploadImage'), async (req: Request, res: Response): Promise<any> => {
-  
-  const documentFile = (req as MulterRequest).file;
-  const bufferImage = documentFile.buffer
-  
-  const orderNum = req.body.orderNum
-  
-  await connectMongo("orderFail");
-  
-  const uploadImage = mongoose.model(orderNum, Image);
-  
-  const adef = new uploadImage({
-    image : bufferImage,  
-  });
-  await adef.save();
-  res.send({msg : "done"})
+  try {
+    const documentFile = (req as MulterRequest).file;
+    const bufferImage = documentFile.buffer
+    
+    const orderNum = req.body.orderNum
+    
+    await connectMongo("orderFail");
+    
+    const uploadImage = mongoose.model(orderNum, ImageFileSchema);
+    
+    const adef = new uploadImage({
+      image : bufferImage,  
+    });
+    await adef.save();
+    res.send({msg : "done"})
+  } catch (error) {
+    console.log(error)
+  }
 })
-  
+
+app.get("/orderFail", async (req: Request, res: Response): Promise<any> => {
+    try {
+      const uploadImage = mongoose.model("1", ImageFileSchema);
+      await connectMongo("orderFail");
+      const data = await uploadImage.find({});
+      console.log(data);
+      res.send({ imageBuffer: data[0].image });
+    } catch (error) {
+      console.log(error);
+    }
+  })
+  .post("/orderFail", upload.single("image"), async (req: Request, res: Response): Promise<any> => {
+      try {
+        const documentFile = (req as MulterRequest).file;
+        const bufferImage = documentFile.buffer;
+        const orderNum = req.body.orderNum;
+
+        await connectMongo("orderFail");
+
+        const uploadImage = mongoose.model(orderNum, ImageFileSchema);
+
+        const image = new uploadImage({
+          image: bufferImage,
+        });
+        await image.save();
+        res.send({ msg: "done" });
+      } catch (error) {
+        console.log(error);
+      }    
+    }
+  );
+
 interface MulterRequest extends Request {
-    file: any;
+  file: any;
 }
 
-app.listen(port, () => {console.log(`App is listening on port ${port} !`);});
+app.listen(port, () => {
+  console.log(`App is listening on port ${port} !`);
+});

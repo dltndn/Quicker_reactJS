@@ -116,12 +116,32 @@ const Camera = () => {
   };
 
 export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
-    const textArea = useRef(null)
+    const textArea = useRef<HTMLTextAreaElement>(null);
     const file = useRef<HTMLInputElement>(null);
     const [fileImage, setFileImage] = useState<File | undefined | null>(undefined);
-    const [ImageURL, setImageURL] = useState("");
     const { address } = useAccount()
     const { setTitle } = useExecutionState()
+
+    const postImage = async () => {
+      if (fileImage !== null && fileImage && orderNum !== undefined ) {
+        const formData = new FormData();
+        formData.append("image" , fileImage);
+        formData.append("orderNum" , orderNum);
+        
+        if (textArea.current?.value !== undefined) {
+          formData.append("reason" , textArea.current?.value)
+        } else {
+          formData.append("reason" , "")
+        }
+  
+        await fetch(process.env.REACT_APP_SERVER_URL + "orderFail", {
+          method: 'POST', 
+          body: formData
+        });
+      }
+    }
+    
+    
 
     const failedRogic = async () => {
       const sdta = new SendDataToAndroid(address)
@@ -130,7 +150,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
           sdta.sendIsDelivering(false)
         }
         // 배송 실패 사진 업로드 로직 작성
-
+        await postImage()
       } catch(e) {
         console.log(e)
       }
@@ -177,6 +197,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
               <ReqFont>배송 실패 사유</ReqFont>
             </div>
             <div>
+              
               <Ipdet ref={textArea}></Ipdet>
             </div>
           </Box>
@@ -185,7 +206,8 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
             isDisabled={false}
             content="확인"
             confirmLogic={async() => {
-                await failedRogic();
+              await postImage();
+              // await failedRogic();
             }}
           />
         </>
