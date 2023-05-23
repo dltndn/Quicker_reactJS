@@ -34,7 +34,7 @@ export default function RemoteDelivery({ state, setState, orderNum }: RemoteDeli
     return(
       <>
         <Div0 onClick={handleDivClick}>
-          <input ref={fileInput} onChange={imageChange} type="file" name="uploadImage" accept="image/png, image/jpeg" style={{ display: 'none' }} />
+          <input ref={fileInput} onChange={imageChange} type="file" name="uploadImage" accept="image/png, image/jpeg" capture="environment" style={{ display: 'none' }} />
           {(state !== null && state !== undefined) ? (
             <div>
               <img src={URL.createObjectURL(state)} alt="uploaded photo" />
