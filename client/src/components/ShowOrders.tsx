@@ -213,7 +213,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
       )}
       {}
       <OrderModal isClient={isClient} />
-      <Divhid />
     </>
   );
 }
