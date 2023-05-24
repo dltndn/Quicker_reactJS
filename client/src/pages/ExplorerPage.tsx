@@ -42,11 +42,9 @@ export default function ExplorerPage() {
   const [isBlink, setIsBlink] = useState<boolean>(false)
   const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
-  const [showTopBar, setShowTopBar] = useState<boolean>(true)
 
   const { setBlinkOrderArrIndex } = useExplorerState()
   const { isMember } = useVerificationStore();
-  const { address } = useAccount()
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -178,11 +176,6 @@ export default function ExplorerPage() {
 
   useEffect(() => {
     getCommissionLateFunc();
-    // 상단바 노출 로직
-    console.log(address)
-    if (address === undefined) {
-      setShowTopBar(false)
-    }
   }, []);
 
   const setBlinkState = async (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -194,12 +187,12 @@ export default function ExplorerPage() {
   return (
     <>
       <GlobalStyle />
-      {showTopBar ? (<TopBarOthers
+      <TopBarOthers
         title="실시간 거래현황"
         redirectLogic={function () {
-          navigate("/profile");
+          navigate("/");
         }}
-      ></TopBarOthers>):(<></>)}
+      ></TopBarOthers>
       <Container>
         <Box>
           <div>
