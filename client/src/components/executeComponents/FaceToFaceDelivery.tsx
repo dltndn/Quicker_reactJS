@@ -65,10 +65,6 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
         <Camera />
-<<<<<<< HEAD
-        
-=======
->>>>>>> b8d111fd24e63b1e5d196e67fdb989ba6b530f4b
     </>
   );
 };
