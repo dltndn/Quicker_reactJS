@@ -1,5 +1,5 @@
 import io from "../Config/SocketConnector";
-import mongoDB from "../../models/mongo/SaveMessage";
+
 const socketHandler = {
 
   printRoomInfo : () => {
@@ -18,4 +18,4 @@ interface roomName {
 }
 
 
-export = socketHandler;
+export default socketHandler;

@@ -9,6 +9,7 @@ import {
   getLastClientOrder,
 } from "../utils/ExecuteOrderFromBlockchain";
 import Handler from "../lib/Handler";
+import { useDivHandler } from "../pages/commission";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
@@ -27,7 +28,7 @@ interface ErrorProps {
 export default function CreateNewOrder({
   data,
   _orderPrice,
-  _deadline
+  _deadline,
 }: Props) {
   const {
     btnContent,
@@ -37,13 +38,14 @@ export default function CreateNewOrder({
     setCreatedOrderNum,
     setErrorMessage,
     cost,
-    deadLine
+    deadLine,
   } = useOrderStore();
-  const [lastOrder, setLastOrder] = useState<string>("")
+  const [lastOrder, setLastOrder] = useState<string>("");
   const { address } = useAccount();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const {orderId, setOrderId} = useOrderDataStore();
+  const { orderId, setOrderId } = useOrderDataStore();
+  const { setShowCommissionPage } = useDivHandler();
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
     abi: Quicker_abi,
@@ -69,7 +71,7 @@ export default function CreateNewOrder({
           setErrorMessage("결제가격을 입력해주세요.");
         } else {
           setErrorMessage("");
-          console.log("error")
+          console.log("error");
         }
       }
     },
@@ -86,13 +88,19 @@ export default function CreateNewOrder({
   });
 
   const writeContract = async () => {
-
-    // 토큰 사용 권한 체크 로직
-    const allowanceData: any = await getAllowance(address);
-    if (allowanceData._hex === "0x00") {
-      setShowAllowance(true);
+    try {
+      // 토큰 사용 권한 체크 로직
+      const allowanceData: any = await getAllowance(address);
+      if (allowanceData._hex === "0x00") {
+        setShowAllowance(true);
+      }
+      write?.();
+    } catch (e) {
+      console.log(e);
+      alert("의뢰가 실패되었습니다.");
+      setShowCommissionPage(false)
+      navigate("/");
     }
-    write?.();
   };
 
   const getCreatedOrderNum = async () => {
@@ -100,10 +108,10 @@ export default function CreateNewOrder({
       let newOrderNum = await getLastClientOrder(address);
       if (newOrderNum !== lastOrder) {
         setCreatedOrderNum(newOrderNum);
-        console.log("새 오더넘버 탐색 완료")
+        console.log("새 오더넘버 탐색 완료");
         clearInterval(intervalId);
       } else {
-        console.log("새 오더 번호 감지x")
+        console.log("새 오더 번호 감지x");
       }
     }, 1000);
   };
@@ -111,13 +119,13 @@ export default function CreateNewOrder({
   const getLastOrderFromBlochain = async () => {
     const result = await getLastClientOrder(address);
     if (result !== undefined) {
-      setLastOrder(result)
+      setLastOrder(result);
     }
-  }
+  };
 
   useEffect(() => {
-    getLastOrderFromBlochain()
-  }, [])
+    getLastOrderFromBlochain();
+  }, []);
 
   useEffect(() => {
     if (isSuccess) {
@@ -128,7 +136,7 @@ export default function CreateNewOrder({
           console.log("db에 저장할 오더번호: " + createdOrderNum);
           setOrderId(parseInt(createdOrderNum));
           // 로직 마지막은 프로필 오더 내역으로 리다이렉트
-        })()
+        })();
       } else {
         console.log("createdOrderNum is null");
       }
@@ -137,10 +145,11 @@ export default function CreateNewOrder({
 
   useEffect(() => {
     if (orderId !== 0) {
-      console.log("호출됨")
+      console.log("호출됨");
       Handler.post(data, process.env.REACT_APP_SERVER_URL + "request");
-      setOrderId(0)
-      navigate("/")
+      setOrderId(0);
+      setShowCommissionPage(false)
+      navigate("/");
     }
   }, [orderId]);
 
@@ -151,17 +160,20 @@ export default function CreateNewOrder({
   }, [isLoading]);
 
   useEffect(() => {
-    setErrorMessage("")
-  }, [cost])
+    setErrorMessage("");
+  }, [cost]);
 
   useEffect(() => {
-    setErrorMessage("")
-  }, [deadLine])
-
+    setErrorMessage("");
+  }, [deadLine]);
 
   return (
     <>
-      <ConfirmBtn isDisabled={false} content={btnContent} confirmLogic={() => writeContract()} />
+      <ConfirmBtn
+        isDisabled={false}
+        content={btnContent}
+        confirmLogic={() => writeContract()}
+      />
     </>
   );
 }

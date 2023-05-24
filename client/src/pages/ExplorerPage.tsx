@@ -40,14 +40,13 @@ export default function ExplorerPage() {
   const [insuaBal, setInsuaBal] = useState<string>("0");
   const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"]);
   const [orderArr, setOrderArr] = useState<any[]>([]);
+  const [showOrders, setShowOrders] = useState<any>([])
   const [isBlink, setIsBlink] = useState<boolean>(false)
   const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
-  const [showTopBar, setShowTopBar] = useState<boolean>(true)
 
   const { setBlinkOrderArrIndex } = useExplorerState()
   const { isMember } = useVerificationStore();
-  const { address } = useAccount()
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -89,21 +88,27 @@ export default function ExplorerPage() {
       try {
         const result: any = await getOrdersForLatest(amount.toString());
         // 바뀐 부분 확인
-        const newOrderArr = result.slice().reverse()
+        const newOrderArr = result.slice()
         let changedIndex:number[] = []
         for (const [index, element] of newOrderArr.entries()) {
           if (orderArr[index] !== undefined) {
+            console.log(index)
             if (orderArr[index].orderNum !== element.orderNum) {
               changedIndex.push(index);
               console.log("new order");
               break; // 중간에 종료
             } else if (orderArr[index].state !== element.state) {
+              console.log("changed state -> " + index)
               changedIndex.push(index);
+            } else {
+              console.log("변경x")
             }
           }
         }
         setBlinkOrderArrIndex(changedIndex)
-        setOrderArr(result.slice().reverse());
+        console.log("changedIndex: " + changedIndex)
+        setOrderArr(newOrderArr);
+        console.log(newOrderArr)
       } catch (e) {
         console.log(e);
       }
@@ -167,12 +172,12 @@ export default function ExplorerPage() {
   }, [transactTrigger]);
 
   useEffect(() => {
+    setShowOrders(orderArr)
+  }, [orderArr]);
+  
+
+  useEffect(() => {
     getCommissionLateFunc();
-    // 상단바 노출 로직
-    console.log(address)
-    if (address === undefined) {
-      setShowTopBar(false)
-    }
   }, []);
 
   const setBlinkState = async (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -184,12 +189,12 @@ export default function ExplorerPage() {
   return (
     <>
       <GlobalStyle />
-      {showTopBar ? (<TopBarOthers
+      <TopBarOthers
         title="실시간 거래현황"
         redirectLogic={function () {
-          navigate("/profile");
+          navigate("/");
         }}
-      ></TopBarOthers>):(<></>)}
+      ></TopBarOthers>
       <Container>
         <Box>
           <div>
@@ -246,7 +251,9 @@ export default function ExplorerPage() {
             <Dvi1_1>의뢰금</Dvi1_1>
             <Dvi1_1>상태</Dvi1_1>
           </Div1>
-              {orderArr.map((element: any, index: number) => (
+          {showOrders.length !== 0 ? (
+            <>
+              {showOrders.map((element: any, index: number) => (
                 <ExplorerTableData
                   orderNum={element.orderNum}
                   clientAddress={element.client}

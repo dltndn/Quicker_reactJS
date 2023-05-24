@@ -148,13 +148,13 @@ const PostcodeInputs = ({ refs, controls, setStates, title }: PostcodeInputsType
                     <Ip type="text" ref={nameRef} onChange={() => setStates.setTarget(nameRef.current!.value)} placeholder="이름" />
                 </DivName>
                 <Divcall>
-                    <Ip type="text" ref={prePhoneNumberRef} onChange={() => setPrePhoneNumber(prePhoneNumberRef.current!.value)} placeholder="010" />
+                    <Ip type="text" inputMode="numeric" ref={prePhoneNumberRef} onChange={() => setPrePhoneNumber(prePhoneNumberRef.current!.value)} placeholder="010" />
                 </Divcall>
                 <Divcall>
-                    <Ip type="text" ref={middlePhoneNumberRef} onChange={() => setMiddlePhoneNumber(middlePhoneNumberRef.current!.value)} placeholder="0000" />
+                    <Ip type="text" inputMode="numeric" ref={middlePhoneNumberRef} onChange={() => setMiddlePhoneNumber(middlePhoneNumberRef.current!.value)} placeholder="0000" />
                 </Divcall>
                 <Divcall1>
-                    <Ip type="text" ref={lastPhoneNumberRef} onChange={() => setLastPhoneNumber(lastPhoneNumberRef.current!.value)} placeholder="0000" />
+                    <Ip type="text" inputMode="numeric" ref={lastPhoneNumberRef} onChange={() => setLastPhoneNumber(lastPhoneNumberRef.current!.value)} placeholder="0000" />
                 </Divcall1>
             </Div0>
         </Box>
