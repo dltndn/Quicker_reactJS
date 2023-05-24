@@ -10,6 +10,7 @@ import {
 } from "../utils/ExecuteOrderFromBlockchain";
 import Handler from "../lib/Handler";
 import { useDivHandler } from "../pages/commission";
+import { useOrderState } from "./ShowOrders";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
@@ -46,6 +47,8 @@ export default function CreateNewOrder({
 
   const { orderId, setOrderId } = useOrderDataStore();
   const { setShowCommissionPage } = useDivHandler();
+  const { setRefreshOrder } = useOrderState()
+
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
     abi: Quicker_abi,
@@ -98,7 +101,7 @@ export default function CreateNewOrder({
     } catch (e) {
       console.log(e);
       alert("의뢰가 실패되었습니다.");
-      setShowCommissionPage(false)
+      setShowCommissionPage(true)
       navigate("/");
     }
   };
@@ -148,7 +151,8 @@ export default function CreateNewOrder({
       console.log("호출됨");
       Handler.post(data, process.env.REACT_APP_SERVER_URL + "request");
       setOrderId(0);
-      setShowCommissionPage(false)
+      setRefreshOrder(true)
+      setShowCommissionPage(true)
       navigate("/");
     }
   }, [orderId]);

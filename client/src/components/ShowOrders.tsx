@@ -21,6 +21,8 @@ interface OrderState {
   setIsModalOpen: (newData: boolean) => void;
   reloadOrderNum: string |  null;
   setReloadOrderNum: (newData: string | null) => void;
+  refreshOrder: boolean;
+  setRefreshOrder: (newData: boolean) => void;
 }
 
 export const useOrderState = create<OrderState>((set) => ({
@@ -32,6 +34,8 @@ export const useOrderState = create<OrderState>((set) => ({
   setIsModalOpen: (isModalOpen: boolean) => set({ isModalOpen }),
   reloadOrderNum: null,
   setReloadOrderNum: (reloadOrderNum: string | null) => set({reloadOrderNum}),
+  refreshOrder: false,
+  setRefreshOrder: (refreshOrder: boolean) => set({refreshOrder}),
 }));
 
 interface ShowOrderProps {
@@ -82,7 +86,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
   const [newOrder, setNewOrder] = useState<object | null>(null)
 
-  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum } = useOrderState();
+  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum, refreshOrder, setRefreshOrder } = useOrderState();
   const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
     setOrder(order);
@@ -175,6 +179,14 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   useEffect(() => {
     getOrderListFromBlochain();
   }, [isClient]);
+
+  useEffect(() => {
+    console.log("refreshOrder: "+refreshOrder)
+    if(refreshOrder) {
+      getOrderListFromBlochain();
+      setRefreshOrder(false)
+    }
+  }, [refreshOrder])
 
   return (
     <>

@@ -10,14 +10,16 @@ import Handler from "../lib/Handler";
 import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
+import { useOrderState } from "./ShowOrders";
 
 const money = require("../image/money.png");
 
 function Search_Detail() {
   const navigator = useNavigate()
   const { address } = useAccount()
-  const { orders, showOrder } = useSearchState();
+  const { orders, showOrder, setIsDetail } = useSearchState();
   const { setShowAllowance } = useOrderStore()
+  const { setRefreshOrder } = useOrderState()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
 
@@ -39,7 +41,9 @@ function Search_Detail() {
         }, process.env.REACT_APP_SERVER_URL + "updateorder")
         // Android로 isDelivering 데이터 true값 전송
         sdta.sendIsDelivering(true)
-        navigator("/fulfillmentlist")
+        setRefreshOrder(true)
+        setIsDetail(false);
+        navigator("/")
       } catch(e) {
         if (e) {
           //@ts-ignore
