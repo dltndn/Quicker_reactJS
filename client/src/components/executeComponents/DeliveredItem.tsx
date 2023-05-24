@@ -41,8 +41,27 @@ text-align: center;
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
-
+    const [file, setFile] = useState<File | null | undefined>(undefined);
     const { address } = useAccount()
+
+    const postImage = async () => {
+        const formData = new FormData();
+
+        if (file !== null && file !== undefined && orderNum !== undefined) {
+            formData.append('uploadImage', file);
+            formData.append('orderNum', orderNum);
+            const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-complete-image", {
+                method: 'POST',
+                body: formData,
+            })
+            const message = await response.json()
+            if (message.msg === "done") {
+                alert("전송완료")
+            }
+        } else {
+            alert("사진이 없습니다.")
+        }
+    }  
 
     const deliveredRogic = async () => {
         if (orderNum !== undefined) {
@@ -56,13 +75,16 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
                     sdta.sendIsDelivering(false)
                 }
                 // 배송원 사진 업로드 로직 작성
+                if (isFace === false) {
+                    await postImage()
+                }
             } catch(e) {
                 console.log(e)
             }
             setShowComponent(<WaitClientConfirm />)
         }
     }
-
+    
     useEffect(() => {
         setTitle("물품전달")
     }, [])
@@ -77,12 +99,14 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
             <Btwal onClick={() => setIsFace(false)}>비대면</Btwal>
             </Div1>
         </Div0>
-            {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery orderNum={orderNum} />)}
+            {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery state={file} setState={setFile} orderNum={orderNum} />)}
             <BottomConfirmBtn
                 content="확인"
-                confirmLogic={() => {
+                confirmLogic={ () => {
+                    // postImage();
                     deliveredRogic();
-                } } isDisabled={false}          />
+                }} isDisabled={false}
+            />
         </>
     )
 }
