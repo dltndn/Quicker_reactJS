@@ -242,8 +242,6 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>거래 현황</ReqFont>
           </div>
-          {orderArr.length !== 0 ? (
-            <>
               <Div1>
             <Dvi1_1>오더번호</Dvi1_1>
             <Dvi1_1>의뢰인</Dvi1_1>
