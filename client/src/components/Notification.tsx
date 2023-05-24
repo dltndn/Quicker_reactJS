@@ -87,7 +87,7 @@ function Notification() {
   return (
     <>
  <GlobalStyle />
-      {/* <TopBarThin
+       <TopBarThin
         title="알림"
         title2=""
         redirectLogic={() => {
@@ -134,9 +134,7 @@ function Notification() {
             <Div1_3>3월 20일</Div1_3>
           </Div1>
         ) : null}
-      </Se0> */}
-
-            <Lottie animationData={Done}/>
+      </Se0> 
 
 
     </>
