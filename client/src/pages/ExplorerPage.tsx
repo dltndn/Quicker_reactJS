@@ -10,8 +10,9 @@ import {
   getOrdersForLatest,
 } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
-import { useContractEvent } from "wagmi";
+import { useContractEvent, useAccount } from "wagmi";
 import ExplorerTableData from "../components/ExplorerTableData";
+import { useVerificationStore } from "../App";
 
 const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
 const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
@@ -40,8 +41,11 @@ export default function ExplorerPage() {
   const [isBlink, setIsBlink] = useState<boolean>(false)
   const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
+  const [showTopBar, setShowTopBar] = useState<boolean>(true)
 
   const { setBlinkOrderArrIndex } = useExplorerState()
+  const { isMember } = useVerificationStore();
+  const { address } = useAccount()
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -162,6 +166,11 @@ export default function ExplorerPage() {
 
   useEffect(() => {
     getCommissionLateFunc();
+    // 상단바 노출 로직
+    console.log(address)
+    if (address === undefined) {
+      setShowTopBar(false)
+    }
   }, []);
 
   const setBlinkState = async (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -173,12 +182,12 @@ export default function ExplorerPage() {
   return (
     <>
       <GlobalStyle />
-      <TopBarOthers
+      {showTopBar ? (<TopBarOthers
         title="실시간 거래현황"
         redirectLogic={function () {
           navigate("/profile");
         }}
-      ></TopBarOthers>
+      ></TopBarOthers>):(<></>)}
       <Container>
         <Box>
           <div>
