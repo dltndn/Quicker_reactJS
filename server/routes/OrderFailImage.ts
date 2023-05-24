@@ -32,13 +32,15 @@ router.get("/", async (req: Request, res: Response): Promise<any> => {
         const image = new uploadImage({
           image: bufferImage,
         });
+        console.log(bufferImage)
         await image.save();
         res.send({ msg: "done" });
       } catch (error) {
         console.log(error);
       }    
     }
-  );
+  
+    );
 
   interface MulterRequest extends Request {
     file: any;

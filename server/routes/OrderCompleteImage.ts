@@ -27,13 +27,14 @@ router.get("/", async (req: Request, res: Response): Promise<any> => {
     
     const orderNum = req.body.orderNum
     
-    await connectMongo("orderFail");
+    await connectMongo("orderComplete");
     
     const uploadImage = mongoose.model(orderNum, ImageFileSchema);
     
     const adef = new uploadImage({
       image : bufferImage,
     });
+    console.log(bufferImage)
     await adef.save();
     res.send({msg : "done"})
   } catch (error) {

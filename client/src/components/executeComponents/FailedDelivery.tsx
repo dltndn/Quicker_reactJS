@@ -208,6 +208,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
             isDisabled={false}
             content="확인"
             confirmLogic={async() => {
+              // await postImage();
               await failedRogic();
             }}
           />
