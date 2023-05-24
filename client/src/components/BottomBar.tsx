@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import circles from "./animation/circles.gif"
 import styled, { keyframes } from "styled-components";
+import Lottie from "lottie-react";
+import BottombarAni from "../Lottie/BottomBarAni.json";
+
 const white1 = require('../image/white1.png');
 const black1 = require('../image/black1.png');
 const white2 = require('../image/white2.png');
@@ -77,8 +80,8 @@ function BottomBar() {
       {showDiv ? (
         <Sc0>
            <Container>
-          <Img1 src={circles}></Img1>
-    </Container>
+              <Lottie animationData={BottombarAni}/>
+           </Container>
         </Sc0>
       ) : (
         <Sc0>

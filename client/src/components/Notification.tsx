@@ -1,10 +1,12 @@
 import TopBarThin from './topBarthin';
 import styled, { createGlobalStyle } from 'styled-components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
-
+import Done from "../Lottie/Done.json";
 import { HiPaperAirplane } from "react-icons/hi2";
+import Lottie from 'lottie-react';
+import Modal from 'react-modal';
 
 const Chatdot = require('../image/Chatdot.png')
 const Chatman = require('../image/Chatman.png')
@@ -77,10 +79,15 @@ function Notification() {
     setSelectedType(e.target.value);
   };
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setModalIsOpen(false), 2000);
+  }, []);
   return (
     <>
  <GlobalStyle />
-      <TopBarThin
+       <TopBarThin
         title="알림"
         title2=""
         redirectLogic={() => {
@@ -127,10 +134,19 @@ function Notification() {
             <Div1_3>3월 20일</Div1_3>
           </Div1>
         ) : null}
-      </Se0>
+      </Se0> 
+
+
     </>
   );
 }
 
 export default Notification;
 
+const Divdone = styled.div`
+  display: flex;
+  justify-content: center; 
+  text-align: center;
+  width: 300px;
+  height: 300px;
+`

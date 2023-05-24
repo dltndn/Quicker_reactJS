@@ -198,8 +198,9 @@ const Bticon = styled.button`
 `;
 
 const Bticonimg = styled.img`
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 1.4rem;
+    height: 1.4rem;
+
 `;
 
 function Req() {
@@ -457,13 +458,13 @@ function Req() {
     </Container>
     <Container>
         <Box>
-            
-        <span>지갑 잔액</span>
-                <Sp1>{isConnected && address && <GetQkrwBalance address={address}/>}</Sp1>
-                <Bticon>
-                    <Bticonimg src={money} alt="" />
-                </Bticon>
-                
+            <div>
+                <ReqFont>지갑 잔액</ReqFont>
+            </div>
+            <div>
+            <Sp2>{isConnected && address && <GetQkrwBalance address={address}/>}
+            <Imgdiv><Bticonimg src={money} alt="" /></Imgdiv></Sp2>
+            </div>
         </Box>
     </Container>
     </>
@@ -471,3 +472,19 @@ function Req() {
   }
   
   export default Req;
+
+  const Sp2 = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 24px;
+    color: #79afff;
+    margin: 10px;
+`;
+
+const Imgdiv = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0px 0px 0px 10px;
+`;

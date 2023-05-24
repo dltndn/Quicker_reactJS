@@ -13,6 +13,8 @@ import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import { useContractEvent, useAccount } from "wagmi";
 import ExplorerTableData from "../components/ExplorerTableData";
 import { useVerificationStore } from "../App";
+import Lottie from "lottie-react";
+import LoadingAni from "../Lottie/144488-transparet-loading-dots.json";
 
 const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
 const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
@@ -240,7 +242,9 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>거래 현황</ReqFont>
           </div>
-          <Div1>
+          {orderArr.length !== 0 ? (
+            <>
+              <Div1>
             <Dvi1_1>오더번호</Dvi1_1>
             <Dvi1_1>의뢰인</Dvi1_1>
             <Dvi1_1>배송원</Dvi1_1>
@@ -261,7 +265,7 @@ export default function ExplorerPage() {
               ))}
             </>
           ) : (
-            <>로딩애니메이션</>
+            <Lottie animationData={LoadingAni}/>
           )}
         </Box>
       </Container>
@@ -301,6 +305,7 @@ const Div1 = styled.div`
   display: flex;
   background-color: var(--white-color);
   padding: 10px;
+  border-radius: 0.313rem;
 `;
 
 const Dvi1_1 = styled.div`
@@ -326,11 +331,11 @@ const Div1_2 = styled(Dvi1_1)`
 `;
 
 const Box = styled.div`
-  border-radius: 0.313rem;
   margin-top: 0.5rem;
   width: 97%;
   background-color: #ffffff;
   margin: 0.313rem;
+  border-radius: 0.313rem !important;
 `;
 
 const Container = styled.section`
