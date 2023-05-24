@@ -26,13 +26,26 @@ export default function ExplorerTableData({
   const { blinkOrderArrIndex } = useExplorerState();
   const [isBlink, setIsblink] = useState<boolean>(false)
 
+  const setIsBlinkFalse = async () => {
+    const timeoutId = setTimeout(() => {
+      setIsblink(false)
+    }, 500);
+return () => clearTimeout(timeoutId);
+  }
+
   useEffect(() => {
     blinkOrderArrIndex.forEach((val) => {
       if (blinkIndex === val) {
         setIsblink(true)
       }
     });
-  });
+  }, [blinkOrderArrIndex]);
+
+  useEffect(() => {
+    if(isBlink) {
+      setIsBlinkFalse()
+    }
+  }, [isBlink])
 
   return (
     <>

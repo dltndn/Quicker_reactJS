@@ -38,6 +38,7 @@ export default function ExplorerPage() {
   const [insuaBal, setInsuaBal] = useState<string>("0");
   const [feeArr, setFeeArr] = useState<string[]>(["0", "0", "0"]);
   const [orderArr, setOrderArr] = useState<any[]>([]);
+  const [showOrders, setShowOrders] = useState<any>([])
   const [isBlink, setIsBlink] = useState<boolean>(false)
   const [isBlinkPI, setIsBlinkPI] = useState<boolean>(false)
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
@@ -87,21 +88,27 @@ export default function ExplorerPage() {
       try {
         const result: any = await getOrdersForLatest(amount.toString());
         // 바뀐 부분 확인
-        const newOrderArr = result.slice().reverse()
+        const newOrderArr = result.slice()
         let changedIndex:number[] = []
         for (const [index, element] of newOrderArr.entries()) {
           if (orderArr[index] !== undefined) {
+            console.log(index)
             if (orderArr[index].orderNum !== element.orderNum) {
               changedIndex.push(index);
               console.log("new order");
               break; // 중간에 종료
             } else if (orderArr[index].state !== element.state) {
+              console.log("changed state -> " + index)
               changedIndex.push(index);
+            } else {
+              console.log("변경x")
             }
           }
         }
         setBlinkOrderArrIndex(changedIndex)
-        setOrderArr(result.slice().reverse());
+        console.log("changedIndex: " + changedIndex)
+        setOrderArr(newOrderArr);
+        console.log(newOrderArr)
       } catch (e) {
         console.log(e);
       }
@@ -163,6 +170,11 @@ export default function ExplorerPage() {
       setTransactTrigger(false);
     }
   }, [transactTrigger]);
+
+  useEffect(() => {
+    setShowOrders(orderArr)
+  }, [orderArr]);
+  
 
   useEffect(() => {
     getCommissionLateFunc();
@@ -242,9 +254,9 @@ export default function ExplorerPage() {
             <Dvi1_1>의뢰금</Dvi1_1>
             <Dvi1_1>상태</Dvi1_1>
           </Div1>
-          {orderArr.length !== 0 ? (
+          {showOrders.length !== 0 ? (
             <>
-              {orderArr.map((element: any, index: number) => (
+              {showOrders.map((element: any, index: number) => (
                 <ExplorerTableData
                   orderNum={element.orderNum}
                   clientAddress={element.client}
