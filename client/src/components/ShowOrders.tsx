@@ -214,12 +214,12 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
         )
       ) : (
-        reversedOrders.map((value) => (
+        reversedOrders.map((value, index) => (
           <Sc0 onClick={() => {  
             // @ts-ignore
             (value.Product !== undefined) ? handleOpenModal(value) : alert("db정보 없음")
           }}>
-            <OrderBox orderObj={value} isClient={isClient} />
+            <OrderBox key={index} orderObj={value} isClient={isClient} />
           </Sc0>
         ))
       )}

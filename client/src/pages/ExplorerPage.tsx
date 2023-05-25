@@ -253,6 +253,7 @@ export default function ExplorerPage() {
             <>
               {showOrders.map((element: any, index: number) => (
                 <ExplorerTableData
+                  key={index}
                   orderNum={element.orderNum}
                   clientAddress={element.client}
                   quickerAddress={element.quicker}
