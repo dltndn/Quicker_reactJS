@@ -83,7 +83,7 @@ function SearchPage() {
   const { showAllowance } = useOrderStore()
   const requestListContainer = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
-  const [map, setMap] = useState({})
+  const [tmap, setTmap] = useState<any>()
   const [userLocation, setUserLocation] = useState({})
 
   const [requestListContents, setRequestListContents] =useState([])
@@ -114,7 +114,7 @@ function SearchPage() {
         // @ts-ignore
         let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X )
         // @ts-ignore
-        let distance = await Map.getDistance(element.Departure, element.Destination)
+        let distance = await tmap.getDistance(element.Departure, element.Destination)
         
         let obj : OrderObj = {
           // @ts-ignore
@@ -160,14 +160,14 @@ function SearchPage() {
   
   let initalizeUserMarker = () => { 
     // @ts-ignore
-    let pos = Map.LatLng(userLocation.lat,userLocation.lon)
+    let pos = tmap.createLatLng(userLocation.lat,userLocation.lon)
     // @ts-ignore
-    Map.Marker(map, userLocation.lat,userLocation.lon)
-    Map.panTo(map, pos)
+    tmap.createMarker(userLocation.lat,userLocation.lon)
+    tmap.panTo(pos)
   }
 
   useEffect(() => {
-    setMap(Map.initTmap());
+    setTmap(new Map("TMapSearch", "51em"))
     Geolocation.getCurrentLocation(setUserLocation)    
     
     const exec = async () => {
@@ -194,7 +194,7 @@ function SearchPage() {
     if (requestListContentLength !== 0) {
       requestListContents.forEach(element => {
         // @ts-ignore
-        Map.Marker(map, element.Departure.Y, element.Departure.X)   
+        tmap.createMarker(element.Departure.Y, element.Departure.X)   
       });
       changeToData(mockData)      
     }
@@ -222,13 +222,13 @@ function SearchPage() {
       navigate("/");
     } else {
       setIsDetail(false);
-      document.getElementById("TMapApp")!.style.display = "block"
+      document.getElementById("TMapSearch")!.style.display = "block"
     }
   };
 
   // 오더 클릭시 세부정보 노출
   const clickOrder = (index: number) => {
-    document.getElementById("TMapApp")!.style.display = "none"
+    document.getElementById("TMapSearch")!.style.display = "none"
     setShowOrder(index)
     setIsDetail(true);
   };
@@ -239,10 +239,9 @@ function SearchPage() {
          title={topBarTitle}
          redirectLogic={() => clickBackBtn()}
        ></TopBarOthers>
-
       <div >
         <div
-          id="TMapApp"
+          id="TMapSearch"
           style={{
             height: "300px",
             width: "100%",

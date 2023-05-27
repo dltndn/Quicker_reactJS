@@ -49,7 +49,7 @@ function Search({ clickOrder }: Props) {
 
           {orders !== undefined ? (
             orders.map((value, index) => (
-              <Div1 onClick={() => clickOrder(index)}>
+              <Div1 onClick={() => clickOrder(index)} key={index}>
                 <Div1_2>{(value.distance / 1000).toFixed(1) + "KM"}</Div1_2>
                 <Div1_2>
                   <div>
