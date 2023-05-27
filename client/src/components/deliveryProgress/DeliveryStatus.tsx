@@ -47,6 +47,7 @@ export default function DeliveryStatus({
     <>
     <button onClick={() => {setCoordiX(126.92264); setCoordiY(37.58616);}}>배송원 위치 마커 버튼1</button>
     <button onClick={() => {setCoordiX(126.816911842685); setCoordiY(37.5336078354823);}}>배송원 위치 마커 버튼2</button>
+    <button onClick={() => {setCoordiX(126.82); setCoordiY(37.534);}}>배송원 위치 마커 버튼3</button>
       <div>픽업예정</div>
       <br />
       <div>{deadline}까지</div>

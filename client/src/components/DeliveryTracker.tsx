@@ -10,16 +10,24 @@ interface DeliveryTrackerProps {
 export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   const [tMap, setTmap] = useState<any>();
   const { coordiX, coordiY } = useQuickerLocationState();
+  const [hasMarker, setHasMarker] = useState<boolean>(false);
 
   const initalizeQuickerMarker = () => {
-    let pos = tMap.createLatLng(coordiY, coordiX);
-    tMap.createMarker(coordiY, coordiX);
+    const pos = tMap.createLatLng(coordiY, coordiX);
+    tMap.moveMarker(coordiY, coordiX);
     tMap.panTo(pos);
   };
 
   useEffect(() => {
     if (coordiX != null && coordiY != null) {
-      initalizeQuickerMarker();
+      if (!hasMarker) {
+        const pos = tMap.createLatLng(coordiY, coordiX);
+        tMap.createMarker(coordiY, coordiX);
+        tMap.panTo(pos);
+        setHasMarker(true);
+      } else {
+        initalizeQuickerMarker();
+      }
     }
   }, [coordiX, coordiY]);
 
