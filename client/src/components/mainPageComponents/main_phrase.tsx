@@ -96,8 +96,10 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           </section>
         )
       ) : (
+        <>
         <section>
         <Div0>
+        <button onClick={() => navigate("/explorer")}>실시간 거래현황 보러가기</button>
           <Sp0>
             안녕하세요!
             <br />
@@ -107,12 +109,15 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           <Sp1>지갑을 연결해주세요.</Sp1>
           <Sp2>
             <Web3Button icon="hide" label="지갑연결" balance="hide" />
-            <button onClick={() => navigate("/execution/205")}>임시배송페이지이동버튼</button>
-            <button onClick={() => navigate("/explorer")}>실시간 거래현황 보러가기</button>
           </Sp2>
           
         </Div1>
       </section>
+      <section>
+        <div>지갑연결 애니메이션</div>
+        <a href="https://dcentwallet.com/MobileApp" target="_blank" rel="noreferrer">암호화폐 지갑이 없으신가요?</a>
+      </section>
+      </>
       )}
     </>
   );
