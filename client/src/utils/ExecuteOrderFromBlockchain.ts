@@ -105,7 +105,7 @@ export const getOrderRawData = async(orderNum: string) => {
 // 오더 내역 번호 배열 반환
 export const getOrderList = async (address:`0x${string}` | undefined, isClient: boolean) => {
   if (address === undefined){
-    return undefined
+    return []
   }
   let functionName = ""
   if (isClient) {
