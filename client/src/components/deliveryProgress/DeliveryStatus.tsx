@@ -3,6 +3,7 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
+import styled from "styled-components";
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -29,6 +30,15 @@ export default function DeliveryStatus({
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState()
 
+  const refreshQuickerLocation = (orderNum : string | undefined) => {
+    if (orderNum !== undefined) {
+      // orderNum로 배송원 위치 좌표 가져오기
+    // setCoordiX, setCoordiY
+    }
+    setCoordiX(126.42264); 
+    setCoordiY(37.38616);
+  }
+
   useEffect(() => {
     setTitle("배송현황");
   }, []);
@@ -42,6 +52,8 @@ export default function DeliveryStatus({
       <div>{deadline}까지</div>
       <br />
       <DeliveryTracker mapHeight="45em"/>
+      <button onClick={() => refreshQuickerLocation(orderNum || undefined)} style={{ position: "absolute", top: "52em",left: "50%", transform: "translateX(-50%)", zIndex: 5 }}>리프레쉬 버튼</button>
     </>
   );
 }
+
