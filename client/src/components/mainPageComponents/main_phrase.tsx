@@ -53,7 +53,7 @@ type isConnectToWallet = {
 
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
-  const { isMember, setIsMember, userName } = useVerificationStore();
+  const { isMember } = useVerificationStore();
   const { address } = useAccount();
 
   const sdta = new SendDataToAndroid(address);
@@ -63,24 +63,11 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
       {isConnect ? (
         isMember ? (
           <>
+            
             <section>
-              <Div0>
-                <Sp0>
-                  {userName}님!
-                  <br />
-                </Sp0>
-              </Div0>
-              <Div1>
-                <Sp1>
-                  현재 배송원이 물건을 배송중입니다.
-                  <Bt0
-                    onClick={() => {
-                      navigate("/");
-                    }}
-                  >
-                    <BsChevronRight />
-                  </Bt0>
-                  <button onClick={() => navigate("/execution/205")}>
+              <MainOrderInformation />
+            </section>
+            <button onClick={() => navigate("/execution/205")}>
                     임시배송페이지이동버튼
                   </button>
                   <button
@@ -96,12 +83,6 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                   <button onClick={() => sdta.sendIsDelivering(false)}>
                     배송여부false전송
                   </button>
-                </Sp1>
-              </Div1>
-            </section>
-            <section>
-              <MainOrderInformation />
-            </section>
           </>
         ) : (
           <>
