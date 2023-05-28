@@ -18,9 +18,9 @@ interface QuickerLocationState {
 
 export const useQuickerLocationState = create<QuickerLocationState>((set) => ({
   coordiX: null,
-  setCoordiX: (coordiX: number) => set({coordiX}),
+  setCoordiX: (coordiX: number) => set({ coordiX }),
   coordiY: null,
-  setCoordiY: (coordiY: number) => set({coordiY}),
+  setCoordiY: (coordiY: number) => set({ coordiY }),
 }));
 
 export default function DeliveryStatus({
@@ -28,16 +28,18 @@ export default function DeliveryStatus({
   deadline,
 }: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
-  const { setCoordiX, setCoordiY } = useQuickerLocationState()
+  const { setCoordiX, setCoordiY } = useQuickerLocationState();
 
-  const refreshQuickerLocation = (orderNum : string | undefined) => {
+  const refreshQuickerLocation = (orderNum: string | undefined) => {
     if (orderNum !== undefined) {
       // orderNum로 배송원 위치 좌표 가져오기
-    // setCoordiX, setCoordiY
+      // setCoordiX(126.42264);
+      // setCoordiY(37.38616);
     }
-    setCoordiX(126.42264); 
+    // 테스트 코드
+    setCoordiX(126.42264);
     setCoordiY(37.38616);
-  }
+  };
 
   useEffect(() => {
     setTitle("배송현황");
@@ -45,16 +47,47 @@ export default function DeliveryStatus({
 
   return (
     <>
-    <button onClick={() => {setCoordiX(126.92264); setCoordiY(37.58616);}}>배송원 위치 마커 버튼1</button>
-    <button onClick={() => {setCoordiX(126.816911842685); setCoordiY(37.5336078354823);}}>배송원 위치 마커 버튼2</button>
-    <button onClick={() => {setCoordiX(126.82); setCoordiY(37.534);}}>배송원 위치 마커 버튼3</button>
+      <button
+        onClick={() => {
+          setCoordiX(126.92264);
+          setCoordiY(37.58616);
+        }}
+      >
+        배송원 위치 마커 버튼1
+      </button>
+      <button
+        onClick={() => {
+          setCoordiX(126.816911842685);
+          setCoordiY(37.5336078354823);
+        }}
+      >
+        배송원 위치 마커 버튼2
+      </button>
+      <button
+        onClick={() => {
+          setCoordiX(126.82);
+          setCoordiY(37.534);
+        }}
+      >
+        배송원 위치 마커 버튼3
+      </button>
       <div>픽업예정</div>
       <br />
       <div>{deadline}까지</div>
       <br />
-      <DeliveryTracker mapHeight="45em"/>
-      <button onClick={() => refreshQuickerLocation(orderNum || undefined)} style={{ position: "absolute", top: "52em",left: "50%", transform: "translateX(-50%)", zIndex: 5 }}>리프레쉬 버튼</button>
+      <DeliveryTracker mapHeight="45em" />
+      <button
+        onClick={() => refreshQuickerLocation(orderNum || undefined)}
+        style={{
+          position: "absolute",
+          top: "52em",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 5,
+        }}
+      >
+        현재 위치 확인하기
+      </button>
     </>
   );
 }
-

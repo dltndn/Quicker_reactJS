@@ -25,6 +25,7 @@ import ExecutionPage from "./pages/ExecutionPage";
 import ClientConfirmPage from "./pages/ClientConfirmPage";
 import Profile_noticePage from "./pages/Profile_noticePage";
 import ExplorerPage from "./pages/ExplorerPage";
+import ReceipientPage from "./pages/ReceipientPage";
 import { create } from 'zustand'
 
 Buffer.from("anything", "base64");
@@ -103,6 +104,7 @@ function App() {
             <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
             <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
             <Route path="/explorer" element={<ExplorerPage />} />
+            <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>

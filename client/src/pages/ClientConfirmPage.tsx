@@ -59,7 +59,6 @@ export default function ClientConfirmPage() {
 
   useEffect(() => {
     setShowComponent(<LoadingDeliveryProgress />)    
-
     setComponentLogic()
   }, [])
 

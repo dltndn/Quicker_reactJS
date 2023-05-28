@@ -13,8 +13,9 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   const [hasMarker, setHasMarker] = useState<boolean>(false);
 
   const initalizeQuickerMarker = () => {
+    tMap.removeMarker();
     const pos = tMap.createLatLng(coordiY, coordiX);
-    tMap.moveMarker(coordiY, coordiX);
+    tMap.createMarkerWithAni(coordiY, coordiX, 500);
     tMap.panTo(pos);
   };
 
@@ -22,7 +23,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     if (coordiX != null && coordiY != null) {
       if (!hasMarker) {
         const pos = tMap.createLatLng(coordiY, coordiX);
-        tMap.createMarker(coordiY, coordiX);
+        tMap.createMarkerWithAni(coordiY, coordiX, 500);
         tMap.panTo(pos);
         setHasMarker(true);
       } else {

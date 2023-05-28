@@ -39,12 +39,18 @@ class Tmap {
     });
   }
 
-  moveMarker(lat: number, lon: number) {
-    try {
-      this.tMapMarker.setPosition(this.createLatLng(lat, lon))
-    } catch(e) {
-      console.log(e)
-    }
+  createMarkerWithAni(lat: number, lon: number, aniLen: number) {
+    this.tMapMarker = new Tmapv3.Marker({
+      position: new Tmapv3.LatLng(lat, lon),
+      map: this.map,
+      // animation: Tmapv3.MarkerOptions.ANIMATE_BOUNCE,
+      animationLength: aniLen,
+    });
+  }
+
+  removeMarker() {
+    if (this.tMapMarker) 
+      this.tMapMarker.setMap(null)
   }
 
   setViewMap(LatLng: any) {
