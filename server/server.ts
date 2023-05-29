@@ -44,9 +44,6 @@ app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWallet
 app.post("/getRoomInfo", OrderController.getRoomInfo);
 // 테스트 중
 
-// app.use("/order-complete-image", OrderCompleteImage);
-// app.use("/order-fail-image", OrderFailImage);
-
 app.use("/order-complete-image", OrderCompleteImage);
 app.use("/order-fail-image", OrderFailImage);
 
