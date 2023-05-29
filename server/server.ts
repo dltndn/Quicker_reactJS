@@ -16,7 +16,7 @@ import Home from "./routes/Home";
 // 설정
 const cors = require("cors");
 const app: Application = express();
-const port: Number = 9000;
+const port: Number = (process.env.NODE_ENV === "development") ? 9000 : 80;
 const bodyParser = require("body-parser");
 
 require("dotenv").config();

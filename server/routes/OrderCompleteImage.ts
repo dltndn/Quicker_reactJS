@@ -40,9 +40,8 @@ router
       image : bufferImage,
       test : "t1"
     });
-    console.log(bufferImage)
     await image.save();
-    await res.send({msg : "done"})
+    res.send({msg : "done"})
   } catch (error) {
     console.log(error)
   }
