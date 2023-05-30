@@ -58,6 +58,12 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
 
   const sdta = new SendDataToAndroid(address);
   const testVal: boolean = true;
+
+  const testFunc = () => {
+    const timeId = setInterval(() => {
+      sdta.sendIsMatchedOrder(true)
+    }, 3000)
+  }
   return (
     <>
       {isConnect ? (
@@ -119,7 +125,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
               <button onClick={() => navigate("/explorer")}>
                 실시간 거래현황 보러가기
               </button>
-              <button onClick={() => sdta.sendIsMatchedOrder(true)}>임시 배송시작 알림 전송 버튼</button>
+              <button onClick={() => testFunc()}>임시 배송시작 알림 전송 버튼</button>
               <Sp0>
                 안녕하세요!
                 <br />
