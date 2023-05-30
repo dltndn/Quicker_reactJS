@@ -1,4 +1,4 @@
-import { WagmiConfig, createClient, configureChains, useAccount } from "wagmi";
+import { WagmiConfig, createClient, configureChains, useAccount, useContractEvent } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import {
   EthereumClient,
@@ -27,6 +27,9 @@ import Profile_noticePage from "./pages/Profile_noticePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import { create } from 'zustand'
+
+import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
+import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -75,6 +78,19 @@ function App() {
     themeColor: "default",
     themeBackground: "gradient",
   });
+
+  // test s
+  const sdta = new SendDataToAndroid(address)
+  useContractEvent({
+    address: QUICKER_ADDRESS,
+    abi: QUICKER_CONTRACT_ABI,
+    eventName: "OrderResult",
+    async listener(node: any, label: any, owner) {
+      sdta.sendIsMatchedOrder(true)
+    },
+  });
+
+  // test e
 
   useEffect(() => {
     // 지갑주소 유저 여부 조회
