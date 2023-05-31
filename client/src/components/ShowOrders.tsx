@@ -8,6 +8,7 @@ import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";
 import { OrderBox, OrderModal } from "./orderComponents/OrderBox";
 import Loading from "./animation/ready.gif";
+import { UseUserOrderState } from "../App";
 
 import money from "../image/money.png";
 
@@ -87,6 +88,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const [newOrder, setNewOrder] = useState<object | null>(null)
 
   const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum, refreshOrder, setRefreshOrder } = useOrderState();
+  const { clientOrderNums, quickerOrderNums } = UseUserOrderState()
   const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
     setOrder(order);
@@ -94,9 +96,14 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   // 현재 연결된 지갑 주소의 오더 내역 번호 array값 불러오기
   const getOrderListFromBlochain = async () => {
-    const orderNumList = await getOrderList(address, isClient);
+    let orderNumList: string[]
+    if (isClient) {
+      orderNumList = clientOrderNums
+    } else {
+      orderNumList = quickerOrderNums
+    }
     //getOrders 호출
-    if (orderNumList !== undefined) {
+    if (orderNumList.length !== 0) {
       getOrderObj(orderNumList);
     } else {
       setIsEmptyOrder(true);
@@ -116,15 +123,22 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const getOrderObj = async (orderNumList: string[]) => {
     const dataInBlockChain = await getOrders(orderNumList);
     const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain)
-    let orderListInDB = await Handler.post(
-      { list: intLisBlockChainId },
-      process.env.REACT_APP_SERVER_URL + "orderlist"
-    );
-
+    let orderListInDB:any
+    try {
+      let orderListInDb = await Handler.post(
+        { list: intLisBlockChainId },
+        process.env.REACT_APP_SERVER_URL + "orderlist"
+      );
+      orderListInDB = orderListInDb
+    } catch(e) {
+      console.log(e)
+    }
     // @ts-ignore
     for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
       for (const orderListInDBElement of orderListInDB) {
         if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
+          console.log(orderListInDBElement)
+          console.log(dataInBlockChain)
           await conbineDBBlockChain(orderListInDBElement, dataInBlockChain, index);
         }
       }
@@ -188,6 +202,11 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     }
   }, [refreshOrder])
 
+  useEffect(() => {
+    getOrderListFromBlochain();
+    console.log("getOrderListFromBlochain 실행")
+  }, [clientOrderNums, quickerOrderNums])
+
   return (
     <>
       <SelectionTags />
@@ -223,7 +242,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
           </Sc0>
         ))
       )}
-      {}
       <OrderModal isClient={isClient} />
     </>
   );

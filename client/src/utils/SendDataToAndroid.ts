@@ -3,8 +3,8 @@ export class SendDataToAndroid {
     private addressScheme: string = "quicker://link?walletAddress="
     private isDeliveringScheme: string = "quicker://link?isDelivering="
     private isMatchedOrderScheme: string = "quicker://link?isMatchedOrder="
-    private isDeliveredScheme: string = "quicker://link?isDelivered="
-    private isCompletedScheme: string = "quicker://link?isCompleted="
+    private isDeliveredOrderScheme: string = "quicker://link?isDeliveredOrder="
+    private isCompletedOrderScheme: string = "quicker://link?isCompletedOrder="
 
     constructor(walletAddress: string | undefined) {
         if (walletAddress) {
@@ -30,11 +30,11 @@ export class SendDataToAndroid {
 
     public sendIsDeliveredOrder(bool: boolean) {
         window.location.href = this.addressScheme + this.address
-        window.location.href = this.isDeliveredScheme + bool.toString()
+        window.location.href = this.isDeliveredOrderScheme + bool.toString()
     }
     
     public sendIsCompletedOrder(bool: boolean) {
         window.location.href = this.addressScheme + this.address
-        window.location.href = this.isCompletedScheme + bool.toString()
+        window.location.href = this.isCompletedOrderScheme + bool.toString()
     }
 }

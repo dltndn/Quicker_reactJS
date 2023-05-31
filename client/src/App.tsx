@@ -74,8 +74,8 @@ interface UseUserOrderStateType {
   setClientOrderNums: (data: string[]) => void;
   quickerOrderNums: string[];
   setQuickerOrderNums: (data: string[]) => void;
-  userOrderStateTrigger: number;
-  setUserOrderStateTrigger: (data: number) => void;
+  userOrderNumStateTrigger: number;
+  setUserOrderNumStateTrigger: (data: number) => void;
 }
 
 export const UseUserOrderState = create<UseUserOrderStateType>((set) => ({
@@ -83,15 +83,15 @@ export const UseUserOrderState = create<UseUserOrderStateType>((set) => ({
   setClientOrderNums: (clientOrderNums: string[]) => set({clientOrderNums}),
   quickerOrderNums: [],
   setQuickerOrderNums: (quickerOrderNums: string[]) => set({quickerOrderNums}),
-  userOrderStateTrigger: 0,
-  setUserOrderStateTrigger: (userOrderStateTrigger: number) => set({userOrderStateTrigger}),
+  userOrderNumStateTrigger: 0,
+  setUserOrderNumStateTrigger: (userOrderNumStateTrigger: number) => set({userOrderNumStateTrigger}),
 }))
 
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
   const { address } = useAccount()
   const { isMember, setIsMember, setUserName } = useVerificationStore();
-  const { clientOrderNums, setClientOrderNums, quickerOrderNums, setQuickerOrderNums, userOrderStateTrigger} = UseUserOrderState()
+  const { clientOrderNums, setClientOrderNums, quickerOrderNums, setQuickerOrderNums, userOrderNumStateTrigger} = UseUserOrderState()
 
   setTheme({
     themeMode: "dark",
@@ -164,6 +164,11 @@ function App() {
     setIsMember(true)
     getAndSetOrders()
   }, [address])
+
+  useEffect(() => {
+    getAndSetOrders()
+    console.log("userOrderNumStateTrigger 직동")
+  }, [userOrderNumStateTrigger])
 
   return (
     <>

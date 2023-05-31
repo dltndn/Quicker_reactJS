@@ -11,6 +11,7 @@ import {
 import Handler from "../lib/Handler";
 import { useDivHandler } from "../pages/commission";
 import { useOrderState } from "./ShowOrders";
+import { UseUserOrderState } from "../App";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
@@ -48,6 +49,7 @@ export default function CreateNewOrder({
   const { orderId, setOrderId } = useOrderDataStore();
   const { setShowCommissionPage } = useDivHandler();
   const { setRefreshOrder } = useOrderState()
+  const { userOrderNumStateTrigger, setUserOrderNumStateTrigger } = UseUserOrderState()
 
   const { config } = usePrepareContractWrite({
     address: Quicker_address,
@@ -112,6 +114,7 @@ export default function CreateNewOrder({
       if (newOrderNum !== lastOrder) {
         setCreatedOrderNum(newOrderNum);
         console.log("새 오더넘버 탐색 완료");
+        setUserOrderNumStateTrigger(userOrderNumStateTrigger + 1)
         clearInterval(intervalId);
       } else {
         console.log("새 오더 번호 감지x");
