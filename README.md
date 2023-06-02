@@ -27,7 +27,8 @@
 <img width="799" alt="스크린샷 2023-06-02 오후 3 56 02" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/ba37075e-ff43-4919-a7c8-26c3f892935f">
 
 ## 데이터베이스 ERD
-<img width="468" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/20f9a65e-9c76-4e1c-a97c-63acf6503c3c">
 <img width="472" alt="스크린샷 2023-06-02 오후 4 00 45" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/b6547008-08f8-4d72-8420-061ced8eaf6c">
+<img width="468" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/20f9a65e-9c76-4e1c-a97c-63acf6503c3c">
+
 
 ## 스크린샷
