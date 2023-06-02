@@ -427,6 +427,7 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
     }
     setReloadOrderNum(order.orderNum);
     closeModal();
+    navigate("/")
   };
 
   // 거래 확인 로직
@@ -455,7 +456,7 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
     case "canceled":
       return <Button onClick={() => cancelLogic()}>다시의뢰하기</Button>;
     default:
-      return <Button onClick={() => cancelLogic()}>주문취소</Button>;
+      return <Button onClick={() => cancelLogic()}>다시의뢰하기</Button>;
   }
 };
 

@@ -11,6 +11,7 @@ import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
+import { UseUserOrderState } from "../App";
 
 const money = require("../image/money.png");
 
@@ -20,6 +21,7 @@ function Search_Detail() {
   const { orders, showOrder, setIsDetail } = useSearchState();
   const { setShowAllowance } = useOrderStore()
   const { setRefreshOrder } = useOrderState()
+  const { userOrderNumStateTrigger, setUserOrderNumStateTrigger} = UseUserOrderState()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
 
@@ -27,6 +29,15 @@ function Search_Detail() {
     const result = await getOrder(orders[showOrder].orderNum)
     return result.client
   }
+
+  const setMatchedOrderNum = async () => {
+    const timeoutId = setTimeout(async () => {
+      setUserOrderNumStateTrigger(userOrderNumStateTrigger + 1)
+      console.log("setUserOrderNumStateTrigger 작동")
+    }, 5000);
+    return () => clearTimeout(timeoutId);
+
+  };
 
   // 수락하기 로직
   const acceptOrder = async () => {
@@ -43,6 +54,7 @@ function Search_Detail() {
         sdta.sendIsDelivering(true)
         setRefreshOrder(true)
         setIsDetail(false);
+        await setMatchedOrderNum()
         navigator("/")
       } catch(e) {
         if (e) {

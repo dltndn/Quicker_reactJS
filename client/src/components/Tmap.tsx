@@ -10,41 +10,43 @@ const Tmap = ({states, containerId }: props) => {
 
     useEffect(() => {
         setTmap(new Map("TMapApp", "30em"))
+        console.log("tmap 객체 생성")
     }, [])
 
     useEffect(() => {
-        if (isPosition(states.startPosition)) {
-            // @ts-ignore
-            setStartMarker(tMap.createMarker(states.startPosition.latitude, states.startPosition.longitude))
+        if(states.startPosition) {
+            if (isPosition(states.startPosition)) {
+                setStartMarker(tMap.createMarker(states.startPosition.latitude, states.startPosition.longitude))
+            }
         }
-        if (isPosition(states.arrivePosition)) {
-            // @ts-ignore
-            setArriveMarker(tMap.createMarker(states.arrivePosition.latitude, states.arrivePosition.longitude))
+        if (states.arrivePosition) {
+            if (isPosition(states.arrivePosition)) {
+                setArriveMarker(tMap.createMarker(states.arrivePosition.latitude, states.arrivePosition.longitude))
+            }
         }
     }, [states.startPosition, states.arrivePosition])
 
     useEffect(() => {
         if (isPosition(states.startPosition)) {
-            // @ts-ignore
-            tMap.panTo(startMarker.getPosition())
+            const pos = tMap.createLatLng(states.startPosition.latitude, states.startPosition.longitude)
+            tMap.panTo(pos)
         }
     }, [startMarker])
 
     useEffect(() => {
         if (isPosition(states.arrivePosition)) {
-            // @ts-ignore
-            tMap.setViewMap(arriveMarker.getPosition())
+            const pos = tMap.createLatLng(states.arrivePosition.latitude, states.arrivePosition.longitude)
+            tMap.panTo(pos)
         }
     }, [arriveMarker])
 
     useEffect(() => {
         if (isPosition(states.startPosition) && isPosition(states.arrivePosition)) {
-            // @ts-ignore
-            let centerLatLng = tMap.createLatLng((states.startPosition.latitude + states.arrivePosition.latitude) / 2, (states.arrivePosition.longitude + states.startPosition.longitude) / 2)
-            // @ts-ignore
-            tMap.autoZoom(centerLatLng, startMarker.getPosition(), arriveMarker.getPosition())
-            // @ts-ignore
-            tMap.getRoutePlanJson(startMarker.getPosition(), arriveMarker.getPosition())
+            const centerLatLng = tMap.createLatLng((states.startPosition.latitude + states.arrivePosition.latitude) / 2, (states.arrivePosition.longitude + states.startPosition.longitude) / 2)
+            const startLatLng = tMap.createLatLng(states.startPosition.latitude, states.startPosition.longitude)
+            const arriveLatLng = tMap.createLatLng(states.arrivePosition.latitude, states.arrivePosition.longitude)
+            tMap.autoZoom(centerLatLng, startLatLng, arriveLatLng)
+            tMap.getRoutePlanJson(startLatLng, arriveLatLng)
         }
     }, [startMarker, arriveMarker])
 

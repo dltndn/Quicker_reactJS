@@ -82,6 +82,7 @@ export default function MainOrderInformation() {
               <UserName />
               <Div1>
                 <Sp1>물건 배송을 의뢰하거나 직접 배달을 해보세요</Sp1>
+                <div>앱 사용 설명을 간단하게 해야되나</div>
               </Div1>
             </>
           ) : (

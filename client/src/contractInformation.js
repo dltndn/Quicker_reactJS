@@ -521,6 +521,55 @@ export const QUICKER_CONTRACT_ABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "uint16",
+				"name": "_platFormFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_insuranceFee",
+				"type": "uint16"
+			},
+			{
+				"internalType": "uint16",
+				"name": "_securityDeposit",
+				"type": "uint16"
+			},
+			{
+				"internalType": "address",
+				"name": "_QkrwToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_Platform",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_Insurance",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "AcceptedOrderNumber",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_orderNum",
 				"type": "uint256"
@@ -563,60 +612,6 @@ export const QUICKER_CONTRACT_ABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_limitedTime",
-				"type": "uint256"
-			}
-		],
-		"name": "createOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint16",
-				"name": "_platFormFee",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_insuranceFee",
-				"type": "uint16"
-			},
-			{
-				"internalType": "uint16",
-				"name": "_securityDeposit",
-				"type": "uint16"
-			},
-			{
-				"internalType": "address",
-				"name": "_QkrwToken",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_Platform",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_Insurance",
-				"type": "address"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -646,6 +641,24 @@ export const QUICKER_CONTRACT_ABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "_orderPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_limitedTime",
+				"type": "uint256"
+			}
+		],
+		"name": "createOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "_orderNum",
 				"type": "uint256"
 			}
@@ -667,19 +680,6 @@ export const QUICKER_CONTRACT_ABI = [
 		],
 		"name": "DepositedFee",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_orderNum",
-				"type": "uint256"
-			}
-		],
-		"name": "failedOrder",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -725,6 +725,45 @@ export const QUICKER_CONTRACT_ABI = [
 		],
 		"name": "OwnershipTransferred",
 		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "completedOrderNumber",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "deliveredOrderNumber",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_orderNum",
+				"type": "uint256"
+			}
+		],
+		"name": "failedOrder",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -1320,4 +1359,4 @@ export const QUICKER_CONTRACT_ABI = [
 	}
 ]
 
-export const QUICKER_ADDRESS = "0x4bEe9cbBA1696D8341dec1796fCfe46ee4ec7be8"
+export const QUICKER_ADDRESS = "0x0A64e89a8DACB5291c7C7536E4D66a49A21B1Ea7"
