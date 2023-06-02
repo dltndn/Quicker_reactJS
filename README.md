@@ -7,6 +7,7 @@
 
 ## 개발 도구
 - ReactJS
+- NodeJS
 - Typescript
 - Kotlin(Android)
 - Polygon(Ethereum's side chain)
