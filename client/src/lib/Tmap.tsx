@@ -1,8 +1,13 @@
-import boxIcon from "../image/box24.png"
+import boxIcon from "../image/boxHigh.png"
 // @ts-ignore
 const { Tmapv3 } = window;
 
-const markerHtml = `<div><img src=${boxIcon} alt="상자"/></div>`
+const boxMarkerStyle = ` width: 3em;
+height: 3em;
+background-image: url(${boxIcon});
+background-size: cover;
+background-position: center;`
+const markerHtml = `<div id="boxTmapMarker" style="${boxMarkerStyle}"></div>`
 
 class Tmap {
   map: any;
