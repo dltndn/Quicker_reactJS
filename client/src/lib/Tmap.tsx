@@ -1,5 +1,8 @@
+import boxIcon from "../image/box24.png"
 // @ts-ignore
 const { Tmapv3 } = window;
+
+const markerHtml = `<div><img src=${boxIcon} alt="상자"/></div>`
 
 class Tmap {
   map: any;
@@ -42,9 +45,10 @@ class Tmap {
   createMarkerWithAni(lat: number, lon: number, aniLen: number) {
     this.tMapMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
-      map: this.map,
-      // animation: Tmapv3.MarkerOptions.ANIMATE_BOUNCE,
-      animationLength: aniLen,
+      // icon: boxIcon,
+      iconHTML: markerHtml,
+      iconSize: Tmapv3.Size(1, 2),
+      map: this.map
     });
   }
 
