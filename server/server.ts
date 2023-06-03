@@ -42,6 +42,7 @@ app.post("/updateorder", OrderController.updateOrder);
 app.post("/getRecentMessageInfo", ChatController.getRecentMessageInfo);
 app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
 app.post("/getRoomInfo", OrderController.getRoomInfo);
+app.get("/order", OrderController.order);
 // 테스트 중
 
 app.use("/order-complete-image", OrderCompleteImage);

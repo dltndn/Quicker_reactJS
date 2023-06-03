@@ -4,7 +4,7 @@ const { Tmapv3 } = window;
 class Tmap {
   map: any;
   tMapMarker: any;
-
+  
   constructor(mapId: string, height: string) {
     this.map = new Tmapv3.Map(mapId, {
       center: new Tmapv3.LatLng(37.5652045, 126.98702028),
@@ -47,7 +47,7 @@ class Tmap {
       animationLength: aniLen,
     });
   }
-
+  
   removeMarker() {
     if (this.tMapMarker) 
       this.tMapMarker.setMap(null)

@@ -41,7 +41,10 @@ export default function ReceipientPage() {
 
     // test code
     setOrderNum("43");
-    getDeadlineText("43");
+
+    // 지도 작업을 위해 임시로 값 변경
+    setIsDelivered(false);
+    // getDeadlineText("43");
   }, []);
 
   return (
