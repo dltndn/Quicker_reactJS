@@ -37,7 +37,7 @@ export default function RemoteDelivery({ state, setState, orderNum }: RemoteDeli
           <input ref={fileInput} onChange={imageChange} type="file" name="uploadImage" accept="image/png, image/jpeg" capture="environment" style={{ display: 'none' }} />
           {(state !== null && state !== undefined) ? (
             <div>
-              <img src={URL.createObjectURL(state)} alt="uploaded photo" />
+              <img src={URL.createObjectURL(state)} alt="uploaded photo"  width="100%" />
             </div>
           ) : <Sp0>위탁장소에 배송된 사진을 촬영해주세요.</Sp0>}
         </Div0>
