@@ -6,6 +6,6 @@ require("dotenv").config();
 
 const router = express.Router();
 
-router.get("/", OrderController.getRoomInfo)
+router.get("/", OrderController.order)
   
 export default router;
