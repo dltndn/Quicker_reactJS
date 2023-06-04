@@ -35,6 +35,10 @@
 
 
 ## 스크린샷
+|기능|스크린샷|
+|--|--|
+|지갑연결|<img width="234" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/13a1a9eb-32ad-414f-9e3f-5042fb1b779f">
+|거래현황|<img width="234" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/3ad647d2-14f7-4840-b45f-f894bb386f41">
 
 ---
 안드로이드 코드는 [여기](https://github.com/dltndn/Quicker_android_part)에서 확인 가능합니다.
