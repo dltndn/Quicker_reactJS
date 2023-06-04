@@ -1,0 +1,30 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+:root {
+  /*color*/
+  --white-color: #FFFFFF;
+  --black-color: #000000;
+  --grey-dark-color: #D9D9D9;
+  --grey-light-color: #D4D4D4;
+  --blue-color: #0D6EFD;
+  /*size*/
+  --padding: 1rem;
+  --image-size: 10rem;
+  /*font size*/
+  
+  --font-Quicker: 1.5625rem;
+  --font-large: 1.375rem;
+  --font-md: 1.25rem;
+  --font-md1: 0.875rem;
+  --font-small: 0.75rem;
+  --font-micro: 0.5rem;
+}
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter';
+}
