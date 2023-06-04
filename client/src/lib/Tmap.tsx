@@ -8,7 +8,6 @@ background-image: url(${boxIcon});
 background-size: cover;
 background-position: center;`
 const markerHtml = `<div id="boxTmapMarker" style="${boxMarkerStyle}"></div>`
-
 class Tmap {
   map: any;
   tMapMarker: any;

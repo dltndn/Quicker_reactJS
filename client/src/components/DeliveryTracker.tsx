@@ -30,7 +30,6 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   };
 
   const getOrderLocation = async () => {
-    const orderid = 24;
     return await Handler.get(process.env.REACT_APP_SERVER_URL + `order/?orderid=${cryptoKey}`)
   }
 
