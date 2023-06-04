@@ -89,7 +89,8 @@ export default function ExplorerPage() {
         const result: any = await getOrdersForLatest(amount.toString());
         // 바뀐 부분 확인
         const newOrderArr = result.slice()
-        if (newOrderArr.length <= 20) {
+        console.log(newOrderArr.length)
+        if (newOrderArr.length < 20) {
           newOrderArr.reverse()
         }
         let changedIndex:number[] = []
