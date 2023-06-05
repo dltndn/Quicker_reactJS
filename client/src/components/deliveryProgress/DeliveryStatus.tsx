@@ -1,9 +1,9 @@
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useClientConfirmState } from "../../pages/ClientConfirmPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -29,8 +29,28 @@ export default function DeliveryStatus({
 }: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
+  const [isBlink, setIsBlink] = useState<boolean>(false)
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+
+  const blinkDeliveryIcon = () => {
+    let i = 0
+    const id = setInterval(() => {
+      if (!isBlink) {
+        clearInterval(id);
+      } else {
+        if (i % 2 === 0) {
+          document.getElementById("boxTmapMarker")!.style.display = "none";
+        } else {
+          document.getElementById("boxTmapMarker")!.style.display = "block";
+        }
+      }
+      i++;
+    }, 500);
+    setIntervalId(id);
+  }
 
   const refreshQuickerLocation = (orderNum: string | undefined) => {
+    setIsBlink(true)
     if (orderNum !== undefined) {
       // orderNum로 배송원 위치 좌표 가져오기
       // setCoordiX(126.42264);
@@ -40,6 +60,24 @@ export default function DeliveryStatus({
     setCoordiX(126.42264);
     setCoordiY(37.38616);
   };
+
+  const setIsBlinkF = async() => {
+    setIsBlink(false)
+  }
+
+  useEffect(() => {
+    if (document.getElementById("boxTmapMarker") !== null) {
+      if (isBlink) {
+        blinkDeliveryIcon()
+      } else {
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+          document.getElementById("boxTmapMarker")!.style.display = "none";
+        }
+      }
+    }
+
+  }, [isBlink])
 
   useEffect(() => {
     setTitle("배송현황");
@@ -77,7 +115,7 @@ export default function DeliveryStatus({
       <br />
       <DeliveryTracker mapHeight="45em" />
       <button
-        onClick={() => refreshQuickerLocation(orderNum || undefined)}
+        onClick={async () => {await setIsBlinkF(); refreshQuickerLocation(orderNum || undefined)}}
         style={{
           position: "absolute",
           top: "52em",

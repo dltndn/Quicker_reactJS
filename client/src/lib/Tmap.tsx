@@ -1,13 +1,6 @@
-import boxIcon from "../image/boxHigh.png"
+import boxIcon from "../image/boxHigh.png";
 // @ts-ignore
 const { Tmapv3 } = window;
-
-const boxMarkerStyle = ` width: 3em;
-height: 3em;
-background-image: url(${boxIcon});
-background-size: cover;
-background-position: center;`
-const markerHtml = `<div id="boxTmapMarker" style="${boxMarkerStyle}"></div>`
 
 class Tmap {
   map: any;
@@ -21,6 +14,14 @@ class Tmap {
       zoom: 15,
     });
   }
+
+  private boxMarkerStyle = ` width: 3em;
+    height: 3em;
+    background-image: url(${boxIcon});
+    background-size: cover;
+    background-position: center;`;
+
+  private markerHtml = (markerId: string) => {return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;}
 
   async getDistance(startPosition: coordination, arrivePosition: coordination) {
     const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
@@ -47,19 +48,18 @@ class Tmap {
     });
   }
 
-  createMarkerWithAni(lat: number, lon: number, aniLen: number) {
+  createMarkerWithAni(lat: number, lon: number, markerId: string) {
     this.tMapMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
       // icon: boxIcon,
-      iconHTML: markerHtml,
+      iconHTML: this.markerHtml(markerId),
       iconSize: Tmapv3.Size(1, 2),
-      map: this.map
+      map: this.map,
     });
   }
 
   removeMarker() {
-    if (this.tMapMarker) 
-      this.tMapMarker.setMap(null)
+    if (this.tMapMarker) this.tMapMarker.setMap(null);
   }
 
   setViewMap(LatLng: any) {

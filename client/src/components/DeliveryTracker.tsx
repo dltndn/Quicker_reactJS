@@ -15,7 +15,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   const initalizeQuickerMarker = () => {
     tMap.removeMarker();
     const pos = tMap.createLatLng(coordiY, coordiX);
-    tMap.createMarkerWithAni(coordiY, coordiX, 500);
+    tMap.createMarkerWithAni(coordiY, coordiX, "boxTmapMarker");
     tMap.panTo(pos);
   };
 
@@ -23,7 +23,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     if (coordiX != null && coordiY != null) {
       if (!hasMarker) {
         const pos = tMap.createLatLng(coordiY, coordiX);
-        tMap.createMarkerWithAni(coordiY, coordiX, 500);
+        tMap.createMarkerWithAni(coordiY, coordiX, "boxTmapMarker");
         tMap.panTo(pos);
         setHasMarker(true);
       } else {
@@ -35,5 +35,6 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   useEffect(() => {
     setTmap(new Tmap("TMapTracker", mapHeight));
   }, []);
+  
   return <div id="TMapTracker" />;
 }
