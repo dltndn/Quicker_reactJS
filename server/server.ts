@@ -42,6 +42,13 @@ app.post("/updateorder", OrderController.updateOrder);
 app.post("/getRecentMessageInfo", ChatController.getRecentMessageInfo);
 app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
 app.post("/getRoomInfo", OrderController.getRoomInfo);
+app.post("/test", async (req: Request, res: Response) => {
+    try {
+      console.log(req.body)
+    } catch (error) {
+      
+    }
+  },);
 // 테스트 중
 
 app.use("/order-complete-image", OrderCompleteImage);
