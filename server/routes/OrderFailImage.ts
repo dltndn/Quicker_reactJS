@@ -12,17 +12,17 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 router
-  // .get("/", async (req: Request, res: Response): Promise<any> => {
-  //   try {
-  //     const uploadImage = mongoose.model("1", ImageFileSchema);
-  //     await connectMongo("orderFail");
-  //     const data = await uploadImage.find({});
-  //     console.log(data);
-  //     res.send({ imageBuffer: data[0].image });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // })
+  .get("/", async (req: Request, res: Response): Promise<any> => {
+    try {
+      const uploadImage = mongoose.model("24", ImageFileSchema);
+      await connectMongo("orderFail");
+      const data = await uploadImage.find({});
+      console.log(data);
+      res.send({ imageBuffer: data[0].image });
+    } catch (error) {
+      console.log(error);
+    }
+  })
   .post("/", upload.single("image"), async (req: Request, res: Response): Promise<any> => {
       try {
         const documentFile = (req as MulterRequest).file;

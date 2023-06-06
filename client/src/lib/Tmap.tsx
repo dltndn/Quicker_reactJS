@@ -4,8 +4,10 @@ const { Tmapv3 } = window;
 
 class Tmap {
   map: any;
-  tMapMarker: any;
-  
+  deliveryMarker: any;
+  departureMarker: any;
+  destinationMarker: any;
+
   constructor(mapId: string, height: string) {
     this.map = new Tmapv3.Map(mapId, {
       center: new Tmapv3.LatLng(37.5652045, 126.98702028),
@@ -21,7 +23,9 @@ class Tmap {
     background-size: cover;
     background-position: center;`;
 
-  private markerHtml = (markerId: string) => {return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;}
+  private markerHtml = (markerId: string) => {
+    return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;
+  };
 
   async getDistance(startPosition: coordination, arrivePosition: coordination) {
     const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
@@ -41,15 +45,30 @@ class Tmap {
     }
   }
 
-  createMarker(lat: number, lon: number) {
-    this.tMapMarker = new Tmapv3.Marker({
-      position: new Tmapv3.LatLng(lat, lon),
-      map: this.map,
-    });
+  createMarker(lat: number, lon: number, markerNum: number) {
+    switch (markerNum) {
+      case 1:
+        this.departureMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+        break;
+      case 2:
+        this.destinationMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+        break;
+      default:
+        this.deliveryMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+    }
   }
 
   createMarkerWithAni(lat: number, lon: number, markerId: string) {
-    this.tMapMarker = new Tmapv3.Marker({
+    this.deliveryMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
       // icon: boxIcon,
       iconHTML: this.markerHtml(markerId),
@@ -57,9 +76,9 @@ class Tmap {
       map: this.map,
     });
   }
-  
-  removeMarker() {
-    if (this.tMapMarker) this.tMapMarker.setMap(null);
+
+  removeDeliveryMarker() {
+    if (this.deliveryMarker) this.deliveryMarker.setMap(null);
   }
 
   setViewMap(LatLng: any) {
