@@ -1,4 +1,5 @@
 import boxIcon from "../image/boxHigh.png";
+import axios from 'axios';
 // @ts-ignore
 const { Tmapv3 } = window;
 
@@ -46,32 +47,26 @@ class Tmap {
     }
   }
 
-  async getRouteDataFromApi(
+  async getRouteData(
     currentPos: coordination,
     depPos: coordination,
     desPos: coordination
   ) {
     const passList = depPos.X.toString() + "," + depPos.Y.toString();
-    const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
+    const appKey = process.env.REACT_APP_TMAP_API_KEY ?? ""
+    // const urlStr = `&startX=${currentPos.X}&startY=${currentPos.Y}&endX=${desPos.X}&endY=${desPos.Y}`
+    const urlStr1 = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0&trafficInfo=Y`
+    const headers = {
+      'appKey': appKey
+    };
 
+    console.log(urlStr1)
     try {
       const response = await fetch(
-        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json`,
+        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result&appKey=${appKey}${urlStr1}`,
         {
           method: "POST",
           headers: headers,
-          body: JSON.stringify({
-            startX: currentPos.X,
-            startY: currentPos.Y,
-            endX: desPos.X,
-            endY: desPos.Y,
-            passList: passList,
-            reqCoordType: "WGS84GEO",
-            resCoordType: "WGS84GEO",
-            angle: "172",
-            searchOption: "0",
-            trafficInfo: "Y",
-          }),
         }
       );
       const result = await response.json();
@@ -80,6 +75,8 @@ class Tmap {
       throw new Error(JSON.stringify(e));
     }
   }
+
+
 
   createMarker(lat: number, lon: number, markerNum: number) {
     switch (markerNum) {
@@ -188,6 +185,10 @@ class Tmap {
       .catch((error) => {
         console.error("Error:", error);
       });
+  }
+
+  private convertPos = (data: number) => {
+    return (Math.round(data * 1000000)/1000000).toString()
   }
 }
 
