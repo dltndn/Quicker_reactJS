@@ -13,6 +13,7 @@ import OrderFailImage from "./routes/OrderFailImage";
 import AssociateOrder from "./routes/AssociateOrder";
 import Home from "./routes/Home";
 import Order from "./routes/Order"
+import realTimeLocation from "./routes/realTimeLocation"
 // 설정
 const cors = require("cors");
 const app: Application = express();
@@ -42,13 +43,7 @@ app.post("/updateorder", OrderController.updateOrder);
 app.post("/getRecentMessageInfo", ChatController.getRecentMessageInfo);
 app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
 app.post("/getRoomInfo", OrderController.getRoomInfo);
-app.post("/test", async (req: Request, res: Response) => {
-    try {
-      console.log(req.body)
-    } catch (error) {
-      
-    }
-  },);
+app.use("/test", realTimeLocation);
 // 테스트 중
 
 app.use("/order-complete-image", OrderCompleteImage);
