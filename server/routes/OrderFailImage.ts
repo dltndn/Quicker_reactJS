@@ -28,7 +28,7 @@ router
         const documentFile = (req as MulterRequest).file;
         const bufferImage = documentFile.buffer;
         const orderNum = req.body.orderNum;
-
+        const reason = req.body.reason
 
         const conn = await connectMongo("orderFail");
 
@@ -36,6 +36,7 @@ router
 
         const image = new uploadImage({
           image: bufferImage,
+          reason : reason
         });
         
         await image.save();

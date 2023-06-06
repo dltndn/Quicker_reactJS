@@ -103,8 +103,8 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
             <BottomConfirmBtn
                 content="확인"
                 confirmLogic={ () => {
-                    // postImage();
-                    deliveredRogic();
+                    postImage();
+                    // deliveredRogic();
                 }} isDisabled={false}
             />
         </>
