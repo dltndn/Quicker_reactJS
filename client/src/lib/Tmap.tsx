@@ -46,6 +46,41 @@ class Tmap {
     }
   }
 
+  async getRouteDataFromApi(
+    currentPos: coordination,
+    depPos: coordination,
+    desPos: coordination
+  ) {
+    const passList = depPos.X.toString() + "," + depPos.Y.toString();
+    const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
+
+    try {
+      const response = await fetch(
+        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json`,
+        {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
+            startX: currentPos.X,
+            startY: currentPos.Y,
+            endX: desPos.X,
+            endY: desPos.Y,
+            passList: passList,
+            reqCoordType: "WGS84GEO",
+            resCoordType: "WGS84GEO",
+            angle: "172",
+            searchOption: "0",
+            trafficInfo: "Y",
+          }),
+        }
+      );
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      throw new Error(JSON.stringify(e));
+    }
+  }
+
   createMarker(lat: number, lon: number, markerNum: number) {
     switch (markerNum) {
       case 1:
