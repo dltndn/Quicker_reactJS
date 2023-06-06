@@ -5,34 +5,42 @@ import RealLocationSchema from "../Mongo/Schemas/realLocation";
 
 const router = express.Router();
 
-router.post("/", async (req: Request, res: Response) => {
-  try {
-    const address = "지갑주소";
-    const tempX = 37.4;
-    const tempY = 128.4;
+router
+  .get("/", async (req: Request, res: Response) => {
+    try {
+      const address = "지갑주소"
+      
+      const conn = await connectMongo("realTimeLocation");
+      const realLocationModel = conn.model(address, RealLocationSchema);
+      const data = await realLocationModel.find({})
+      res.send({data : data})
+    } catch (error) {
+      console.log(error);
+      res.send({ msg: "fail" });
+    }
+  })
+  .post("/", async (req: Request, res: Response) => {
+    try {
+      const address = "지갑주소";
+      const tempX = 37.4;
+      const tempY = 128.4;
 
-    const conn = await connectMongo("realTimeLocation");
-    const realLocationSchema = conn.model(address, RealLocationSchema);
-    const realLocationModel = new realLocationSchema({
-      X: tempX,
-      Y: tempY,
-    });
-    await realLocationModel.save();
+      const conn = await connectMongo("realTimeLocation");
+      const realLocationSchema = conn.model(address, RealLocationSchema);
+      const realLocationModel = new realLocationSchema({
+        X: tempX,
+        Y: tempY,
+      });
+      await realLocationModel.save();
 
-    res.send({ msg: "done" });
-  } catch (error) {
-    console.log(error);
-    res.send({ msg: "fail" });
-  }
-});
+      res.send({ msg: "done" });
+    } catch (error) {
+      console.log(error);
+      res.send({ msg: "fail" });
+    }
+  });
 
-export default router
-
-
-
-
-
-
+export default router;
 
 // import { Request, Response } from "express";
 // import connectMongo from "../Mongo/Connector";
@@ -43,7 +51,7 @@ export default router
 //     const address = "지갑주소"
 //     const tempX = 37.4
 //     const tempY = 128.4
-    
+
 //     const conn = await connectMongo("realTimeLocation");
 //     const realLocationSchema = conn.model(address, RealLocationSchema);
 //     const realLocationModel = new realLocationSchema ({
