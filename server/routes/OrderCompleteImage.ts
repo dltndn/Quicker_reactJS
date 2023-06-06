@@ -13,13 +13,11 @@ const router = express.Router();
 router
   .get("/", async (req: Request, res: Response): Promise<any> => {
     try {
-      const query = req.query;
-      const orderId = query.orderNum;
+      const orderId = req.query.orderNum;
 
       const conn = await connectMongo("orderComplete");
-      let imageModel
       if (typeof orderId === "string") {
-        imageModel = conn.model(orderId, ImageFileSchema);
+        const imageModel = conn.model(orderId, ImageFileSchema);
         const images = await imageModel.find();
         res.send({imageBuffer : images[0].image})
       }
@@ -36,16 +34,14 @@ router
     
     const conn = await connectMongo("orderComplete");
   
-    const test = new mongoose.Schema({
-      image : Buffer, 
-      test : String   
+    const schema = new mongoose.Schema({
+      image : Buffer
     });
 
-    const uploadImage = conn.model(orderNum, test);
+    const imageModel = conn.model(orderNum, schema);
     
-    const image = new uploadImage({
-      image : bufferImage,
-      test : "t1"
+    const image = new imageModel({
+      image : bufferImage
     });
     await image.save();
     res.send({msg : "done"})
