@@ -21,7 +21,8 @@ class Tmap {
     height: 3em;
     background-image: url(${boxIcon});
     background-size: cover;
-    background-position: center;`;
+    background-position: center;
+    `;
 
   private markerHtml = (markerId: string) => {
     return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;
@@ -70,7 +71,6 @@ class Tmap {
   createMarkerWithAni(lat: number, lon: number, markerId: string) {
     this.deliveryMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
-      // icon: boxIcon,
       iconHTML: this.markerHtml(markerId),
       iconSize: Tmapv3.Size(1, 2),
       map: this.map,

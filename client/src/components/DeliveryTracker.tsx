@@ -92,10 +92,12 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   useEffect(() => {
     if (coordiX != null && coordiY != null) {
       if (!hasMarker) {
-        const pos = tMap.createLatLng(coordiY, coordiX);
-        tMap.createMarkerWithAni(coordiY, coordiX, "boxTmapMarker");
-        tMap.panTo(pos);
-        setHasMarker(true);
+        if (tMap !== undefined) {
+          const pos = tMap.createLatLng(coordiY, coordiX);
+          tMap.createMarkerWithAni(coordiY, coordiX, "boxTmapMarker");
+          tMap.panTo(pos);
+          setHasMarker(true);
+        }
       } else {
         initalizeQuickerMarker();
       }
