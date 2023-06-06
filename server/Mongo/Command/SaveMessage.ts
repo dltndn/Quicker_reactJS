@@ -6,8 +6,8 @@ require("dotenv").config();
 
 async function saveMessage(messageObjcet : MessageObject) {
   try {
-    const Message = mongoose.model((String)(messageObjcet.roomName), MessageSchema);
-    connectMongo("chat");
+    const conn = await connectMongo("chat");
+    const Message = conn.model((String)(messageObjcet.roomName), MessageSchema);
     const userMessage = new Message({
       id: messageObjcet.id,
       message: messageObjcet.receiveMessage,

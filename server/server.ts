@@ -16,7 +16,7 @@ import Home from "./routes/Home";
 // 설정
 const cors = require("cors");
 const app: Application = express();
-const port: Number = 9000;
+const port: Number = (process.env.NODE_ENV === "development") ? 9000 : 80;
 const bodyParser = require("body-parser");
 
 require("dotenv").config();
@@ -42,10 +42,8 @@ app.post("/updateorder", OrderController.updateOrder);
 app.post("/getRecentMessageInfo", ChatController.getRecentMessageInfo);
 app.post("/getUserNameUseByWalletAddress", UserController.getUserNameUseByWalletAddress);
 app.post("/getRoomInfo", OrderController.getRoomInfo);
+app.get("/order", OrderController.order);
 // 테스트 중
-
-// app.use("/order-complete-image", OrderCompleteImage);
-// app.use("/order-fail-image", OrderFailImage);
 
 app.use("/order-complete-image", OrderCompleteImage);
 app.use("/order-fail-image", OrderFailImage);

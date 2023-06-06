@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import url from 'node:url';
+
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateOrder from "../Maria/Commands/CreateOrder";
 import sequelize from "../Maria/Connectors/SequelizeConnector"
@@ -7,6 +9,7 @@ import UpdateOrder from "../Maria/Commands/UpdateOrder";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import SelectUser from "../Maria/Commands/SelectUser";
 import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
+
 
 
 initModels(sequelize);
@@ -41,6 +44,21 @@ export default {
       const data = req.body.list;
       let instance = await SelectOrder.getOrderlist(data);
       res.send(instance)
+    } catch (error){
+      console.log(error)
+      res.send("fail");
+    }
+  },
+
+  order: async (req: Request, res: Response) => {
+    try {
+      const query = req.query;
+      const orderId = query.orderid;
+      
+      if (typeof orderId === "string") {
+        const instance = await SelectOrder.location(parseInt(orderId))
+        res.send(instance)
+      }
     } catch (error){
       console.log(error)
       res.send("fail");

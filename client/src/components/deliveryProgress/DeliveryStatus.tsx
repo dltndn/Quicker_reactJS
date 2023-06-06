@@ -23,10 +23,7 @@ export const useQuickerLocationState = create<QuickerLocationState>((set) => ({
   setCoordiY: (coordiY: number) => set({ coordiY }),
 }));
 
-export default function DeliveryStatus({
-  orderNum,
-  deadline,
-}: DeliveryStatusProps) {
+export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
   const [isBlink, setIsBlink] = useState<boolean>(false)
@@ -49,6 +46,11 @@ export default function DeliveryStatus({
     setIntervalId(id);
   }
 
+  const getDeliverLocation = () => {
+    setCoordiX(126.82);
+    setCoordiY(37.534);
+  }
+
   const refreshQuickerLocation = (orderNum: string | undefined) => {
     setIsBlink(true)
     if (orderNum !== undefined) {
@@ -57,8 +59,7 @@ export default function DeliveryStatus({
       // setCoordiY(37.38616);
     }
     // 테스트 코드
-    setCoordiX(126.42264);
-    setCoordiY(37.38616);
+    getDeliverLocation();
   };
 
   const setIsBlinkF = async() => {
@@ -85,11 +86,8 @@ export default function DeliveryStatus({
 
   return (
     <>
-      <button
-        onClick={() => {
-          setCoordiX(126.92264);
-          setCoordiY(37.58616);
-        }}
+      {/* <button
+        onClick={() => getDeliverLocation}
       >
         배송원 위치 마커 버튼1
       </button>
@@ -103,12 +101,11 @@ export default function DeliveryStatus({
       </button>
       <button
         onClick={() => {
-          setCoordiX(126.82);
-          setCoordiY(37.534);
+          
         }}
       >
         배송원 위치 마커 버튼3
-      </button>
+      </button> */}
       <div>픽업예정</div>
       <br />
       <div>{deadline}까지</div>
