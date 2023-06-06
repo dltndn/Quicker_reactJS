@@ -25,7 +25,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   const initalizeQuickerMarker = () => {
     tMap.removeMarker();
     const pos = tMap.createLatLng(coordiY, coordiX);
-    tMap.createMarkerWithAni(coordiY, coordiX, 500);
+    tMap.createMarkerWithAni(coordiY, coordiX, "boxTmapMarker");
     tMap.panTo(pos);
   };
 
