@@ -78,7 +78,7 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
       <br />
       <div>{deadline}까지</div>
       <br />
-      <DeliveryTracker mapHeight="45em" />
+      <DeliveryTracker mapHeight="45em"/>
       <button
         onClick={async () => {refreshQuickerLocation()}}
         style={{

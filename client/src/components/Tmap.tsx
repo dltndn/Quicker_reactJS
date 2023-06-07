@@ -16,12 +16,12 @@ const Tmap = ({states, containerId }: props) => {
     useEffect(() => {
         if(states.startPosition) {
             if (isPosition(states.startPosition)) {
-                setStartMarker(tMap.createMarker(states.startPosition.latitude, states.startPosition.longitude))
+                setStartMarker(tMap.createMarker(states.startPosition.latitude, states.startPosition.longitude, 1))
             }
         }
         if (states.arrivePosition) {
             if (isPosition(states.arrivePosition)) {
-                setArriveMarker(tMap.createMarker(states.arrivePosition.latitude, states.arrivePosition.longitude))
+                setArriveMarker(tMap.createMarker(states.arrivePosition.latitude, states.arrivePosition.longitude, 2))
             }
         }
     }, [states.startPosition, states.arrivePosition])
