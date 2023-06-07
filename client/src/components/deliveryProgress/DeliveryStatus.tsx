@@ -5,6 +5,7 @@ import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
 import Handler from "../../lib/Handler";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -27,7 +28,7 @@ export const useQuickerLocationState = create<QuickerLocationState>((set) => ({
 export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
-  const [orderData, setOrderData] = useState({});
+  const [orderData, setOrderData] = useState<any>({});
 
   const initalizeOrderData = async (orderNum: string | undefined) => {
     if (orderNum !== undefined) {
@@ -37,15 +38,24 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
   }
 
   const refreshQuickerLocation = async () => {
-    // 지갑 주소를 이용하여 블록체인 데이터에서 상대 지갑 주소를 추출      
-    
-    // 값을 불러오는 fetch
-    const response = await fetch(process.env.REACT_APP_SERVER_URL+`test`)
-    const json = await response.json()
+    try {
+      if (orderData !== undefined && orderData.quicker !== undefined ) {
+        // 값을 불러오는 fetch
+        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+        const json = await response.json()
 
-    // 해당 X,Y좌표를 수정
-    setCoordiX(json.data.X);
-    setCoordiY(json.data.Y);
+        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+        
+        // 해당 X,Y좌표를 수정
+        setCoordiX(json.data.X);
+        setCoordiY(json.data.Y);
+      }
+    } catch (error) {
+      console.error(error)
+      alert("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    }
+    
   };
 
   useEffect(() => {

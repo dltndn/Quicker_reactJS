@@ -8,13 +8,13 @@ const router = express.Router();
 router
   .get("/", async (req: Request, res: Response) => {
     try {
-      const address = "0x2cc285279f6970d00f84f3034439ab8d29d04d97";
-      
-      const conn = await connectMongo("realTimeLocation");
-      const realLocationModel = conn.model(address, RealLocationSchema);
-      const data = await realLocationModel.findOne({}).sort({ $natural: -1 });
-      console.log(data)
-      res.send({data : data})
+      const address = req.query.quicker;
+      if (typeof address === "string") {
+        const conn = await connectMongo("realTimeLocation");
+        const realLocationModel = conn.model(address, RealLocationSchema);
+        const data = await realLocationModel.findOne({}).sort({ $natural: -1 });
+        res.send({data : data})
+      }
     } catch (error) {
       console.log(error);
       res.send({ msg: "fail" });
