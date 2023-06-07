@@ -19,8 +19,10 @@ import styled from "styled-components";
 import OtherMessageTemplate from "./OtherMessageTemplate";
 import MyMessageTemplate from "./MyMessageTemplate";
 import React from "react";
+import TopBarChat from "../topBarChat";
 
 import { MessageInfo } from "./interface/MessageInfo";
+import { useNavigate } from "react-router-dom";
 
 const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
@@ -155,9 +157,16 @@ export default function ({
     console.log(messageData)
   }, [messageData]);
 
+  const navigate = useNavigate();
+
   return (
     <>
-      상대방 이름 : {opponentName}
+          <TopBarChat
+        title={opponentName}
+        redirectLogic={() => {
+          navigate("/");
+        }}
+        ></TopBarChat>
       <Div0>
         <Div1>
           {receiverAddress}
@@ -181,16 +190,16 @@ export default function ({
           (address === element.id) ? <MyMessageTemplate message={element.message} date={element.date} /> : <OtherMessageTemplate message={element.message} date={element.date} />
         ))}
       </>
+      <form onSubmit={sendMessage} action="">
       <Sc0>
-          <form onSubmit={sendMessage} action="">
-            <div>
+              <Divinput>
               <Ip1 ref={inputbox} placeholder="메세지 보내기"></Ip1>
-            </div>
-            <button type="submit">
+              </Divinput>
+              <Bt1 type="submit">
               <HiPaperAirplane />
-            </button>
-          </form>
+            </Bt1>
         </Sc0>
+        </form>
     </>
   );
 }
@@ -206,7 +215,7 @@ const Div1 = styled.div`
   display: flex;
   padding: 10px 10px 10px 10px;
   flex-direction: column;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
@@ -214,6 +223,7 @@ const Div2 = styled.div`
   font-size: 12px;
   font-weight: thin;
   color: #646464;
+  margin: 5px 0 5px 0;
 `;
 
 const Img1 = styled.img`
@@ -273,16 +283,30 @@ const Sc0 = styled.section`
   height: 3.875rem;
   background-color: var(--white-color);
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   text-align: center;
 `;
 
 const Ip1 = styled.input`
   border-radius: 20px;
+  border: none;
+  width: 90%;
   background-color: #e6e6e6;
   outline: none;
-  height: auto;
+  height: 100%;
   color: #a0a0a0;
+  padding-left: 15px;
 `;
 
+const Bt1 = styled.button`
+  border: none;
+  background-color: #ffffff;
+  width: 30px;
+  font-size: 20px;
+  margin: 5px 10px 0 0 ;
+`
 
+const Divinput = styled.div`
+  width: 85%;
+  height: 30px;
+`
