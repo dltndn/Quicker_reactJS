@@ -172,7 +172,6 @@ function App() {
     console.log(address)
     getUserInfo()
     getAndSetOrders()
-    setIsMember(true)
   }, [address])
 
   useEffect(() => {
