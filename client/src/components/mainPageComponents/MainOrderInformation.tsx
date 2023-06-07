@@ -81,8 +81,7 @@ export default function MainOrderInformation() {
             <>
               <UserName />
               <Div1>
-                <Sp1>물건 배송을 의뢰하거나 직접 배달을 해보세요</Sp1>
-                <div>앱 사용 설명을 간단하게 해야되나</div>
+                <Sp1>간편하게 배송하시거나<br/><br/>직접 배달을 해보세요!</Sp1>
               </Div1>
             </>
           ) : (
@@ -129,7 +128,7 @@ export default function MainOrderInformation() {
           )}
         </>
       ) : (
-        <>메인 로딩 애니메이션</>
+        <></>
       )}
     </>
   );

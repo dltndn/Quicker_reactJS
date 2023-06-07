@@ -26,6 +26,7 @@ import ClientConfirmPage from "./pages/ClientConfirmPage";
 import Profile_noticePage from "./pages/Profile_noticePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
+import ChatcssPage from "./components/ChatcssPage";
 import { create } from 'zustand'
 
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
@@ -171,6 +172,7 @@ function App() {
     console.log(address)
     getUserInfo()
     getAndSetOrders()
+    setIsMember(true)
   }, [address])
 
   useEffect(() => {
@@ -199,6 +201,7 @@ function App() {
             <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
             <Route path="/explorer" element={<ExplorerPage />} />
             <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
+            <Route path="/chatcss" element={<ChatcssPage />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
