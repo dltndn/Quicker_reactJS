@@ -1,17 +1,12 @@
-import boxIcon from "../image/boxHigh.png"
+import boxIcon from "../image/boxHigh.png";
 // @ts-ignore
 const { Tmapv3 } = window;
 
-const boxMarkerStyle = ` width: 3em;
-height: 3em;
-background-image: url(${boxIcon});
-background-size: cover;
-background-position: center;`
-const markerHtml = `<div id="boxTmapMarker" style="${boxMarkerStyle}"></div>`
-
 class Tmap {
   map: any;
-  tMapMarker: any;
+  deliveryMarker: any;
+  departureMarker: any;
+  destinationMarker: any;
 
   constructor(mapId: string, height: string) {
     this.map = new Tmapv3.Map(mapId, {
@@ -21,6 +16,17 @@ class Tmap {
       zoom: 15,
     });
   }
+
+  private boxMarkerStyle = ` width: 3em;
+    height: 3em;
+    background-image: url(${boxIcon});
+    background-size: cover;
+    background-position: center;
+    `;
+
+  private markerHtml = (markerId: string) => {
+    return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;
+  };
 
   async getDistance(startPosition: coordination, arrivePosition: coordination) {
     const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
@@ -40,26 +46,39 @@ class Tmap {
     }
   }
 
-  createMarker(lat: number, lon: number) {
-    this.tMapMarker = new Tmapv3.Marker({
+  createMarker(lat: number, lon: number, markerNum: number) {
+    switch (markerNum) {
+      case 1:
+        this.departureMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+        break;
+      case 2:
+        this.destinationMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+        break;
+      default:
+        this.deliveryMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+        });
+    }
+  }
+
+  createMarkerWithAni(lat: number, lon: number, markerId: string) {
+    this.deliveryMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
+      iconHTML: this.markerHtml(markerId),
+      iconSize: Tmapv3.Size(1, 2),
       map: this.map,
     });
   }
 
-  createMarkerWithAni(lat: number, lon: number, aniLen: number) {
-    this.tMapMarker = new Tmapv3.Marker({
-      position: new Tmapv3.LatLng(lat, lon),
-      // icon: boxIcon,
-      iconHTML: markerHtml,
-      iconSize: Tmapv3.Size(1, 2),
-      map: this.map
-    });
-  }
-
-  removeMarker() {
-    if (this.tMapMarker) 
-      this.tMapMarker.setMap(null)
+  removeDeliveryMarker() {
+    if (this.deliveryMarker) this.deliveryMarker.setMap(null);
   }
 
   setViewMap(LatLng: any) {

@@ -38,10 +38,15 @@ export default function ReceipientPage() {
     // cryptoKey로 orderNum 복호화
     // setOrderNum(복호화된 orderNum)
     // getDeadlineText(복호화된 orderNum)
-
+    
     // test code
-    setOrderNum("43");
-    getDeadlineText("43");
+    setOrderNum(cryptoKey);
+
+    // 지도 작업을 위해 임시로 값 변경
+    setIsDelivered(false);
+    // if (cryptoKey !== undefined) {
+    //   getDeadlineText(cryptoKey);
+    // }
   }, []);
 
   return (

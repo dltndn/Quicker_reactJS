@@ -2,6 +2,31 @@ import { Transportation, Sender, Recipient, Destination, Departure, Product, Ord
 const { Op } = require("sequelize");
 
 export default {
+  location : (orderId : number) => {
+    Order.hasOne(Destination, {foreignKey : "id"})
+    Order.hasOne(Departure, {foreignKey : "id"})
+    return new Promise ((resolve, reject) => {
+      const orderLocation = Order.findOne({
+        attributes: ["id"],
+        where: { id: orderId },
+        include: [
+          {
+            model: Destination,
+            attributes: { exclude: ["id", "DETAIL"] },
+            required: true,
+          },
+          {
+            model: Departure,
+            attributes: { exclude: ["ID", "DETAIL"] },
+            required: true,
+          },
+        ],
+      });
+      resolve(orderLocation)
+      reject("fail")
+    })
+  },
+
   getRequests: (userId : string) => {
     console.log("USER_ID : ",userId)
     Order.hasOne(Transportation, { foreignKey: "id" });

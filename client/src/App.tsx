@@ -31,6 +31,7 @@ import { create } from 'zustand'
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
 import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
+import Handler from "./lib/Handler";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -99,6 +100,14 @@ function App() {
     themeBackground: "gradient",
   });
 
+  const getUserInfo = async () => {
+    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "getUserNameUseByWalletAddress")
+    if (Object.keys(result).length !== 0) {
+      setIsMember(true)
+      setUserName(result.name)
+    }
+  }
+
   const getAndSetOrders = async () => {
     const clientOrderNumsArr = await getOrderList(address, true)
     const quickerOrderNumsArr = await getOrderList(address, false)
@@ -160,8 +169,7 @@ function App() {
     // 지갑주소 유저 여부 조회
     console.log("changed user wallet")
     console.log(address)
-    setUserName("유저이름")
-    setIsMember(true)
+    getUserInfo()
     getAndSetOrders()
   }, [address])
 

@@ -200,7 +200,10 @@ function SearchPage() {
     if (requestListContentLength !== 0) {
       requestListContents.forEach((element) => {
         // @ts-ignore
+        const pos = tmap.createLatLng(element.Departure.Y, element.Departure.X);
+        // @ts-ignore
         tmap.createMarker(element.Departure.Y, element.Departure.X);
+        tmap.panTo(pos)
       });
       changeToData(mockData);
     }
