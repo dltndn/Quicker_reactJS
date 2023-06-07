@@ -1,7 +1,7 @@
 import { SetStateAction } from "react"
 import Handler from "../../lib/Handler"
 import { getNameInterface } from "./interface/getNameInterface"
-import delelteDoubleQuote from "./DeleteDoubleQuote"
+import delelteDoubleQuote from "../../lib/DeleteDoubleQuote"
 
 const getName = async ({ blockchainElement, address, setState }: getNameInterface) => {
     let clientWalletAddress = delelteDoubleQuote(blockchainElement.client)

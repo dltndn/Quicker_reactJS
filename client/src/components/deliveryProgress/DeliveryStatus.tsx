@@ -3,6 +3,9 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
+import Handler from "../../lib/Handler";
+import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -25,24 +28,41 @@ export const useQuickerLocationState = create<QuickerLocationState>((set) => ({
 export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
+  const [orderData, setOrderData] = useState<any>({});
 
-  const getDeliverLocation = () => {
-    setCoordiX(126.82);
-    setCoordiY(37.534);
+  const initalizeOrderData = async (orderNum: string | undefined) => {
+    if (orderNum !== undefined) {
+      const orderData = await getOrder(orderNum)
+      setOrderData(orderData)
+    }
   }
 
-  const refreshQuickerLocation = (orderNum: string | undefined) => {
-    if (orderNum !== undefined) {
-      // orderNum로 배송원 위치 좌표 가져오기
-      // setCoordiX(126.42264);
-      // setCoordiY(37.38616);
+  const refreshQuickerLocation = async () => {
+    try {
+      if (orderData !== undefined && orderData.quicker !== undefined ) {
+        // 값을 불러오는 fetch
+        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+        const json = await response.json()
+
+        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+        
+        // 해당 X,Y좌표를 수정
+        setCoordiX(json.data.X);
+        setCoordiY(json.data.Y);
+      }
+    } catch (error) {
+      console.error(error)
+      alert("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
     }
-    // 테스트 코드
-    getDeliverLocation();
+    
   };
 
   useEffect(() => {
-    setTitle("배송현황");
+    (async()=> {
+      setTitle("배송현황");
+      await initalizeOrderData(orderNum);
+    })()
     return () => {
       setCoordiX(null);
       setCoordiY(null);
@@ -59,7 +79,7 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
       <br />
       <DeliveryTracker mapHeight="45em" />
       <button
-        onClick={async () => {refreshQuickerLocation(orderNum || undefined)}}
+        onClick={async () => {refreshQuickerLocation()}}
         style={{
           position: "absolute",
           top: "52em",

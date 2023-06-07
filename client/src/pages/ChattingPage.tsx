@@ -11,7 +11,7 @@ import {
 import { useAccount } from "wagmi";
 import Room from "../components/chatComponents/Room";
 import Chat from "../components/chatComponents/Chat";
-import delelteDoubleQuote from "../components/chatComponents/DeleteDoubleQuote";
+import delelteDoubleQuote from "../lib/DeleteDoubleQuote";
 
 const nochat = require("../image/nochat.png");
 
