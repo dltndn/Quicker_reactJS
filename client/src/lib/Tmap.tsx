@@ -94,7 +94,7 @@ class Tmap {
     let new_polyLine = []
     let pointId1 = "-1234567";
     let newData = [];
-    let ar_line = [];
+    
     let pointArray = []
     let equalData = [];
     console.log(data)
@@ -102,22 +102,33 @@ class Tmap {
       var feature = data.features[i];
       //배열에 경로 좌표 저잘
       if (feature.geometry.type === "LineString") {
-        // ar_line = [];
+        let trraficT0_ar_line: any[] = [];
+        let trraficT1_ar_line: any[] = [];
+        let trraficT2_ar_line: any[] = [];
+        let trraficT3_ar_line: any[] = [];
+        let trraficT4_ar_line: any[] = [];
         for (let j = 0; j < feature.geometry.coordinates.length; j++) {
+          if (feature.geometry.traffic.lenth !== 0) {
+
+          } else {
+
+          }
+          let ar_line = []
           const startPt = new Tmapv3.LatLng(
             feature.geometry.coordinates[j][1],
             feature.geometry.coordinates[j][0]
           );
           ar_line.push(startPt);
           pointArray.push(feature.geometry.coordinates[j]);
+          const polyline = new Tmapv3.Polyline({
+            path: trraficT0_ar_line,
+            strokeColor: "#ff0000",
+            strokeWeight: 3,
+            map: this.map,
+          });
+          new_polyLine.push(polyline);
         }
-        const polyline = new Tmapv3.Polyline({
-          path: ar_line,
-          strokeColor: "#ff0000",
-          strokeWeight: 3,
-          map: this.map,
-        });
-        new_polyLine.push(polyline);
+       
       }
       var pointId2 = feature.properties.viaPointId;
       if (pointId1 !== pointId2) {
