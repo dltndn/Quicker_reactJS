@@ -7,6 +7,8 @@ import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
+import { BsPlusCircle } from "react-icons/bs";
+
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -185,10 +187,17 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
           <input ref={file} type="file" name="file" accept="image/*" capture="environment" onChange={onChange} style={{display : "none"}}/>
           {(fileImage === undefined || fileImage === null) ? 
           <div>
-            <span onClick={clickPlusIcon}>플러스 아이콘 추가</span>
+            <span onClick={clickPlusIcon}>
+            <Div5>
+                <Span01>
+                <BsPlusCircle/><br/><br/>
+                  사진을 업로드해주세요.
+                </Span01>
+            </Div5>
+            </span>
           </div> :
             <div>
-              <img onClick={clickPlusIcon} src={URL.createObjectURL(fileImage)} alt="uploaded photo" />
+              <img onClick={clickPlusIcon} src={URL.createObjectURL(fileImage)} alt="uploaded photo" width="100%"/>
             </div>
           }
           
@@ -215,3 +224,18 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
         </>
     )
 }
+
+const Span01 = styled.div`
+  margin: 20px 0 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #828282;
+`;
+
+const Div5 = styled.div`
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+`;

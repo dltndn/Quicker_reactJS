@@ -1,4 +1,4 @@
-import { BsPencilSquare, BsEyeSlash, BsFileText, BsCheck2Circle, BsClipboardCheck, BsUiChecksGrid, BsExclamationCircle, BsGear } from "react-icons/bs";
+import { BsCoin, BsPencilSquare, BsEyeSlash, BsFileText, BsCheck2Circle, BsClipboardCheck, BsUiChecksGrid, BsExclamationCircle, BsGear } from "react-icons/bs";
 import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -167,6 +167,10 @@ function Imfo(){
         navigate("/profile/notice")
     }
 
+    const ClickExplorerPage = () => {
+        navigate("/explorer")
+    }
+
 
     useEffect(() => {
         if(!isConnected) {
@@ -210,6 +214,12 @@ function Imfo(){
                 <Bticon>
                     <Bticonimg src={money} alt="" />
                 </Bticon>
+            </Div0>
+        </Sc3>
+        <Sc3>
+            <Div0 onClick={ClickExplorerPage}>
+                <BsCoin></BsCoin>
+                <Sp2>실시간 거래 현황</Sp2>
             </Div0>
         </Sc3>
         <Sc0>

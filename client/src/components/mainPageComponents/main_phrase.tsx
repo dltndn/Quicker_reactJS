@@ -76,6 +76,9 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
             <button onClick={() => navigate("/execution/205")}>
                     임시배송페이지이동버튼
                   </button>
+                  <button onClick={() => navigate("/client_confirm/10")}>
+                    임시의뢰인확인페이지이동버튼
+                  </button>
                   <button
                     onClick={() =>
                       (window.location.href = `quicker://link?walletAddress=${address?.toString()}`)
