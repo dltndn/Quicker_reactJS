@@ -2,7 +2,8 @@ import TopBarThin from './topBarthin';
 import styled, { createGlobalStyle } from 'styled-components';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BsChatLeftDots, BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { BsChatLeftDots, BsChevronLeft, BsChevronRight, BsStickies, BsTelephone } from "react-icons/bs";
+import { HiPaperAirplane } from 'react-icons/hi2';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -43,6 +44,7 @@ const Div1_3 = styled.div`
   font-weight: thin;
 `;
 
+
 function Notice() {
   const navigate = useNavigate();
 
@@ -79,6 +81,7 @@ function Notice() {
             <BsChevronRight />
           </Div0>
       </Se0>
+      
     </>
   );
 }

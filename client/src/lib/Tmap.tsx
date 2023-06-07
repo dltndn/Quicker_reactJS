@@ -1,17 +1,14 @@
-import boxIcon from "../image/boxHigh.png"
+import boxIcon from "../image/boxHigh.png";
+import depIcon from "../image/dep-icon-gif-unscreen.gif"
+import desIcon from "../image/des-icon-gif-unscreen.gif"
 // @ts-ignore
 const { Tmapv3 } = window;
 
-const boxMarkerStyle = ` width: 3em;
-height: 3em;
-background-image: url(${boxIcon});
-background-size: cover;
-background-position: center;`
-const markerHtml = `<div id="boxTmapMarker" style="${boxMarkerStyle}"></div>`
-
 class Tmap {
   map: any;
-  tMapMarker: any;
+  deliveryMarker: any;
+  departureMarker: any;
+  destinationMarker: any;
 
   constructor(mapId: string, height: string) {
     this.map = new Tmapv3.Map(mapId, {
@@ -21,6 +18,16 @@ class Tmap {
       zoom: 15,
     });
   }
+
+  private boxMarkerStyle = ` width: 3em;
+    height: 3em;
+    background-size: cover;
+    background-position: center;
+    `;
+
+  private markerHtml = (markerId: string, icon: string) => {
+    return `<div id=${markerId} style="${this.boxMarkerStyle}background-image: url(${icon});"></div>`;
+  };
 
   async getDistance(startPosition: coordination, arrivePosition: coordination) {
     const headers = { appKey: process.env.REACT_APP_TMAP_API_KEY ?? "" };
@@ -40,26 +47,124 @@ class Tmap {
     }
   }
 
-  createMarker(lat: number, lon: number) {
-    this.tMapMarker = new Tmapv3.Marker({
+  async getRouteData(
+    currentPos: coordination,
+    depPos: coordination,
+    desPos: coordination
+  ) {
+    const passList = depPos.X.toString() + "," + depPos.Y.toString();
+    const appKey = process.env.REACT_APP_TMAP_API_KEY ?? "";
+    const getTrraficInfo = "&trafficInfo=N"
+    const urlStr = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0${getTrraficInfo}`;
+    const headers = {
+      appKey: appKey,
+    };
+    try {
+      const response = await fetch(
+        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result&appKey=${appKey}${urlStr}`,
+        {
+          method: "POST",
+          headers: headers,
+        }
+      );
+      const result = await response.json();
+      this.drawTrafficData(result);
+
+      return result;
+    } catch (e) {
+      throw new Error(JSON.stringify(e));
+    }
+  }
+
+  async drawTrafficData(data: any) {
+    // const jsonObject = new Tmapv3.extension.GeoJSON()
+    // // const jsonForm = jsonObject.rpTrafficRead(data);
+    // // const jsonForm = jsonObject.jsonForm
+    // const jsonForm = data.features
+    const trafficColors = {
+      trafficDefaultColor: "#000000",
+      trafficType1Color: "#009900",
+      trafficType2Color: "#7A8E0A",
+      trafficType3Color: "#8E8111",
+      trafficType4Color: "#FF0000",
+    };
+    let new_polyLine = [];
+    let pointId1 = "-1234567";
+    let newData = [];
+
+    let pointArray = [];
+    let equalData = [];
+    for (var i = 0; i < data.features.length; i++) {
+      var feature = data.features[i];
+      let ar_line = [];
+      if (feature.geometry.type === "LineString") {
+        for (let j = 0; j < feature.geometry.coordinates.length; j++) {
+          const startPt = new Tmapv3.LatLng(
+            feature.geometry.coordinates[j][1],
+            feature.geometry.coordinates[j][0]
+          );
+          ar_line.push(startPt);
+          pointArray.push(feature.geometry.coordinates[j]);
+        }
+        const polyline = new Tmapv3.Polyline({
+          path: ar_line,
+          strokeColor: "#009900",
+          strokeWeight: 3,
+          map: this.map,
+        });
+        new_polyLine.push(polyline);
+      }
+      var pointId2 = feature.properties.viaPointId;
+      if (pointId1 !== pointId2) {
+        // equalData = [];
+        equalData.push(feature);
+        newData.push(equalData);
+        pointId1 = pointId2;
+      } else {
+        equalData.push(feature);
+      }
+    }
+  }
+
+  createMarker(lat: number, lon: number, markerNum: number) {
+    switch (markerNum) {
+      case 1:
+        this.departureMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+          iconHTML: this.markerHtml("depMarker", depIcon),
+          iconSize: Tmapv3.Size(1, 2),
+        });
+        break;
+      case 2:
+        this.destinationMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+          iconHTML: this.markerHtml("desMarker", desIcon),
+          iconSize: Tmapv3.Size(1, 2),
+        });
+        break;
+      default:
+        this.deliveryMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+          iconHTML: this.markerHtml("deliveryMarker", boxIcon),
+          iconSize: Tmapv3.Size(1, 2),
+        });
+    }
+  }
+
+  createMarkerWithAni(lat: number, lon: number, markerId: string) {
+    this.deliveryMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
+      iconHTML: this.markerHtml(markerId, boxIcon),
+      iconSize: Tmapv3.Size(1, 2),
       map: this.map,
     });
   }
 
-  createMarkerWithAni(lat: number, lon: number, aniLen: number) {
-    this.tMapMarker = new Tmapv3.Marker({
-      position: new Tmapv3.LatLng(lat, lon),
-      // icon: boxIcon,
-      iconHTML: markerHtml,
-      iconSize: Tmapv3.Size(1, 2),
-      map: this.map
-    });
-  }
-
-  removeMarker() {
-    if (this.tMapMarker) 
-      this.tMapMarker.setMap(null)
+  removeDeliveryMarker() {
+    if (this.deliveryMarker) this.deliveryMarker.setMap(null);
   }
 
   setViewMap(LatLng: any) {
@@ -135,6 +240,10 @@ class Tmap {
         console.error("Error:", error);
       });
   }
+
+  private convertPos = (data: number) => {
+    return (Math.round(data * 1000000) / 1000000).toString();
+  };
 }
 
 export default Tmap;

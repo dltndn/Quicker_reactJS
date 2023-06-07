@@ -4,17 +4,23 @@ import mongoose from "mongoose";
 import ImageFileSchema from "../Mongo/Schemas/ImageFile";
 import connectMongo from "../Mongo/Connector";
 
+require("dotenv").config();
+
+
 const router = express.Router();
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
-router.get("/", async (req: Request, res: Response): Promise<any> => {
+router
+  .get("/", async (req: Request, res: Response): Promise<any> => {
     try {
-      const uploadImage = mongoose.model("1", ImageFileSchema);
-      await connectMongo("orderFail");
-      const data = await uploadImage.find({});
-      console.log(data);
-      res.send({ imageBuffer: data[0].image });
+      const orderId = req.query.orderNum;
+      if (typeof orderId === "string") {
+        const conn = await connectMongo("orderFail");
+        const uploadImage = conn.model(orderId, ImageFileSchema);
+        const data = await uploadImage.find({});
+        res.send({ imageBuffer: data[0].image, reason : data[0].reason});
+      }
     } catch (error) {
       console.log(error);
     }
@@ -24,17 +30,19 @@ router.get("/", async (req: Request, res: Response): Promise<any> => {
         const documentFile = (req as MulterRequest).file;
         const bufferImage = documentFile.buffer;
         const orderNum = req.body.orderNum;
+        const reason = req.body.reason
 
-        await connectMongo("orderFail");
+        const conn = await connectMongo("orderFail");
 
-        const uploadImage = mongoose.model(orderNum, ImageFileSchema);
+        const uploadImage = conn.model(orderNum, ImageFileSchema);
 
         const image = new uploadImage({
           image: bufferImage,
+          reason : reason
         });
-        console.log(bufferImage)
+        
         await image.save();
-        res.send({ msg: "done" });
+        await res.send({ msg: "done" });
       } catch (error) {
         console.log(error);
       }    

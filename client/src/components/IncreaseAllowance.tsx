@@ -43,7 +43,6 @@ export default function IncreaseAllowance() {
         content="확인"
         confirmLogic={() => write?.()}
       />
-      {isLoading && <Lottie animationData={Done}/>}
     </>)
 }
 

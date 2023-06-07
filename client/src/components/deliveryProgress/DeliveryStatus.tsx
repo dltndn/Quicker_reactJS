@@ -1,9 +1,19 @@
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useClientConfirmState } from "../../pages/ClientConfirmPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
+import Handler from "../../lib/Handler";
+import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
+import Lottie from "lottie-react";
+import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
+
+
+const whitePin = require('../../image/whitePin.png');
+const redPin = require('../../image/redPin.png');
+
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -11,73 +21,82 @@ interface DeliveryStatusProps extends ExecutionComponentProps {
 
 interface QuickerLocationState {
   coordiX: number | null;
-  setCoordiX: (data: number) => void;
+  setCoordiX: (data: number | null) => void;
   coordiY: number | null;
-  setCoordiY: (data: number) => void;
+  setCoordiY: (data: number | null) => void;
 }
 
 export const useQuickerLocationState = create<QuickerLocationState>((set) => ({
   coordiX: null,
-  setCoordiX: (coordiX: number) => set({ coordiX }),
+  setCoordiX: (coordiX: number | null) => set({ coordiX }),
   coordiY: null,
-  setCoordiY: (coordiY: number) => set({ coordiY }),
+  setCoordiY: (coordiY: number | null) => set({ coordiY }),
 }));
 
-export default function DeliveryStatus({
-  orderNum,
-  deadline,
-}: DeliveryStatusProps) {
+export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps) {
   const { setTitle } = useClientConfirmState();
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
+  const [orderData, setOrderData] = useState<any>({});
 
-  const refreshQuickerLocation = (orderNum: string | undefined) => {
+  const initalizeOrderData = async (orderNum: string | undefined) => {
     if (orderNum !== undefined) {
-      // orderNum로 배송원 위치 좌표 가져오기
-      // setCoordiX(126.42264);
-      // setCoordiY(37.38616);
+      const orderData = await getOrder(orderNum)
+      setOrderData(orderData)
     }
-    // 테스트 코드
-    setCoordiX(126.42264);
-    setCoordiY(37.38616);
+  }
+
+  const refreshQuickerLocation = async () => {
+    try {
+      if (orderData !== undefined && orderData.quicker !== undefined ) {
+        // 값을 불러오는 fetch
+        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+        
+        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+        const json = await response.json()
+        console.log(json)
+        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+        
+        // 해당 X,Y좌표를 수정
+        setCoordiX(json.data.Y);
+        setCoordiY(json.data.X);
+      }
+    } catch (error) {
+      console.error(error)
+      alert("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    }
+    
   };
 
   useEffect(() => {
-    setTitle("배송현황");
+    (async()=> {
+      setTitle("배송현황");
+      await initalizeOrderData(orderNum);
+    })()
+    return () => {
+      setCoordiX(null);
+      setCoordiY(null);
+    };
   }, []);
+
+  
 
   return (
     <>
-      <button
-        onClick={() => {
-          setCoordiX(126.92264);
-          setCoordiY(37.58616);
-        }}
-      >
-        배송원 위치 마커 버튼1
-      </button>
-      <button
-        onClick={() => {
-          setCoordiX(126.816911842685);
-          setCoordiY(37.5336078354823);
-        }}
-      >
-        배송원 위치 마커 버튼2
-      </button>
-      <button
-        onClick={() => {
-          setCoordiX(126.82);
-          setCoordiY(37.534);
-        }}
-      >
-        배송원 위치 마커 버튼3
-      </button>
-      <div>픽업예정</div>
+    <Div0>
+      <Div1>
+      <Pin1 src={whitePin}/>
+      <DivSp>픽업예정</DivSp>
+      </Div1>
+      <Div1>
+      <Pin1 src={redPin}/>
+      <DivSp>{deadline}까지</DivSp>
+      </Div1>
+    </Div0>
+      <Lottie animationData={lodingAni} />
       <br />
-      <div>{deadline}까지</div>
-      <br />
-      <DeliveryTracker mapHeight="45em" />
+      <DeliveryTracker mapHeight="45em"/>
       <button
-        onClick={() => refreshQuickerLocation(orderNum || undefined)}
+        onClick={async () => {refreshQuickerLocation()}}
         style={{
           position: "absolute",
           top: "52em",
@@ -91,3 +110,25 @@ export default function DeliveryStatus({
     </>
   );
 }
+
+const Pin1 = styled.img`
+  width: 35px;
+`
+const Div0 = styled.div`
+    display: flex;
+    justify-content: space-between;
+
+`
+const Div1 = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+    margin: 0 20px 0 20px;
+`
+const DivSp = styled.div`
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 10px;
+`

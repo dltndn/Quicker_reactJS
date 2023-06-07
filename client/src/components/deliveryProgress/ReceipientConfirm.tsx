@@ -6,20 +6,36 @@ interface ReceipientConfirmProp {
 }
 export default function ReceipientConfirm({ orderNum }: ReceipientConfirmProp) {
   const [hasImg, setHasImg] = useState<boolean>(false);
-
+  const [base64String, setBase64String] = useState("");
+  
   const confirmLogic = () => {
     // 수취인 배달 확인 로직 작성
+
   };
 
-  const getPicture = () => {
-    // 배송완료 사진 불러오기
-    // 불러온 후 setHasImg(true)
+  const getPicture = async () => {
+    
+    // 암호화
+    // const { createHmac } = await import('node:crypto');
 
-    // testcode
-    const timeoutId = setTimeout(() => {
-      setHasImg(true);
-    }, 3000);
-    return () => clearTimeout(timeoutId);
+    // const secret = process.env.REACT_APP_CRYPTO_KEY;
+    // let hashCode;
+    // if (secret !== undefined && orderNum !== undefined) {
+    //   hashCode = createHmac('sha256', secret).update(orderNum).digest('hex');
+    // }
+
+    // 배송완료 사진 불러오기
+    const response = await fetch(process.env.REACT_APP_SERVER_URL + `order-complete-image/?orderNum=${orderNum}`)
+    const buffer = await response.json();
+    const bufferImage = buffer.imageBuffer.data
+   
+    const base64Image = Buffer.from(bufferImage).toString('base64');
+
+    // 이미지 src로 설정합니다.
+    setBase64String(`data:image/png;base64, ${base64Image}`);
+    
+    // 불러온 후 setHasImg(true)
+    setHasImg(true)
   };
 
   useEffect(() => {
@@ -29,7 +45,9 @@ export default function ReceipientConfirm({ orderNum }: ReceipientConfirmProp) {
   return (
     <>
       <h1>물품전달</h1>
-      {hasImg ? <div>배송 사진</div> : <>배송 사진 로딩 애니메이션</>}
+      {hasImg ? <div>
+        <img src={base64String} alt="uploaded photo" />
+      </div> : <>배송 사진 로딩 애니메이션</>}
       <div>수행원이 배송을 완료했어요</div>
       <ConfirmBtn
         content="배송을 확인했어요"
