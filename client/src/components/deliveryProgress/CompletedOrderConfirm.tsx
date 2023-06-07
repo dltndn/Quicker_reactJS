@@ -47,8 +47,9 @@ export default function CompletedOrderConfirm({
         </Divback>
         <Div3>
         <Div5>
-            <div>수익<br/><Div5_1>보증금</Div5_1><br/><Div4>총액</Div4></div>
-            <Divpo>-원<br/><Div5_1>-원</Div5_1><br/><Div4>-원</Div4></Divpo>
+            <Span01>
+              배송이 완료되었습니다.
+            </Span01>
         </Div5>
         </Div3>
       <BottomConfirmBtn
@@ -111,29 +112,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const MoneyGifImg = styled.img`
-    width: 55%;
+const Span01 = styled.div`
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #828282;
 `;
-
-
-const Div5_1 = styled.div`
-    font-size: 12px;
-    color: #929292;
-    font-weight: bold;
-    padding-top: 10px;
-`;
-
-const Divpo = styled.div`
-    position: relative;
-`;
-
-const Div4 = styled.div`
-    color: #000000;
-`
 
 const Div5 = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     font-size: 18px;
     color: #0D6EFD;
     font-weight: bold;

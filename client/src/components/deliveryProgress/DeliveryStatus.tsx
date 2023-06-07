@@ -6,6 +6,14 @@ import { create } from "zustand";
 import Handler from "../../lib/Handler";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
 import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
+import Lottie from "lottie-react";
+import lodingAni from '../../Lottie/lodingAni.json';
+import styled from "styled-components";
+
+
+const whitePin = require('../../image/whitePin.png');
+const redPin = require('../../image/redPin.png');
+
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
   deadline: string;
@@ -74,9 +82,17 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
 
   return (
     <>
-      <div>픽업예정</div>
-      <br />
-      <div>{deadline}까지</div>
+    <Div0>
+      <Div1>
+      <Pin1 src={whitePin}/>
+      <DivSp>픽업예정</DivSp>
+      </Div1>
+      <Div1>
+      <Pin1 src={redPin}/>
+      <DivSp>{deadline}까지</DivSp>
+      </Div1>
+    </Div0>
+      <Lottie animationData={lodingAni} />
       <br />
       <DeliveryTracker mapHeight="45em" />
       <button
@@ -94,3 +110,25 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
     </>
   );
 }
+
+const Pin1 = styled.img`
+  width: 35px;
+`
+const Div0 = styled.div`
+    display: flex;
+    justify-content: space-between;
+
+`
+const Div1 = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 16px;
+    margin: 0 20px 0 20px;
+`
+const DivSp = styled.div`
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 10px;
+`
