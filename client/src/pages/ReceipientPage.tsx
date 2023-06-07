@@ -43,10 +43,10 @@ export default function ReceipientPage() {
     setOrderNum(cryptoKey);
 
     // 지도 작업을 위해 임시로 값 변경
-    // setIsDelivered(false);
-    if (cryptoKey !== undefined) {
-      getDeadlineText(cryptoKey);
-    }
+    setIsDelivered(false);
+    // if (cryptoKey !== undefined) {
+    //   getDeadlineText(cryptoKey);
+    // }
   }, []);
 
   return (
