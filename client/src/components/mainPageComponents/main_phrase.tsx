@@ -141,6 +141,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           </section>
           <section>
             <div>지갑연결 애니메이션</div>
+            <button onClick={() => window.location.href="nmap://route/public?slat=37.4640070&slng=126.9522394&sname=%EC%84%9C%EC%9A%B8%EB%8C%80%ED%95%99%EA%B5%90&dlat=37.5209436&dlng=127.1230074&dname=%EC%98%AC%EB%A6%BC%ED%94%BD%EA%B3%B5%EC%9B%90&appname=com.example.myapp"}>naver map 이동</button>
             <a
               href="https://dcentwallet.com/MobileApp"
               target="_blank"

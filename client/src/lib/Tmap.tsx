@@ -55,27 +55,81 @@ class Tmap {
     const passList = depPos.X.toString() + "," + depPos.Y.toString();
     const appKey = process.env.REACT_APP_TMAP_API_KEY ?? ""
     // const urlStr = `&startX=${currentPos.X}&startY=${currentPos.Y}&endX=${desPos.X}&endY=${desPos.Y}`
-    const urlStr1 = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0&trafficInfo=Y`
+    const urlStr = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0&trafficInfo=Y`
     const headers = {
       'appKey': appKey
     };
-
-    console.log(urlStr1)
+    // const jsonObject = new Tmapv3.extension.GeoJSON()
     try {
       const response = await fetch(
-        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result&appKey=${appKey}${urlStr1}`,
+        `https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result&appKey=${appKey}${urlStr}`,
         {
           method: "POST",
           headers: headers,
         }
       );
       const result = await response.json();
+      console.log(result)
+      this.drawTrafficData(result)
+      
       return result;
     } catch (e) {
       throw new Error(JSON.stringify(e));
     }
   }
 
+  async drawTrafficData(data: any) {
+    // const jsonObject = new Tmapv3.extension.GeoJSON()
+    // // const jsonForm = jsonObject.rpTrafficRead(data);
+    // // const jsonForm = jsonObject.jsonForm
+    // const jsonForm = data.features
+        const trafficColors = {
+          trafficDefaultColor: "#000000",
+          trafficType1Color: "#009900",
+          trafficType2Color: "#7A8E0A",
+          trafficType3Color: "#8E8111",
+          trafficType4Color: "#FF0000",
+        };
+    // jsonObject.drawRouteByTraffic(this.map, jsonForm, trafficColors);
+    let new_polyLine = []
+    let pointId1 = "-1234567";
+    let newData = [];
+    let ar_line = [];
+    let pointArray = []
+    let equalData = [];
+    console.log(data)
+    for (var i = 0; i < data.features.length; i++) {
+      var feature = data.features[i];
+      //배열에 경로 좌표 저잘
+      if (feature.geometry.type === "LineString") {
+        // ar_line = [];
+        for (let j = 0; j < feature.geometry.coordinates.length; j++) {
+          const startPt = new Tmapv3.LatLng(
+            feature.geometry.coordinates[j][1],
+            feature.geometry.coordinates[j][0]
+          );
+          ar_line.push(startPt);
+          pointArray.push(feature.geometry.coordinates[j]);
+        }
+        const polyline = new Tmapv3.Polyline({
+          path: ar_line,
+          strokeColor: "#ff0000",
+          strokeWeight: 3,
+          map: this.map,
+        });
+        new_polyLine.push(polyline);
+      }
+      var pointId2 = feature.properties.viaPointId;
+      if (pointId1 !== pointId2) {
+        // equalData = [];
+        equalData.push(feature);
+        newData.push(equalData);
+        pointId1 = pointId2;
+      } else {
+        equalData.push(feature);
+      }
+    }
+  }
 
 
   createMarker(lat: number, lon: number, markerNum: number) {

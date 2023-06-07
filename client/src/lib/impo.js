@@ -10,7 +10,7 @@ var new_Click_polyLine = [];
 
 function drawData(data) {
   // 지도위에 선은 다 지우기
-  routeData = data;
+  const routeData = data;
   var resultStr = "";
   var distance = 0;
   var idx = 1;
@@ -196,6 +196,7 @@ $.ajax({
     }
     map.fitBounds(PTbounds);
   },
+
   error: function (request, status, error) {
     console.log(
       "code:" +
