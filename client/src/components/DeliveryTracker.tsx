@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 interface DeliveryTrackerProps {
   //   mapDivId: string;
   mapHeight: string;
+  // drawLine: (() => void);
 }
 
 interface location {
@@ -40,11 +41,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     DepartureLocation: location
   ) => {
     return {
-      destination: tMap.createMarker(
-        DestinationLocation.Y,
-        DestinationLocation.X,
-        2
-      ),
+      destination: tMap.createMarker(DestinationLocation.Y, DestinationLocation.X, 2),
       departure: tMap.createMarker(DepartureLocation.Y, DepartureLocation.X, 1),
     };
   };
@@ -119,11 +116,20 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   }, []);
 
   const test = async () => {
-    const currentPos = {X: coordiX, Y: coordiY}
-    console.log(await tMap.getRouteData(currentPos, departureLocation, destinationLocation))
-  }
+    const currentPos = { X: coordiX, Y: coordiY };
+    console.log(
+      await tMap.getRouteData(
+        currentPos,
+        departureLocation,
+        destinationLocation
+      )
+    );
+  };
 
-  return (<><button onClick={async () => await test()}>test</button>
-  <div id="TMapTracker" /></>)
-  ;
+  return (
+    <>
+      <button onClick={async () => await test()}>test</button>
+      <div id="TMapTracker" />
+    </>
+  );
 }

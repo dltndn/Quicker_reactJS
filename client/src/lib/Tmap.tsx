@@ -1,5 +1,6 @@
 import boxIcon from "../image/boxHigh.png";
-import axios from 'axios';
+import depIcon from "../image/dep-icon-gif-unscreen.gif"
+import desIcon from "../image/des-icon-gif-unscreen.gif"
 // @ts-ignore
 const { Tmapv3 } = window;
 
@@ -20,13 +21,12 @@ class Tmap {
 
   private boxMarkerStyle = ` width: 3em;
     height: 3em;
-    background-image: url(${boxIcon});
     background-size: cover;
     background-position: center;
     `;
 
-  private markerHtml = (markerId: string) => {
-    return `<div id=${markerId} style="${this.boxMarkerStyle}"></div>`;
+  private markerHtml = (markerId: string, icon: string) => {
+    return `<div id=${markerId} style="${this.boxMarkerStyle}background-image: url(${icon});"></div>`;
   };
 
   async getDistance(startPosition: coordination, arrivePosition: coordination) {
@@ -53,13 +53,12 @@ class Tmap {
     desPos: coordination
   ) {
     const passList = depPos.X.toString() + "," + depPos.Y.toString();
-    const appKey = process.env.REACT_APP_TMAP_API_KEY ?? ""
-    // const urlStr = `&startX=${currentPos.X}&startY=${currentPos.Y}&endX=${desPos.X}&endY=${desPos.Y}`
-    const urlStr = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0&trafficInfo=Y`
+    const appKey = process.env.REACT_APP_TMAP_API_KEY ?? "";
+    const getTrraficInfo = "&trafficInfo=N"
+    const urlStr = `&endX=${this.convertPos(desPos.X)}&endY=${this.convertPos(desPos.Y)}&startX=${this.convertPos(currentPos.X)}&startY=${this.convertPos(currentPos.Y)}&passList=${passList}&reqCoordType=WGS84GEO&resCoordType=WGS84GEO&angle=172&searchOption=0${getTrraficInfo}`;
     const headers = {
-      'appKey': appKey
+      appKey: appKey,
     };
-    // const jsonObject = new Tmapv3.extension.GeoJSON()
     try {
       const response = await fetch(
         `https://apis.openapi.sk.com/tmap/routes?version=1&format=json&callback=result&appKey=${appKey}${urlStr}`,
@@ -69,9 +68,8 @@ class Tmap {
         }
       );
       const result = await response.json();
-      console.log(result)
-      this.drawTrafficData(result)
-      
+      this.drawTrafficData(result);
+
       return result;
     } catch (e) {
       throw new Error(JSON.stringify(e));
@@ -83,52 +81,38 @@ class Tmap {
     // // const jsonForm = jsonObject.rpTrafficRead(data);
     // // const jsonForm = jsonObject.jsonForm
     // const jsonForm = data.features
-        const trafficColors = {
-          trafficDefaultColor: "#000000",
-          trafficType1Color: "#009900",
-          trafficType2Color: "#7A8E0A",
-          trafficType3Color: "#8E8111",
-          trafficType4Color: "#FF0000",
-        };
-    // jsonObject.drawRouteByTraffic(this.map, jsonForm, trafficColors);
-    let new_polyLine = []
+    const trafficColors = {
+      trafficDefaultColor: "#000000",
+      trafficType1Color: "#009900",
+      trafficType2Color: "#7A8E0A",
+      trafficType3Color: "#8E8111",
+      trafficType4Color: "#FF0000",
+    };
+    let new_polyLine = [];
     let pointId1 = "-1234567";
     let newData = [];
-    
-    let pointArray = []
+
+    let pointArray = [];
     let equalData = [];
-    console.log(data)
     for (var i = 0; i < data.features.length; i++) {
       var feature = data.features[i];
-      //배열에 경로 좌표 저잘
+      let ar_line = [];
       if (feature.geometry.type === "LineString") {
-        let trraficT0_ar_line: any[] = [];
-        let trraficT1_ar_line: any[] = [];
-        let trraficT2_ar_line: any[] = [];
-        let trraficT3_ar_line: any[] = [];
-        let trraficT4_ar_line: any[] = [];
         for (let j = 0; j < feature.geometry.coordinates.length; j++) {
-          if (feature.geometry.traffic.lenth !== 0) {
-
-          } else {
-
-          }
-          let ar_line = []
           const startPt = new Tmapv3.LatLng(
             feature.geometry.coordinates[j][1],
             feature.geometry.coordinates[j][0]
           );
           ar_line.push(startPt);
           pointArray.push(feature.geometry.coordinates[j]);
-          const polyline = new Tmapv3.Polyline({
-            path: trraficT0_ar_line,
-            strokeColor: "#ff0000",
-            strokeWeight: 3,
-            map: this.map,
-          });
-          new_polyLine.push(polyline);
         }
-       
+        const polyline = new Tmapv3.Polyline({
+          path: ar_line,
+          strokeColor: "#009900",
+          strokeWeight: 3,
+          map: this.map,
+        });
+        new_polyLine.push(polyline);
       }
       var pointId2 = feature.properties.viaPointId;
       if (pointId1 !== pointId2) {
@@ -142,25 +126,30 @@ class Tmap {
     }
   }
 
-
   createMarker(lat: number, lon: number, markerNum: number) {
     switch (markerNum) {
       case 1:
         this.departureMarker = new Tmapv3.Marker({
           position: new Tmapv3.LatLng(lat, lon),
           map: this.map,
+          iconHTML: this.markerHtml("depMarker", depIcon),
+          iconSize: Tmapv3.Size(1, 2),
         });
         break;
       case 2:
         this.destinationMarker = new Tmapv3.Marker({
           position: new Tmapv3.LatLng(lat, lon),
           map: this.map,
+          iconHTML: this.markerHtml("desMarker", desIcon),
+          iconSize: Tmapv3.Size(1, 2),
         });
         break;
       default:
         this.deliveryMarker = new Tmapv3.Marker({
           position: new Tmapv3.LatLng(lat, lon),
           map: this.map,
+          iconHTML: this.markerHtml("deliveryMarker", boxIcon),
+          iconSize: Tmapv3.Size(1, 2),
         });
     }
   }
@@ -168,7 +157,7 @@ class Tmap {
   createMarkerWithAni(lat: number, lon: number, markerId: string) {
     this.deliveryMarker = new Tmapv3.Marker({
       position: new Tmapv3.LatLng(lat, lon),
-      iconHTML: this.markerHtml(markerId),
+      iconHTML: this.markerHtml(markerId, boxIcon),
       iconSize: Tmapv3.Size(1, 2),
       map: this.map,
     });
@@ -253,8 +242,8 @@ class Tmap {
   }
 
   private convertPos = (data: number) => {
-    return (Math.round(data * 1000000)/1000000).toString()
-  }
+    return (Math.round(data * 1000000) / 1000000).toString();
+  };
 }
 
 export default Tmap;

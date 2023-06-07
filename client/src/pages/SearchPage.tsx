@@ -202,7 +202,7 @@ function SearchPage() {
         // @ts-ignore
         const pos = tmap.createLatLng(element.Departure.Y, element.Departure.X);
         // @ts-ignore
-        tmap.createMarker(element.Departure.Y, element.Departure.X);
+        tmap.createMarker(element.Departure.Y, element.Departure.X, 0);
         tmap.panTo(pos)
       });
       changeToData(mockData);
