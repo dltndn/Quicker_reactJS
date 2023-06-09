@@ -27,9 +27,6 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json());
 
-// socket
-chat()
-
 // 개발용 라우터
 app.use("/", Home);
 app.use("/AssociateOrder",AssociateOrder);
@@ -50,4 +47,7 @@ app.use("/order-fail-image", OrderFailImage);
 app.use("/order", Order)
 app.use("/test", realTimeLocation);
 
-app.listen(port, () => console.log(`App is listening on port ${port} !`));
+const server = app.listen(port, () => console.log(`App is listening on port ${port} !`));
+
+// socket
+chat(server)
