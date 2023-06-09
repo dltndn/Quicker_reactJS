@@ -19,6 +19,7 @@ import {
 import { useOrderStore } from "./commission";
 import IncreaseAllowance from "../components/IncreaseAllowance";
 import { useAccount } from "wagmi";
+import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
 export interface OrderObj {
   orderNum: string;
@@ -38,6 +39,13 @@ export interface OrderObj {
   transportation: string[];
   income: string;
   securityDeposit: string;
+  depatureRaw: Coordi;
+  destinationRaw: Coordi;
+}
+
+interface Coordi {
+  X: number;
+  Y:number
 }
 
 interface SearchProps {
@@ -123,6 +131,11 @@ function SearchPage() {
           // @ts-ignore
           let distance = await tmap.getDistance(element.Departure, element.Destination);
 
+          // @ts-ignore
+          let depatureRaw = {X: element.Departure.X, Y: element.Departure.Y}
+          // @ts-ignore
+          let destinationRaw = {X: element.Destination.X, Y: element.Destination.Y}
+
           let obj: OrderObj = {
             // @ts-ignore
             orderNum: element.id,
@@ -158,6 +171,8 @@ function SearchPage() {
             income: income,
             // @ts-ignore
             securityDeposit: securityDeposit,
+            depatureRaw,
+            destinationRaw
           };
           setMockData((mockData) => [...mockData, obj]);
         }

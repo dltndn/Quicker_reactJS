@@ -24,6 +24,7 @@ function Search_Detail() {
   const { userOrderNumStateTrigger, setUserOrderNumStateTrigger} = UseUserOrderState()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
+  console.log(order)
 
   const getClientAddress =async (showOrder: number) => {
     const result = await getOrder(orders[showOrder].orderNum)
@@ -56,6 +57,12 @@ function Search_Detail() {
         setIsDetail(false);
         await setMatchedOrderNum()
         navigator("/")
+        // naver map
+        const depatureRaw = order?.depatureRaw
+        const destinationRaw = order?.destinationRaw
+        // @ts-ignore
+        sdta.openNaverMapApp(depatureRaw.Y, depatureRaw.X, order?.departure, destinationRaw.Y, destinationRaw, order?.destination)
+        // ex) lat : 37.464, lng : 126.9522394
       } catch(e) {
         if (e) {
           //@ts-ignore
@@ -135,8 +142,8 @@ function Search_Detail() {
                 <Div3_2>운송수단</Div3_2>
               </Div3_1>
               <SelectInput name="ex">
-                {order.transportation.map((value) => (
-                    <option>{value}</option>
+                {order.transportation.map((value, index) => (
+                    <option key={index}>{value}</option>
                 ))}
               </SelectInput>
             </Div4_1>
