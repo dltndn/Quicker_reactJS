@@ -2,6 +2,8 @@
 import express, { Application } from "express";
 import chat from "./chat/socket";
 const morgan = require('morgan')
+const https = require("https");
+const fs = require("fs");
 
 // 라우터 처리 미완료
 import OrderController from "./Controllers/OrderController";
@@ -21,6 +23,11 @@ const app: Application = express();
 const port: Number = (process.env.NODE_ENV === "development") ? 9000 : 80;
 const bodyParser = require("body-parser");
 
+const options = {
+  key: fs.readFileSync("./config/cert.key"),
+  cert: fs.readFileSync("./config/cert.crt"),
+};
+  
 require("dotenv").config();
 app.use(morgan('combined'))
 app.use(cors());
@@ -47,7 +54,13 @@ app.use("/order-fail-image", OrderFailImage);
 app.use("/order", Order)
 app.use("/test", realTimeLocation);
 
-const server = app.listen(port, () => console.log(`App is listening on port ${port} !`));
+app.listen(port, () => console.log(`App is listening on port ${port} !`));
+
+
+
+const server = https.createServer(options, app).listen(8080, () => {
+  console.log(`HTTPS server started on port 8080`);
+});
 
 // socket
 chat(server)
