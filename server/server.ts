@@ -25,10 +25,10 @@ const HTTP_PORT = (process.env.NODE_ENV === "development") ? process.env.HTTP_LO
 const HTTPS_PORT = (process.env.NODE_ENV === "development") ? process.env.HTTPS_LOCAL_SERVER_PORT : process.env.HTTPS_AWS_SERVER_PORT;
 const bodyParser = require("body-parser");
 
-const options = {
-  key: fs.readFileSync("./config/cert.key"),
-  cert: fs.readFileSync("./config/cert.crt"),
-};
+// const options = {
+//   key: fs.readFileSync("./config/cert.key"),
+//   cert: fs.readFileSync("./config/cert.crt"),
+// };
   
 require("dotenv").config();
 app.use(morgan('combined'))
@@ -57,10 +57,10 @@ app.use("/order-fail-image", OrderFailImage);
 app.use("/order", Order)
 app.use("/test", realTimeLocation);
 
-app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
+const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 
-const server = https.createServer(options, app).listen(HTTPS_PORT, () => {
-  console.log(`HTTPS server started on port ${HTTPS_PORT}`);
-});
+// const server = https.createServer(options, app).listen(HTTPS_PORT, () => {
+//   console.log(`HTTPS server started on port ${HTTPS_PORT}`);
+// });
 // socket
 chat(server)
