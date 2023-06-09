@@ -62,9 +62,10 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
       }
     } catch (error) {
       console.error(error)
-      alert("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+      console.log("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
     }
-    
+    // setCoordiX(127.12);
+    // setCoordiY(37.33);
   };
 
   useEffect(() => {

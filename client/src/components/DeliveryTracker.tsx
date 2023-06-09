@@ -41,14 +41,13 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     DepartureLocation: location
   ) => {
     return {
-      destination: tMap.createMarker(DestinationLocation.Y, DestinationLocation.X, 2),
+      destination: tMap.createMarker(
+        DestinationLocation.Y,
+        DestinationLocation.X,
+        2
+      ),
       departure: tMap.createMarker(DepartureLocation.Y, DepartureLocation.X, 1),
     };
-  };
-
-  const addEvnetToMarker = (markers: any) => {
-    // markers.departure.on('click', () => window.open(`https://apis.openapi.sk.com/tmap/app/routes?appKey=${process.env.REACT_APP_TMAP_API_KEY}&lon=${markers.departure._marker_data.vsmMarker._lngLat[0]}&lat=${markers.departure._marker_data.vsmMarker._lngLat[1]}`))
-    // markers.destination.on('click', () => window.open(`https://apis.openapi.sk.com/tmap/app/routes?appKey=${process.env.REACT_APP_TMAP_API_KEY}&lon=${markers.destination._marker_data.vsmMarker._lngLat[0]}&lat=${markers.destination._marker_data.vsmMarker._lngLat[1]}`))
   };
 
   const zoomOutMap = (
@@ -80,7 +79,6 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
           destinationLocation,
           departureLocation
         );
-        addEvnetToMarker(markers);
         zoomOutMap(destinationLocation, departureLocation);
       }
     }
@@ -115,20 +113,35 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     setTmap(new Tmap("TMapTracker", mapHeight));
   }, []);
 
-  const test = async () => {
-    const currentPos = { X: coordiX, Y: coordiY };
-    console.log(
-      await tMap.getRouteData(
-        currentPos,
-        departureLocation,
-        destinationLocation
-      )
-    );
+  const checkRoute = async () => {
+    if (hasMarker) {
+      const currentPos = { X: coordiX, Y: coordiY };
+      console.log(
+        await tMap.getRouteData(
+          currentPos,
+          departureLocation,
+          destinationLocation
+        )
+      );
+    } else {
+      alert("배송원의 위치를 확인해주세요")
+    }
   };
 
   return (
     <>
-      <button onClick={async () => await test()}>test</button>
+      <button
+        onClick={async () => await checkRoute()}
+        style={{
+          position: "absolute",
+          top: "52em",
+          left: "10%",
+          transform: "translateX(-50%)",
+          zIndex: 5,
+        }}
+      >
+        예상 경로 확인
+      </button>
       <div id="TMapTracker" />
     </>
   );
