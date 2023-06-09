@@ -1,9 +1,10 @@
 // 필요한 모듈 import
 import express, { Application } from "express";
 import chat from "./chat/socket";
-const morgan = require('morgan')
-const https = require("https");
-const fs = require("fs");
+import compression from "compression";
+import morgan from "morgan"
+import https from "https"
+import fs from "fs"
 
 // 라우터 처리 미완료
 import OrderController from "./Controllers/OrderController";
@@ -20,7 +21,8 @@ import realTimeLocation from "./routes/realTimeLocation"
 // 설정
 const cors = require("cors");
 const app: Application = express();
-const port: Number = (process.env.NODE_ENV === "development") ? 9000 : 80;
+const HTTP_PORT = (process.env.NODE_ENV === "development") ? process.env.HTTP_LOCAL_SERVER_PORT : process.env.HTTP_AWS_SERVER_PORT;
+const HTTPS_PORT = (process.env.NODE_ENV === "development") ? process.env.HTTPS_LOCAL_SERVER_PORT : process.env.HTTPS_AWS_SERVER_PORT;
 const bodyParser = require("body-parser");
 
 const options = {
@@ -30,6 +32,7 @@ const options = {
   
 require("dotenv").config();
 app.use(morgan('combined'))
+app.use(compression())
 app.use(cors());
 app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json());
@@ -54,13 +57,10 @@ app.use("/order-fail-image", OrderFailImage);
 app.use("/order", Order)
 app.use("/test", realTimeLocation);
 
-app.listen(port, () => console.log(`App is listening on port ${port} !`));
+app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 
-
-
-const server = https.createServer(options, app).listen(8080, () => {
-  console.log(`HTTPS server started on port 8080`);
+const server = https.createServer(options, app).listen(HTTPS_PORT, () => {
+  console.log(`HTTPS server started on port ${HTTPS_PORT}`);
 });
-
 // socket
 chat(server)
