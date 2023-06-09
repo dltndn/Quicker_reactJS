@@ -1,6 +1,7 @@
 // 필요한 모듈 import
 import express, { Application } from "express";
 import chat from "./chat/socket";
+const morgan = require('morgan')
 
 // 라우터 처리 미완료
 import OrderController from "./Controllers/OrderController";
@@ -21,6 +22,7 @@ const port: Number = (process.env.NODE_ENV === "development") ? 9000 : 80;
 const bodyParser = require("body-parser");
 
 require("dotenv").config();
+app.use(morgan('combined'))
 app.use(cors());
 app.use(express.urlencoded({extended: true}))
 app.use(bodyParser.json());
