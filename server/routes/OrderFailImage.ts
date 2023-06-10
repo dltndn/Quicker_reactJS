@@ -19,7 +19,7 @@ router
         const conn = await connectMongo("orderFail");
         const uploadImage = conn.model(orderId, ImageFileSchema);
         const data = await uploadImage.find({});
-        conn.close();
+        conn.destroy();
         res.send({ imageBuffer: data[0].image, reason : data[0].reason});
       }
     } catch (error) {
@@ -43,7 +43,7 @@ router
         });
         
         await image.save();
-        conn.close();
+        conn.destroy();
         res.send({ msg: "done" });
       } catch (error) {
         console.log(error);
