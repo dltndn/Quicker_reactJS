@@ -46,26 +46,26 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
   }
 
   const refreshQuickerLocation = async () => {
-    try {
-      if (orderData !== undefined && orderData.quicker !== undefined ) {
-        // 값을 불러오는 fetch
-        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+    // try {
+    //   if (orderData !== undefined && orderData.quicker !== undefined ) {
+    //     // 값을 불러오는 fetch
+    //     const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
         
-        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
-        const json = await response.json()
-        console.log(json)
-        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    //     const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+    //     const json = await response.json()
+    //     console.log(json)
+    //     if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
         
-        // 해당 X,Y좌표를 수정
-        setCoordiX(json.data.Y);
-        setCoordiY(json.data.X);
-      }
-    } catch (error) {
-      console.error(error)
-      console.log("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
-    }
-    // setCoordiX(127.12);
-    // setCoordiY(37.33);
+    //     // 해당 X,Y좌표를 수정
+    //     setCoordiX(json.data.Y);
+    //     setCoordiY(json.data.X);
+    //   }
+    // } catch (error) {
+    //   console.error(error)
+    //   console.log("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    // }
+    setCoordiX(127.12);
+    setCoordiY(37.33);
   };
 
   useEffect(() => {

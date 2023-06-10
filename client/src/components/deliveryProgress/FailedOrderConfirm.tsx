@@ -45,7 +45,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
     //   hashCode = createHmac('sha256', secret).update(orderNum).digest('hex');
     // }
 
-    // 배송완료 사진 불러오기
+    // 배송시ㄹ패 사진 불러오기
     const response = await fetch(process.env.REACT_APP_SERVER_URL + `order-fail-image/?orderNum=${orderNum}`)
     const json = await response.json();
     const bufferImage = json.imageBuffer.data
@@ -69,7 +69,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
           <img src={base64String} alt="uploaded photo" />
         </div>
         <div>
-        {reason}
+        {reason}실패 사유
         </div>
         <ConfirmBtn
             isDisabled={false}

@@ -135,12 +135,12 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
         style={{
           position: "absolute",
           top: "52em",
-          left: "10%",
+          left: "85%",
           transform: "translateX(-50%)",
           zIndex: 5,
         }}
       >
-        예상 경로 확인
+        예상 경로
       </button>
       <div id="TMapTracker" />
     </>
