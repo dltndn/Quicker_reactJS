@@ -19,6 +19,7 @@ router
       if (typeof orderId === "string") {
         const imageModel = conn.model(orderId, ImageFileSchema);
         const images = await imageModel.find();
+        conn.close();
         res.send({imageBuffer : images[0].image})
       }
     } catch (error) {
@@ -44,6 +45,7 @@ router
       image : bufferImage
     });
     await image.save();
+    conn.close();
     res.send({msg : "done"})
   } catch (error) {
     console.log(error)

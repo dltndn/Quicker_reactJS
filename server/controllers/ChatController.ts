@@ -11,6 +11,7 @@ export default {
       const conn = await connectMongo("chat");
       const Message = conn.model(String(orderNum), MessageModel);
       const recentMessage = await Message.findOne().sort({ $natural: -1 });
+      conn.close();
       res.send(recentMessage);
     } catch (error) {
       console.error(error);

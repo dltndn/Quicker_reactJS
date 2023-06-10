@@ -9,6 +9,7 @@ async function findMessage(roomName: string) {
     const conn = await connectMongo("chat");
     const Message = conn.model((String)(roomName), MessageSchema);
     const messages = await Message.find();
+    conn.close();
     return messages
   } catch (error) {
     console.error(error);

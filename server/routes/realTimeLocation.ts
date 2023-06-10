@@ -13,6 +13,7 @@ router
         const conn = await connectMongo("realTimeLocation");
         const realLocationModel = conn.model(address, RealLocationSchema);
         const data = await realLocationModel.findOne({}).sort({ $natural: -1 });
+        conn.close();
         res.send({data : data})
       }
     } catch (error) {
@@ -33,7 +34,7 @@ router
         Y: tempY,
       });
       await realLocationModel.save();
-
+      conn.close();
       res.send({ msg: "done" });
     } catch (error) {
       console.log(error);
