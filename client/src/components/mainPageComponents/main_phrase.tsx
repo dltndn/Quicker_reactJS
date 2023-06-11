@@ -128,8 +128,12 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
               <button onClick={() => navigate("/explorer")}>
                 실시간 거래현황 보러가기
               </button>
+              <button onClick={() => navigate("/execution/205")}>
+                    임시배송페이지이동버튼
+                  </button>
               <button onClick={() => testFunc()}>임시 배송시작 알림 전송 버튼</button>
               <button onClick={() => sdta.openNaverMapApp(37.4640070, 126.9522394, "rkskek", 37.5209436, 127.1230074, "sdflkjiov")}>네이버지도</button>
+              <button onClick={() => navigate("/testQR")}>QR테스트 이동 버튼</button>
               <Sp0>
                 안녕하세요!
                 <br />

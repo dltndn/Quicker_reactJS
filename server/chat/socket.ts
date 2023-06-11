@@ -1,15 +1,20 @@
-import io from "./Config/SocketConnector";
-import socketHandler from "./Controller/Handler";
+const SocketIo = require("socket.io")
 import saveMessage from "../Mongo/Command/SaveMessage";
 import findMessage from "../Mongo/Command/FindMessages";
 
-const main = () => {
+const main = (server : any) => {
+  const io = SocketIo(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  })
   try {
     // 임의의 채팅방 이름
     let roomName = "";
     // 이벤트 설정
     io.on("connect", (socket: any) => {
-      socketHandler.printRoomInfo();
       // 이벤트 관리
       socket.on("joinRoom", async (receiveRoomName: receiveRoomName) => {
         roomName = receiveRoomName.roomName
@@ -30,7 +35,6 @@ const main = () => {
         saveMessage({id : receiveMessage.sender , roomName : roomName, receiveMessage : receiveMessage.data});
         done();
       },);
-      socket.on("disconnect", () => socketHandler.disconnect(socket));
     });
   } catch (error) {
     console.error(error);
