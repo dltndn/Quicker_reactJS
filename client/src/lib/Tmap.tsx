@@ -108,9 +108,10 @@ class Tmap {
         }
         const polyline = new Tmapv3.Polyline({
           path: ar_line,
-          strokeColor: "#009900",
-          strokeWeight: 3,
+          strokeColor: "#7ad17a",
+          strokeWeight: 5,
           map: this.map,
+          direction: true,
         });
         new_polyLine.push(polyline);
       }

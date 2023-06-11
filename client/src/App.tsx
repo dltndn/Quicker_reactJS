@@ -210,6 +210,7 @@ function App() {
         projectId={projectId ?? ""}
         ethereumClient={ethereumClient}
         themeBackground={theme.themeBackground}
+        // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
       />
     </>
   );
