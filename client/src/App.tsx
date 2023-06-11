@@ -27,6 +27,7 @@ import Profile_noticePage from "./pages/Profile_noticePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
+import QR from "./pages/QR"
 import { create } from 'zustand'
 
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
@@ -201,6 +202,7 @@ function App() {
             <Route path="/explorer" element={<ExplorerPage />} />
             <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
+            <Route path="/testQR" element={<QR />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
