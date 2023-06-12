@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
     alert(JSON.stringify(decodedResult))
+    console.log(decodedText, decodedResult)
 };
 const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
     /* handle success */
@@ -39,34 +40,11 @@ export default function QR() {
     }
 
     useEffect(() => {
-        if (html5QrCode !== null) {
-            
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-    
-            // If you want to prefer back camera
-            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, qrCodeErrorCallback);
-        }
-        
+        start()
     }, [html5QrCode])
 
     useEffect(() => {
-        Html5Qrcode.getCameras().then(devices => {
-            /**
-             * devices would be an array of objects of type:
-             * { id: "id", label: "label" }
-             */
-            if (devices && devices.length) {
-                var cameraId = devices[0].id;
-                // .. use this to start scanning.
-                console.log(cameraId)
-
-                setHtml5QrCode(new Html5Qrcode("reader"))
-
-            }
-        }).catch(err => {
-            // handle err
-        });
-
+        setHtml5QrCode(new Html5Qrcode("reader"))
     }, [])
 
     return (
