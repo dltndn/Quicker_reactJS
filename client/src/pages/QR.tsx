@@ -5,6 +5,13 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useState } from "react";
 
+const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
+    alert(JSON.stringify(decodedResult))
+};
+const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
+    /* handle success */
+};
+
 export default function QR() {
 
     const [scanResult, setScanResult] = useState(null)
@@ -21,15 +28,19 @@ export default function QR() {
             })
         }
     }
+    const start = () => {
+        if (html5QrCode !== null) {
+            
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    
+            // If you want to prefer back camera
+            html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, qrCodeErrorCallback);
+        }
+    }
 
     useEffect(() => {
         if (html5QrCode !== null) {
-            const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
-                alert(JSON.stringify(decodedResult))
-            };
-            const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
-                /* handle success */
-            };
+            
             const config = { fps: 10, qrbox: { width: 250, height: 250 } };
     
             // If you want to prefer back camera
@@ -65,6 +76,8 @@ export default function QR() {
                 : <div id="reader"></div>
             }
             <button onClick={onclick}>stop</button>
+            
+            <button onClick={start}>start</button>
         </>
     )
 }
