@@ -59,7 +59,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-https": "sudo PORT=443 HTTPS=true npm start"
   },
   "eslintConfig": {
     "extends": [
