@@ -5,17 +5,18 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = require("twilio")(accountSid, authToken);
 
-const userNumber = "상대방 번호";
-(async () => {
+const sendURLToReceiver = async (editedPhoneNumber : String, url : String) => {
   try {
     const message = await client.messages.create({
-      body: "testMessage",
+      body: url,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: "+82" + userNumber,
+      to: "+82" + editedPhoneNumber,
     });
     console.log(message);
   } catch (error) {
     // You can implement your fallback code here
     console.error(error);
   }
-})();
+}
+
+export default sendURLToReceiver;
