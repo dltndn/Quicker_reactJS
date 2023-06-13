@@ -34,6 +34,7 @@ import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
 import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
+import QRCode from "./pages/QRCode";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -203,6 +204,7 @@ function App() {
             <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
             <Route path="/testQR" element={<QR />}/>
+            <Route path="/testQR2" element={<QRCode />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
