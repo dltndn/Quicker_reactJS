@@ -5,18 +5,17 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useState } from "react";
 
-const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
-    alert(JSON.stringify(decodedResult))
-    console.log(decodedText, decodedResult)
-};
-const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
-    /* handle success */
-};
-
 export default function QR() {
-
     const [scanResult, setScanResult] = useState(null)
     const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
+
+    const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
+        alert(JSON.stringify(decodedResult))
+        console.log(decodedText, decodedResult)
+    };
+    const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
+        /* handle success */
+    };
 
     const onclick = () => {
         if (html5QrCode !== null) {
