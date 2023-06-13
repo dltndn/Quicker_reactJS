@@ -9,11 +9,17 @@ export default function QR() {
     const { isFace, hasScanResult, setHasScanResult } = useDeliveredComponent()
 
     const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
-        // scan 통과
+        // scan 통과 여부
+        if (true) {
+            // scan 통과
         setHasScanResult(true)
         alert(JSON.stringify(decodedResult))
         console.log(decodedText, decodedResult)
         stopScanner()
+        } else {
+            alert("잘못된 QR코드 입니다.")
+        }
+        
     };
     const qrCodeErrorCallback = (decodedText: any, decodedResult: any) => {
         /* handle success */

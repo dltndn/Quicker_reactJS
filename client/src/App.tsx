@@ -203,7 +203,7 @@ function App() {
             <Route path="/explorer" element={<ExplorerPage />} />
             <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
-            {/* <Route path="/testQR" element={<QR />}/> */}
+            <Route path="/testQR" element={<QR />}/>
             <Route path="/testQR2" element={<QRCode />}/>
           </Routes>
         </BrowserRouter>
