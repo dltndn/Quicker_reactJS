@@ -68,10 +68,10 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
               }
               // 배송원 사진 업로드 로직 작성
               await postImage()
+              setShowComponent(<WaitClientConfirm />)
           } catch(e) {
               console.log(e)
           }
-          setShowComponent(<WaitClientConfirm />)
       }
   }
 
@@ -84,13 +84,13 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
               <img src={URL.createObjectURL(file)} alt="uploaded photo"  width="100%" />
             </div>
           ) : <Sp0>위탁장소에 배송된 사진을 촬영해주세요.</Sp0>}
-          <BottomConfirmBtn
+        </Div0>
+        <BottomConfirmBtn
                 content="확인"
                 confirmLogic={ () => {
                     deliveredRogic();
                 }} isDisabled={false}
             />
-        </Div0>
       </>
     )
 }

@@ -6,6 +6,9 @@ import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockc
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
+import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
+import { useAccount } from "wagmi";
+import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -54,7 +57,27 @@ const Camera = () => {
 
 export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState()
+  const { address } = useAccount()
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    const deliveredRogic = async () => {
+      if (orderNum !== undefined) {
+          const wttb = new WriteTransactionToBlockchain(orderNum)
+          const sdta = new SendDataToAndroid(address)
+          try {
+              const result = await wttb.deliveredOrder()
+              console.log(result)
+              // 배송원 수행 중인 오더 확인 후 false값 전송
+              if (!(await checkIsDelivering(address))) {
+                  sdta.sendIsDelivering(false)
+              }
+              // 배송원 QR코드 스캔 로직
+              setShowComponent(<WaitClientConfirm />)
+          } catch(e) {
+              console.log(e)
+          }
+      }
+  }
     
   return (
     <>
@@ -65,6 +88,12 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
         <Camera />
+        <BottomConfirmBtn
+                content="확인"
+                confirmLogic={ () => {
+                    deliveredRogic();
+                }} isDisabled={false}
+            />
     </>
   );
 };

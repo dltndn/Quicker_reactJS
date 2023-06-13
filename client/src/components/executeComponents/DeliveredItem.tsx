@@ -5,11 +5,6 @@ import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
-import WaitClientConfirm from "./WaitClientConfirm";
-import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { useAccount } from "wagmi";
-import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 
 const Div0 = styled.div`
     display: flex;
@@ -41,28 +36,6 @@ text-align: center;
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle } = useExecutionState()
     const [isFace, setIsFace] = useState<boolean>(true)
-
-    const deliveredRogic = async () => {
-        // if (orderNum !== undefined) {
-        //     const wttb = new WriteTransactionToBlockchain(orderNum)
-        //     const sdta = new SendDataToAndroid(address)
-        //     try {
-        //         const result = await wttb.deliveredOrder()
-        //         console.log(result)
-        //         // 배송원 수행 중인 오더 확인 후 false값 전송
-        //         if (!(await checkIsDelivering(address))) {
-        //             sdta.sendIsDelivering(false)
-        //         }
-        //         // 배송원 사진 업로드 로직 작성
-        //         if (isFace === false) {
-        //             await postImage()
-        //         }
-        //     } catch(e) {
-        //         console.log(e)
-        //     }
-        //     setShowComponent(<WaitClientConfirm />)
-        // }
-    }
     
     useEffect(() => {
         setTitle("물품전달")
