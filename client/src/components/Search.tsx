@@ -31,8 +31,8 @@ function Search({ clickOrder }: Props) {
 
   return (
     <>
-      <Se0>
-        <Hr0 onClick={() => setIsOpen(!isOpen)} />
+      <Se0 onClick={() => setIsOpen(!isOpen)} >
+        <Hr0/>
         <AccordionWrapper isOpen={isOpen} ref={accordionRef}>
           <Div0>
             <Div0_1>전체</Div0_1>

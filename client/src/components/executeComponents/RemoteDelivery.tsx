@@ -1,6 +1,7 @@
 import React, { useState, useEffect, ChangeEvent, useRef  } from "react";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
+import { BsPlusCircle } from "react-icons/bs";
 
 const Div0 = styled.div`
     display: flex;
@@ -39,8 +40,28 @@ export default function RemoteDelivery({ state, setState, orderNum }: RemoteDeli
             <div>
               <img src={URL.createObjectURL(state)} alt="uploaded photo"  width="100%" />
             </div>
-          ) : <Sp0>위탁장소에 배송된 사진을 촬영해주세요.</Sp0>}
+          ) : <Div5>                <Span01>
+          <BsPlusCircle/><br/><br/>
+            사진을 업로드해주세요.
+          </Span01></Div5>}
         </Div0>
       </>
     )
 }
+
+const Div5 = styled.div`
+    display: flex;
+    height: 500px;
+    justify-content: center;
+    padding-top: 200px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+`;
+
+const Span01 = styled.div`
+  margin: 20px 0 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #828282;
+`;

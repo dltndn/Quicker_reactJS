@@ -9,7 +9,7 @@ import { useExecutionState } from "../../pages/ExecutionPage";
 
 const CameraContainer = styled.div`
   width: 95%;
-  height: 500px;
+  height: 600px;
   background-color: #ffffff;
   border-radius: 10px;
   margin-bottom: 10px;

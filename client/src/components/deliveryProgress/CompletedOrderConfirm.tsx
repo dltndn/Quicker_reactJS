@@ -84,7 +84,7 @@ const Div3 = styled.div`
 
 const Div2 = styled.div`
     display: flex;
-    height: 400px;
+    height: 600px;
     width: 95%;
     justify-content: center;
     align-items: center;
@@ -113,7 +113,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Span01 = styled.div`
-  margin-top: 20px;
   font-size: 20px;
   font-weight: bold;
   color: #828282;
