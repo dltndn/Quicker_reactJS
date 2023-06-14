@@ -10,7 +10,8 @@ import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import SelectUser from "../Maria/Commands/SelectUser";
 import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
-
+import sendMessage from "../sendMessage"
+import { encrypt, decrypt } from "../lib/cryto";
 
 initModels(sequelize);
 
@@ -77,6 +78,26 @@ export default {
       let requesterId = await SelectUser.getRequesterId(orderId);
       // @ts-ignore
       await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
+      
+      const receiver = await SelectOrder.receiverPhoneNumber(orderId)
+    
+      if ((typeof receiver === "object") && (receiver !== null && "PHONE" in receiver && typeof receiver.PHONE === "string")) {
+        // 기본 url
+        let url = process.env.CLIENT_SERVER_DOMAIN
+        // url 수정 
+        if (typeof url === "string") {
+          const encryptedUrl = encrypt(JSON.stringify(req.body))
+          url = url + encryptedUrl
+          
+          // 문자 발송
+          await sendMessage(receiver.PHONE, url)  
+        } else {
+          throw new Error ("CLIENT_SERVER_DOMAIN 이 정상적인 값이 아님")
+        }
+      } else {
+        throw new Error ("전송 받은 데이터에 문제가 있음")
+      }
+      
       return res.send({msg : "done"})
     } catch (error){
       console.log(error)
