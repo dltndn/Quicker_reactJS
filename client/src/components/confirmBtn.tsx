@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
 
 interface Props {
-    content: string;
-    confirmLogic: ()=> void;
-    isDisabled: boolean;
-  }
-  
-  const Button = styled.button`
+  content: string;
+  confirmLogic: () => void;
+  isDisabled: boolean;
+}
+
+const Button = styled.button`
   position: fixed;
   bottom: 3.875rem;
   width: 98%;
@@ -20,7 +20,8 @@ interface Props {
   margin-bottom: 0.313rem;
   transition: all 0.2s ease-in-out;
   &:active {
-    transform: translateY(0.25rem);
+    transform: scale(0.95);
+    background-color: #004488;
   }
 `;
 
@@ -30,13 +31,13 @@ const Container = styled.section`
   justify-content: center;
 `;
 
-function ConfirmBtn({ content, confirmLogic, isDisabled  }: Props){
+function ConfirmBtn({ content, confirmLogic, isDisabled  }: Props) {
 
-    return(
-        <Container>
-                <Button disabled={isDisabled} onClick={() => confirmLogic()}>{content}</Button>
-        </Container>
-    );
+  return (
+    <Container>
+      <Button disabled={isDisabled} onClick={() => confirmLogic()}>{content}</Button>
+    </Container>
+  );
 }
 
 

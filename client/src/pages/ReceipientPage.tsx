@@ -53,10 +53,9 @@ export default function ReceipientPage() {
 
   return (
     <>
-    <button onClick={() => setIsDelivered(true)}>임시 확인페이지 이동버튼</button>
     <Div0>
             <Div1>
-            <Btwal onClick={() => setIsLive(true)} autoFocus>물품위치현황</Btwal> 
+            <Btwal onClick={() => setIsLive(true)} autoFocus>물품위치</Btwal> 
             </Div1>
             <Div1>
             <Btwal onClick={() => setIsLive(false)}>물품전달</Btwal>

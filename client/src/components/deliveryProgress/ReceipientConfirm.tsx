@@ -45,7 +45,6 @@ export default function ReceipientConfirm({ orderNum }: ReceipientConfirmProp) {
 
   return (
     <>
-      <h1>물품전달</h1>
       {!hasImg ? (
         <>
           <div>QR코드</div>
