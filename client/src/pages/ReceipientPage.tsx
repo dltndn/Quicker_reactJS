@@ -11,8 +11,17 @@ import {
 import { decrypt } from "../lib/cryto";
 import { queryStringParser } from "../lib/parseQueryString";
 import { useAccount } from "wagmi";
+import { create } from "zustand";
 
+export interface isLive {
+  isLive : boolean,
+  setIsLive : Function
+}
 
+export const useLiveState = create<isLive>((set) => ({
+  isLive : true,
+  setIsLive : (isLive: boolean) => set({isLive}),
+}));
 
 export default function ReceipientPage() {
   const queryString = useLocation();

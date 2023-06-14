@@ -19,12 +19,11 @@ export default function QR() {
 
         if (true && orderNumber !== undefined) {
             // scan 통과
-            setHasScanResult(true)
             console.log(decodedText, decodedResult)
             const validationInfos = JSON.parse(decodedText)
             if (validationInfos.validationInfo === address && validationInfos.orderNum === parseInt(orderNumber)) {
                 // 성공
-                
+                setHasScanResult(true)
             }
             stopScanner()
         } else if (orderNumber !== undefined) {

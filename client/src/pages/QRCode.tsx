@@ -1,4 +1,7 @@
 import { useEffect } from "react"
+import { useAccount } from "wagmi"
+import { useLiveState } from "./ReceipientPage";
+import { redirect, useNavigate } from "react-router-dom";
 
 const QRcode = require('qrcode')
 
@@ -23,9 +26,18 @@ export interface validationInfos {
 
 export default function QRCode(props : QRCode ) {
     const {validationInfos} = props
+    const {address} = useAccount();
+    const navigate = useNavigate();
     useEffect(() => {
-        generateQRCode(JSON.stringify(validationInfos))
-        console.log(JSON.stringify(validationInfos))
+        console.log(validationInfos.validationInfo, address)
+        if (validationInfos.validationInfo === address) {
+            alert("비정상적 접근입니다.")
+            navigate('/')
+        } else {
+            const QRInfo = JSON.stringify(validationInfos)
+            generateQRCode(QRInfo)
+            console.log(QRInfo)
+        }
     }, [])
 
     return (
