@@ -117,7 +117,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
             </Div1>
               <Sc3>
                 <Divmain>
-                  메인
+                  회원 가입은 처음 한 번만 진행합니다!
                   <DelPo>
                     <Lottie animationData={mainDelivery}/>
                   </DelPo>
@@ -181,7 +181,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
             </Div1>
               <Sc3>
                 <Divmain>
-                  메인
+                서비스 이용을 위해 지갑 연결은 필수입니다!
                   <DelPo>
                     <Lottie animationData={mainDelivery}/>
                   </DelPo>

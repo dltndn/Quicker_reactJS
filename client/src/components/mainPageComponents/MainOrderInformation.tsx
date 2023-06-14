@@ -197,7 +197,7 @@ export default function MainOrderInformation() {
                 </Div1>
                 <Sc3>
                 <Divmain>
-                  메인
+                  조금만 기다려 주세요!
                   <DelPo>
                     <Lottie animationData={mainDelivery}/>
                   </DelPo>
