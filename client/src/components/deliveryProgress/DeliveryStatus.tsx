@@ -9,10 +9,11 @@ import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
 import Lottie from "lottie-react";
 import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
+import { GrAddCircle } from "react-icons/gr";
+import finduser from "../../Lottie/81378-find-user-location.json";
 
-
-const whitePin = require('../../image/whitePin.png');
-const redPin = require('../../image/redPin.png');
+const whitePin = require('../../image/dep-icon-gif-unscreen.gif');
+const redPin = require('../../image/des-icon-gif-unscreen.gif');
 
 
 interface DeliveryStatusProps extends ExecutionComponentProps {
@@ -46,25 +47,26 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
   }
 
   const refreshQuickerLocation = async () => {
-    try {
-      if (orderData !== undefined && orderData.quicker !== undefined ) {
-        // 값을 불러오는 fetch
-        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+    // try {
+    //   if (orderData !== undefined && orderData.quicker !== undefined ) {
+    //     // 값을 불러오는 fetch
+    //     const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
         
-        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
-        const json = await response.json()
-        console.log(json)
-        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    //     const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+    //     const json = await response.json()
+    //     console.log(json)
+    //     if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
         
-        // 해당 X,Y좌표를 수정
-        setCoordiX(json.data.Y);
-        setCoordiY(json.data.X);
-      }
-    } catch (error) {
-      console.error(error)
-      alert("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
-    }
-    
+    //     // 해당 X,Y좌표를 수정
+    //     setCoordiX(json.data.Y);
+    //     setCoordiY(json.data.X);
+    //   }
+    // } catch (error) {
+    //   console.error(error)
+    //   console.log("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+    // }
+    setCoordiX(127.12);
+    setCoordiY(37.33);
   };
 
   useEffect(() => {
@@ -93,23 +95,20 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
       </Div1>
     </Div0>
       <Lottie animationData={lodingAni} />
-      <br />
       <DeliveryTracker mapHeight="45em"/>
-      <button
-        onClick={async () => {refreshQuickerLocation()}}
-        style={{
-          position: "absolute",
-          top: "52em",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 5,
-        }}
-      >
-        현재 위치 확인하기
-      </button>
+      <Posst onClick={async () => {refreshQuickerLocation()}}>
+      <Lottie animationData={finduser} />
+      </Posst>
     </>
   );
 }
+
+const Posst = styled.div`
+  font-size: 30px;
+  position: fixed;
+  bottom: 5%;
+  left: 82%;
+`
 
 const Pin1 = styled.img`
   width: 35px;

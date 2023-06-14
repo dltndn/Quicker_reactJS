@@ -5,11 +5,8 @@ import FaceToFaceDelivery from "./FaceToFaceDelivery";
 import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
-import WaitClientConfirm from "./WaitClientConfirm";
-import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { useAccount } from "wagmi";
-import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
+import { create } from "zustand";
+import { Html5Qrcode } from "html5-qrcode";
 
 const Div0 = styled.div`
     display: flex;
@@ -37,53 +34,24 @@ text-align: center;
 
 `;
 
+interface DeliveredComponent {
+    isFace: boolean;
+    setIsFace: (newData: boolean) => void;
+    hasScanResult: boolean;
+    setHasScanResult: (newData: boolean) => void;
+}
+
+export const useDeliveredComponent = create<DeliveredComponent>((set) => ({
+    isFace: false,
+    setIsFace: (isFace: boolean) => set({ isFace }),
+    hasScanResult: false,
+    setHasScanResult: (hasScanResult: boolean) => set({ hasScanResult })
+}))
+
 
 export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
-    const { setTitle, setShowComponent } = useExecutionState()
-    const [isFace, setIsFace] = useState<boolean>(true)
-    const [file, setFile] = useState<File | null | undefined>(undefined);
-    const { address } = useAccount()
-
-    const postImage = async () => {
-        const formData = new FormData();
-
-        if (file !== null && file !== undefined && orderNum !== undefined) {
-            formData.append('uploadImage', file);
-            formData.append('orderNum', orderNum);
-            const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-complete-image", {
-                method: 'POST',
-                body: formData,
-            })
-            const message = await response.json()
-            if (message.msg === "done") {
-                alert("전송완료")
-            }
-        } else {
-            alert("사진이 없습니다.")
-        }
-    }  
-
-    const deliveredRogic = async () => {
-        if (orderNum !== undefined) {
-            const wttb = new WriteTransactionToBlockchain(orderNum)
-            const sdta = new SendDataToAndroid(address)
-            try {
-                const result = await wttb.deliveredOrder()
-                console.log(result)
-                // 배송원 수행 중인 오더 확인 후 false값 전송
-                if (!(await checkIsDelivering(address))) {
-                    sdta.sendIsDelivering(false)
-                }
-                // 배송원 사진 업로드 로직 작성
-                if (isFace === false) {
-                    await postImage()
-                }
-            } catch(e) {
-                console.log(e)
-            }
-            setShowComponent(<WaitClientConfirm />)
-        }
-    }
+    const { setTitle } = useExecutionState()
+    const { isFace, setIsFace } = useDeliveredComponent()
     
     useEffect(() => {
         setTitle("물품전달")
@@ -93,19 +61,13 @@ export default function DeliveredItem({ orderNum }: ExecutionComponentProps) {
         <>
         <Div0>
             <Div1>
-            <Btwal onClick={() => setIsFace(true)} autoFocus>대면</Btwal> 
+            <Btwal onClick={() => setIsFace(true)}>대면</Btwal> 
             </Div1>
             <Div1>
-            <Btwal onClick={() => setIsFace(false)}>비대면</Btwal>
+            <Btwal onClick={() => setIsFace(false)} autoFocus>비대면</Btwal>
             </Div1>
         </Div0>
-            {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery state={file} setState={setFile} orderNum={orderNum} />)}
-            <BottomConfirmBtn
-                content="확인"
-                confirmLogic={ () => {
-                    deliveredRogic();
-                }} isDisabled={false}
-            />
+            {isFace ? (<FaceToFaceDelivery orderNum={orderNum} />):(<RemoteDelivery orderNum={orderNum} />)}
         </>
     )
 }

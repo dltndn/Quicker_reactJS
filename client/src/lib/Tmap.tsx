@@ -1,6 +1,7 @@
 import boxIcon from "../image/boxHigh.png";
 import depIcon from "../image/dep-icon-gif-unscreen.gif"
 import desIcon from "../image/des-icon-gif-unscreen.gif"
+import humanIcon from "../image/human_gif.gif"
 // @ts-ignore
 const { Tmapv3 } = window;
 
@@ -108,9 +109,10 @@ class Tmap {
         }
         const polyline = new Tmapv3.Polyline({
           path: ar_line,
-          strokeColor: "#009900",
-          strokeWeight: 3,
+          strokeColor: "#7ad17a",
+          strokeWeight: 5,
           map: this.map,
+          direction: true,
         });
         new_polyLine.push(polyline);
       }
@@ -141,6 +143,14 @@ class Tmap {
           position: new Tmapv3.LatLng(lat, lon),
           map: this.map,
           iconHTML: this.markerHtml("desMarker", desIcon),
+          iconSize: Tmapv3.Size(1, 2),
+        });
+        break;
+        case 3:
+        this.destinationMarker = new Tmapv3.Marker({
+          position: new Tmapv3.LatLng(lat, lon),
+          map: this.map,
+          iconHTML: this.markerHtml("humanMarker", humanIcon),
           iconSize: Tmapv3.Size(1, 2),
         });
         break;

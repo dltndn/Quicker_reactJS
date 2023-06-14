@@ -27,12 +27,14 @@ import Profile_noticePage from "./pages/Profile_noticePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
+import QR from "./pages/QR"
 import { create } from 'zustand'
 
 import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
 import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
+import QRCode from "./pages/QRCode";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -201,6 +203,8 @@ function App() {
             <Route path="/explorer" element={<ExplorerPage />} />
             <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
+            <Route path="/testQR" element={<QR />}/>
+            <Route path="/testQR2" element={<QRCode />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
@@ -208,6 +212,7 @@ function App() {
         projectId={projectId ?? ""}
         ethereumClient={ethereumClient}
         themeBackground={theme.themeBackground}
+        // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
       />
     </>
   );

@@ -46,6 +46,9 @@ const Btwal = styled.button`
 `;
 
 const Container = styled.section`
+  position: fixed;
+  width: 100%;
+  bottom: 4.125rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -234,7 +237,9 @@ const Span01 = styled.div`
 
 const Div5 = styled.div`
     display: flex;
+    height: 500px;
     justify-content: center;
+    padding-top: 200px;
     font-size: 14px;
     font-weight: bold;
     text-align: center;
