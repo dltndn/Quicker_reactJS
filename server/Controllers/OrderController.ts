@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import url from 'node:url';
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateOrder from "../Maria/Commands/CreateOrder";
@@ -69,31 +68,32 @@ export default {
   updateOrder: async (req: Request, res: Response) => {
     try {
       console.log(1)
-      const userWalletAddress = req.body.userWalletAddress;
-      const orderId = req.body.orderId;
-      const deliver = await SelectUser.getUserId(userWalletAddress);
+      // const userWalletAddress = req.body.userWalletAddress;
+      // const orderId = req.body.orderId;
+      // const deliver = await SelectUser.getUserId(userWalletAddress);
     
-      // @ts-ignore
-      await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
-      // @ts-ignore
-      let requesterId = await SelectUser.getRequesterId(orderId);
-      // @ts-ignore
-      await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
+      // // @ts-ignore
+      // await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
+      // // @ts-ignore
+      // let requesterId = await SelectUser.getRequesterId(orderId);
+      // // @ts-ignore
+      // await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
       
-      const receiver = await SelectOrder.receiverPhoneNumber(orderId)
+      const receiver = await SelectOrder.receiverPhoneNumber(24)
     
       if ((typeof receiver === "object") && (receiver !== null && "PHONE" in receiver && typeof receiver.PHONE === "string")) {
         console.log(2)
         // 기본 url
         let url = process.env.CLIENT_SERVER_DOMAIN
         // url 수정 
+        console.log(typeof url)
         if (typeof url === "string") {
           console.log(3)
           const encryptedUrl = encrypt(JSON.stringify(req.body))
           url = url + encryptedUrl
-          // 문자 발송
-          console.log(4)
-          await sendMessage(receiver.PHONE, url)  
+          // // 문자 발송
+          // console.log(4)
+          // await sendMessage(receiver.PHONE, url)  
         } else {
           throw new Error ("CLIENT_SERVER_DOMAIN 이 정상적인 값이 아님")
         }
