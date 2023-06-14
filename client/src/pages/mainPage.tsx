@@ -12,7 +12,8 @@ function MainPage() {
       <div className="App">
         <Main_topbar></Main_topbar>
         <Main_phrase isConnect={isConnected}></Main_phrase>
-        <Main_notice></Main_notice>
+        {/* <Main_textimage></Main_textimage> */}
+        {/*  <Main_notice></Main_notice> */}
         <BottomBar></BottomBar>
       </div>
     );
