@@ -101,7 +101,7 @@ export default function MainOrderInformation() {
               <Sc0>
                 <Sc4>
                 <Divmain1 onClick={() => navigate('/search')}>
-                  배송 목록<br></br>확인하기
+                  주변 의뢰<br></br>확인하기
                   <Img src={note} />
                 </Divmain1>
                 </Sc4>
