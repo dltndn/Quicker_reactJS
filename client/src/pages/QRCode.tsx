@@ -12,11 +12,11 @@ const generateQRCode = (text : string) => {
     })
 }
 
-interface QRCode {
+export interface QRCode {
     validationInfos: validationInfos
 }
 
-interface validationInfos {
+export interface validationInfos {
     orderNum: string | undefined;
     validationInfo : string | null;
 }
