@@ -82,10 +82,10 @@ export default {
     
       if ((typeof receiver === "object") && (receiver !== null && "PHONE" in receiver && typeof receiver.PHONE === "string")) {
         // 기본 url
-        let url = process.env.CLIENT_SERVER_DOMAIN + "receipient/"
+        let url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key="
         // url 수정 
         if (typeof url === "string") {
-          const encryptedUrl = encrypt(JSON.stringify(req.body))
+          const encryptedUrl = encrypt(req.body)
           url = url + encryptedUrl
           // 문자 발송
 
