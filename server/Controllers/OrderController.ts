@@ -88,7 +88,6 @@ export default {
         if (typeof url === "string") {
           const encryptedUrl = encrypt(JSON.stringify(req.body))
           url = url + encryptedUrl
-          
           // 문자 발송
           await sendMessage(receiver.PHONE, url)  
         } else {
