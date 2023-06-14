@@ -184,7 +184,7 @@ function SearchPage() {
     // @ts-ignore
     let pos = tmap.createLatLng(userLocation.lat, userLocation.lon);
     // @ts-ignore
-    tmap.createMarker(userLocation.lat, userLocation.lon);
+    tmap.createMarker(userLocation.lat, userLocation.lon, 3);
     tmap.panTo(pos);
   };
 
