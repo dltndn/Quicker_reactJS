@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 interface DeliveryTrackerProps {
   //   mapDivId: string;
   mapHeight: string;
-  // drawLine: (() => void);
+  orderNum: string | undefined;
 }
 
 interface location {
@@ -15,7 +15,10 @@ interface location {
   Y: number;
 }
 
-export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
+export default function DeliveryTracker({
+  mapHeight,
+  orderNum,
+}: DeliveryTrackerProps) {
   const [tMap, setTmap] = useState<any>(undefined);
   const { coordiX, coordiY } = useQuickerLocationState();
   const [hasMarker, setHasMarker] = useState<boolean>(false);
@@ -31,9 +34,13 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   };
 
   const getOrderLocation = async () => {
-    return await Handler.get(
-      process.env.REACT_APP_SERVER_URL + `order/?orderid=24`
-    );
+    if (orderNum !== undefined) {
+      return await Handler.get(
+        process.env.REACT_APP_SERVER_URL + `order/?orderid=${orderNum}`
+      );
+    } else {
+      return null;
+    }
   };
 
   const createDestinationAndDepartureMarkers = (
@@ -103,8 +110,12 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     (async () => {
       if (tMap !== undefined) {
         const orderLocation = await getOrderLocation();
-        setDestinationLocation(orderLocation.Destination);
-        setDepartureLocation(orderLocation.Departure);
+        if (orderLocation !== null) {
+          setDestinationLocation(orderLocation.Destination);
+          setDepartureLocation(orderLocation.Departure);
+        } else {
+          alert("오더 번호가 없습니다.");
+        }
       }
     })();
   }, [tMap]);
@@ -124,7 +135,7 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
         )
       );
     } else {
-      alert("배송원의 위치를 확인해주세요")
+      alert("배송원의 위치를 확인해주세요");
     }
   };
 
