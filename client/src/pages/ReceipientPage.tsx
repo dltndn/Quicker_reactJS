@@ -10,7 +10,6 @@ import {
 } from "../utils/ConvertTimestampToDate";
 import { decrypt } from "../lib/cryto";
 import { queryStringParser } from "../lib/parseQueryString";
-import { useAccount } from "wagmi";
 import { create } from "zustand";
 
 export interface isLive {
@@ -29,8 +28,6 @@ export default function ReceipientPage() {
   const [deadline, setDeadline] = useState<string>("-:-");
   const [isDelivered, setIsDelivered] = useState<boolean | undefined>(undefined);
   const [isLive, setIsLive] = useState<boolean>(true);
-  const { address } = useAccount()
-  const [isDeliver, setIsDeliver] = useState(false)
   const [deiverWalletAddress, setDeiverWalletAddress] = useState(null)
 
   const getDeadlineText = async (orderNum: string) => {
@@ -58,13 +55,14 @@ export default function ReceipientPage() {
     if( orderNum !== undefined ) {
       console.log(orderNum)
     }
-    console.log(isDeliver)
-  }, [orderNum, isDeliver]);
+  
+  }, [orderNum]);
 
   useEffect(() => {
     const qeuryObject = queryStringParser(window.location.search)
     // @ts-ignore
     const queryData = decrypt(qeuryObject.key)
+    console.log(queryData)
     // setOrderNum(복호화된 orderNum)
     setOrderNum(queryData.orderId)
     // getDeadlineText(복호화된 orderNum)
