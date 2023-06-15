@@ -1,23 +1,16 @@
+import QRCode from "../../pages/QRCode";
 import ConfirmBtn from "../confirmBtn";
 import { useState, useEffect } from "react";
 
 interface ReceipientConfirmProp {
   orderNum: string | undefined;
+  validationInfo : string | null;
 }
-export default function ReceipientConfirm({ orderNum }: ReceipientConfirmProp) {
-  const [hasImg, setHasImg] = useState<boolean>(false);
+export default function ReceipientConfirm({ orderNum ,validationInfo}: ReceipientConfirmProp) {
+  const [hasImg, setHasImg] = useState<boolean>();
   const [base64String, setBase64String] = useState("");
 
   const getPicture = async () => {
-    // 암호화
-    // const { createHmac } = await import('node:crypto');
-
-    // const secret = process.env.REACT_APP_CRYPTO_KEY;
-    // let hashCode;
-    // if (secret !== undefined && orderNum !== undefined) {
-    //   hashCode = createHmac('sha256', secret).update(orderNum).digest('hex');
-    // }
-
     // 배송완료 사진 불러오기
     try {
       const response = await fetch(
@@ -48,6 +41,7 @@ export default function ReceipientConfirm({ orderNum }: ReceipientConfirmProp) {
       {!hasImg ? (
         <>
           <div>QR코드</div>
+          <QRCode validationInfos={{orderNum : orderNum, validationInfo : validationInfo}}></QRCode>
           <div>배송원에게 QR코드를 보여주세요</div>
         </>
       ) : (

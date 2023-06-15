@@ -3,19 +3,31 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDeliveredComponent } from "../components/executeComponents/DeliveredItem";
+import { useAccount } from "wagmi";
+import { useParams } from "react-router-dom";
 
 export default function QR() {
     const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
     const { isFace, hasScanResult, setHasScanResult } = useDeliveredComponent()
+    const {address} = useAccount();
+    const { orderNumber } = useParams();
 
     const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {
         // scan 통과 여부
-        if (true) {
+        
+
+
+        if (true && orderNumber !== undefined) {
             // scan 통과
-        setHasScanResult(true)
-        alert(JSON.stringify(decodedResult))
-        console.log(decodedText, decodedResult)
-        stopScanner()
+            console.log(decodedText, decodedResult)
+            const validationInfos = JSON.parse(decodedText)
+            if (validationInfos.validationInfo === address && validationInfos.orderNum === parseInt(orderNumber)) {
+                // 성공
+                setHasScanResult(true)
+            }
+            stopScanner()
+        } else if (orderNumber !== undefined) {
+            alert("잘못된 URL 입니다.")
         } else {
             alert("잘못된 QR코드 입니다.")
         }

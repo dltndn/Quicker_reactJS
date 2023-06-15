@@ -47,10 +47,11 @@ function Search_Detail() {
       const sdta = new SendDataToAndroid(address)
       try {
         const data = await wttb.acceptOrder()
-        Handler.post({
+        const requestTosServer = await Handler.post({
           orderId : order!.orderNum,
           userWalletAddress : address
         }, process.env.REACT_APP_SERVER_URL + "updateorder")
+        console.log(requestTosServer)
         // Android로 isDelivering 데이터 true값 전송
         sdta.sendIsDelivering(true)
         setRefreshOrder(true)

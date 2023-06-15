@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
 import ReceipientConfirm from "../components/deliveryProgress/ReceipientConfirm";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
@@ -8,13 +8,27 @@ import {
   getDateFromTimestamp,
   formatedDateHM,
 } from "../utils/ConvertTimestampToDate";
+import { decrypt } from "../lib/cryto";
+import { queryStringParser } from "../lib/parseQueryString";
+import { create } from "zustand";
+
+export interface isLive {
+  isLive : boolean,
+  setIsLive : Function
+}
+
+export const useLiveState = create<isLive>((set) => ({
+  isLive : true,
+  setIsLive : (isLive: boolean) => set({isLive}),
+}));
 
 export default function ReceipientPage() {
-  const { cryptoKey } = useParams();
+  const queryString = useLocation();
   const [orderNum, setOrderNum] = useState<string | undefined>(undefined);
   const [deadline, setDeadline] = useState<string>("-:-");
   const [isDelivered, setIsDelivered] = useState<boolean | undefined>(undefined);
-  const [isLive, setIsLive] = useState<boolean>(true)
+  const [isLive, setIsLive] = useState<boolean>(true);
+  const [deiverWalletAddress, setDeiverWalletAddress] = useState(null)
 
   const getDeadlineText = async (orderNum: string) => {
     try {
@@ -35,20 +49,26 @@ export default function ReceipientPage() {
     }
   };
 
-  useEffect(() => {
-    console.log(cryptoKey);
-    // cryptoKey로 orderNum 복호화
-    // setOrderNum(복호화된 orderNum)
-    // getDeadlineText(복호화된 orderNum)
-    
-    // test code
-    setOrderNum(cryptoKey);
+  
 
-    // 지도 작업을 위해 임시로 값 변경
-    setIsDelivered(false);
-    if (cryptoKey !== undefined) {
-      getDeadlineText(cryptoKey);
+  useEffect(() => {
+    if( orderNum !== undefined ) {
+      console.log(orderNum)
     }
+  
+  }, [orderNum]);
+
+  useEffect(() => {
+    const qeuryObject = queryStringParser(window.location.search)
+    // @ts-ignore
+    const queryData = decrypt(qeuryObject.key)
+    console.log(queryData)
+    // setOrderNum(복호화된 orderNum)
+    setOrderNum(queryData.orderId)
+    // getDeadlineText(복호화된 orderNum)
+    getDeadlineText(queryData.orderId)
+    
+    setDeiverWalletAddress(queryData.userWalletAddress)
   }, []);
 
   return (
@@ -68,7 +88,7 @@ export default function ReceipientPage() {
           {isLive ? (
             <DeliveryStatus orderNum={orderNum} deadline={deadline} />
           ) : (
-            <ReceipientConfirm orderNum={orderNum}/>
+            <ReceipientConfirm orderNum={orderNum} validationInfo={deiverWalletAddress}/>
           )}
         </>
       )}
