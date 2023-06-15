@@ -2,6 +2,17 @@ import { Transportation, Sender, Recipient, Destination, Departure, Product, Ord
 const { Op } = require("sequelize");
 
 export default {
+  receiverPhoneNumber : (orderId : number) => {
+    return new Promise ((resolve, reject) => {
+      const receiverPhoneNumber = Recipient.findOne({
+        attributes: ["id", "PHONE"],
+        where: { id: orderId },
+      });
+      resolve(receiverPhoneNumber)
+      reject("fail")
+    })
+  },
+
   location : (orderId : number) => {
     Order.hasOne(Destination, {foreignKey : "id"})
     Order.hasOne(Departure, {foreignKey : "id"})

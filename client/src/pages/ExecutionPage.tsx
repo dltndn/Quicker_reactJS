@@ -31,6 +31,8 @@ export const useExecutionState = create<ExecutionState>((set) => ({
   setShowComponent: (showComponent: JSX.Element) => set({showComponent}),
 }));
 
+// 상대 지갑주소는 확인 가능 필요한 것 은 인증 정보들만 필요함
+
 export default function ExecutionPage() {
   const { orderNumber } = useParams()
   const navigate = useNavigate()

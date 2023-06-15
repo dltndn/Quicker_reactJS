@@ -201,10 +201,9 @@ function App() {
             <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
             <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
             <Route path="/explorer" element={<ExplorerPage />} />
-            <Route path="/receipient/:cryptoKey" element={<ReceipientPage />}/>
+            <Route path="/receipient" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
             <Route path="/testQR" element={<QR />}/>
-            <Route path="/testQR2" element={<QRCode />}/>
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
