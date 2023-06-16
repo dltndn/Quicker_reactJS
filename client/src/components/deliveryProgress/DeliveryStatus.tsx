@@ -97,17 +97,18 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
       <Lottie animationData={lodingAni} />
       <DeliveryTracker mapHeight="45em" orderNum={orderNum}/>
       <Posst onClick={async () => {refreshQuickerLocation()}}>
-      <Lottie animationData={finduser} />
+        <Lottie animationData={finduser} />
       </Posst>
     </>
   );
 }
 
 const Posst = styled.div`
-  font-size: 30px;
   position: fixed;
-  bottom: 5%;
-  left: 82%;
+  width: 50px;
+  bottom: 4%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `
 
 const Pin1 = styled.img`

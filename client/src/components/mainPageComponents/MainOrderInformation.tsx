@@ -91,25 +91,25 @@ export default function MainOrderInformation() {
                 <Sp1>배송 의뢰를 시작해보세요!</Sp1>
               </Div1>
               <Sc3>
-              <Divmain>
-                메인
-                <DelPo>
-                  <Lottie animationData={mainDelivery}/>
-                </DelPo>
-              </Divmain>
+                <Divmain>
+                  메인
+                  <DelPo>
+                    <Lottie animationData={mainDelivery} />
+                  </DelPo>
+                </Divmain>
               </Sc3>
               <Sc0>
                 <Sc4>
-                <Divmain1 onClick={() => navigate('/search')}>
-                  주변 의뢰<br></br>확인하기
-                  <Img src={note} />
-                </Divmain1>
+                  <Divmain1 onClick={() => navigate("/search")}>
+                    주변 의뢰<br></br>확인하기
+                    <Img src={note} />
+                  </Divmain1>
                 </Sc4>
                 <Sc4>
-                <Divmain1 onClick={() => navigate('/explorer')}>
-                  실시간 거래 현황
-                  <Img src={transaction} />
-                </Divmain1>
+                  <Divmain1 onClick={() => navigate("/explorer")}>
+                    실시간 거래 현황
+                    <Img src={transaction} />
+                  </Divmain1>
                 </Sc4>
               </Sc0>
               <Sc5>
@@ -117,30 +117,12 @@ export default function MainOrderInformation() {
                   <Notice_divfont_1>공지</Notice_divfont_1>
                   <Notice_divfont_2>가나다라마바사</Notice_divfont_2>
                 </Notice_div>
-              </Sc5> 
+              </Sc5>
             </>
           ) : (
             <>
               {isDelivering ? (
                 <>
-                  {/* <UserName />
-                  <Div1>
-                    <Sp1
-                      onClick={() =>
-                        navigate(`/execution/${showOrderObj.orderNum}`)
-                      }
-                    >
-                      현재 물건을 배송중이세요 {">"}
-                    </Sp1>
-                  </Div1>
-                  <div>{formatedDate(showOrderObj.limitedTime)} 까지</div>
-                  <br></br>
-                  <div>
-                    {showOrderObj.destination.address_name}에 배달을
-                    완료해주세요
-                  </div>
-                  <br></br>
-                  <div>{showOrderObj.orderPrice}의 수익이 예상돼요!</div> */}
                   <UserName />
                   <Div1>
                     <Sp1
@@ -151,35 +133,32 @@ export default function MainOrderInformation() {
                       현재 물건을 배송중이세요 {">"}
                     </Sp1>
                   </Div1>
-                  <Div1>
-              </Div1>
+                  <Div1></Div1>
                   <Sc3>
-                  <Divmain>
-                  <div>{formatedDate(showOrderObj.limitedTime)} 까지</div>
-                  <br></br>
-                  <div>
-                    {showOrderObj.destination.address_name}에 배달을
-                    완료해주세요
-                  </div>
-                  <br></br>
-                  <div>{showOrderObj.orderPrice}의 수익이 예상돼요!</div>
-                    <DelPo>
-                      <Lottie animationData={mainDelivery}/>
-                    </DelPo>
-                  </Divmain>
+                    <Divmain>
+                      {formatedDate(showOrderObj.limitedTime)} 까지
+                      <br></br>
+                        {showOrderObj.destination.address_name}에 배달을
+                        완료해주세요
+                      <br></br>
+                      {showOrderObj.orderPrice}의 수익이 예상돼요!
+                      <DelPo>
+                        <Lottie animationData={mainDelivery} />
+                      </DelPo>
+                    </Divmain>
                   </Sc3>
                   <Sc0>
                     <Sc4>
-                    <Divmain1 onClick={() => navigate('/fulfillmentlist')}>
-                      배송 목록<br></br>확인하기
-                      <Img src={note} />
-                    </Divmain1>
+                      <Divmain1 onClick={() => navigate("/fulfillmentlist")}>
+                        배송 목록<br></br>확인하기
+                        <Img src={note} />
+                      </Divmain1>
                     </Sc4>
                     <Sc4>
-                    <Divmain1 onClick={() => navigate('/explorer')}>
-                      실시간 거래 현황
-                      <Img src={transaction} />
-                    </Divmain1>
+                      <Divmain1 onClick={() => navigate("/explorer")}>
+                        실시간 거래 현황
+                        <Img src={transaction} />
+                      </Divmain1>
                     </Sc4>
                   </Sc0>
                   <Sc5>
@@ -191,45 +170,47 @@ export default function MainOrderInformation() {
                 </>
               ) : (
                 <>
-                <UserName />
-                <Div1>
-                  <Sp1>현재 배송원이 물건을 배송중이에요!</Sp1>
-                </Div1>
-                <Sc3>
-                <Divmain>
-                  조금만 기다려 주세요!
-                  <DelPo>
-                    <Lottie animationData={mainDelivery}/>
-                  </DelPo>
-                </Divmain>
-                </Sc3>
-                <Sc0>
-                  <Sc4>
-                  <Divmain1 onClick={() => navigate('/orderlist')}>
-                    의뢰 목록<br></br>확인하기
-                    <Img src={pin} />
-                  </Divmain1>
-                  </Sc4>
-                  <Sc4>
-                  <Divmain1 onClick={() => navigate('/explorer')}>
-                    실시간 거래 현황
-                    <Img src={transaction} />
-                  </Divmain1>
-                  </Sc4>
-                </Sc0>
-                <Sc5>
-                  <Notice_div>
-                    <Notice_divfont_1>공지</Notice_divfont_1>
-                    <Notice_divfont_2>가나다라마바사</Notice_divfont_2>
-                  </Notice_div>
-                </Sc5> 
-              </>
+                  <UserName />
+                  <Div1>
+                    <Sp1>현재 배송원이 물건을 배송중이에요!</Sp1>
+                  </Div1>
+                  <Sc3>
+                    <Divmain>
+                      조금만 기다려 주세요!
+                      <DelPo>
+                        <Lottie animationData={mainDelivery} />
+                      </DelPo>
+                    </Divmain>
+                  </Sc3>
+                  <Sc0>
+                    <Sc4>
+                      <Divmain1 onClick={() => navigate("/orderlist")}>
+                        의뢰 목록<br></br>확인하기
+                        <Img src={pin} />
+                      </Divmain1>
+                    </Sc4>
+                    <Sc4>
+                      <Divmain1 onClick={() => navigate("/explorer")}>
+                        실시간 거래 현황
+                        <Img src={transaction} />
+                      </Divmain1>
+                    </Sc4>
+                  </Sc0>
+                  <Sc5>
+                    <Notice_div>
+                      <Notice_divfont_1>공지</Notice_divfont_1>
+                      <Notice_divfont_2>가나다라마바사</Notice_divfont_2>
+                    </Notice_div>
+                  </Sc5>
+                </>
               )}
             </>
           )}
         </>
       ) : (
-        <LotDiv><Lottie animationData={mainLoaing}/></LotDiv>
+        <LotDiv>
+          <Lottie animationData={mainLoaing} />
+        </LotDiv>
       )}
     </>
   );
@@ -252,28 +233,28 @@ const UserName = () => {
 };
 
 const Img = styled.img`
-    position: absolute;
-    width: 70px;
-    top: 70%;
-    left: 70%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  width: 70px;
+  top: 70%;
+  left: 70%;
+  transform: translate(-50%, -50%);
 `;
 
 const LotDiv = styled.div`
-    position: absolute;
-    width: 100px;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  width: 100px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const DelPo = styled.div`
-    position: absolute;
-    width: 250px;
-    top: 75%;
-    left: 65%;
-    transform: translate(-50%, -50%);
-`
+  position: absolute;
+  width: 250px;
+  top: 75%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+`;
 
 const Div0 = styled.div`
   display: flex;
@@ -308,67 +289,66 @@ const Sp1_1 = styled.span`
 `;
 
 const Divmain = styled.div`
-font-size: 18px;
-`
-
+  font-size: 18px;
+`;
 
 const Divmain1 = styled.div`
-font-size: 14px;
-font-weight: bold;
-`
+  font-size: 14px;
+  font-weight: bold;
+`;
 
 const Sc3 = styled.section`
-    display: flex;
-    height: 400px;
-    margin: 8px 16px 16px 16px;
-    padding: 16px;
-    border-radius: 15px;
-    border: solid;
-    border-width: 1px;
-    border-color: #d9d9d9;
-    background-color: #ffffff;
-    filter: drop-shadow(0px 4px 2px #bebebe);
+  display: flex;
+  height: 400px;
+  margin: 8px 16px 16px 16px;
+  padding: 16px;
+  border-radius: 15px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  filter: drop-shadow(0px 4px 2px #bebebe);
 `;
 
 const Sc0 = styled.section`
-    display: flex;
-    padding: 0 8px 16px 8px ;
+  display: flex;
+  padding: 0 8px 16px 8px;
 `;
 
 const Sc4 = styled.section`
-    flex: 1 1 50%;
-    height: 160px;
-    margin: 8px 8px 0 8px;
-    padding: 16px;
-    border-radius: 15px;
-    border: solid;
-    border-width: 1px;
-    border-color: #d9d9d9;
-    background-color: #ffffff;
-    filter: drop-shadow(0px 4px 2px #bebebe);
+  flex: 1 1 50%;
+  height: 160px;
+  margin: 8px 8px 0 8px;
+  padding: 16px;
+  border-radius: 15px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  filter: drop-shadow(0px 4px 2px #bebebe);
 `;
 
 const Sc5 = styled.section`
-    display: flex;
-    margin: 8px 16px 16px 16px;
-    padding: 8px;
-    border-radius: 15px;
-    border-width: 1px;
-    border-color: #d9d9d9;
-    background-color: #E9E9E9;
-    filter: drop-shadow(0px 4px 2px #bebebe);
+  display: flex;
+  margin: 8px 16px 16px 16px;
+  padding: 8px;
+  border-radius: 15px;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #e9e9e9;
+  filter: drop-shadow(0px 4px 2px #bebebe);
 `;
 
 const Notice_div = styled.div`
-    display: flex;
-    align-items:center;
-    font-size: var(--font-small);
+  display: flex;
+  align-items: center;
+  font-size: var(--font-small);
 `;
 const Notice_divfont_1 = styled.div`
-    font-weight: bold;
-    margin-left: 1.25rem;
+  font-weight: bold;
+  margin-left: 1.25rem;
 `;
 const Notice_divfont_2 = styled.div`
-    font-weight: lighter;
-    margin-left: 0.625rem;
+  font-weight: lighter;
+  margin-left: 0.625rem;
 `;

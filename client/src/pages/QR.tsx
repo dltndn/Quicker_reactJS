@@ -88,9 +88,12 @@ export default function QR() {
 }
 
 const CameraContainer = styled.div`
+  display:flex;
   width: 95%;
   height: 40em;
   background-color: #ffffff;
   border-radius: 10px;
   margin-bottom: 10px;
+  justify-content: center;
+  flex-direction: center;
 `;
