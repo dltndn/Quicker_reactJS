@@ -3,6 +3,8 @@ import Tmap from "../lib/Tmap";
 import { useQuickerLocationState } from "./deliveryProgress/DeliveryStatus";
 import Handler from "../lib/Handler";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import { TiArrowUpThick } from "react-icons/ti";
 
 interface DeliveryTrackerProps {
   //   mapDivId: string;
@@ -141,19 +143,36 @@ export default function DeliveryTracker({
 
   return (
     <>
-      <button
+      <Bt1
         onClick={async () => await checkRoute()}
         style={{
           position: "absolute",
-          top: "52em",
-          left: "85%",
+          top: "58.5em",
+          left: "88%",
           transform: "translateX(-50%)",
           zIndex: 5,
         }}
       >
-        예상 경로
-      </button>
+        <Ic1>
+        <TiArrowUpThick/></Ic1>
+        길찾기
+        </Bt1>
       <div id="TMapTracker" />
     </>
   );
 }
+
+const Bt1 = styled.button`
+  border: none;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 0.313rem;
+  border: 0;
+  color: #000000;
+  background-color: #ffffff;
+`
+const Ic1 = styled.div`
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #3bd8ff;
+`

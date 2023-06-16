@@ -11,6 +11,8 @@ import MainOrderInformation from "./MainOrderInformation";
 import Lottie from "lottie-react";
 import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
+import BottomWallet from "../../Lottie/BottomBarAni.json";
+import joinmember from "../../Lottie/laptobman.json";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -112,15 +114,14 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <Div1>
               <Sp1 onClick={() => {
                     navigate("/signUp");
-                  }}>처음이시라면<br></br>
-                    회원가입을 진행해주세요. {">"}</Sp1>
+                  }}>회원가입을 진행해주세요. {">"}</Sp1>
             </Div1>
               <Sc3>
                 <Divmain>
                   회원 가입은 처음 한 번만 진행합니다!
-                  <DelPo>
-                    <Lottie animationData={mainDelivery}/>
-                  </DelPo>
+                  <DelPo1>
+                    <Lottie animationData={joinmember}/>
+                  </DelPo1>
                 </Divmain>
                 </Sc3>
                 <Sc0>
@@ -137,40 +138,6 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         )
       ) : (
         <>
-          {/* <section>
-            <Div0>
-              <button onClick={() => navigate("/explorer")}>
-                실시간 거래현황 보러가기
-              </button>
-              <button onClick={() => navigate("/execution/205")}>
-                    임시배송페이지이동버튼
-                  </button>
-              <button onClick={() => testFunc()}>임시 배송시작 알림 전송 버튼</button>
-              <button onClick={() => sdta.openNaverMapApp(37.4640070, 126.9522394, "rkskek", 37.5209436, 127.1230074, "sdflkjiov")}>네이버지도</button>
-              <button onClick={() => navigate("/testQR")}>QR테스트 이동 버튼</button>
-              <Sp0>
-                안녕하세요!
-                <br />
-              </Sp0>
-            </Div0>
-            <Div1>
-              <Sp1>지갑을 연결해주세요.</Sp1>
-              <Sp2>
-                <Web3Button icon="hide" label="지갑연결" balance="hide" />
-              </Sp2>
-            </Div1>
-          </section>
-          <section>
-            <div>지갑연결 애니메이션</div>
-            {/* <button onClick={() => sdta.openNaverMapApp()}>naver map 이동</button> }
-            <a
-              href="https://dcentwallet.com/MobileApp"
-              target="_blank"
-              rel="noreferrer"
-            >
-              암호화폐 지갑이 없으신가요? {">"}
-            </a>
-          </section> */}
                 <Div1_1>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
                 <Web3Button icon="hide" label="지갑연결" balance="hide" />
@@ -183,7 +150,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <Divmain>
                 서비스 이용을 위해 지갑 연결은 필수입니다!
                   <DelPo>
-                    <Lottie animationData={mainDelivery}/>
+                    <Lottie animationData={BottomWallet}/>
                   </DelPo>
                 </Divmain>
                 </Sc3>
@@ -236,6 +203,14 @@ const DelPo = styled.div`
     width: 250px;
     top: 75%;
     left: 65%;
+    transform: translate(-50%, -50%);
+`
+
+const DelPo1 = styled.div`
+    position: absolute;
+    width: 350px;
+    top: 60%;
+    left: 50%;
     transform: translate(-50%, -50%);
 `
 
