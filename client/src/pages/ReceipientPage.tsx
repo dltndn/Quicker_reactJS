@@ -10,7 +10,6 @@ import {
 } from "../utils/ConvertTimestampToDate";
 import { decrypt } from "../lib/cryto";
 import { queryStringParser } from "../lib/parseQueryString";
-import { useAccount } from "wagmi";
 import { create } from "zustand";
 
 export interface isLive {
@@ -54,6 +53,7 @@ export default function ReceipientPage() {
     const qeuryObject = queryStringParser(window.location.search)
     // @ts-ignore
     const queryData = decrypt(qeuryObject.key)
+    console.log(queryData)
     // setOrderNum(복호화된 orderNum)
     setOrderNum(queryData.orderId)
     // getDeadlineText(복호화된 orderNum)

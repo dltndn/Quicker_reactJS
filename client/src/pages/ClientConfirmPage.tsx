@@ -70,8 +70,8 @@ export default function ClientConfirmPage() {
         }}
       ></TopBarOthers>
       {showComponent}
-      <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline="20:00"/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
+      {/* <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline="20:00"/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
       <button onClick={() => setShowComponent(<CompletedOrderConfirm orderNum={orderNumber}/>)}>배송성공 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={false}/>)}>배송실패 확인 컴포넌트 이동</button>
+      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={false}/>)}>배송실패 확인 컴포넌트 이동</button> */}
   </>;
 }

@@ -7,7 +7,7 @@ interface ReceipientConfirmProp {
   validationInfo : string | null;
 }
 export default function ReceipientConfirm({ orderNum ,validationInfo}: ReceipientConfirmProp) {
-  const [hasImg, setHasImg] = useState<boolean | null>(null);
+  const [hasImg, setHasImg] = useState<boolean>();
   const [base64String, setBase64String] = useState("");
 
   const getPicture = async () => {

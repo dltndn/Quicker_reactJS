@@ -3,11 +3,13 @@ import Tmap from "../lib/Tmap";
 import { useQuickerLocationState } from "./deliveryProgress/DeliveryStatus";
 import Handler from "../lib/Handler";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
+import { TiArrowUpThick } from "react-icons/ti";
 
 interface DeliveryTrackerProps {
   //   mapDivId: string;
   mapHeight: string;
-  // drawLine: (() => void);
+  orderNum: string | undefined;
 }
 
 interface location {
@@ -15,7 +17,10 @@ interface location {
   Y: number;
 }
 
-export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
+export default function DeliveryTracker({
+  mapHeight,
+  orderNum,
+}: DeliveryTrackerProps) {
   const [tMap, setTmap] = useState<any>(undefined);
   const { coordiX, coordiY } = useQuickerLocationState();
   const [hasMarker, setHasMarker] = useState<boolean>(false);
@@ -31,9 +36,13 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
   };
 
   const getOrderLocation = async () => {
-    return await Handler.get(
-      process.env.REACT_APP_SERVER_URL + `order/?orderid=24`
-    );
+    if (orderNum !== undefined) {
+      return await Handler.get(
+        process.env.REACT_APP_SERVER_URL + `order/?orderid=${orderNum}`
+      );
+    } else {
+      return null;
+    }
   };
 
   const createDestinationAndDepartureMarkers = (
@@ -103,8 +112,12 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
     (async () => {
       if (tMap !== undefined) {
         const orderLocation = await getOrderLocation();
-        setDestinationLocation(orderLocation.Destination);
-        setDepartureLocation(orderLocation.Departure);
+        if (orderLocation !== null) {
+          setDestinationLocation(orderLocation.Destination);
+          setDepartureLocation(orderLocation.Departure);
+        } else {
+          alert("오더 번호가 없습니다.");
+        }
       }
     })();
   }, [tMap]);
@@ -124,25 +137,46 @@ export default function DeliveryTracker({ mapHeight }: DeliveryTrackerProps) {
         )
       );
     } else {
-      alert("배송원의 위치를 확인해주세요")
+      alert("배송원의 위치를 확인해주세요");
     }
   };
 
   return (
     <>
-      <button
+      <Bt1
         onClick={async () => await checkRoute()}
         style={{
           position: "absolute",
-          top: "52em",
-          left: "85%",
+          top: "58.5em",
+          left: "88%",
           transform: "translateX(-50%)",
           zIndex: 5,
         }}
       >
-        예상 경로
-      </button>
+        <Ic1>
+        <TiArrowUpThick/></Ic1>
+        예상경로
+        </Bt1>
       <div id="TMapTracker" />
     </>
   );
 }
+
+const Bt1 = styled.button`
+  border: none;
+  padding: 5px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.22em;
+  padding-right: 0.22em;
+  font-size: 12px;
+  border-radius: 0.213rem;
+  border: 0;
+  color: #000000;
+  background-color: #ffffff;
+`
+const Ic1 = styled.div`
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #3bd8ff;
+`
