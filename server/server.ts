@@ -3,8 +3,6 @@ import express, { Application } from "express";
 import chat from "./chat/socket";
 import compression from "compression";
 import morgan from "morgan"
-import https from "https"
-import fs from "fs"
 
 // 라우터 처리 미완료
 import OrderController from "./Controllers/OrderController";
