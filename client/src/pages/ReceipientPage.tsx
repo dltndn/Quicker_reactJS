@@ -29,8 +29,6 @@ export default function ReceipientPage() {
   const [deadline, setDeadline] = useState<string>("-:-");
   const [isDelivered, setIsDelivered] = useState<boolean | undefined>(undefined);
   const [isLive, setIsLive] = useState<boolean>(true);
-  const { address } = useAccount()
-  const [isDeliver, setIsDeliver] = useState(false)
   const [deiverWalletAddress, setDeiverWalletAddress] = useState(null)
 
   const getDeadlineText = async (orderNum: string) => {
@@ -51,15 +49,6 @@ export default function ReceipientPage() {
       console.log(e);
     }
   };
-
-  
-
-  useEffect(() => {
-    if( orderNum !== undefined ) {
-      console.log(orderNum)
-    }
-    console.log(isDeliver)
-  }, [orderNum, isDeliver]);
 
   useEffect(() => {
     const qeuryObject = queryStringParser(window.location.search)
