@@ -84,7 +84,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
             <section>
               <MainOrderInformation />
             </section>
-            <button onClick={() => navigate("/execution/205")}>
+            {/* <button onClick={() => navigate("/execution/205")}>
                     임시배송페이지이동버튼
                   </button>
                   <button onClick={() => navigate("/client_confirm/10")}>
@@ -102,7 +102,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                   </button>
                   <button onClick={() => sdta.sendIsDelivering(false)}>
                     배송여부false전송
-                  </button>
+                  </button> */}
           </>
         ) : (
           <>

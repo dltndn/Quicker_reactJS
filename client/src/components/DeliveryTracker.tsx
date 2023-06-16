@@ -155,7 +155,7 @@ export default function DeliveryTracker({
       >
         <Ic1>
         <TiArrowUpThick/></Ic1>
-        길찾기
+        예상경로
         </Bt1>
       <div id="TMapTracker" />
     </>
@@ -165,8 +165,12 @@ export default function DeliveryTracker({
 const Bt1 = styled.button`
   border: none;
   padding: 5px;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 0.22em;
+  padding-right: 0.22em;
   font-size: 12px;
-  border-radius: 0.313rem;
+  border-radius: 0.213rem;
   border: 0;
   color: #000000;
   background-color: #ffffff;
