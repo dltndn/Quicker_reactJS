@@ -38,8 +38,13 @@ export class SendDataToAndroid {
         window.location.href = this.isCompletedOrderScheme + bool.toString()
     }
 
-    public openNaverMapApp(sLat: number, sLng: number, sName: string, eLat: number, eLng: number, eName: string, ) {
+    public openNaverMapApp(sLat: number, sLng: number, sName: string, eLat: number, eLng: number, eName: string, isUsingCurrent: boolean) {
         window.location.href = this.addressScheme + this.address
-        window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+        if (isUsingCurrent) {
+            window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+        } else {
+            window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+        }
+        
     }
 }

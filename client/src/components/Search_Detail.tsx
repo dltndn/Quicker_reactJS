@@ -14,6 +14,7 @@ import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
 import { OnePointRoute, TwoPointRoute } from "./searchComponents/interface/route";
 import KakaoNaviDeepLinkButton from "./searchComponents/KakaoNaviDeepLinkButton";
+import NaverMapDeepLinkButton from "./searchComponents/NaverMapDeepLinkButton";
 
 const money = require("../image/money.png");
 
@@ -62,13 +63,7 @@ function Search_Detail() {
         setRefreshOrder(true)
         setIsDetail(false);
         await setMatchedOrderNum()
-        navigator("/")
-        // naver map
-        const depatureRaw = order?.depatureRaw
-        const destinationRaw = order?.destinationRaw
-        // @ts-ignore
-        sdta.openNaverMapApp(depatureRaw.Y, depatureRaw.X, order?.departure, destinationRaw.Y, destinationRaw, order?.destination)
-        // ex) lat : 37.464, lng : 126.9522394
+        navigator("/")        
       } catch(e) {
         if (e) {
           //@ts-ignore
@@ -125,14 +120,18 @@ function Search_Detail() {
             </Div0>
             <Div1>
               <Div1_1>
-                {order.departure} <KakaoNaviDeepLinkButton routeInfo={routeNowLocationToStartPoint(order)}></KakaoNaviDeepLinkButton>
+                {order.departure} 
+                <KakaoNaviDeepLinkButton routeInfo={routeNowLocationToStartPoint(order)} />
+                <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={true} />
                 <br />
                 <Div1_2>{order.dep_detail}(출발지)</Div1_2>
               </Div1_1>
             </Div1>
             <Div2>
               <Div1_1>
-                {order.destination} <KakaoNaviDeepLinkButton routeInfo={routeStartPointToEndPoint(order)}></KakaoNaviDeepLinkButton>
+                {order.destination}
+                 <KakaoNaviDeepLinkButton routeInfo={routeStartPointToEndPoint(order)} />
+                 <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={false} />
                 <br />
                 <Div1_2>{order.des_detail}(도착지)</Div1_2>
               </Div1_1>
