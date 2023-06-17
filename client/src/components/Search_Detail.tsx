@@ -108,10 +108,6 @@ function Search_Detail() {
     }
   }
 
-  useEffect(() => {
-    Kakao.init(process.env.REACT_APP_KAKAOMAP_API_KEY);
-  }, [])
-
   return (
     <>
       {order && (
