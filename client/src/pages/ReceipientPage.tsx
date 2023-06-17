@@ -49,15 +49,6 @@ export default function ReceipientPage() {
     }
   };
 
-  
-
-  useEffect(() => {
-    if( orderNum !== undefined ) {
-      console.log(orderNum)
-    }
-  
-  }, [orderNum]);
-
   useEffect(() => {
     const qeuryObject = queryStringParser(window.location.search)
     // @ts-ignore
