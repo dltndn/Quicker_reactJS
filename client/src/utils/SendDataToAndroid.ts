@@ -38,13 +38,29 @@ export class SendDataToAndroid {
         window.location.href = this.isCompletedOrderScheme + bool.toString()
     }
 
-    public openNaverMapApp(sLat: number, sLng: number, sName: string, eLat: number, eLng: number, eName: string, isUsingCurrent: boolean) {
+    public openMapApp(sLat: number, sLng: number, sName: string, eLat: number, eLng: number, eName: string, isUsingCurrent: boolean, mapIndex: number) {
         window.location.href = this.addressScheme + this.address
-        if (isUsingCurrent) {
-            window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
-        } else {
-            window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+        switch(mapIndex) {
+            case 1: // naverMap
+                if (isUsingCurrent) {
+                    window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                } else {
+                    window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                }
+                break;
+            case 2: // kakaoMap 	
+                if (isUsingCurrent) {
+                    window.location.href=`kakaomap://route?ep=${eLat.toString()},${eLng.toString()}&by=CAR`
+                } else {
+                    window.location.href=`kakaomap://route?sp=${sLat.toString()},${sLng.toString()}&ep=${eLat.toString()},${eLng.toString()}&by=CAR`
+                }
+                break;
+            default: //naverMap
+                if (isUsingCurrent) {
+                    window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                } else {
+                    window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                }
         }
-        
     }
 }
