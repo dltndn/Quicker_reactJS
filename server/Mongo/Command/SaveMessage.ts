@@ -13,8 +13,8 @@ async function saveMessage(messageObjcet : MessageObject) {
       message: messageObjcet.receiveMessage,
       roomName: messageObjcet.roomName,
     });
+    await userMessage.save();
     conn.destroy();
-    userMessage.save();
   } catch (error) {
     console.error(error);
   }
