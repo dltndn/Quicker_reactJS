@@ -1,7 +1,6 @@
 import { OnePointRoute, TwoPointRoute } from "./interface/route";
 import kakaoNaviIcon from './kakaonavi_btn_medium.png';
-// @ts-ignore
-const { Kakao } = window
+import { useEffect } from "react";
 
 interface Prop {
     routeInfo: OnePointRoute | TwoPointRoute
@@ -10,7 +9,7 @@ interface Prop {
 export default function KakaoNaviDeepLinkButton(prop: Prop) {
     const { routeInfo } = prop
     const startNavigation = (routeInfo: OnePointRoute | TwoPointRoute) => {
-        Kakao.Navi.start(routeInfo);
+        
     }
 
     return (

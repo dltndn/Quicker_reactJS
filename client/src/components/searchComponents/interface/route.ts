@@ -1,3 +1,5 @@
+import { OrderObj } from "../../../pages/SearchPage";
+
 export interface OnePointRoute {
   name: string;
   x: number;
@@ -8,4 +10,10 @@ export interface OnePointRoute {
 export interface TwoPointRoute extends OnePointRoute {
   sX: number;
   sY: number;
+}
+
+export interface NMapBtnProps {
+  address: `0x${string}` | undefined;
+  order: OrderObj | undefined;
+  isUsingCurrent: boolean;
 }

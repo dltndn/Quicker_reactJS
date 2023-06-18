@@ -12,8 +12,8 @@ import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
-import { OnePointRoute, TwoPointRoute } from "./searchComponents/interface/route";
-import KakaoNaviDeepLinkButton from "./searchComponents/KakaoNaviDeepLinkButton";
+// import { OnePointRoute, TwoPointRoute } from "./searchComponents/interface/route";
+import { NaverMapDeepLinkButton, KakaoMapDeepLinkButton } from "./searchComponents/MapAppButton";
 
 const money = require("../image/money.png");
 
@@ -62,13 +62,7 @@ function Search_Detail() {
         setRefreshOrder(true)
         setIsDetail(false);
         await setMatchedOrderNum()
-        navigator("/")
-        // naver map
-        const depatureRaw = order?.depatureRaw
-        const destinationRaw = order?.destinationRaw
-        // @ts-ignore
-        sdta.openNaverMapApp(depatureRaw.Y, depatureRaw.X, order?.departure, destinationRaw.Y, destinationRaw, order?.destination)
-        // ex) lat : 37.464, lng : 126.9522394
+        navigator("/")        
       } catch(e) {
         if (e) {
           //@ts-ignore
@@ -88,29 +82,25 @@ function Search_Detail() {
     }
   };
 
-  const routeNowLocationToStartPoint = (order : OrderObj) : OnePointRoute => {
-    return {
-      name: order.departure,
-      x: order.depatureRaw.X,
-      y: order.depatureRaw.Y,
-      coordType: 'wgs84',
-    }
-  }
+  // const routeNowLocationToStartPoint = (order : OrderObj) : OnePointRoute => {
+  //   return {
+  //     name: order.departure,
+  //     x: order.depatureRaw.X,
+  //     y: order.depatureRaw.Y,
+  //     coordType: 'wgs84',
+  //   }
+  // }
 
-  const routeStartPointToEndPoint = (order : OrderObj) : TwoPointRoute => {
-    return {
-      sX : order.depatureRaw.X,
-      sY : order.depatureRaw.Y,
-      name: order.destination,
-      x: order.destinationRaw.X,
-      y: order.destinationRaw.Y,
-      coordType: 'wgs84',
-    }
-  }
-
-  useEffect(() => {
-    Kakao.init(process.env.REACT_APP_KAKAOMAP_API_KEY);
-  }, [])
+  // const routeStartPointToEndPoint = (order : OrderObj) : TwoPointRoute => {
+  //   return {
+  //     sX : order.depatureRaw.X,
+  //     sY : order.depatureRaw.Y,
+  //     name: order.destination,
+  //     x: order.destinationRaw.X,
+  //     y: order.destinationRaw.Y,
+  //     coordType: 'wgs84',
+  //   }
+  // }
 
   return (
     <>
@@ -129,14 +119,18 @@ function Search_Detail() {
             </Div0>
             <Div1>
               <Div1_1>
-                {order.departure} <KakaoNaviDeepLinkButton routeInfo={routeNowLocationToStartPoint(order)}></KakaoNaviDeepLinkButton>
+                {order.departure} 
+                <KakaoMapDeepLinkButton address={address} order={order} isUsingCurrent={true} />
+                <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={true} />
                 <br />
                 <Div1_2>{order.dep_detail}(출발지)</Div1_2>
               </Div1_1>
             </Div1>
             <Div2>
               <Div1_1>
-                {order.destination} <KakaoNaviDeepLinkButton routeInfo={routeStartPointToEndPoint(order)}></KakaoNaviDeepLinkButton>
+                {order.destination}
+                 <KakaoMapDeepLinkButton address={address} order={order} isUsingCurrent={false} />
+                 <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={false} />
                 <br />
                 <Div1_2>{order.des_detail}(도착지)</Div1_2>
               </Div1_1>
