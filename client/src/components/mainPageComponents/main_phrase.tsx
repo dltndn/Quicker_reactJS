@@ -153,7 +153,6 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
       ) : (
         <>
                 <Div1_1>
-                  <KakaoNaviDeepLinkButton routeInfo={routeStartPointToEndPoint} />
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
                 <Web3Button icon="hide" label="지갑연결" balance="hide" />
               </Sp2>
