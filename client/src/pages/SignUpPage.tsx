@@ -12,7 +12,7 @@ const serverUrl = process.env.REACT_APP_SERVER_URL
 function SignUpPage() {
   const navigate = useNavigate()
   const { address } = useAccount()
-  const { setIsMember } = useVerificationStore()
+  const { setIsMember, setUserName } = useVerificationStore()
 
   const name = useRef<HTMLInputElement>(null);
   const birthday = useRef<HTMLInputElement>(null);
@@ -52,6 +52,7 @@ function SignUpPage() {
     .then((data) => {
       console.log("Success:", data);
       setIsMember(true)
+      setUserName(registerData.User.name)
     })
     .catch((error) => {
       console.error("Error:", error);
