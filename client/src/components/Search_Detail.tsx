@@ -12,13 +12,9 @@ import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
-// import { OnePointRoute, TwoPointRoute } from "./searchComponents/interface/route";
 import { NaverMapDeepLinkButton, KakaoMapDeepLinkButton } from "./searchComponents/MapAppButton";
 
 const money = require("../image/money.png");
-
-// @ts-ignore
-const {Kakao} = window
 
 function Search_Detail() {
   const navigator = useNavigate()
@@ -29,7 +25,6 @@ function Search_Detail() {
   const { userOrderNumStateTrigger, setUserOrderNumStateTrigger} = UseUserOrderState()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
-  console.log(order)
 
   const getClientAddress =async (showOrder: number) => {
     const result = await getOrder(orders[showOrder].orderNum)
@@ -81,26 +76,6 @@ function Search_Detail() {
       }
     }
   };
-
-  // const routeNowLocationToStartPoint = (order : OrderObj) : OnePointRoute => {
-  //   return {
-  //     name: order.departure,
-  //     x: order.depatureRaw.X,
-  //     y: order.depatureRaw.Y,
-  //     coordType: 'wgs84',
-  //   }
-  // }
-
-  // const routeStartPointToEndPoint = (order : OrderObj) : TwoPointRoute => {
-  //   return {
-  //     sX : order.depatureRaw.X,
-  //     sY : order.depatureRaw.Y,
-  //     name: order.destination,
-  //     x: order.destinationRaw.X,
-  //     y: order.destinationRaw.Y,
-  //     coordType: 'wgs84',
-  //   }
-  // }
 
   return (
     <>
@@ -249,7 +224,7 @@ const Div1_2 = styled(Div1_1)`
 `;
 
 const Div2 = styled.div`
-  margin: 50px 10px 30px 40px;
+  margin: 0px 10px 30px 40px;
 `;
 
 const Se0 = styled.section`
