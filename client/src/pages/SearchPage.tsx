@@ -19,7 +19,6 @@ import {
 import { useOrderStore } from "./commission";
 import IncreaseAllowance from "../components/IncreaseAllowance";
 import { useAccount } from "wagmi";
-import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
 export interface OrderObj {
   orderNum: string;
@@ -267,7 +266,7 @@ function SearchPage() {
         <div
           id="TMapSearch"
           style={{
-            height: "300px",
+            height: "100%",
             width: "100%",
           }}
         />
