@@ -41,7 +41,7 @@ function SignUpPage() {
         date: parseInt(birthday.current!.value.substring(8, 10))
       }
     }
-    fetch(`${serverUrl}/register`, {
+    fetch(`${serverUrl}register`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
