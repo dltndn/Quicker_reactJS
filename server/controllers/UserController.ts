@@ -26,11 +26,9 @@ export default {
 
   register: async (req: Request, res: Response) => {
     try {
-      console.log('test')
       const secret = process.env.cryptoKey;
       const userInstance = req.body.User;
       const userBirthDate = req.body.Birthday;
-      console.log(req.body)
       //NOTE : 전화번호를 기반으로 암호화한 id 사용
       const hashed = crypto
         .createHmac("sha256", secret)
@@ -38,8 +36,8 @@ export default {
         .digest("hex");
       userInstance.id = hashed;
       userBirthDate.id = hashed;
+      console.log(userInstance, userBirthDate, hashed)
       await CreateUser.registerUser(userInstance, userBirthDate, hashed);
-      console.log('done')
       res.send({ msg: "done" });
     } catch (error) {
       console.log(error)
