@@ -14,6 +14,8 @@
 - Polygon(Ethereum's side chain)
 - MariaDB
 - MongoDB
+- Figma
+- Slack
 
 ## 주요 기능
 - 암호화폐 지갑 연결방식의 로그인 시스템
