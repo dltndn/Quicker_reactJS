@@ -21,7 +21,7 @@ const isMember = (data: { name: string | null }, setState: React.Dispatch<SetSta
     if (isNameNull(data)) {
         setState("탈퇴한 회원입니다.");
     } else if (data.name) {
-        setState(data.name);
+        setState(hideCharacters(data.name));
     }
 }
 
@@ -33,5 +33,18 @@ const isNameNull = (data: { name: null | undefined | string; }): boolean => {
         return false
     }
 }
+
+const hideCharacters = (str: string) => {
+    let result = str;
+    if (str.length === 2) {
+      result = str.charAt(0) + '*' + str.charAt(2);
+    } else if (str.length === 3) {
+      result = str.charAt(0) + '*' + str.charAt(2);
+    } else if (str.length === 4) {
+      result = str.charAt(0) + '**' + str.slice(3);
+    }
+    return result;
+  }
+  
 
 export default getName
