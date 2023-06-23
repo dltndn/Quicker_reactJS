@@ -29,7 +29,7 @@ const main = (server : any) => {
       socket.on("sendMessage",(receiveMessage: Message, done : Function) => {
         // 해당 방에 전부 메세지 보냄
         // 메세지, 아이디, 시간 포함
-        socket.to(roomName).emit("sendMessage", {id: receiveMessage.sender, message : receiveMessage.data, date : new Date().toISOString });
+        socket.to(roomName).emit("sendMessage", {id: receiveMessage.sender, message : receiveMessage.data, date : new Date().toISOString() });
         console.log("현재 접속 방 정보 : ", roomName)
         console.log("수신 메세지 : ", receiveMessage.data);
         saveMessage({id : receiveMessage.sender , roomName : roomName, receiveMessage : receiveMessage.data});

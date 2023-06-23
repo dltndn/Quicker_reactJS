@@ -36,6 +36,7 @@ export default {
         .digest("hex");
       userInstance.id = hashed;
       userBirthDate.id = hashed;
+      console.log(userInstance, userBirthDate, hashed)
       await CreateUser.registerUser(userInstance, userBirthDate, hashed);
       res.send({ msg: "done" });
     } catch (error) {
