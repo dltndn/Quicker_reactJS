@@ -14,15 +14,18 @@
 - Polygon(Ethereum's side chain)
 - MariaDB
 - MongoDB
+- Figma
+- Slack
 
 ## 주요 기능
 - 암호화폐 지갑 연결방식의 로그인 시스템
 - 스마트 컨트랙을 활용한 탈중앙화 자동 결제 기능 구현
 - 전체 실시간 거래 현황을 보여준는 Explorer페이지 제공
-- 사용자들의 개인정보는 중앙DB에서 관리
+- 중앙DB에서 관리되는 사용자들의 개인정보
 - 배송원 실시간 위치 제공
 - 의뢰 수락 및 배달 완료 시 앱 알림기능
 - 배송 완료 후 의뢰인, 수취인에게 완료 사진 전송
+- 배송물품 대면 전달 시 QR코드 인증
 - 의뢰인과 배송원 사이 채팅 기능
 - 유저간 토큰 전송기능(예정)
 - DAO(Decentralized Autonomous Organization) 시스템(예정)
