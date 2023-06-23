@@ -5,7 +5,6 @@ import Main_notice from "../components/mainPageComponents/main_notice";
 import BottomBar from "../components/BottomBar";
 import { useState, useEffect } from "react";
 
-
 function MainPage() {
   const { isConnected } = useAccount();
     return (

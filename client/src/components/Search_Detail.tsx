@@ -12,6 +12,7 @@ import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
+import { NaverMapDeepLinkButton, KakaoMapDeepLinkButton } from "./searchComponents/MapAppButton";
 
 const money = require("../image/money.png");
 
@@ -24,7 +25,6 @@ function Search_Detail() {
   const { userOrderNumStateTrigger, setUserOrderNumStateTrigger} = UseUserOrderState()
   let order:OrderObj | undefined
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
-  console.log(order)
 
   const getClientAddress =async (showOrder: number) => {
     const result = await getOrder(orders[showOrder].orderNum)
@@ -57,13 +57,7 @@ function Search_Detail() {
         setRefreshOrder(true)
         setIsDetail(false);
         await setMatchedOrderNum()
-        navigator("/")
-        // naver map
-        const depatureRaw = order?.depatureRaw
-        const destinationRaw = order?.destinationRaw
-        // @ts-ignore
-        sdta.openNaverMapApp(depatureRaw.Y, depatureRaw.X, order?.departure, destinationRaw.Y, destinationRaw, order?.destination)
-        // ex) lat : 37.464, lng : 126.9522394
+        navigator("/")        
       } catch(e) {
         if (e) {
           //@ts-ignore
@@ -100,7 +94,9 @@ function Search_Detail() {
             </Div0>
             <Div1>
               <Div1_1>
-                {order.departure}
+                {order.departure} 
+                <KakaoMapDeepLinkButton address={address} order={order} isUsingCurrent={true} />
+                <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={true} />
                 <br />
                 <Div1_2>{order.dep_detail}(출발지)</Div1_2>
               </Div1_1>
@@ -108,6 +104,8 @@ function Search_Detail() {
             <Div2>
               <Div1_1>
                 {order.destination}
+                 <KakaoMapDeepLinkButton address={address} order={order} isUsingCurrent={false} />
+                 <NaverMapDeepLinkButton address={address} order={order} isUsingCurrent={false} />
                 <br />
                 <Div1_2>{order.des_detail}(도착지)</Div1_2>
               </Div1_1>
@@ -226,7 +224,7 @@ const Div1_2 = styled(Div1_1)`
 `;
 
 const Div2 = styled.div`
-  margin: 50px 10px 30px 40px;
+  margin: 0px 10px 30px 40px;
 `;
 
 const Se0 = styled.section`

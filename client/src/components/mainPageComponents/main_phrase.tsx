@@ -13,13 +13,15 @@ import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
 import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
+import KakaoNaviDeepLinkButton from "../searchComponents/KakaoNaviDeepLinkButton";
+import { TwoPointRoute } from "../searchComponents/interface/route";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
 const pin = require("../../image/redPin.png");
 const wallet = require("../../image/wallet.png");
 
-const dcentUrl = "https://dcentwallet.com/MobileApp";
+const walletWebsiteUrl = "https://www.tokenpocket.pro/ko";
 
 const Div0 = styled.div`
   display: flex;
@@ -74,6 +76,18 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
     const timeId = setInterval(() => {
       sdta.sendIsMatchedOrder(true)
     }, 3000)
+  }
+
+  // const testData = {"sX":127.04951606332,"sY":37.5701609651972,"name":"서울 서초구 우면동 1","x":127.024170188781,"y":37.4687523234136,"coordType":"wgs84"}
+  const routeStartPointToEndPoint : TwoPointRoute = {
+    
+      sX : 127.04951606332,
+      sY : 37.5701609651972,
+      name: "서울 서초구 우면동 1",
+      x: 127.024170188781,
+      y: 37.4687523234136,
+      coordType: 'wgs84',
+    
   }
   return (
     <>
@@ -156,7 +170,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 </Sc3>
                 <Sc0>
                   <Sc4>
-                  <Divmain1 onClick={()=>{window.open(dcentUrl)}}>
+                  <Divmain1 onClick={()=>{window.open(walletWebsiteUrl)}}>
                     암호화폐 지갑이<br></br>
                     없으신가요?
                     <Img src={wallet} />
