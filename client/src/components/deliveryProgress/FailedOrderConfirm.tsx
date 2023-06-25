@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
-import Handler from "../../lib/Handler"
+import { useOrderState } from "../ShowOrders"
 
 interface FailedOrderConfirmProps extends ExecutionComponentProps{
   isReceived: boolean;
@@ -12,6 +12,7 @@ interface FailedOrderConfirmProps extends ExecutionComponentProps{
 
 export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrderConfirmProps) {
     const { setTitle } = useClientConfirmState()
+    const { setReloadOrderNum } = useOrderState()
     const [base64String, setBase64String] = useState("");
     const [reason, setReason] = useState("");
     const navigate = useNavigate()
@@ -26,6 +27,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
         try {
           const reult = await wttb.failedOrder();
           console.log(reult);
+          setReloadOrderNum(orderNum)
           navigate("/");
         } catch (e) {
           console.log(e);

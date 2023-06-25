@@ -169,15 +169,15 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 </Divmain>
                 </Sc3>
                 <Sc0>
-                  <Sc4>
-                  <Divmain1 onClick={()=>{window.open(walletWebsiteUrl)}}>
+                  <Sc4 onClick={()=>{window.open(walletWebsiteUrl)}}>
+                  <Divmain1 >
                     암호화폐 지갑이<br></br>
                     없으신가요?
                     <Img src={wallet} />
                   </Divmain1>
                   </Sc4>
-                  <Sc4>
-                  <Divmain1 onClick={() => navigate('/explorer')}>
+                  <Sc4 onClick={() => navigate('/explorer')}>
+                  <Divmain1 >
                     실시간 거래 현황
                     <Img src={transaction} />
                   </Divmain1>
