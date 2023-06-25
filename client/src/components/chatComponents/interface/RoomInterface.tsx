@@ -1,6 +1,7 @@
 export interface RoomInterface {
     setStates : setStates
     orderNum: number
+    role : string
     blockchainElement : any
 }
 
