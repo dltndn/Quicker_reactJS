@@ -92,7 +92,9 @@ export default function MainOrderInformation() {
               </Div1>
               <Sc3>
                 <Divmain>
-                  메인
+                  <Divmain1>
+                    배송을 시작해보세요!
+                  </Divmain1>
                   <DelPo>
                     <Lottie animationData={mainDelivery} />
                   </DelPo>
@@ -136,12 +138,14 @@ export default function MainOrderInformation() {
                   <Div1></Div1>
                   <Sc3>
                     <Divmain>
+                      <Divmain1>
                       {formatedDate(showOrderObj.limitedTime)} 까지
                       <br></br>
                         {showOrderObj.destination.address_name}에 배달을
-                        완료해주세요
+                        완료해주세요.
                       <br></br>
                       {showOrderObj.orderPrice}의 수익이 예상돼요!
+                      </Divmain1>
                       <DelPo>
                         <Lottie animationData={mainDelivery} />
                       </DelPo>
@@ -176,7 +180,9 @@ export default function MainOrderInformation() {
                   </Div1>
                   <Sc3>
                     <Divmain>
-                      조금만 기다려 주세요!
+                      <Divmain1>
+                      조금만 기다려주세요!
+                      </Divmain1>
                       <DelPo>
                         <Lottie animationData={mainDelivery} />
                       </DelPo>

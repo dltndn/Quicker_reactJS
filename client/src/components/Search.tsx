@@ -52,22 +52,24 @@ function Search({ clickOrder }: Props) {
               <Div1 onClick={() => clickOrder(index)} key={index}>
                 <Div1_2>{(value.distance / 1000).toFixed(1) + "KM"}</Div1_2>
                 <Div1_2>
-                  <div>
+                  <Div3>
                     <Sp0>
                       {value.departure_region_1depth_name}
-                      <br />
                     </Sp0>
+                    </Div3>
+                    <Div3>
                     {value.departure_region_3depth_name}
-                  </div>
+                    </Div3>
                 </Div1_2>
                 <Div1_2>
-                  <div>
+                <Div3>
                     <Sp0>
                       {value.destination_region_1depth_name}
-                      <br />
                     </Sp0>
+                    </Div3>
+                    <Div3>
                     {value.destination_region_3depth_name}
-                  </div>
+                    </Div3>
                 </Div1_2>
                 <Div1_2>{value.income}</Div1_2>
               </Div1>
@@ -132,9 +134,15 @@ const Dvi1_1 = styled.div`
   font-weight: bold;
 `;
 
+const Div3 = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const Div1_2 = styled(Dvi1_1)`
   font-size: 16px;
   align-items: center;
+  flex-direction: column;
 `;
 
 const Sp0 = styled.span`
