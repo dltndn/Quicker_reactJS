@@ -316,7 +316,7 @@ const Divhid = styled(Div0)`
 
 
 const Sc1 = styled(Sc0)`
-    margin: 0 0.563rem 0.563rem 0.563rem;
+    margin: 0.563rem 0.563rem 0.563rem 0.563rem;
     justify-content: center;
     height: 3rem;
 `;
