@@ -10,7 +10,7 @@ import Time from "../../lib/Time"
 const Chatman = require('../../image/Chatman.png')
 const operator = require('../../image/operator.png')
 
-export default function ({ setStates, orderNum, blockchainElement }: RoomInterface) {
+export default function ({ setStates, orderNum, blockchainElement, role }: RoomInterface) {
     const { address } = useAccount();
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
@@ -54,7 +54,7 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
           </Div1>
           <Div2>
             <Sp0>
-            {opponentName} <Sp1>{time}</Sp1>
+            {opponentName} {`(${role})`} <Sp1>{time}</Sp1>
             </Sp0>
             <Sp2>{message}</Sp2>
           </Div2>
