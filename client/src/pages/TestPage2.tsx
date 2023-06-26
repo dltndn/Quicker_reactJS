@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useContractEvent, useTransaction, useAccount } from "wagmi";
 import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
+import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
@@ -54,9 +55,21 @@ export default function TestPage2() {
     console.log(result)
   }
 
+ const KakaoMapDeepLinkButton = () => {
+    const executeMap = (isUsingCurrent : boolean) => {
+        const sdta = new SendDataToAndroid("")
+        
+        // @ts-ignore
+        sdta.openMapApp("37.45265062424184", "126.78840727356301", "경기 시흥시 대야동 303-75", "37.48999816930172", "126.77896203089682", "경기 부천시 심곡동 424", isUsingCurrent, 2)
+        // ex) lat : 37.464, lng : 126.9522394
+        // sdta.openMapApp("126.78840727356301", "37.45265062424184", "경기 시흥시 대야동 303-75", "126.77896203089682", "37.48999816930172", "경기 부천시 심곡동 424", isUsingCurrent, 2)
+    }
+    return <button onClick={() => executeMap(false)}> kakao map btn</button>
+}
   return (
     <>
       <TopDiv>
+        <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
           <div>오더 생성하기(의뢰인)</div>
