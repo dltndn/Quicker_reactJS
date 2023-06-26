@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
 import { useOrderState } from "../ShowOrders"
+import styled from "styled-components"
 
 interface FailedOrderConfirmProps extends ExecutionComponentProps{
   isReceived: boolean;
@@ -66,13 +67,24 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
       })()
     }, [])
     
-    return <><div>배송실패</div>
-        <div>
-          <img src={base64String} alt="uploaded photo" />
-        </div>
-        <div>
-        {reason}실패 사유
-        </div>
+    return <>
+        <Divv>
+        <Div1>
+          <Btwal>배송실패</Btwal>
+        </Div1>
+      </Divv>
+
+        <Div0>
+        <img src={base64String} alt="uploaded photo" width="100%" />
+        </Div0>
+        <Container>
+          <Box>
+            <div>
+              <ReqFont>배송 실패 사유</ReqFont>
+            </div> 
+            {reason}실패 사유
+          </Box>
+        </Container>
         <ConfirmBtn
             isDisabled={false}
             content={isReceived? ("확인"):("환불받기")}
@@ -82,3 +94,53 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
           />
     </>
 }
+
+const Div0 = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+const Divv = styled.div`
+    display: flex;
+    height: 3.875rem;
+`;
+
+const Div1 = styled.div`
+    flex: 1 1 100%;
+`;
+
+const Btwal = styled.button`
+    width: 100%;
+    height: 3.25rem;
+    font-size: var(--font-md);
+    font-weight: bold;
+    border: 0rem;
+    outline: #efefef;
+    background-color: #ffffff;
+    padding-left: 0.625rem;
+    text-align: center;
+    color: #FF5353;
+`;
+
+const Container = styled.section`
+  width: 100%;
+  bottom: 4.125rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Box = styled.div`
+  border-radius: 0.313rem;
+  margin-top: 0.5rem;
+  width: 95%;
+  background-color: #ffffff;
+  padding: 0.75rem 1.125rem 0.75rem 1.125rem;
+  text-align: center;
+`;
+
+const ReqFont = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 0.313rem;
+`;

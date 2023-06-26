@@ -205,6 +205,7 @@ const Div0 = styled.div`
 const Div0_1 = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 14px;
 `;
 
 const Div1 = styled.div`

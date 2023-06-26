@@ -57,7 +57,6 @@ function TopBarChat({ title, redirectLogic }: Props) {
 
     return (
         <section>
-            <Divhid/>
             <Tdiv>
                 <Tbtleft onClick={() => redirectLogic()}><BsChevronLeft></BsChevronLeft></Tbtleft>
                 <Tbsp>{title}</Tbsp>
