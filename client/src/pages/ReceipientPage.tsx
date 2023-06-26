@@ -11,6 +11,8 @@ import {
 import { decrypt } from "../lib/cryto";
 import { queryStringParser } from "../lib/parseQueryString";
 import { create } from "zustand";
+import Lottie from "lottie-react";
+import mainLoaing from "../Lottie/mainLoading.json";
 
 export interface isLive {
   isLive : boolean,
@@ -73,7 +75,9 @@ export default function ReceipientPage() {
             </Div1>
         </Div0>
       {isDelivered === undefined ? (
-        <>로딩 애니메이션</>
+        <LotDiv>
+        <Lottie animationData={mainLoaing} />
+      </LotDiv>
       ) : (
         <>
           {isLive ? (
@@ -94,6 +98,14 @@ const Div0 = styled.div`
 
 const Div1 = styled.div`
     flex: 1 1 50%;
+`;
+
+const LotDiv = styled.div`
+  position: absolute;
+  width: 100px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Btwal = styled.button`
