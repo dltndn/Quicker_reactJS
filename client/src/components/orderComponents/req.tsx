@@ -249,6 +249,10 @@ function Req() {
         return result
     }
     
+    useEffect(()=> {
+        setWeight(5)
+    }, [])
+    
     return (
     <>
     <Container>
@@ -391,7 +395,7 @@ function Req() {
             <InputDiv>
             {/* ERROR : 타입이 String 타입임 */}
             <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value)); console.log(weight)}} name="weight">
-                <option value={5}>5kg 이상</option>
+                <option value={5} selected>5kg 이상</option>
                 <option value={10}>10kg 이상</option>
                 <option value={15}>15kg 이상</option>
                 <option value={20}>20kg 이상</option>
