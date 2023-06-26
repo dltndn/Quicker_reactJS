@@ -163,7 +163,8 @@ export default function ({
   return (
     <>
           <TopBarChat
-        title={`${opponentName + " " + role}`}
+        title={`${opponentName}`}
+        role={`${role}`}
         redirectLogic={() => {
           navigate("/");
         }}
