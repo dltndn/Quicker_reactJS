@@ -144,7 +144,7 @@ function ChattingPage() {
             console.log(blockchainElement)
             if (address === delelteDoubleQuote(blockchainElement.client)) {
               // 계정 주인이 의뢰인 즉 상대방은 배송원
-              role = "배송인"
+              role = "배송원"
             } else {
               // 계정 주인이 배송원 즉 상대방은 의뢰인
               role = "의뢰인"
