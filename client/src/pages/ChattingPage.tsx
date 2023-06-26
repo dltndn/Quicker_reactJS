@@ -38,10 +38,13 @@ const StateDiv = styled(Div0_1)`
 `;
 const Div0 = styled.div`
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  text-align: center;
 `;
+
+const Div3 = styled.div`
+  justify-content: center;
+  text-align: center;
+`
 
 const Img = styled.img`
   margin-top: 30%;
@@ -161,7 +164,7 @@ function ChattingPage() {
             );
           })
         ) : (
-          <div>
+          <Div3>
             <div>
               <Img src={nochat} />
             </div>
@@ -169,7 +172,7 @@ function ChattingPage() {
               현재 진행 중인 채팅이 없습니다.<br></br>
               거래를 시작하여 채팅을 활성화 시켜보세요!
             </Div1>
-          </div>
+          </Div3>
         )}
       </Div0>
       {isRoomClicked === true && selectedOrderNum !== undefined ? (<></>):(<BottomBar></BottomBar>)}
