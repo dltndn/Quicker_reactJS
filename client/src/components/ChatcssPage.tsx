@@ -14,12 +14,6 @@ function ChatcssPage() {
   const navigate = useNavigate();
   return (
     <>
-      {/* <TopBarChat
-        title="상대방이름"
-        redirectLogic={() => {
-          navigate("/");
-        }}
-      ></TopBarChat> */}
       <Div0>
         <Div1>
         김포시 김포대로 926번길 46
