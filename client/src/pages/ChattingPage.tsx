@@ -21,7 +21,21 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
+const Div0_1 = styled.div`
+  display: flex;
+  padding: 1rem 0.75rem 1rem 1.875rem;
+`;
 
+const StateDiv = styled(Div0_1)`
+  border-radius: 1.25rem;
+  width: 3.75rem;
+  height: 1.438rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #5843f5;
+  font-weight: bold;
+`;
 const Div0 = styled.div`
   display: flex;
   flex-direction: column;
@@ -128,7 +142,7 @@ function ChattingPage() {
             console.log(blockchainElement)
             if (address === delelteDoubleQuote(blockchainElement.client)) {
               // 계정 주인이 의뢰인 즉 상대방은 배송원
-              role = "배송원"
+              role = "배송인"
             } else {
               // 계정 주인이 배송원 즉 상대방은 의뢰인
               role = "의뢰인"
