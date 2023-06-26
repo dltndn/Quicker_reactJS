@@ -8,5 +8,6 @@ export interface RoomInterface {
 interface setStates {
     setSelectedOrderNum: React.Dispatch<React.SetStateAction<number | undefined>>
     setIsRoomClicked: React.Dispatch<React.SetStateAction<boolean>>
+    setRole : React.Dispatch<React.SetStateAction<string>>
 }
 

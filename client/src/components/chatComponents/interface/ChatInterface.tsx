@@ -1,4 +1,5 @@
 export interface ChatInterface {
+    role : string,
     roomName: number | undefined;
     realAddress: {
         receiver: string
