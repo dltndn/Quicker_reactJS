@@ -17,20 +17,17 @@ const nochat = require("../image/nochat.png");
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #ffffff !important;
+    background-color: #efefef !important;
     height: 100%;
   }
 `;
 
 const Div0 = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-
-const Div3 = styled.div`
   justify-content: center;
+  flex-direction: column;
   text-align: center;
-`
+`;
 
 const Img = styled.img`
   margin-top: 30%;
@@ -76,6 +73,7 @@ function ChattingPage() {
   const [combinedBlockChainData, setCombinedBlockChainData] = useState<
     ReactNode[] | undefined
   >();
+  const [role, setRole] = useState("");
 
   const getOrderListFromBlochain = async () => {
     const blockChainDataList = await getOrdersForState(1).then((list) =>
@@ -118,6 +116,7 @@ function ChattingPage() {
       <Div0 className="App">
         {isRoomClicked === true && selectedOrderNum !== undefined ? (
           <Chat
+            role={role}
             roomName={selectedOrderNum}
             realAddress={{ receiver: "수취인 주소", sender: "발송인 주소" }}
             phoneNumbers={{ receiver: "수취인 번호", sender: "발송인 번호" }}
@@ -137,6 +136,7 @@ function ChattingPage() {
             return (
               <Room
                 setStates={{
+                  setRole : setRole,
                   setSelectedOrderNum: setSelectedOrderNum,
                   setIsRoomClicked: setIsRoomClicked,
                 }}
@@ -147,7 +147,7 @@ function ChattingPage() {
             );
           })
         ) : (
-          <Div3>
+          <div>
             <div>
               <Img src={nochat} />
             </div>
@@ -155,7 +155,7 @@ function ChattingPage() {
               현재 진행 중인 채팅이 없습니다.<br></br>
               거래를 시작하여 채팅을 활성화 시켜보세요!
             </Div1>
-          </Div3>
+          </div>
         )}
       </Div0>
       {isRoomClicked === true && selectedOrderNum !== undefined ? (<></>):(<BottomBar></BottomBar>)}

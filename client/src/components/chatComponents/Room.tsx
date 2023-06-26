@@ -44,6 +44,7 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
         <div
           ref={roomComponent}
           onClick={() => {
+            setStates.setRole(role)
             setStates.setIsRoomClicked(true);
             setStates.setSelectedOrderNum(orderNum);
           }}

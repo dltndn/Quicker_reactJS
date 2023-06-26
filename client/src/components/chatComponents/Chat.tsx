@@ -28,6 +28,7 @@ const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
 
 export default function ({
+  role,
   roomName,
   realAddress,
   phoneNumbers,
@@ -162,7 +163,7 @@ export default function ({
   return (
     <>
           <TopBarChat
-        title={opponentName}
+        title={`${opponentName + " " + role}`}
         redirectLogic={() => {
           navigate("/");
         }}
