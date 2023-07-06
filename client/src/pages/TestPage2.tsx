@@ -9,6 +9,17 @@ import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
+import WalletConnectBtn from "../components/WalletConnectBtn";
+
+import {
+  prepare,
+  request as klipRequest,
+  getResult as getKlipResult,
+  //@ts-ignore
+} from "klip-sdk";
+import { KlipSdk } from "../utils/KlipSdk";
+var QRCode = require('qrcode')
+
 //Qkrw token contract information - polygon mumbai network
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
@@ -66,12 +77,49 @@ export default function TestPage2() {
     }
     return <button onClick={() => executeMap(false)}> kakao map btn</button>
 }
+
+// klip test
+
+const [showQr, setShowQr] = useState<boolean>(false)
+const [qrUrl, setQrUrl] = useState<string>("")
+
+const generateQRCode = async (url: string) => {
+  try {
+    const qrCodeDataUrl = await QRCode.toDataURL(url);
+    // console.log(qrCodeDataUrl);
+    setQrUrl(qrCodeDataUrl)
+    setShowQr(true)
+  } catch (error) {
+    console.error('Failed to generate QR code:', error);
+  }
+};
+
+const MAIN_URL = "http://localhost:3000/";
+
+
+const kSdk = new KlipSdk()
+
+const getKlipAddress = async () => {
+  const response = await prepare.auth({
+          bappName: "Quicker",
+          successLink: MAIN_URL,
+          failLink: MAIN_URL,
+        });
+  generateQRCode(`https://klipwallet.com/?target=/a2a?request_key=${response.request_key}`)
+  
+}
+
+//
+
   return (
     <>
       <TopDiv>
         <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
+          {/* <button onClick={async () => await getKlipAddress()}>클립 지갑주소 테스트</button> */}
+          <WalletConnectBtn />
+          {showQr && <img src={qrUrl}/>}
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"
