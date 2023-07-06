@@ -33,15 +33,41 @@ export class KlipSdk {
     return response.request_key
   }
 
-  public getAddress = async (request_key: string) => {
-    const timerId = setInterval(async () => {
-      const data = await axios.get(`https://a2a-api.klipwallet.com/v2/a2a/result?request_key=${request_key}`)
-      if (data.data.status === "completed") {
-        clearInterval(timerId)
-        console.log(data.data.result.klaytn_address)
-        return data.data.result.klaytn_address
-      }
-    }, 1000);
+  // 1: mobile, 2: QR
+  public getAddress = async (request_key: string, caseNum: number) => {
+    switch(caseNum) {
+      case 1:
+        return new Promise(async (resolve) => {
+          klipRequest(request_key);
+          const timerId = setInterval(async () => {
+            const data = await getKlipResult(request_key);
+            const currentTime = Math.floor(Date.now() / 1000);
+            if (data.status === "completed") {
+              resolve(data.result.klaytn_address)
+              return () => clearInterval(timerId);
+            } else if (currentTime === data.expiration_time) {
+              clearInterval(timerId);
+            }
+          }, 1000);
+        });
+      case 2:
+        return new Promise(async (resolve) => {
+          const timerId = setInterval(async () => {
+            const data = await axios.get(
+              `https://a2a-api.klipwallet.com/v2/a2a/result?request_key=${request_key}`
+            );
+            const currentTime = Math.floor(Date.now() / 1000);
+            if (data.data.status === "completed") {
+              clearInterval(timerId);
+              resolve(data.data.result.klaytn_address);
+            } else if (currentTime === data.data.expiration_time) {
+              clearInterval(timerId);
+            }
+          }, 1000);
+        });
+    }
+
+    
   }
 
   public getAddress_old = async (): Promise<string> => {
