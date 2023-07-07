@@ -55,6 +55,10 @@ app.use("/order-fail-image", OrderFailImage);
 app.use("/order", Order)
 app.use("/test", realTimeLocation);
 
+// 클립 지갑용 임시
+import tempKlipConnect from "./Maria/Connectors/tempKlipConnect";
+app.post("/connectKlip", tempKlipConnect.getRequests)
+
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 
 // const server = https.createServer(options, app).listen(HTTPS_PORT, () => {
@@ -62,3 +66,4 @@ const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port
 // });
 // socket
 chat(server)
+

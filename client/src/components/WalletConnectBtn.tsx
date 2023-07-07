@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { KlipSdk } from "../utils/KlipSdk";
-import axios from "axios";
 
 var QRCode = require("qrcode");
 
@@ -12,19 +11,20 @@ const WalletConnectBtn = () => {
   const klip = new KlipSdk();
 
   const mobileConnect = async () => {
-    const reqKey = await klip.getKlipReqKey();
-    const adrr = await klip.getAddress(reqKey, 1)
+    const reqKey = await klip.getKlipReqKey(true);
+    const adrr = await klip.getAddress(reqKey, true)
     setAddress(adrr)
   }
 
   const qrConnect = async () => {
-    const reqKey = await klip.getKlipReqKey();
+    const reqKey = await klip.getKlipReqKey(false);
     const qrUrlStr = await generateQRCode(
       `https://klipwallet.com/?target=/a2a?request_key=${reqKey}`
     );
     setQrUrl(qrUrlStr);
     setShowQr(true);
-    const adrr = await klip.getAddress(reqKey, 2)
+    const adrr = await klip.getAddress(reqKey, false)
+    console.log(adrr)
     setAddress(adrr)
   };
 
