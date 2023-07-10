@@ -18,6 +18,7 @@ import {
   //@ts-ignore
 } from "klip-sdk";
 import { KlipSdk } from "../utils/KlipSdk";
+import { KaikasConnect } from "../utils/KaikasConnect";
 var QRCode = require('qrcode')
 
 //Qkrw token contract information - polygon mumbai network
@@ -80,46 +81,44 @@ export default function TestPage2() {
 
 // klip test
 
-const [showQr, setShowQr] = useState<boolean>(false)
-const [qrUrl, setQrUrl] = useState<string>("")
-
-const generateQRCode = async (url: string) => {
-  try {
-    const qrCodeDataUrl = await QRCode.toDataURL(url);
-    // console.log(qrCodeDataUrl);
-    setQrUrl(qrCodeDataUrl)
-    setShowQr(true)
-  } catch (error) {
-    console.error('Failed to generate QR code:', error);
-  }
-};
-
-const MAIN_URL = "http://localhost:3000/";
-
-
 const kSdk = new KlipSdk()
+const getReqkey = async() => {
+  const req_key = await kSdk.getKlipReqKeySendToken('', "0.1")
+  setReqKey(req_key)
+}
+const sendKlay = async () => {
+  const txHash = await kSdk.getTxHash(reqKey)
 
-const getKlipAddress = async () => {
-  const response = await prepare.auth({
-          bappName: "Quicker",
-          successLink: MAIN_URL,
-          failLink: MAIN_URL,
-        });
-  generateQRCode(`https://klipwallet.com/?target=/a2a?request_key=${response.request_key}`)
-  
+}
+//
+
+// Kaikas test
+const [reqKey, setReqKey] = useState<string>("")
+const [klaytnAddr, setKlaytnAddr] = useState<unknown>("")
+const kConn = new KaikasConnect()
+const getReqKey2 = async () => {
+  const req_key = await kConn.getKaikasReqKeyAuth()
+  setReqKey(req_key)
 }
 
+const getAddress = async () => {
+  const addr = await kConn.getAddress(reqKey, true)
+  setKlaytnAddr(addr)
+}
 //
 
   return (
     <>
+      {klaytnAddr}
       <TopDiv>
         <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
           {/* <button onClick={async () => await getKlipAddress()}>클립 지갑주소 테스트</button> */}
           <WalletConnectBtn />
-          {showQr && <img src={qrUrl}/>}
+          <button onClick={async() => await getReqKey2()}>kaikas req key</button>
+          <button onClick={async() => await getAddress()}>kaikas address</button>
+          
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"

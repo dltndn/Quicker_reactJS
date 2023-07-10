@@ -14,7 +14,7 @@ const APP_NAME = "Quicker";
 export class KlipSdk {
   constructor() {}
 
-  public getKlipReqKey = async (isMobile: boolean) => {
+  public getKlipReqKeyAuth = async (isMobile: boolean) => {
     const mobilePara = {
       bappName: APP_NAME,
       successLink: MAIN_URL,
@@ -46,6 +46,21 @@ export class KlipSdk {
     }
   };
 
+  public getKlipReqKeySendToken = async (toAddress: string, amount: string) => {
+    const bappName = 'Quicker'
+    const from = ''
+    const to = toAddress
+    const successLink = MAIN_URL
+    const failLink = MAIN_URL
+    try {
+      const res = await prepare.sendKLAY({ bappName, from, to, amount, successLink, failLink })
+      return res.request_key
+    } catch (e) {
+      alert(JSON.stringify(e))
+      return null
+    }
+  }
+
   public getAddress = async (request_key: string, isMobile: boolean) => {
     const para = request_key;
     return new Promise(async (resolve) => {
@@ -61,7 +76,7 @@ export class KlipSdk {
           if (res.data.status === "completed") {
             clearInterval(timerId);
             resolve(res.data.result.klaytn_address);
-          } else if (currentTime === res.data.expiration_time) {
+          } else if (currentTime > res.data.expiration_time) {
             clearInterval(timerId);
           }
         } else {
@@ -73,7 +88,7 @@ export class KlipSdk {
           if (res.data.status === "completed") {
             clearInterval(timerId);
             resolve(res.data.result.klaytn_address);
-          } else if (currentTime === res.data.expiration_time) {
+          } else if (currentTime > res.data.expiration_time) {
             clearInterval(timerId);
           }
         }
@@ -81,34 +96,43 @@ export class KlipSdk {
     });
   };
 
-  public getAddress_old = async (): Promise<string> => {
-    return new Promise(async (resolve, reject) => {
-      const response = await prepare.auth({
-        bappName: APP_NAME,
-        successLink: MAIN_URL,
-        failLink: MAIN_URL,
-      });
-      alert(response.request_key);
-      resolve(await this.reqAndGetRes(response.request_key, 1));
-    });
-  };
+  public getTxHash = async (request_key: string) => {
+    klipRequest(request_key);
+    return new Promise(async (resolve) => {
+      const timerId = setInterval(async () => {
+        const data = await getKlipResult(request_key)
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (data.status === "completed") {
+          resolve(data.result.tx_hash)
+          clearInterval(timerId);
+        } else if (currentTime > data.expiration_time) {
+          clearInterval(timerId);
+        }
+      }, 1000)
+    })
+  }
 
   public sendKlay = async (
     from: string,
     to: string,
-    amount: number
+    amount: number,
+    isMobile: boolean
   ): Promise<string> => {
     return new Promise(async (resolve, reject) => {
-      const response = await prepare.sendToken({
-        bappName: APP_NAME,
-        from,
-        to,
-        amount: amount.toString(),
-        contract: "0x0000000000000000000000000000000000000000",
-        successLink: MAIN_URL,
-        failLink: MAIN_URL,
-      });
-      resolve(await this.reqAndGetRes(response.request_key, 3));
+      if (isMobile) {
+        const response = await prepare.sendToken({
+          bappName: APP_NAME,
+          from,
+          to,
+          amount: amount.toString(),
+          contract: "0x0000000000000000000000000000000000000000",
+          successLink: MAIN_URL,
+          failLink: MAIN_URL,
+        });
+        resolve(await this.reqAndGetRes(response.request_key, 3));
+      } else {
+
+      }
     });
   };
 

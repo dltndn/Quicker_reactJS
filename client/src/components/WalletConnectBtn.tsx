@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { KlipSdk } from "../utils/KlipSdk";
+// import { KlipSdk } from "../utils/KlipSdk";
+import { KaikasConnect } from "../utils/KaikasConnect";
 
 var QRCode = require("qrcode");
 
@@ -8,22 +9,22 @@ const WalletConnectBtn = () => {
   const [qrUrl, setQrUrl] = useState<string>("");
   const [address, setAddress] = useState<unknown>("");
 
-  const klip = new KlipSdk();
+  const kConn = new KaikasConnect();
 
   const mobileConnect = async () => {
-    const reqKey = await klip.getKlipReqKey(true);
-    const adrr = await klip.getAddress(reqKey, true)
+    const reqKey = await kConn.getKaikasReqKeyAuth();
+    const adrr = await kConn.getAddress(reqKey, true)
     setAddress(adrr)
   }
 
   const qrConnect = async () => {
-    const reqKey = await klip.getKlipReqKey(false);
+    const reqKey = await kConn.getKaikasReqKeyAuth();
     const qrUrlStr = await generateQRCode(
-      `https://klipwallet.com/?target=/a2a?request_key=${reqKey}`
+        `https://app.kaikas.io/a/${reqKey}`
     );
     setQrUrl(qrUrlStr);
     setShowQr(true);
-    const adrr = await klip.getAddress(reqKey, false)
+    const adrr = await kConn.getAddress(reqKey, false)
     console.log(adrr)
     setAddress(adrr)
   };
