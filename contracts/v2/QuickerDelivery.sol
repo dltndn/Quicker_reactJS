@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-// @custom: security-contact james98099@gmail.com
-// @dev: This contract uses QKRW token as currency
+// @custom:security-contact james98099@gmail.com
+// @dev:This contract was created for use in graduation project
+//      This contract uses QKRW token as currency
 
 /**
  * @dev declare Qkrw(ERC20) contract
@@ -103,6 +104,8 @@ contract QuickerDelivery is Ownable, AccessControl {
         address _Platform,
         address _Insurance
     ) Ownable() {
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(CHANGE_FEE_ROLE, msg.sender);
         setCommissionRate(0, _platFormFee);
         setCommissionRate(1, _insuranceFee);
         setCommissionRate(2, _securityDeposit);
@@ -245,6 +248,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     }
 
     function changeCommissionRate(uint8 _num, uint16 _changedRate) public onlyRole(CHANGE_FEE_ROLE) {
+        require(hasRole(CHANGE_FEE_ROLE, msg.sender), "Caller must have CHANGE_FEE_ROLE");
         setCommissionRate(_num, _changedRate);
     }
 
