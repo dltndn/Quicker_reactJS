@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 // import { KlipSdk } from "../utils/KlipSdk";
-import { KaikasConnect } from "../utils/KaikasConnect";
+import { KaikasConnect } from "../../utils/KaikasConnect";
 
 var QRCode = require("qrcode");
 
