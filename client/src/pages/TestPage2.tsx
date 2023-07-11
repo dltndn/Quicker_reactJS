@@ -10,7 +10,7 @@ import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
 import WalletConnectBtn from "../components/blockChainTx/WalletConnectBtn";
-import SendToken from "../components/blockChainTx/SendTokenK";
+import SendTxK from "../components/blockChainTx/SendTxK";
 
 import {
   prepare,
@@ -119,7 +119,7 @@ const getAddress = async () => {
           <WalletConnectBtn />
           <button onClick={async() => await getReqKey2()}>kaikas req key</button>
           <button onClick={async() => await getAddress()}>kaikas address</button>
-          <SendToken recieverAddress={""} amm={10}/>
+          <SendTxK recieverAddress={""} amm={10}/>
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"
