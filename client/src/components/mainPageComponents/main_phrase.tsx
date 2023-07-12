@@ -15,6 +15,8 @@ import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
 import KakaoNaviDeepLinkButton from "../searchComponents/KakaoNaviDeepLinkButton";
 import { TwoPointRoute } from "../searchComponents/interface/route";
+import { useConnWalletInfo } from "../../App";
+import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -67,7 +69,8 @@ type isConnectToWallet = {
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
   const { isMember } = useVerificationStore();
-  const { address } = useAccount();
+  // const { address } = useAccount();
+  const { address } = useConnWalletInfo();
 
   const sdta = new SendDataToAndroid(address);
   const testVal: boolean = true;
@@ -154,7 +157,8 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         <>
                 <Div1_1>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
-                <Web3Button icon="hide" label="지갑연결" balance="hide" />
+                {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
+                <WalletConnectBtn />
               </Sp2>
                 </Div1_1>
                 <Div1>

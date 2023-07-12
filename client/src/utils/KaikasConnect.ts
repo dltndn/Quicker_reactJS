@@ -74,6 +74,7 @@ export class KaikasConnect {
           resolve(res.data.result.klaytn_address);
         } else if (currentTime > res.data.expiration_time) {
           clearInterval(timerId);
+          resolve(null)
         }
       }, 1000);
     });

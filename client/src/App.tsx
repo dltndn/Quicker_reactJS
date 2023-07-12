@@ -59,6 +59,24 @@ const wagmiClient = createClient({
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+interface UseConnWalletInfoType {
+  address: string | undefined;
+  setAddress: (data: string | undefined) => void;
+  isMobile: boolean | null;
+  setIsMobile: (data: boolean | null) => void;
+  isConnected: boolean;
+  setIsConneted: (data: boolean) => void;
+}
+
+export const useConnWalletInfo = create<UseConnWalletInfoType>((set) => ({
+  address: undefined,
+  setAddress: (address: string | undefined) => set({address}),
+  isMobile: null, 
+  setIsMobile: (isMobile: boolean | null) => set({isMobile}),
+  isConnected: false,
+  setIsConneted: (isConnected: boolean) => set({isConnected})
+}))
+
 interface UseVerifiaction {
   isMember: boolean;
   setIsMember: (newIsMember:boolean) => void;
@@ -93,7 +111,8 @@ export const UseUserOrderState = create<UseUserOrderStateType>((set) => ({
 
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
-  const { address } = useAccount()
+  // const { address } = useAccount()
+  const { address, setAddress, setIsConneted, setIsMobile } = useConnWalletInfo()
   const { isMember, setIsMember, setUserName } = useVerificationStore();
   const { clientOrderNums, setClientOrderNums, quickerOrderNums, setQuickerOrderNums, userOrderNumStateTrigger} = UseUserOrderState()
 
@@ -167,6 +186,25 @@ function App() {
       }
     },
   });
+
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("kaikas_address");
+    const storedIsMobile = localStorage.getItem("kaikas_isMobile");
+    console.log(storedAddress)
+    console.log(storedIsMobile)
+    if (storedAddress === "undefined") {
+        setAddress(undefined)
+        setIsConneted(false)
+    } else if (storedAddress !== null){
+        setAddress(storedAddress)
+        setIsConneted(true)
+        if (storedIsMobile === "true") {
+          setIsMobile(true)
+        } else {
+          setIsMobile(false)
+        }
+    }
+  }, [])
 
   useEffect(() => {
     // 지갑주소 유저 여부 조회
