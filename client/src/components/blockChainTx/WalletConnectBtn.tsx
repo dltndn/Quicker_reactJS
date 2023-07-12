@@ -8,8 +8,7 @@ const WalletConnectBtn = () => {
   const [showQr, setShowQr] = useState<boolean>(false);
   const [qrUrl, setQrUrl] = useState<string>("");
 
-  const { address, setAddress, setIsMobile, setIsConneted } =
-    useConnWalletInfo();
+  const { address, setAddress, setIsMobile, setIsConneted } = useConnWalletInfo();
 
   const kConn = new KaikasConnect();
 
@@ -42,7 +41,8 @@ const WalletConnectBtn = () => {
     setAddress(JSON.stringify(address));
     setIsMobile(isMobile);
     setIsConneted(true);
-    localStorage.setItem("kaikas_address", JSON.stringify(address));
+    // @ts-ignore
+    localStorage.setItem("kaikas_address", address);
     localStorage.setItem("kaikas_isMobile", JSON.stringify(isMobile));
   };
 

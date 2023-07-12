@@ -7,7 +7,7 @@ const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
 
 type AddressProps = {
-  address: `0x${string}`;
+  address: string;
 };
 
 export default function GetQkrwBalance({ address }: AddressProps) {

@@ -190,8 +190,6 @@ function App() {
   useEffect(() => {
     const storedAddress = localStorage.getItem("kaikas_address");
     const storedIsMobile = localStorage.getItem("kaikas_isMobile");
-    console.log(storedAddress)
-    console.log(storedIsMobile)
     if (storedAddress === "undefined") {
         setAddress(undefined)
         setIsConneted(false)

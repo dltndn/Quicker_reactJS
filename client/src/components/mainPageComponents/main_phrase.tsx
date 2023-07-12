@@ -72,6 +72,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   // const { address } = useAccount();
   const { address } = useConnWalletInfo();
 
+
   const sdta = new SendDataToAndroid(address);
   const testVal: boolean = true;
 

@@ -3,6 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { BsAt } from "react-icons/bs";
 import { useAccount } from 'wagmi';
+import { useConnWalletInfo } from '../App';
 
 const Maintx = styled.div`
   background-color: #efefef;
@@ -123,7 +124,7 @@ function Join_input({ refs }: props) {
   const [name, setName] = useState('');
   const [contact1, setContact1] = useState('');
   const [contact2, setContact2] = useState('');
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
 
   return (
     <>

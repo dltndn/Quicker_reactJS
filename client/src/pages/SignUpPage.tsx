@@ -6,12 +6,13 @@ import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from 'wagmi';
 import { useVerificationStore } from '../App';
+import { useConnWalletInfo } from '../App';
 
 const serverUrl = process.env.REACT_APP_SERVER_URL
 
 function SignUpPage() {
   const navigate = useNavigate()
-  const { address } = useAccount()
+  const { address } = useConnWalletInfo()
   const { setIsMember, setUserName } = useVerificationStore()
 
   const name = useRef<HTMLInputElement>(null);
