@@ -17,17 +17,10 @@ const WalletConnectBtn = () => {
     const reqKey = await kConn.getKaikasReqKeyAuth();
     const adrr = await kConn.getAddress(reqKey, true);
     if (adrr === null) {
-      setAddress(undefined);
-      setIsMobile(null);
-      setIsConneted(false);
-      localStorage.setItem("kaikas_address", JSON.stringify(null));
+      disConnect();
       localStorage.setItem("kaikas_isMobile", JSON.stringify(true));
     } else {
-      setAddress(JSON.stringify(adrr));
-      setIsMobile(true);
-      setIsConneted(true);
-      localStorage.setItem("kaikas_address", JSON.stringify(adrr));
-      localStorage.setItem("kaikas_isMobile", JSON.stringify(true));
+      connect(adrr, true)
     }
   };
 
@@ -38,18 +31,19 @@ const WalletConnectBtn = () => {
     setShowQr(true);
     const adrr = await kConn.getAddress(reqKey, false);
     if (adrr === null) {
-      setAddress(undefined);
-      setIsMobile(null);
-      setIsConneted(false);
-      localStorage.setItem("kaikas_address", JSON.stringify(undefined));
+      disConnect();
       localStorage.setItem("kaikas_isMobile", JSON.stringify(false));
     } else {
-      setAddress(JSON.stringify(adrr));
-      setIsMobile(false);
-      setIsConneted(true);
-      localStorage.setItem("kaikas_address", JSON.stringify(adrr));
-      localStorage.setItem("kaikas_isMobile", JSON.stringify(false));
+      connect(adrr, false)
     }
+  };
+
+  const connect = (address: unknown, isMobile: boolean) => {
+    setAddress(JSON.stringify(address));
+    setIsMobile(isMobile);
+    setIsConneted(true);
+    localStorage.setItem("kaikas_address", JSON.stringify(address));
+    localStorage.setItem("kaikas_isMobile", JSON.stringify(isMobile));
   };
 
   const disConnect = () => {
