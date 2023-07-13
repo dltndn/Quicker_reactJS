@@ -4,9 +4,6 @@ import { QKRW_CONTRACT_ABI, QKRW_ADDRESS } from "../contractInformation";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm } from "../utils/CalAny";
 
-//Qkrw token contract information - polygon mumbai network
-const Qkrw_abi = QKRW_CONTRACT_ABI;
-const Qkrw_address = QKRW_ADDRESS;
 
 type AddressProps = {
   address: string;

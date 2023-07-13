@@ -103,7 +103,7 @@ export default function CreateNewOrder({
       } else {
         console.log("새 오더 번호 감지x");
       }
-    }, 1000);
+    }, 500);
   };
 
   const getLastOrderFromBlochain = async () => {
