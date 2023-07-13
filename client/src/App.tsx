@@ -50,7 +50,7 @@ const wagmiClient = createClient({
   autoConnect: true,
   connectors: modalConnectors({
     projectId,
-    version: "1",
+    version: "2",
     appName: "web3Modal",
     chains,
   }),
