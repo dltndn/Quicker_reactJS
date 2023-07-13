@@ -15,7 +15,8 @@ import SendTxK from "../components/blockChainTx/SendTxK";
 import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import { useConnWalletInfo } from "../App";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
-
+import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrderList } from "../utils/ExecuteOrderFromBlockchain";
 import {
   prepare,
   request as klipRequest,
@@ -24,6 +25,7 @@ import {
 } from "klip-sdk";
 import { KlipSdk } from "../utils/KlipSdk";
 import { KaikasConnect } from "../utils/KaikasConnect";
+import { changeBalanceToForm } from "../utils/CalAny";
 var QRCode = require('qrcode')
 
 //Qkrw token contract information - polygon mumbai network
@@ -114,8 +116,8 @@ const getAddress = async () => {
 
 const allowanceTest = async () => {
   // increaseAllowance test
-  const result = await getAllowance(address)
-  console.log(result)
+  const result = await getOrderList("0x4068f9E751954D162ab858276f2F208D79f10930", true)
+  console.log("test func: ", result)
 }
 
   return (
@@ -131,7 +133,7 @@ const allowanceTest = async () => {
           <button onClick={async() => await getAddress()}>kaikas address</button>
           {/* <SendTxK recieverAddress={""} amm={10}/> */}
           <SendTxK param={GetContractParams.IncreaseAllowanceQkrw()} successFunc={() => console.log("success func")}/>
-          <button onClick={async() => await allowanceTest()}>allowance test</button>
+          <button onClick={async() => await allowanceTest()}>balance test</button>
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"

@@ -65,6 +65,8 @@ app.post("/connectKlip", tempKlipConnect.getRequests)
 
 // 클레이튼 api 연결
 app.post("/getAllowance", KlaytnCaver.getAllowance)
+app.post("/getQkrwBalance", KlaytnCaver.getQkrwBal)
+app.post("/getOrderList", KlaytnCaver.getOrderList)
 
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 
