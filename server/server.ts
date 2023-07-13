@@ -16,6 +16,10 @@ import AssociateOrder from "./routes/AssociateOrder";
 import Home from "./routes/Home";
 import Order from "./routes/Order"
 import realTimeLocation from "./routes/realTimeLocation"
+
+// Klaytn caver
+import KlaytnCaver from "./klaytnApi/KlaytnCaver";
+
 // 설정
 const cors = require("cors");
 const app: Application = express();
@@ -58,6 +62,9 @@ app.use("/test", realTimeLocation);
 // 클립 지갑용 임시
 import tempKlipConnect from "./Maria/Connectors/tempKlipConnect";
 app.post("/connectKlip", tempKlipConnect.getRequests)
+
+// 클레이튼 api 연결
+app.post("/getAllowance", KlaytnCaver.getAllowance)
 
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 

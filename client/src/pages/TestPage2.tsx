@@ -12,6 +12,10 @@ import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 import WalletConnectBtn from "../components/blockChainTx/WalletConnectBtn";
 import SendTxK from "../components/blockChainTx/SendTxK";
 
+import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
+import { useConnWalletInfo } from "../App";
+import GetContractParams from "../components/blockChainTx/GetContractParams";
+
 import {
   prepare,
   request as klipRequest,
@@ -33,7 +37,7 @@ export default function TestPage2() {
   const [txSender, setTxSender] = useState<string>("")
   const [txHash, setTxHash] = useState<string>("")
 
-  const { address } = useAccount()
+  const { address } = useConnWalletInfo()
 
   const handleClick = (_orderNum: string) => {
     setOrderNum(_orderNum);
@@ -108,6 +112,12 @@ const getAddress = async () => {
 }
 //
 
+const allowanceTest = async () => {
+  // increaseAllowance test
+  const result = await getAllowance(address)
+  console.log(result)
+}
+
   return (
     <>
       {klaytnAddr}
@@ -119,7 +129,9 @@ const getAddress = async () => {
           <WalletConnectBtn />
           <button onClick={async() => await getReqKey2()}>kaikas req key</button>
           <button onClick={async() => await getAddress()}>kaikas address</button>
-          <SendTxK recieverAddress={""} amm={10}/>
+          {/* <SendTxK recieverAddress={""} amm={10}/> */}
+          <SendTxK param={GetContractParams.IncreaseAllowanceQkrw()} successFunc={() => console.log("success func")}/>
+          <button onClick={async() => await allowanceTest()}>allowance test</button>
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"

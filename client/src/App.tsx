@@ -243,12 +243,12 @@ function App() {
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
-      <Web3Modal
+      {/* <Web3Modal
         projectId={projectId ?? ""}
         ethereumClient={ethereumClient}
         themeBackground={theme.themeBackground}
         // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
-      />
+      /> */}
     </>
   );
 }

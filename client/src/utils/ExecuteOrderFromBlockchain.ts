@@ -2,11 +2,14 @@ import { readContract, readContracts, prepareWriteContract, writeContract } from
 import { QKRW_CONTRACT_ABI,
   QKRW_ADDRESS, QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from '../contractInformation'
 import { getDateFromTimestamp } from './ConvertTimestampToDate';
+import axios from 'axios';
 
 const Qkrw_abi = QKRW_CONTRACT_ABI;
 const Qkrw_address = QKRW_ADDRESS;
 const Quicker_abi = QUICKER_CONTRACT_ABI;
 const Quicker_address = QUICKER_ADDRESS;
+
+const env = process.env
 
 // 최신순 오더 배열 반환
 export const getOrdersForLatest =async (amount:string) => {
@@ -43,14 +46,13 @@ export const getQkrwBalance =async (address: string) => {
 }
 
 // QKRW token 권한 확인
-export const getAllowance =async (address:`0x${string}` | undefined) => {
-  const data = await readContract({
-    address: Qkrw_address,
-    abi: Qkrw_abi,
-    functionName: "allowance",
-    args: [address, Quicker_address],
-  })
-  return data
+export const getAllowance =async (address:string | undefined) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}getAllowance`, {owner: address})
+    return data.data // type: number
+  } catch (e) {
+    return null
+  }
 }
 
 // 오더 객체 배열 반환

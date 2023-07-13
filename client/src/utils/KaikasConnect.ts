@@ -32,7 +32,7 @@ export class KaikasConnect {
     }
   };
 
-  public getKaikasReqKeyTx = async (tx: SendTokenTxType) => {
+  public getKaikasReqKeyTx = async (tx: SendTxType) => {
     const para = {
         type: "execute_contract",
         chain_id: CHAIN_ID,
@@ -89,7 +89,6 @@ export class KaikasConnect {
           const res = await axios.get(
             `https://api.kaikas.io/api/v1/k/result/${reqKey}`
           );
-          console.log(res)
           const currentTime = Math.floor(Date.now() / 1000);
           if (res.data.status === "completed") {
             clearInterval(timerId);
@@ -102,7 +101,7 @@ export class KaikasConnect {
   }
 }
 
-export interface SendTokenTxType {
+export interface SendTxType {
     abi: string;
     value: string;
     to: string;

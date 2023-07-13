@@ -96,7 +96,7 @@ export default function CreateNewOrder({
     try {
       // 토큰 사용 권한 체크 로직
       const allowanceData: any = await getAllowance(address);
-      if (allowanceData._hex === "0x00") {
+      if (allowanceData === 0) {
         setShowAllowance(true);
       }
       write?.();
