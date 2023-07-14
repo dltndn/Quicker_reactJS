@@ -52,7 +52,7 @@ export default function CreateNewOrder({
   const getQkrwBal = async () => {
     try {
       const result = await getQkrwBalance(address);
-      const bal = changeBalanceToForm(BigInt(result));
+      const bal = changeBalanceToForm(result);
       return Number(bal);
     } catch (e) {
       console.log(e);

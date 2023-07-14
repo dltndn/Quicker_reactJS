@@ -1,7 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { SendTxType } from "../../utils/KaikasConnect";
 import { to18decimals } from "../../utils/CalAny";
-import { QKRW_ADDRESS_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../../contractInformation";
+import {
+  QKRW_ADDRESS_KLAYTN,
+  QUICKER_DLVR_ADDRESS_KLAYTN,
+} from "../../contractInformation";
 
 export default {
   SendQkrwToken: (reciever: string, ammount: number): SendTxType => {
@@ -35,7 +38,7 @@ export default {
       to: QKRW_ADDRESS_KLAYTN,
       params: `["${reciever}", "${amm}"]`,
     };
-  },  
+  },
   IncreaseAllowanceQkrw: (): SendTxType => {
     return {
       abi: `{
@@ -56,10 +59,10 @@ export default {
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
-      value: '0',
+      value: "0",
       to: QKRW_ADDRESS_KLAYTN,
-      params: `["${QUICKER_DLVR_ADDRESS_KLAYTN}", "100000000000000000000000000"]`
-    }
+      params: `["${QUICKER_DLVR_ADDRESS_KLAYTN}", "100000000000000000000000000"]`,
+    };
   },
   CreateOrder: (orderPrice: string, deadLine: string): SendTxType => {
     return {
@@ -81,9 +84,9 @@ export default {
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
-      value: '0',
+      value: "0",
       to: QUICKER_DLVR_ADDRESS_KLAYTN,
-      params: `["${orderPrice}", "${deadLine}"]`
-    }
-  }
+      params: `["${orderPrice}", "${deadLine}"]`,
+    };
+  },
 };

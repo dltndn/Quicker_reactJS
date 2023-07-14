@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
+import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { create } from "zustand";
 import { useState, useEffect } from "react";
 import {
@@ -16,9 +16,9 @@ import { useVerificationStore } from "../App";
 import Lottie from "lottie-react";
 import LoadingAni from "../Lottie/144488-transparet-loading-dots.json";
 
-const PLATFORM_ADDRESS = "0xB6C9011d74B1149fdc269530d51b4A594D97Fd04";
-const INSUARANCE_ADDRESS = "0x7762DA67fB11335cABb68231B81d1804229E8245";
-const CONTRACT_ADDRESS = QUICKER_ADDRESS;
+const PLATFORM_ADDRESS = "0x007db722AFb72463328821DA8e0F41AC2f15C5Ef";
+const INSUARANCE_ADDRESS = "0xD033A17214bFab58D27c411e102dF4aAE86A8Af3";
+const CONTRACT_ADDRESS = QUICKER_DLVR_ADDRESS_KLAYTN;
 
 interface ExplorerState {
   blinkOrderArrIndex: number[];
@@ -51,7 +51,7 @@ export default function ExplorerPage() {
   const getQkrwBalanceFunc = async (address: string) => {
     try {
       const result: any = await getQkrwBalance(address);
-      const balance = changeBalanceToForm(BigInt(result._hex));
+      const balance = changeBalanceToForm(BigInt(result));
       switch (address) {
         case CONTRACT_ADDRESS:
           setContractBal(balance);

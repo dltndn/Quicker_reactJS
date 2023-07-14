@@ -51,6 +51,7 @@ export default {
       let data = (await SelectUser.getUserName(walletAddress)) as {
         name: string | null;
       };
+      console.log("userName: ",data.name)
       res.send({ name: data.name });
     } catch (error) {
       console.log(error)

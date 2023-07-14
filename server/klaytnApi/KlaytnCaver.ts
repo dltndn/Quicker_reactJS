@@ -33,6 +33,7 @@ export default {
         "balanceOf",
         para
       );
+      console.log(result)
       res.send(result);
     } catch (e) {
       console.log(e);
@@ -46,6 +47,35 @@ export default {
       const result = await quicker_drvr_contract.call(
         funcName,
         para
+      );
+      res.send(result);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
+    }
+  },
+  getOrdersForLatest: async (req: Request, res: Response) => {
+    try {
+      const para = req.body.amount;
+      const result: any = await quicker_drvr_contract.call(
+        "getOrdersForLatest",
+        para
+      );
+      let cResult = []
+      for (let i=0; i < result.length; i++) {
+        const ele = result[i].slice(0, 11)
+        cResult.push(ele)
+      }
+      res.send(cResult);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
+    }
+  },
+  getCommissionRate: async (req: Request, res: Response) => {
+    try {
+      const result: any = await quicker_drvr_contract.call(
+        "getCommissionRate"
       );
       res.send(result);
     } catch (e) {
