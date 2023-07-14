@@ -44,18 +44,24 @@ export default {
       abi: `{
         "inputs": [
           {
-            "internalType": "uint256",
-            "name": "_orderPrice",
-            "type": "uint256"
+            "internalType": "address",
+            "name": "spender",
+            "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "_limitedTime",
+            "name": "addedValue",
             "type": "uint256"
           }
         ],
-        "name": "createOrder",
-        "outputs": [],
+        "name": "increaseAllowance",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
@@ -89,4 +95,24 @@ export default {
       params: `["${orderPrice}", "${deadLine}"]`,
     };
   },
+  AcceptOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "acceptOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  }
 };

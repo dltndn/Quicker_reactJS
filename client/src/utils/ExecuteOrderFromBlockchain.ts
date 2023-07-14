@@ -100,24 +100,26 @@ export const getOrders = async (orderNumList: string[]) => {
 
 // 오더 객체 반환
 export const getOrder = async (orderNum: string) => {
-  const data = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrder",
-    args: [orderNum],
-  });
-  return TemplateOrder(data);
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
+      orderNum,
+    });
+    return TemplateOrder(data.data); // type: object
+  } catch (e) {
+    return null;
+  }
 };
 
 // 오더 객체 반환(블록체인 raw 값)
 export const getOrderRawData = async (orderNum: string) => {
-  const data = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrder",
-    args: [orderNum],
-  });
-  return data;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
+      orderNum,
+    });
+    return data.data; // type: object
+  } catch (e) {
+    return null;
+  }
 };
 
 // 오더 내역 번호 배열 반환

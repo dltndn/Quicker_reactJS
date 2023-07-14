@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
+import { useVerificationStore } from "../../App";
 
 var QRCode = require("qrcode");
 
@@ -9,6 +10,7 @@ const WalletConnectBtn = () => {
   const [qrUrl, setQrUrl] = useState<string>("");
 
   const { address, setAddress, setIsMobile, setIsConneted } = useConnWalletInfo();
+  const { setIsMember, setUserName} = useVerificationStore()
 
   const kConn = new KaikasConnect();
 
@@ -50,6 +52,8 @@ const WalletConnectBtn = () => {
     setAddress(undefined);
     setIsMobile(null);
     setIsConneted(false);
+    setIsMember(false)
+    setUserName(null)
     localStorage.setItem("kaikas_address", JSON.stringify(undefined));
   };
 

@@ -2,7 +2,11 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { create } from "zustand";
 import { useAccount } from "wagmi";
-import { getOrderList, getOrders, getOrder } from "../utils/ExecuteOrderFromBlockchain";
+import {
+  getOrderList,
+  getOrders,
+  getOrder,
+} from "../utils/ExecuteOrderFromBlockchain";
 import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
 import Kakao from "../lib/Kakao";
@@ -12,7 +16,6 @@ import { UseUserOrderState } from "../App";
 
 import money from "../image/money.png";
 
-
 interface OrderState {
   order: object | null;
   setOrder: (newOrder: object | null) => void;
@@ -20,7 +23,7 @@ interface OrderState {
   setOrdersObj: (newOrderObj: object[] | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (newData: boolean) => void;
-  reloadOrderNum: string |  null;
+  reloadOrderNum: string | null;
   setReloadOrderNum: (newData: string | null) => void;
   refreshOrder: boolean;
   setRefreshOrder: (newData: boolean) => void;
@@ -34,9 +37,9 @@ export const useOrderState = create<OrderState>((set) => ({
   isModalOpen: false,
   setIsModalOpen: (isModalOpen: boolean) => set({ isModalOpen }),
   reloadOrderNum: null,
-  setReloadOrderNum: (reloadOrderNum: string | null) => set({reloadOrderNum}),
+  setReloadOrderNum: (reloadOrderNum: string | null) => set({ reloadOrderNum }),
   refreshOrder: false,
-  setRefreshOrder: (refreshOrder: boolean) => set({refreshOrder}),
+  setRefreshOrder: (refreshOrder: boolean) => set({ refreshOrder }),
 }));
 
 interface ShowOrderProps {
@@ -44,51 +47,86 @@ interface ShowOrderProps {
 }
 
 const changeToIntDataInBlockChainId = (dataInBlockChain: any) => {
-  let list: any = []
+  let list: any = [];
   dataInBlockChain.forEach((element: any) => {
-    list.push(parseInt(element.orderNum))
+    list.push(parseInt(element.orderNum));
   });
-  return list
-}
+  return list;
+};
 
+const setRealLocation = async (
+  orderListInDBElement: any,
+  dataInBlockChain: any,
+  index: number
+) => {
+  let realdepartureAdress = await Kakao.reverseGeoCording(
+    orderListInDBElement.Departure.Y,
+    orderListInDBElement.Departure.X
+  );
+  let realdestinationAdress = await Kakao.reverseGeoCording(
+    orderListInDBElement.Destination.Y,
+    orderListInDBElement.Destination.X
+  );
 
-const setRealLocation = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
-  let realdepartureAdress = await Kakao.reverseGeoCording(orderListInDBElement.Departure.Y, orderListInDBElement.Departure.X);
-  let realdestinationAdress = await Kakao.reverseGeoCording(orderListInDBElement.Destination.Y, orderListInDBElement.Destination.X);
-  
   dataInBlockChain[index].realdepartureAdress = realdepartureAdress;
   dataInBlockChain[index].realdestinationAdress = realdestinationAdress;
 
-  dataInBlockChain[index].realdepartureAdress.DETAIL = orderListInDBElement.Departure.DETAIL;
-  dataInBlockChain[index].realdestinationAdress.DETAIL = orderListInDBElement.Destination.DETAIL;
-}
+  dataInBlockChain[index].realdepartureAdress.DETAIL =
+    orderListInDBElement.Departure.DETAIL;
+  dataInBlockChain[index].realdestinationAdress.DETAIL =
+    orderListInDBElement.Destination.DETAIL;
+};
 
-const setSender = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+const setSender = async (
+  orderListInDBElement: any,
+  dataInBlockChain: any,
+  index: number
+) => {
   dataInBlockChain[index].Sender = orderListInDBElement.Sender;
-}
+};
 
-const setRecipient = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+const setRecipient = async (
+  orderListInDBElement: any,
+  dataInBlockChain: any,
+  index: number
+) => {
   dataInBlockChain[index].Recipient = orderListInDBElement.Recipient;
-}
+};
 
-const setDetail = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+const setDetail = async (
+  orderListInDBElement: any,
+  dataInBlockChain: any,
+  index: number
+) => {
   dataInBlockChain[index].DETAIL = orderListInDBElement.DETAIL;
-}
+};
 
-const setProduct = async (orderListInDBElement: any, dataInBlockChain: any, index: number) => {
+const setProduct = async (
+  orderListInDBElement: any,
+  dataInBlockChain: any,
+  index: number
+) => {
   dataInBlockChain[index].Product = orderListInDBElement.Product;
-}
-
+};
 
 // isClient ? (오더 내역):(수행 내역)
 export default function ShowOrders({ isClient }: ShowOrderProps) {
   const { address, isConnected } = useAccount();
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
-  const [newOrder, setNewOrder] = useState<object | null>(null)
+  const [newOrder, setNewOrder] = useState<object | null>(null);
 
-  const { setOrder, ordersObj, setOrdersObj, setIsModalOpen, reloadOrderNum, setReloadOrderNum, refreshOrder, setRefreshOrder } = useOrderState();
-  const { clientOrderNums, quickerOrderNums } = UseUserOrderState()
+  const {
+    setOrder,
+    ordersObj,
+    setOrdersObj,
+    setIsModalOpen,
+    reloadOrderNum,
+    setReloadOrderNum,
+    refreshOrder,
+    setRefreshOrder,
+  } = useOrderState();
+  const { clientOrderNums, quickerOrderNums } = UseUserOrderState();
   const handleOpenModal = (order: object) => {
     setIsModalOpen(true);
     setOrder(order);
@@ -96,11 +134,11 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   // 현재 연결된 지갑 주소의 오더 내역 번호 array값 불러오기
   const getOrderListFromBlochain = async () => {
-    let orderNumList: string[]
+    let orderNumList: string[];
     if (isClient) {
-      orderNumList = clientOrderNums
+      orderNumList = clientOrderNums;
     } else {
-      orderNumList = quickerOrderNums
+      orderNumList = quickerOrderNums;
     }
     //getOrders 호출
     if (orderNumList.length !== 0) {
@@ -111,78 +149,88 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     }
   };
 
-  const conbineDBBlockChain = async (orderListInDBElement: any, dataInBlockChain: any, index: number) =>{
-    await setRealLocation(orderListInDBElement, dataInBlockChain, index)
-    setSender(orderListInDBElement, dataInBlockChain, index)
-    setRecipient(orderListInDBElement, dataInBlockChain, index)
-    setDetail(orderListInDBElement, dataInBlockChain, index)
-    setProduct(orderListInDBElement, dataInBlockChain, index)
-  }
+  const conbineDBBlockChain = async (
+    orderListInDBElement: any,
+    dataInBlockChain: any,
+    index: number
+  ) => {
+    await setRealLocation(orderListInDBElement, dataInBlockChain, index);
+    setSender(orderListInDBElement, dataInBlockChain, index);
+    setRecipient(orderListInDBElement, dataInBlockChain, index);
+    setDetail(orderListInDBElement, dataInBlockChain, index);
+    setProduct(orderListInDBElement, dataInBlockChain, index);
+  };
 
   // orderNumList -> 오더번호
   const getOrderObj = async (orderNumList: string[]) => {
     const dataInBlockChain = await getOrders(orderNumList);
-    const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain)
-    let orderListInDB:any
+    const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain);
+    let orderListInDB: any;
     try {
       let orderListInDb = await Handler.post(
         { list: intLisBlockChainId },
         process.env.REACT_APP_SERVER_URL + "orderlist"
       );
-      orderListInDB = orderListInDb
-    } catch(e) {
-      console.log(e)
+      orderListInDB = orderListInDb;
+    } catch (e) {
+      console.log(e);
     }
     // @ts-ignore
     for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
       for (const orderListInDBElement of orderListInDB) {
         if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
-          console.log(orderListInDBElement)
-          console.log(dataInBlockChain)
-          await conbineDBBlockChain(orderListInDBElement, dataInBlockChain, index);
+          console.log(orderListInDBElement);
+          console.log(dataInBlockChain);
+          await conbineDBBlockChain(
+            orderListInDBElement,
+            dataInBlockChain,
+            index
+          );
         }
       }
     }
     setOrdersObj(dataInBlockChain);
-  }
+  };
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
     const orderNumList = await getOrderList(address, isClient);
     if (orderNumList) {
       getOrderObj(orderNumList);
     }
-    setNewOrder(null)
-  }
+    setNewOrder(null);
+  };
 
   const getNewOrderObj = async (orderNum: string) => {
-    const originOrder = await getOrder(orderNum)
+    const originOrder = await getOrder(orderNum);
     const intervalId = setInterval(async () => {
-        let newOrder = await getOrder(orderNum);
+      let newOrder = await getOrder(orderNum);
+      if (newOrder !== null && originOrder !== null) {
         // 서명 거부시 인터벌 탈출기능 추가
         if (newOrder.state !== originOrder.state) {
-          console.log("새 오더 탐색 완료")
-          setNewOrder(newOrder)
+          console.log("새 오더 탐색 완료");
+          setNewOrder(newOrder);
           clearInterval(intervalId);
         } else {
-          console.log("새 오더 감지x")
+          console.log("새 오더 감지x");
         }
-      }, 500);
-  }
+      }
+    }, 500);
+  };
 
   useEffect(() => {
     if (reloadOrderNum !== null) {
-        getNewOrderObj(reloadOrderNum)
+      getNewOrderObj(reloadOrderNum);
     }
-  }, [reloadOrderNum])
+  }, [reloadOrderNum]);
 
   useEffect(() => {
     if (newOrder !== null) {
-        if (reloadOrderNum !== null) {
-            reloadOrderBoxLogic(reloadOrderNum)
-            setReloadOrderNum(null)
-        }
+      if (reloadOrderNum !== null) {
+        reloadOrderBoxLogic(reloadOrderNum);
+        setReloadOrderNum(null);
+      }
     }
-  }, [newOrder])
+  }, [newOrder]);
 
   useEffect(() => {
     if (ordersObj !== null) {
@@ -195,17 +243,17 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   }, [isClient]);
 
   useEffect(() => {
-    console.log("refreshOrder: "+refreshOrder)
-    if(refreshOrder) {
+    console.log("refreshOrder: " + refreshOrder);
+    if (refreshOrder) {
       getOrderListFromBlochain();
-      setRefreshOrder(false)
+      setRefreshOrder(false);
     }
-  }, [refreshOrder])
+  }, [refreshOrder]);
 
   useEffect(() => {
     getOrderListFromBlochain();
-    console.log("getOrderListFromBlochain 실행")
-  }, [clientOrderNums, quickerOrderNums])
+    console.log("getOrderListFromBlochain 실행");
+  }, [clientOrderNums, quickerOrderNums]);
 
   return (
     <>
@@ -229,15 +277,22 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         isEmptyOrder ? (
           <Div0>오더 내역이 없습니다</Div0>
         ) : (
-          <Div0><Divimg><LoadingImg src={Loading}/></Divimg></Div0>
-
+          <Div0>
+            <Divimg>
+              <LoadingImg src={Loading} />
+            </Divimg>
+          </Div0>
         )
       ) : (
         reversedOrders.map((value, index) => (
-          <Sc0 onClick={() => {  
-            // @ts-ignore
-            (value.Product !== undefined) ? handleOpenModal(value) : alert("db정보 없음")
-          }}>
+          <Sc0
+            onClick={() => {
+              // @ts-ignore
+              value.Product !== undefined
+                ? handleOpenModal(value)
+                : alert("db정보 없음");
+            }}
+          >
             <OrderBox key={index} orderObj={value} isClient={isClient} />
           </Sc0>
         ))
@@ -314,50 +369,49 @@ const Divhid = styled(Div0)`
   height: 3.875rem;
 `;
 
-
 const Sc1 = styled(Sc0)`
-    margin: 0.563rem 0.563rem 0.563rem 0.563rem;
-    justify-content: center;
-    height: 3rem;
+  margin: 0.563rem 0.563rem 0.563rem 0.563rem;
+  justify-content: center;
+  height: 3rem;
 `;
 
 const Divwallet = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: var(--font-small);
-    font-weight: bold;
-    margin-left: 0.75rem;
+  display: flex;
+  align-items: center;
+  font-size: var(--font-small);
+  font-weight: bold;
+  margin-left: 0.75rem;
 `;
 
 const Sp0 = styled.span`
-    font-size: var(--font-md);
-    font-weight: bold;
+  font-size: var(--font-md);
+  font-weight: bold;
 `;
 
 const Spwallet = styled.div`
-    margin-left: auto;
-    margin-right: 0.625rem;
-    font-size: var(--font-md);
+  margin-left: auto;
+  margin-right: 0.625rem;
+  font-size: var(--font-md);
 `;
 
 const Bticon = styled.button`
-    border: none;
-    background-color: var(--white-color);
-    margin-right: 0.625rem;
+  border: none;
+  background-color: var(--white-color);
+  margin-right: 0.625rem;
 `;
 
 const Bticonimg = styled.img`
-    width: 1.875rem;
+  width: 1.875rem;
 `;
 
 const Divimg = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%
+  width: 100%;
 `;
 
 const LoadingImg = styled.img`
-    width: 300px;
+  width: 300px;
 
-    margin-top: 200px;
+  margin-top: 200px;
 `;

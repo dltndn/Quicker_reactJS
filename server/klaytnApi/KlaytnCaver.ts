@@ -33,7 +33,6 @@ export default {
         "balanceOf",
         para
       );
-      console.log(result)
       res.send(result);
     } catch (e) {
       console.log(e);
@@ -83,4 +82,17 @@ export default {
       res.send(e);
     }
   },
+  getOrder: async(req: Request, res: Response) => {
+    try {
+      const para = req.body.orderNum
+      const result = await quicker_drvr_contract.call(
+        "getOrder",
+        para
+      );
+      res.send(result);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
+    }
+  }
 };

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 export default {
     post : (data: Object, url: string) => {
         const response = fetch(url, {
