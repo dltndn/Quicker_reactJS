@@ -42,7 +42,7 @@ export default function ExecutionPage() {
   const twelveHoursToSec = 12 * 60 * 60
 
   const isClientConfirmBefore = (order: any) => {
-    if (order.state === 1 && Number(order.deliveredTime) !== 0)
+    if (order.state === "1" && Number(order.deliveredTime) !== 0)
       return true
 
     return false
@@ -57,7 +57,7 @@ export default function ExecutionPage() {
 
   const isCLientConfirm = (order: any) => {
     console.log(order)
-    if (order.state === 2 || (Number(order.deliveredTime) !== 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime))
+    if (order.state === "2" || (Number(order.deliveredTime) !== 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime))
       return true
     
     return false
@@ -84,19 +84,16 @@ export default function ExecutionPage() {
     if (orderNumber !== undefined) {
       try {
         const blockchainOrder: any = await getOrderRawData(orderNumber)
-        // console.log(isCLientConfirm(blockchainOrder))
-        // console.log(isDeliveryFailed(blockchainOrder))
-        // console.log(isClientConfirmBefore(blockchainOrder))
         if (isCLientConfirm(blockchainOrder)) {
           let securityDeposit: number
           let isReceived: boolean = false
-          if (blockchainOrder.deliveredTime.toNumber() > blockchainOrder.limitedTime.toNumber()) {
+          if (Number(blockchainOrder.deliveredTime) > Number(blockchainOrder.limitedTime)) {
             securityDeposit = 0
           } else {
-            securityDeposit = calSecurityDepositNum(blockchainOrder.orderPrice.toNumber())
+            securityDeposit = calSecurityDepositNum(Number(blockchainOrder.orderPrice))
           }
-          const income = calQuickerIncomeNum(blockchainOrder.orderPrice.toNumber())
-          if(blockchainOrder.securityDeposit.toNumber() === 0) {
+          const income = calQuickerIncomeNum(Number(blockchainOrder.orderPrice))
+          if(Number(blockchainOrder.securityDeposit) === 0) {
             isReceived = true
           }
           setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit} isReceived={isReceived}/>)
