@@ -37,13 +37,13 @@ export default function ClientConfirmPage() {
     if (orderNumber !== undefined) {
         try {
             const blockchainOrder: any = await getOrderRawData(orderNumber)
-            if (blockchainOrder.deliveredTime.toNumber() === 0) {
-                if((blockchainOrder.limitedTime.toNumber() + twelveHoursToSec) >= currentTime) {
-                    let deadlineHM = formatedDateHM(getDateFromTimestamp(blockchainOrder.limitedTime.toNumber()))
+            if (Number(blockchainOrder.deliveredTime) === 0) {
+                if((Number(blockchainOrder.limitedTime) + twelveHoursToSec) >= currentTime) {
+                    let deadlineHM = formatedDateHM(getDateFromTimestamp(Number(blockchainOrder.limitedTime)))
                     setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline={deadlineHM}/>)
                 } else {
                   let isReceived: boolean = false
-                  if(blockchainOrder.securityDeposit.toNumber() === 0) {
+                  if(Number(blockchainOrder.securityDeposit) === 0) {
                     isReceived = true
                   }
                   setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={isReceived}/>)

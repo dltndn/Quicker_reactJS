@@ -8,25 +8,14 @@ import BottomConfirmBtn from "../bottomconfirmBtn";
 import styled, { createGlobalStyle } from "styled-components";
 import Lottie from "lottie-react";
 import OrderDelivery from "../../Lottie/89626-order-delivery.json";
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
 
 export default function CompletedOrderConfirm({
   orderNum,
 }: ExecutionComponentProps) {
   const { setTitle } = useClientConfirmState();
   const navigate = useNavigate();
-
-  const confirmLogic = async () => {
-    if (orderNum !== undefined) {
-      const wttb = new WriteTransactionToBlockchain(orderNum);
-      try {
-        const result = await wttb.completeOrder();
-        console.log(result);
-        navigate("/");
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
 
   useEffect(() => {
     setTitle("배송결과");
@@ -52,13 +41,8 @@ export default function CompletedOrderConfirm({
             </Span01>
         </Div5>
         </Div3>
-      <BottomConfirmBtn
-      isDisabled={false}
-      content="확인"
-      confirmLogic={async () => {
-        await confirmLogic();
-      }}
-    />
+        
+        {orderNum && <SendTxK param={GetContractParams.CompleteOrder(orderNum)} successFunc={() => navigate("/")}/>}
     </>
   );
 }

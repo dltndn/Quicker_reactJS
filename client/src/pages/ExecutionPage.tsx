@@ -42,22 +42,22 @@ export default function ExecutionPage() {
   const twelveHoursToSec = 12 * 60 * 60
 
   const isClientConfirmBefore = (order: any) => {
-    if (order.state === 1 && order.deliveredTime.toNumber() !== 0)
+    if (order.state === 1 && Number(order.deliveredTime) !== 0)
       return true
 
     return false
   }
 
   const isDeliveryFailed = (order: any) => {
-    if (order.deliveredTime.toNumber() === 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime)
+    if (Number(order.deliveredTime) === 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime)
       return true
 
     return false
   }
 
   const isCLientConfirm = (order: any) => {
-    
-    if (order.state === 2 || (order.deliveredTime.toNumber() !== 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime))
+    console.log(order)
+    if (order.state === 2 || (Number(order.deliveredTime) !== 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime))
       return true
     
     return false
@@ -84,6 +84,9 @@ export default function ExecutionPage() {
     if (orderNumber !== undefined) {
       try {
         const blockchainOrder: any = await getOrderRawData(orderNumber)
+        // console.log(isCLientConfirm(blockchainOrder))
+        // console.log(isDeliveryFailed(blockchainOrder))
+        // console.log(isClientConfirmBefore(blockchainOrder))
         if (isCLientConfirm(blockchainOrder)) {
           let securityDeposit: number
           let isReceived: boolean = false

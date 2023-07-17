@@ -102,7 +102,7 @@ export const getOrderRawData = async (orderNum: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
       orderNum,
     });
-    return data.data; // type: object
+    return TemplateOrderRaw(data.data); // type: object
   } catch (e) {
     return null;
   }
@@ -260,6 +260,23 @@ const TemplateOrder = (data: any) => {
     matchedTime: ConvertDateData(data[8]),
     deliveredTime: ConvertDateData(data[9]),
     completedTime: ConvertDateData(data[10]),
+  };
+  return obj;
+};
+
+const TemplateOrderRaw = (data: any) => {
+  let obj = {
+    orderNum: data[0],
+    client: data[1],
+    quicker: data[2],
+    state: data[3],
+    orderPrice: data[4],
+    securityDeposit: data[5],
+    limitedTime: data[6],
+    createdTime: data[7],
+    matchedTime: data[8],
+    deliveredTime: data[9],
+    completedTime: data[10],
   };
   return obj;
 };
