@@ -157,7 +157,7 @@ export const getLastClientOrder = async (address: string | undefined) => {
 };
 
 // 배송원 배송 여부 확인
-export const checkIsDelivering = async (address: `0x${string}` | undefined) => {
+export const checkIsDelivering = async (address: string | undefined) => {
   let orderNumArr: string[] | undefined;
   try {
     orderNumArr = await getOrderList(address, false);

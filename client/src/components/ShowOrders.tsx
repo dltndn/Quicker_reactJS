@@ -166,31 +166,30 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const getOrderObj = async (orderNumList: string[]) => {
     const dataInBlockChain = await getOrders(orderNumList);
     const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain);
-    let orderListInDB: any;
     try {
-      let orderListInDb = await Handler.post(
+      let orderListInDB: any;
+      orderListInDB = await Handler.post(
         { list: intLisBlockChainId },
         process.env.REACT_APP_SERVER_URL + "orderlist"
       );
-      orderListInDB = orderListInDb;
+      // @ts-ignore
+      for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
+        for (const orderListInDBElement of orderListInDB) {
+          if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
+            console.log(orderListInDBElement);
+            console.log(dataInBlockChain);
+            await conbineDBBlockChain(
+              orderListInDBElement,
+              dataInBlockChain,
+              index
+            );
+          }
+        }
+      }
+    setOrdersObj(dataInBlockChain);
     } catch (e) {
       console.log(e);
     }
-    // @ts-ignore
-    for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
-      for (const orderListInDBElement of orderListInDB) {
-        if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
-          console.log(orderListInDBElement);
-          console.log(dataInBlockChain);
-          await conbineDBBlockChain(
-            orderListInDBElement,
-            dataInBlockChain,
-            index
-          );
-        }
-      }
-    }
-    setOrdersObj(dataInBlockChain);
   };
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
