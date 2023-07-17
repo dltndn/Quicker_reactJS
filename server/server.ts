@@ -70,6 +70,7 @@ app.post("/caver/getOrderList", KlaytnCaver.getOrderList)
 app.post("/caver/getOrdersForLatest", KlaytnCaver.getOrdersForLatest)
 app.get("/caver/getCommissionRate", KlaytnCaver.getCommissionRate)
 app.post("/caver/getOrder", KlaytnCaver.getOrder)
+app.post("/caver/getOrders", KlaytnCaver.getOrders)
 
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 

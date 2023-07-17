@@ -71,31 +71,17 @@ export const getAllowance = async (address: string | undefined) => {
 
 // 오더 객체 배열 반환
 export const getOrders = async (orderNumList: string[]) => {
-  const quickerContract = {
-    address: Quicker_address,
-    abi: Quicker_abi,
-  };
-
-  const orderNumListToObjList = (orderNumList: string[]) => {
-    let objList: object[] = [];
-    orderNumList.map((value) =>
-      objList.push({
-        ...quickerContract,
-        functionName: "getOrder",
-        args: [value],
-      })
-    );
-    return objList;
-  };
-
-  const data = await readContracts({
-    contracts: orderNumListToObjList(orderNumList) as any,
-  });
-
   let orderList: any[] = [];
-
-  data.map((value) => orderList.push(TemplateOrder(value)));
-  return orderList;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrders`, {
+      orderNumList,
+    });
+    data.data.map((value: any) => orderList.push(TemplateOrder(value)));
+    return orderList; // type: object[]
+  } catch (e) {
+    return orderList;
+  }
+  // getOrders 백엔드 처리
 };
 
 // 오더 객체 반환

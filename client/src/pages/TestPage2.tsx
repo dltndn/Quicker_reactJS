@@ -16,7 +16,7 @@ import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import { useConnWalletInfo } from "../App";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
-import { getOrdersForLatest } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrdersForLatest, getOrders } from "../utils/ExecuteOrderFromBlockchain";
 import {
   prepare,
   request as klipRequest,
@@ -116,7 +116,7 @@ const getAddress = async () => {
 
 const allowanceTest = async () => {
   // increaseAllowance test
-  const result = await getOrdersForLatest("20")
+  const result = await getOrders(["0", "1"])
   console.log("test func: ", result)
 }
 

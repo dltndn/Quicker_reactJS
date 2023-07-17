@@ -13,6 +13,7 @@ import Kakao from "../lib/Kakao";
 import { OrderBox, OrderModal } from "./orderComponents/OrderBox";
 import Loading from "./animation/ready.gif";
 import { UseUserOrderState } from "../App";
+import { useConnWalletInfo } from "../App";
 
 import money from "../image/money.png";
 
@@ -111,7 +112,7 @@ const setProduct = async (
 
 // isClient ? (오더 내역):(수행 내역)
 export default function ShowOrders({ isClient }: ShowOrderProps) {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnWalletInfo();
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
   const [newOrder, setNewOrder] = useState<object | null>(null);
@@ -285,7 +286,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         )
       ) : (
         reversedOrders.map((value, index) => (
-          <Sc0
+          <Sc0 key={index}
             onClick={() => {
               // @ts-ignore
               value.Product !== undefined
@@ -293,7 +294,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
                 : alert("db정보 없음");
             }}
           >
-            <OrderBox key={index} orderObj={value} isClient={isClient} />
+            <OrderBox orderObj={value} isClient={isClient} />
           </Sc0>
         ))
       )}
