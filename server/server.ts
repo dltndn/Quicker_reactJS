@@ -19,7 +19,6 @@ import realTimeLocation from "./routes/realTimeLocation"
 
 // Klaytn caver
 import KlaytnCaver from "./klaytnApi/KlaytnCaver";
-import WebsocketCaver from "./klaytnApi/WebsocketCaver";
 
 // 설정
 const cors = require("cors");
