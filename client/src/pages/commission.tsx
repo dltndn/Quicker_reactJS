@@ -8,9 +8,9 @@ import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
-import { useAccount } from "wagmi";
 import { create } from 'zustand'
 import Time from "../lib/Time"
+import { useConnWalletInfo } from "../App";
 
 interface OrderState {
   cost: number;
@@ -184,7 +184,7 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
   const navigate = useNavigate();
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const startinputDiv = useRef<HTMLInputElement>(null);
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();

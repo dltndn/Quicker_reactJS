@@ -1,10 +1,7 @@
-import { BsChevronRight } from "react-icons/bs";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Web3Button } from "@web3modal/react";
 import { useVerificationStore } from "../../App";
-import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import MainOrderInformation from "./MainOrderInformation";
@@ -13,7 +10,6 @@ import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
 import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
-import KakaoNaviDeepLinkButton from "../searchComponents/KakaoNaviDeepLinkButton";
 import { TwoPointRoute } from "../searchComponents/interface/route";
 import { useConnWalletInfo } from "../../App";
 import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";

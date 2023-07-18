@@ -18,7 +18,6 @@ import {
 } from "../utils/CalAny";
 import { useOrderStore } from "./commission";
 import IncreaseAllowance from "../components/IncreaseAllowance";
-import { useAccount } from "wagmi";
 import { useConnWalletInfo } from "../App";
 
 export interface OrderObj {

@@ -8,10 +8,10 @@ import {
   getOrders,
   getOrdersForState,
 } from "../utils/ExecuteOrderFromBlockchain";
-import { useAccount } from "wagmi";
 import Room from "../components/chatComponents/Room";
 import Chat from "../components/chatComponents/Chat";
 import delelteDoubleQuote from "../lib/DeleteDoubleQuote";
+import { useConnWalletInfo } from "../App";
 
 const nochat = require("../image/nochat.png");
 
@@ -81,7 +81,7 @@ const filterNotMyOrder = (list: any[], address: string) => {
 
 function ChattingPage() {
   const navigate = useNavigate();
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const [isRoomClicked, setIsRoomClicked] = useState<boolean>(false);
   const [selectedOrderNum, setSelectedOrderNum] = useState<number | undefined>(
     undefined

@@ -4,7 +4,6 @@ import ConfirmBtn from "../components/confirmBtn";
 import TopBarOthers from "../components/topBarOthers";
 import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from 'wagmi';
 import { useVerificationStore } from '../App';
 import { useConnWalletInfo } from '../App';
 

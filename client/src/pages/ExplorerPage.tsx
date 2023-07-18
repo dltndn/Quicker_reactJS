@@ -10,7 +10,6 @@ import {
   getOrdersForLatest,
 } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
-import { useContractEvent, useAccount } from "wagmi";
 import ExplorerTableData from "../components/ExplorerTableData";
 import { useVerificationStore } from "../App";
 import Lottie from "lottie-react";
@@ -120,38 +119,38 @@ export default function ExplorerPage() {
     return [];
   };
 
-  // 배송원 정산, 의뢰인 정산시 동작
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "DepositedFee",
-    async listener(node: any, label: any, owner) {
-      setFeeDepositTrigger(true);
-      await setBlinkState(setIsBlinkPI);
-    },
-  });
+  // // 배송원 정산, 의뢰인 정산시 동작
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "DepositedFee",
+  //   async listener(node: any, label: any, owner) {
+  //     setFeeDepositTrigger(true);
+  //     await setBlinkState(setIsBlinkPI);
+  //   },
+  // });
 
-  // contract QKRW토큰 입출금시 동작
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "ChangedBalance",
-    async listener(node: any, label: any, owner) {
-      setContractBalTrigger(true);
-      await setBlinkState(setIsBlinkCo);
-    },
-  });
+  // // contract QKRW토큰 입출금시 동작
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "ChangedBalance",
+  //   async listener(node: any, label: any, owner) {
+  //     setContractBalTrigger(true);
+  //     await setBlinkState(setIsBlinkCo);
+  //   },
+  // });
 
-  // contract 오더관련 함수 실행 성공시 동작
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "OrderResult",
-    async listener(node: any, label: any, owner) {
-      setTransactTrigger(true);
-      await setBlinkState(setIsBlink);
-    },
-  });
+  // // contract 오더관련 함수 실행 성공시 동작
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "OrderResult",
+  //   async listener(node: any, label: any, owner) {
+  //     setTransactTrigger(true);
+  //     await setBlinkState(setIsBlink);
+  //   },
+  // });
 
   useEffect(() => {
     if (feeDepositTrigger) {

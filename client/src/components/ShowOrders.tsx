@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { create } from "zustand";
-import { useAccount } from "wagmi";
 import {
   getOrderList,
   getOrders,

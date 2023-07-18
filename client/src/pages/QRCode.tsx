@@ -1,7 +1,7 @@
 import { useEffect } from "react"
-import { useAccount } from "wagmi"
 import { useLiveState } from "./ReceipientPage";
 import { redirect, useNavigate } from "react-router-dom";
+import { useConnWalletInfo } from "../App";
 
 const QRcode = require('qrcode')
 
@@ -26,7 +26,7 @@ export interface validationInfos {
 
 export default function QRCode(props : QRCode ) {
     const {validationInfos} = props
-    const {address} = useAccount();
+    const {address} = useConnWalletInfo();
     const navigate = useNavigate();
     useEffect(() => {
         console.log(validationInfos.validationInfo, address)

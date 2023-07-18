@@ -1,17 +1,17 @@
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import type { RoomInterface } from "./interface/RoomInterface"
 import Handler from "../../lib/Handler"
-import { useAccount } from "wagmi"
 import getName from "./getName"
 import styled from "styled-components"
 import BottomBar from "../BottomBar"
 import Time from "../../lib/Time"
+import { useConnWalletInfo } from "../../App"
 
 const Chatman = require('../../image/Chatman.png')
 const operator = require('../../image/operator.png')
 
 export default function ({ setStates, orderNum, blockchainElement, role }: RoomInterface) {
-    const { address } = useAccount();
+    const { address } = useConnWalletInfo();
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
     const [opponentName, setOponentName] = useState("");

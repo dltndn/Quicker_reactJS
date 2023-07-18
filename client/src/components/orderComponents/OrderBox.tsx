@@ -1,6 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAccount } from "wagmi";
 import { useOrderState } from "../ShowOrders";
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
@@ -11,6 +10,7 @@ import {
 } from "../../utils/ConvertTimestampToDate";
 import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useConnWalletInfo } from "../../App";
 
 interface OrderBoxProps {
   orderObj: any;
@@ -118,7 +118,7 @@ interface OrderModalProps {
 }
 
 export function OrderModal({ isClient }: OrderModalProps) {
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
   const handleCloseModal = () => {
@@ -169,6 +169,12 @@ export function OrderModal({ isClient }: OrderModalProps) {
     fontSize: "25px",
     backgroundColor: "#fff",
   };
+
+  useEffect(() => {
+    return () => {
+      handleCloseModal()
+    }
+  }, [])
 
   useEffect(() => {
     // 모달이 열렸을 때 body의 overflow 스타일 속성을 hidden으로 변경
@@ -405,7 +411,7 @@ const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
 
 interface BottomBtnProps {
   order: any;
-  address: `0x${string}` | undefined;
+  address: string | undefined;
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
