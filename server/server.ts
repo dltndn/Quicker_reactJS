@@ -19,6 +19,7 @@ import realTimeLocation from "./routes/realTimeLocation"
 
 // Klaytn caver
 import KlaytnCaver from "./klaytnApi/KlaytnCaver";
+import WebsocketCaver from "./klaytnApi/WebsocketCaver";
 
 // 설정
 const cors = require("cors");
@@ -72,6 +73,9 @@ app.get("/caver/getCommissionRate", KlaytnCaver.getCommissionRate)
 app.post("/caver/getOrder", KlaytnCaver.getOrder)
 app.post("/caver/getOrders", KlaytnCaver.getOrders)
 
+// app.get("/caver/getEventsTest", WebsocketCaver.getEventTest)
+// WebsocketCaver.getEventTest()
+
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 
 // const server = https.createServer(options, app).listen(HTTPS_PORT, () => {
@@ -79,4 +83,3 @@ const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port
 // });
 // socket
 chat(server)
-

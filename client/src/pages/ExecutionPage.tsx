@@ -56,7 +56,6 @@ export default function ExecutionPage() {
   }
 
   const isCLientConfirm = (order: any) => {
-    console.log(order)
     if (order.state === "2" || (Number(order.deliveredTime) !== 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime))
       return true
     

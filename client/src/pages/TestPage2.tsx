@@ -5,7 +5,7 @@ import styled from "styled-components";
 import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
 import { useContractEvent, useTransaction, useAccount } from "wagmi";
-import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
+import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
@@ -26,6 +26,10 @@ import {
 import { KlipSdk } from "../utils/KlipSdk";
 import { KaikasConnect } from "../utils/KaikasConnect";
 import { changeBalanceToForm } from "../utils/CalAny";
+
+// socket test
+import { socket } from "../components/chatComponents/socket";
+
 var QRCode = require('qrcode')
 
 //Qkrw token contract information - polygon mumbai network
@@ -44,6 +48,7 @@ export default function TestPage2() {
   const handleClick = (_orderNum: string) => {
     setOrderNum(_orderNum);
   };
+
 
   useContractEvent({
     address: Quicker_address,
@@ -119,6 +124,19 @@ const allowanceTest = async () => {
   const result = await getOrders(["0", "1"])
   console.log("test func: ", result)
 }
+
+// socket test
+const [socketId, setSocketId] = useState<string>()
+useEffect(() => {
+  // socket.on("connect", () => setSocketId(socket.id))
+  console.log("???")
+}, [socket])
+
+useEffect(() => {
+  if(socketId !== undefined) {
+    console.log(socketId)
+  }
+}, [socketId])
 
   return (
     <>
