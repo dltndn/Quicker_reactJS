@@ -3,9 +3,10 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import ConfirmBtn from "../confirmBtn"
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain"
 import { useOrderState } from "../ShowOrders"
 import styled from "styled-components"
+import SendTxK from "../blockChainTx/SendTxK"
+import GetContractParams from "../blockChainTx/GetContractParams"
 
 interface FailedOrderConfirmProps extends ExecutionComponentProps{
   isReceived: boolean;
@@ -16,29 +17,18 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
     const { setReloadOrderNum } = useOrderState()
     const [base64String, setBase64String] = useState("");
     const [reason, setReason] = useState("");
+    const [showTxBtn, setShowTxBtn] = useState<boolean>(false)
     const navigate = useNavigate()
 
-    const confirmLogic = async () => {
+    const confirmLogic = () => {
       if (isReceived) {
         navigate("/")
-        return
-      }
-      if (orderNum !== undefined) {
-        const wttb = new WriteTransactionToBlockchain(orderNum);
-        try {
-          const reult = await wttb.failedOrder();
-          console.log(reult);
-          setReloadOrderNum(orderNum)
-          navigate("/");
-        } catch (e) {
-          console.log(e);
-        }
+      } else {
+        setShowTxBtn(true)
       }
     }
 
   const getImage = async () => {
-
-
     // 암호화
     // const { createHmac } = await import('node:crypto');
 
@@ -65,6 +55,10 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
         setTitle("배송결과")
         await getImage()
       })()
+      return () => {
+        setReloadOrderNum(orderNum)
+        setShowTxBtn(false)
+      }
     }, [])
     
     return <>
@@ -85,13 +79,12 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
             {reason}실패 사유
           </Box>
         </Container>
-        <ConfirmBtn
+        {!showTxBtn ? (<ConfirmBtn
             isDisabled={false}
             content={isReceived? ("확인"):("환불받기")}
-            confirmLogic={async() => {
-              await confirmLogic();
-            }}
-          />
+            confirmLogic={confirmLogic}
+          />):(<>{orderNum && (<SendTxK param={GetContractParams.FailedOrder(orderNum)} successFunc={() => navigate("/")}/>)}</>)}
+        
     </>
 }
 

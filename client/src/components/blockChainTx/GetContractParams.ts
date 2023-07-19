@@ -174,5 +174,45 @@ export default {
       to: QUICKER_DLVR_ADDRESS_KLAYTN,
       params: `["${orderNum}"]`
     }
-  }
+  },
+  CancelOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "cancelOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
+  FailedOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "failedOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
 };

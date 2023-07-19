@@ -23,8 +23,8 @@ interface OrderState {
   setOrdersObj: (newOrderObj: object[] | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (newData: boolean) => void;
-  reloadOrderNum: string | null;
-  setReloadOrderNum: (newData: string | null) => void;
+  reloadOrderNum: string | undefined;
+  setReloadOrderNum: (newData: string | undefined) => void;
   refreshOrder: boolean;
   setRefreshOrder: (newData: boolean) => void;
 }
@@ -36,8 +36,8 @@ export const useOrderState = create<OrderState>((set) => ({
   setOrdersObj: (ordersObj: object[] | null) => set({ ordersObj }),
   isModalOpen: false,
   setIsModalOpen: (isModalOpen: boolean) => set({ isModalOpen }),
-  reloadOrderNum: null,
-  setReloadOrderNum: (reloadOrderNum: string | null) => set({ reloadOrderNum }),
+  reloadOrderNum: undefined,
+  setReloadOrderNum: (reloadOrderNum: string | undefined) => set({ reloadOrderNum }),
   refreshOrder: false,
   setRefreshOrder: (refreshOrder: boolean) => set({ refreshOrder }),
 }));
@@ -217,16 +217,16 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   };
 
   useEffect(() => {
-    if (reloadOrderNum !== null) {
+    if (reloadOrderNum !== undefined) {
       getNewOrderObj(reloadOrderNum);
     }
   }, [reloadOrderNum]);
 
   useEffect(() => {
     if (newOrder !== null) {
-      if (reloadOrderNum !== null) {
+      if (reloadOrderNum !== undefined) {
         reloadOrderBoxLogic(reloadOrderNum);
-        setReloadOrderNum(null);
+        setReloadOrderNum(undefined);
       }
     }
   }, [newOrder]);

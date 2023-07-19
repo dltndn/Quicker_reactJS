@@ -1,7 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useOrderState } from "../ShowOrders";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import { calQuickerIncome, extractNumber } from "../../utils/CalAny";
 import {
@@ -11,6 +10,8 @@ import {
 import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useConnWalletInfo } from "../../App";
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
 
 interface OrderBoxProps {
   orderObj: any;
@@ -172,9 +173,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
 
   useEffect(() => {
     return () => {
-      handleCloseModal()
-    }
-  }, [])
+      handleCloseModal();
+    };
+  }, []);
 
   useEffect(() => {
     // 모달이 열렸을 때 body의 overflow 스타일 속성을 hidden으로 변경
@@ -201,7 +202,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     {order?.matchedTime === null ? (
                       <Order_Span_md1_left>-</Order_Span_md1_left>
                     ) : (
-                      <Order_Span_md1_left>{formatedDate(order?.matchedTime)}</Order_Span_md1_left>
+                      <Order_Span_md1_left>
+                        {formatedDate(order?.matchedTime)}
+                      </Order_Span_md1_left>
                     )}
                   </Order_Div_detail>
                   <Order_Div_detail>
@@ -209,7 +212,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     {order?.deliveredTime === null ? (
                       <Order_Span_md1_left>-</Order_Span_md1_left>
                     ) : (
-                      <Order_Span_md1_left>{formatedDate(order?.deliveredTime)}</Order_Span_md1_left>
+                      <Order_Span_md1_left>
+                        {formatedDate(order?.deliveredTime)}
+                      </Order_Span_md1_left>
                     )}
                   </Order_Div_detail>
                   <Order_Div_detail>
@@ -272,11 +277,15 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Order_Hr />
                   <Order_Div_detail>
                     <Order_Span_md1_blue>수익</Order_Span_md1_blue>
-                    <Order_Span_md1_blue_left>{order?.orderPrice}</Order_Span_md1_blue_left>
+                    <Order_Span_md1_blue_left>
+                      {order?.orderPrice}
+                    </Order_Span_md1_blue_left>
                   </Order_Div_detail>
                   <Order_Div_detail>
                     <Order_Span_md1_grey>결제 일시</Order_Span_md1_grey>
-                    <Order_Span_md1_left>{formatedDate(order?.createdTime)}</Order_Span_md1_left>
+                    <Order_Span_md1_left>
+                      {formatedDate(order?.createdTime)}
+                    </Order_Span_md1_left>
                   </Order_Div_detail>
                   <BottomBtn order={order} address={address} />
                 </>
@@ -287,7 +296,9 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   </Order_Div>
                   <Order_Div_detail>
                     <Order_Span_md1_grey>배송 기한</Order_Span_md1_grey>
-                    <Order_Span_md1_left>{formatedDate(order?.limitedTime)}</Order_Span_md1_left>
+                    <Order_Span_md1_left>
+                      {formatedDate(order?.limitedTime)}
+                    </Order_Span_md1_left>
                   </Order_Div_detail>
                   <Order_Hr />
                   <Order_Div_detail>
@@ -369,15 +380,19 @@ export function OrderModal({ isClient }: OrderModalProps) {
                     <Order_Span_md1_left>
                       {order.DETAIL !== undefined ? order.DETAIL : "없음"}
                       <br />
-                      <Order_Span_mc_detail>{order.Product.WEIGHT}kg 이상</Order_Span_mc_detail>
+                      <Order_Span_mc_detail>
+                        {order.Product.WEIGHT}kg 이상
+                      </Order_Span_mc_detail>
                     </Order_Span_md1_left>
                   </Order_Div_detail>
                   <Order_Hr />
                   <Order_Div_detail>
                     <Order_Span_md1_blue>수익</Order_Span_md1_blue>
-                    <Order_Span_md1_blue_left>{income}</Order_Span_md1_blue_left>
+                    <Order_Span_md1_blue_left>
+                      {income}
+                    </Order_Span_md1_blue_left>
                   </Order_Div_detail>
-                  <QuickerBottomBtn order={order}/>
+                  <QuickerBottomBtn order={order} />
                 </>
               )}
             </>
@@ -415,25 +430,19 @@ interface BottomBtnProps {
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
-  const wttb = new WriteTransactionToBlockchain(order.orderNum);
   const { setOrder, setIsModalOpen, setReloadOrderNum } = useOrderState();
-  const navigate = useNavigate()
+  const [showTxBtn, setShowTxBtn] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      setShowTxBtn(false);
+    };
+  }, []);
 
   const closeModal = () => {
     setIsModalOpen(false);
     setOrder(null);
-  };
-  // 주문 취소 로직
-  const createdLogic = async () => {
-    try {
-      const result = await wttb.cancelOrder();
-      console.log(result);
-    } catch(e) {
-      console.log(e)
-    }
-    setReloadOrderNum(order.orderNum);
-    closeModal();
-    navigate("/")
   };
 
   // 거래 확인 로직
@@ -442,23 +451,41 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
   };
 
   const redirectExecutionPage = () => {
-    navigate(`/client_confirm/${order.orderNum}`)
-  }
+    navigate(`/client_confirm/${order.orderNum}`);
+  };
   // 다시 의뢰하기 로직
   const cancelLogic = () => {
     console.log("다시 의뢰하기 로직 구현");
     // 의뢰하기 페이지 리다이렉트
-    navigate("/commission")
+    navigate("/commission");
   };
   switch (order?.state) {
     case "created":
-      return <Button onClick={() => createdLogic()}>주문취소</Button>;
+      return (
+        <>
+          {!showTxBtn ? (
+            <Button onClick={() => setShowTxBtn(true)}>주문취소</Button>
+          ) : (
+            <SendTxK
+              param={GetContractParams.CancelOrder(order.orderNum)}
+              successFunc={() => {
+                setReloadOrderNum(order.orderNum);
+                closeModal();
+              }}
+            />
+          )}
+        </>
+      );
     case "matched":
-      return <Button onClick={() => redirectExecutionPage()}>배송현황확인</Button>;
+      return (
+        <Button onClick={() => redirectExecutionPage()}>배송현황확인</Button>
+      );
     case "completed":
       return <Button onClick={() => completeLogic()}>거래완료</Button>;
     case "failed":
-      return <Button onClick={() => redirectExecutionPage()}>실패사유확인</Button>;
+      return (
+        <Button onClick={() => redirectExecutionPage()}>실패사유확인</Button>
+      );
     case "canceled":
       return <Button onClick={() => cancelLogic()}>다시의뢰하기</Button>;
     default:
@@ -490,73 +517,80 @@ const QuickerBottomBtn = ({ order }: any) => {
   }
 };
 
-const Order_Div = styled.div`//div0
-    display: flex;
-    padding: 1.75rem 0 1.25rem 0;
+const Order_Div = styled.div`
+  //div0
+  display: flex;
+  padding: 1.75rem 0 1.25rem 0;
 `;
 
-const Order_Div_detail = styled(Order_Div)`//div1
-    padding: 0.625rem 0px 0.625rem 0px;
+const Order_Div_detail = styled(Order_Div)`
+  //div1
+  padding: 0.625rem 0px 0.625rem 0px;
 `;
 
-const Order_Span_md_bold = styled.span`//sp0
-    font-size: var(--font-md);
-    font-weight: bold;
+const Order_Span_md_bold = styled.span`
+  //sp0
+  font-size: var(--font-md);
+  font-weight: bold;
 `;
 
 const Order_Span_md1 = styled.span`
   font-size: var(--font-md1);
-`
+`;
 
 const Order_Span_md1_blue = styled(Order_Span_md1)`
-    color: #0D6EFD;
-    font-weight: bold;
+  color: #0d6efd;
+  font-weight: bold;
 `;
-const Order_Span_md1_blue_left = styled(Order_Span_md1)`//sp5
-    font-size: var(--font-md1);
-    color: #0D6EFD;
-    margin-left: auto;
-    font-weight: bold;
+const Order_Span_md1_blue_left = styled(Order_Span_md1)`
+  //sp5
+  font-size: var(--font-md1);
+  color: #0d6efd;
+  margin-left: auto;
+  font-weight: bold;
 `;
-const Order_Span_md1_left = styled(Order_Span_md1)`//sp1
-    margin-left: auto;
-    position: relative;
-    font-weight: bold;
+const Order_Span_md1_left = styled(Order_Span_md1)`
+  //sp1
+  margin-left: auto;
+  position: relative;
+  font-weight: bold;
 `;
-const Order_Span_md1_grey = styled(Order_Span_md1)`//sp2
-    color: #646464;
-`;
-
-const Order_Span_mc_ab = styled.span`//sp3
-    font-size: var(--font-micro);
-    position: absolute;
-    top: 1rem;
-    right: 0;
-    font-weight: lighter;
+const Order_Span_md1_grey = styled(Order_Span_md1)`
+  //sp2
+  color: #646464;
 `;
 
-const Order_Span_mc_detail = styled.div`//sp3
-    font-size: var(--font-micro);
-    top: 1rem;
-    right: 0;
-    font-weight: lighter;
+const Order_Span_mc_ab = styled.span`
+  //sp3
+  font-size: var(--font-micro);
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  font-weight: lighter;
+`;
+
+const Order_Span_mc_detail = styled.div`
+  //sp3
+  font-size: var(--font-micro);
+  top: 1rem;
+  right: 0;
+  font-weight: lighter;
 `;
 
 const Order_Span_mc_left = styled.span`
-    font-size: var(--font-micro);
-    margin-left: 0.188rem;
+  font-size: var(--font-micro);
+  margin-left: 0.188rem;
 `;
 
-const Order_Hr = styled.hr`//hr
-    margin: 0.75rem auto 0.75rem auto;
-    width: 100%;
-    border: 0;
-    height: 0;
-    border-top: 0.063rem solid #dfdfdf;
-    padding: 0 0 0 0;
+const Order_Hr = styled.hr`
+  //hr
+  margin: 0.75rem auto 0.75rem auto;
+  width: 100%;
+  border: 0;
+  height: 0;
+  border-top: 0.063rem solid #dfdfdf;
+  padding: 0 0 0 0;
 `;
-
-
 
 const Div0 = styled.div`
   display: flex;
@@ -581,7 +615,6 @@ const Div1 = styled.div`
   padding: 0px 0px 0px 1.875rem;
 `;
 
-
 const Sp0 = styled.span`
   font-size: var(--font-md);
   font-weight: bold;
@@ -602,7 +635,6 @@ const Sp3 = styled(Sp1)`
   padding-left: 1.625rem;
   margin-bottom: 1rem;
 `;
-
 
 const Button = styled.button`
   width: 100%;
@@ -634,13 +666,11 @@ const Spprofit0 = styled.span`
   font-weight: bold;
 `;
 
-
 const Spprofit2 = styled(Spprofit0)`
   padding-top: 0px;
   font-size: var(--font-small);
   color: #979797;
 `;
-
 
 const Spsc0 = styled(Spprofit0)`
   color: #0d6efd;
