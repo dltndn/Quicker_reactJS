@@ -81,14 +81,14 @@ interface UseVerifiaction {
   isMember: boolean;
   setIsMember: (newIsMember:boolean) => void;
   userName: string | null;
-  setUserName: (newUserName:string) => void;
+  setUserName: (newUserName:string | null) => void;
 }
 
 export const useVerificationStore = create<UseVerifiaction>((set) => ({
   isMember: false,
   setIsMember: (isMember: boolean) => set({isMember}),
   userName: null,
-  setUserName: (userName: string) => set({userName}),
+  setUserName: (userName: string | null) => set({userName}),
 }))
 
 interface UseUserOrderStateType {

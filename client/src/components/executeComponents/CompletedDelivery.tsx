@@ -8,7 +8,8 @@ import money1 from "../../image/money1.gif"
 import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { useNavigate } from "react-router-dom";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
-
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
 
 interface CompletedDeliveryProps extends ExecutionComponentProps{
     income: number;
@@ -23,23 +24,23 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
     const [total] = useState((income + securityDeposit).toLocaleString())
     const navigate = useNavigate()
 
-    const confirmLogic = async () => {
-        if (isReceived) {
-            navigate("/")
-            return
-        }
-        if (orderNum !== undefined) {
-            const wttb = new WriteTransactionToBlockchain(orderNum)
-            try {
-                const result = await wttb.withdrawFromOrder()
-                console.log(result)
-            } catch(e) {
-                console.log(e)
-                alert("정산이 완료됐습니다.")
-            }
-            navigate("/")
-        }
-    }
+    // const confirmLogic = async () => {
+    //     if (isReceived) {
+    //         navigate("/")
+    //         return
+    //     }
+    //     if (orderNum !== undefined) {
+    //         const wttb = new WriteTransactionToBlockchain(orderNum)
+    //         try {
+    //             const result = await wttb.withdrawFromOrder()
+    //             console.log(result)
+    //         } catch(e) {
+    //             console.log(e)
+    //             alert("정산이 완료됐습니다.")
+    //         }
+            
+    //     }
+    // }
 
     useEffect(() => {
         setTitle("배송결과")
@@ -65,13 +66,9 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
             <Divpo>{incomeString}원<br/><Div5_1>{securityDpositString === "0" ? (" - "):(securityDpositString)}원</Div5_1><br/><Div4>{total}원</Div4></Divpo>
         </Div5>
         </Div3>
-            <BottomConfirmBtn
-            isDisabled={false}
-            content="확인"
-            confirmLogic={() => {
-                confirmLogic();
-            }}
-          />
+        {!isReceived && 
+        // @ts-ignore
+        <SendTxK param={GetContractParams.WithdrawFromOrder(orderNum)} successFunc={() => navigate("/")}/>}
         </>
     )
 }

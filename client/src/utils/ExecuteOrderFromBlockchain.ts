@@ -23,30 +23,32 @@ const env = process.env;
 // 최신순 오더 배열 반환
 export const getOrdersForLatest = async (amount: string) => {
   let result: any[] = [];
-  const data: any = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrdersForLatest",
-    args: [amount],
-  });
-  data.forEach((element: any) => result.push(TemplateOrder(element)));
-  return result;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrdersForLatest`, {
+      amount,
+    });
+    data.data.forEach((element: any) => result.push(TemplateOrder(element)));
+    return result;
+  } catch (e) {
+    console.log(e)
+    return [];
+  }
 };
 
 // 수수료 조회
 export const getCommissionRate = async () => {
-  const data = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getCommissionRate",
-  });
-  return data;
+  try {
+    const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
+    return data.data; // type: string[]
+  } catch (e) {
+    return null;
+  }
 };
 
 // QKRW balance 확인
 export const getQkrwBalance = async (address: string | undefined) => {
   try {
-    const data = await axios.post(`${env.REACT_APP_SERVER_URL}getQkrwBalance`, {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQkrwBalance`, {
       owner: address,
     });
     return data.data; // type: number
@@ -58,7 +60,7 @@ export const getQkrwBalance = async (address: string | undefined) => {
 // QKRW token 권한 확인
 export const getAllowance = async (address: string | undefined) => {
   try {
-    const data = await axios.post(`${env.REACT_APP_SERVER_URL}getAllowance`, {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getAllowance`, {
       owner: address,
     });
     return data.data; // type: number
@@ -69,53 +71,41 @@ export const getAllowance = async (address: string | undefined) => {
 
 // 오더 객체 배열 반환
 export const getOrders = async (orderNumList: string[]) => {
-  const quickerContract = {
-    address: Quicker_address,
-    abi: Quicker_abi,
-  };
-
-  const orderNumListToObjList = (orderNumList: string[]) => {
-    let objList: object[] = [];
-    orderNumList.map((value) =>
-      objList.push({
-        ...quickerContract,
-        functionName: "getOrder",
-        args: [value],
-      })
-    );
-    return objList;
-  };
-
-  const data = await readContracts({
-    contracts: orderNumListToObjList(orderNumList) as any,
-  });
-
   let orderList: any[] = [];
-
-  data.map((value) => orderList.push(TemplateOrder(value)));
-  return orderList;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrders`, {
+      orderNumList,
+    });
+    data.data.map((value: any) => orderList.push(TemplateOrder(value)));
+    return orderList; // type: object[]
+  } catch (e) {
+    return orderList;
+  }
+  // getOrders 백엔드 처리
 };
 
 // 오더 객체 반환
 export const getOrder = async (orderNum: string) => {
-  const data = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrder",
-    args: [orderNum],
-  });
-  return TemplateOrder(data);
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
+      orderNum,
+    });
+    return TemplateOrder(data.data); // type: object
+  } catch (e) {
+    return null;
+  }
 };
 
 // 오더 객체 반환(블록체인 raw 값)
 export const getOrderRawData = async (orderNum: string) => {
-  const data = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrder",
-    args: [orderNum],
-  });
-  return data;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
+      orderNum,
+    });
+    return TemplateOrderRaw(data.data); // type: object
+  } catch (e) {
+    return null;
+  }
 };
 
 // 오더 내역 번호 배열 반환
@@ -134,7 +124,7 @@ export const getOrderList = async (
   }
   let dataRes;
   try {
-    const data = await axios.post(`${env.REACT_APP_SERVER_URL}getOrderList`, {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrderList`, {
       owner: address, 
       funcName: functionName
     });
@@ -167,7 +157,7 @@ export const getLastClientOrder = async (address: string | undefined) => {
 };
 
 // 배송원 배송 여부 확인
-export const checkIsDelivering = async (address: `0x${string}` | undefined) => {
+export const checkIsDelivering = async (address: string | undefined) => {
   let orderNumArr: string[] | undefined;
   try {
     orderNumArr = await getOrderList(address, false);
@@ -256,12 +246,13 @@ export class WriteTransactionToBlockchain {
   };
 }
 
+// caver-js
 const TemplateOrder = (data: any) => {
   let obj = {
-    orderNum: BigInt(data[0]._hex).toString(),
-    client: JSON.stringify(data[1]),
-    quicker: JSON.stringify(data[2]),
-    state: ConvertStateData(data[3]),
+    orderNum: data[0],
+    client: data[1],
+    quicker: data[2],
+    state: ConvertStateData(Number(data[3])),
     orderPrice: ConvertCostData(data[4]),
     securityDeposit: ConvertCostData(data[5]),
     limitedTime: ConvertDateData(data[6]),
@@ -273,29 +264,39 @@ const TemplateOrder = (data: any) => {
   return obj;
 };
 
-const ConvertStateData = (state: number): string => {
-  const stateArr = ["created", "matched", "completed", "failed", "canceled"];
-
-  const result = stateArr[state];
-  return result;
+const TemplateOrderRaw = (data: any) => {
+  let obj = {
+    orderNum: data[0],
+    client: data[1],
+    quicker: data[2],
+    state: data[3],
+    orderPrice: data[4],
+    securityDeposit: data[5],
+    limitedTime: data[6],
+    createdTime: data[7],
+    matchedTime: data[8],
+    deliveredTime: data[9],
+    completedTime: data[10],
+  };
+  return obj;
 };
 
-const ConvertCostData = (cost: any): string | null => {
+const ConvertCostData = (cost: string): string | null => {
   let result: string | null;
-  if (cost == 0) {
+  if (cost === "0") {
     result = null;
   } else {
-    result = BigInt(cost._hex).toLocaleString() + "원";
+    result = Number(cost).toLocaleString() + "원";
   }
   return result;
 };
 
-const ConvertDateData = (timestamp: any) => {
-  if (timestamp == 0) {
+const ConvertDateData = (timestamp: string) => {
+  if (timestamp === "0") {
     return null;
   } else {
     const { year, month, day, hours, minutes } =
-      getDateFromTimestamp(timestamp);
+      getDateFromTimestamp(Number(timestamp));
     const result = {
       year,
       month,
@@ -306,3 +307,55 @@ const ConvertDateData = (timestamp: any) => {
     return result;
   }
 };
+
+// wagmi
+// const TemplateOrder = (data: any) => {
+//   let obj = {
+//     orderNum: BigInt(data[0]._hex).toString(),
+//     client: JSON.stringify(data[1]),
+//     quicker: JSON.stringify(data[2]),
+//     state: ConvertStateData(data[3]),
+//     orderPrice: ConvertCostData(data[4]),
+//     securityDeposit: ConvertCostData(data[5]),
+//     limitedTime: ConvertDateData(data[6]),
+//     createdTime: ConvertDateData(data[7]),
+//     matchedTime: ConvertDateData(data[8]),
+//     deliveredTime: ConvertDateData(data[9]),
+//     completedTime: ConvertDateData(data[10]),
+//   };
+//   return obj;
+// };
+
+const ConvertStateData = (state: number): string => {
+  const stateArr = ["created", "matched", "completed", "failed", "canceled"];
+
+  const result = stateArr[state];
+  return result;
+};
+
+// const ConvertCostData = (cost: any): string | null => {
+//   let result: string | null;
+//   if (cost == 0) {
+//     result = null;
+//   } else {
+//     result = BigInt(cost._hex).toLocaleString() + "원";
+//   }
+//   return result;
+// };
+
+// const ConvertDateData = (timestamp: any) => {
+//   if (timestamp == 0) {
+//     return null;
+//   } else {
+//     const { year, month, day, hours, minutes } =
+//       getDateFromTimestamp(timestamp);
+//     const result = {
+//       year,
+//       month,
+//       day,
+//       hours,
+//       minutes,
+//     };
+//     return result;
+//   }
+// };

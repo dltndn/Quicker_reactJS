@@ -8,6 +8,7 @@ import Orders from "../routes/Orders";
 import Register from "../routes/Register";
 import Room from "../routes/Room";
 import User from "../routes/User";
+import Caver from "../routes/Caver"
 
 const router = {
   handle: async (app: Application) => {
@@ -21,6 +22,10 @@ const router = {
     app.use("/order", Order);
     app.use("/orders", Orders);
     app.use("/register", Register);
+    app.use("/caver", Caver);
+
+    app.get("/test", (req, res) => {res.send({"test": 1234})})
+
     /**
      * @TODO : 안드로이드 라우터 코드 수정
      */

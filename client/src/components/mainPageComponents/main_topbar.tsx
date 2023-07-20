@@ -26,7 +26,7 @@ function Main_topbar() {
     return (
         <section>
             <Maindiv>
-                <MainSp>Quicker</MainSp>
+                <MainSp>Quicker 2.0</MainSp>
                 <Mainbt><BsBell onClick={() => navigate('/notification')}></BsBell></Mainbt>
             </Maindiv>
         </section>

@@ -12,9 +12,7 @@ import {
 import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useAccount, useDisconnect } from "wagmi";
 import GetQkrwBalance from "../getQkrwBalance";
-import { Web3Button } from "@web3modal/react";
 import { useEffect } from "react";
 // import Profile_settingPage from "../../pages/Profile_settingPage";
 import { useVerificationStore } from "../../App";

@@ -43,7 +43,7 @@ export const extractNumber = (priceChar: string) => {
     return parseInt(numStr, 10);
   }
 
-export const changeBalanceToForm = (balance:BigInt):string => {
+export const changeBalanceToForm = (balance: BigInt):string => {
     if (Number(balance) === 0) 
         return "0"
     let result = parseInt(balance.toString().slice(0, -18))
