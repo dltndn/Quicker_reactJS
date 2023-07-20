@@ -17,7 +17,6 @@ export default {
       const userId = await SelectUser.getUserId(userWalletAdress);
       // @ts-ignore
       let data = await SelectOrder.getRequests(userId.id);
-      console.log(data)
       res.send(data);
     } catch (error) {
       console.log(error)
@@ -52,7 +51,6 @@ export default {
       let data = (await SelectUser.getUserName(walletAddress)) as {
         name: string | null;
       };
-      console.log("userName: ",data.name)
       res.send({ name: data.name });
     } catch (error) {
       console.log(error)
