@@ -43,21 +43,21 @@ export class SendDataToAndroid {
         switch(mapIndex) {
             case 1: // naverMap
                 if (isUsingCurrent) {
-                    window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                    window.location.href=`nmap://route/public?dlat=${sLat.toString()}&dlng=${sLng.toString()}&dname=${sName}&appname=com.example.quicker`
                 } else {
                     window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
                 }
                 break;
             case 2: // kakaoMap 	
                 if (isUsingCurrent) {
-                    window.location.href=`kakaomap://route?ep=${eLat.toString()},${eLng.toString()}&by=CAR`
+                    window.location.href=`kakaomap://route?ep=${sLat.toString()},${sLng.toString()}&by=CAR`
                 } else {
                     window.location.href=`kakaomap://route?sp=${sLat.toString()},${sLng.toString()}&ep=${eLat.toString()},${eLng.toString()}&by=CAR`
                 }
                 break;
             default: //naverMap
                 if (isUsingCurrent) {
-                    window.location.href=`nmap://route/public?dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
+                    window.location.href=`nmap://route/public?dlat=${sLat.toString()}&dlng=${sLng.toString()}&dname=${sName}&appname=com.example.quicker`
                 } else {
                     window.location.href=`nmap://route/public?slat=${sLat.toString()}&slng=${sLng.toString()}&sname=${sName}&dlat=${eLat.toString()}&dlng=${eLng.toString()}&dname=${eName}&appname=com.example.quicker`
                 }

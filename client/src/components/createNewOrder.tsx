@@ -1,5 +1,3 @@
-import { useContractWrite, usePrepareContractWrite, useAccount } from "wagmi";
-import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
@@ -12,19 +10,16 @@ import Handler from "../lib/Handler";
 import { useDivHandler } from "../pages/commission";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
-
-//Qkrw token contract information - polygon mumbai network
-const Quicker_abi = QUICKER_CONTRACT_ABI;
-const Quicker_address = QUICKER_ADDRESS;
+import { useConnWalletInfo } from "../App";
+import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
+import { changeBalanceToForm } from "../utils/CalAny";
+import SendTxK from "./blockChainTx/SendTxK";
+import GetContractParams from "./blockChainTx/GetContractParams";
 
 interface Props {
   data: object;
   _orderPrice: string;
   _deadline: string;
-}
-
-interface ErrorProps {
-  reason: string;
 }
 
 export default function CreateNewOrder({
@@ -43,67 +38,56 @@ export default function CreateNewOrder({
     deadLine,
   } = useOrderStore();
   const [lastOrder, setLastOrder] = useState<string>("");
-  const { address } = useAccount();
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [showTxBtn, setShowTxBtn] = useState<boolean>(false);
+  const { address } = useConnWalletInfo();
   const navigate = useNavigate();
 
   const { orderId, setOrderId } = useOrderDataStore();
   const { setShowCommissionPage } = useDivHandler();
-  const { setRefreshOrder } = useOrderState()
-  const { userOrderNumStateTrigger, setUserOrderNumStateTrigger } = UseUserOrderState()
+  const { setRefreshOrder } = useOrderState();
+  const { userOrderNumStateTrigger, setUserOrderNumStateTrigger } =
+    UseUserOrderState();
 
-  const { config } = usePrepareContractWrite({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "createOrder",
-    args: [_orderPrice, _deadline],
-    onSettled(data: any, error: any) {
-      if (error) {
-        let result: ErrorProps = JSON.parse(JSON.stringify(error));
-        if (
-          result.reason ===
-          "execution reverted: ERC20: transfer amount exceeds balance"
-        ) {
-          setErrorMessage("QKRW토큰이 부족합니다.");
-        } else if (
-          result.reason ===
-          "execution reverted: The deadline must later than the current time!"
-        ) {
-          setErrorMessage("마감기한은 현재시간 이후로 설정해주세요.");
-        } else if (
-          result.reason ===
-          "execution reverted: Order price must bigger than 0!"
-        ) {
-          setErrorMessage("결제가격을 입력해주세요.");
-        } else {
-          setErrorMessage("");
-          console.log("error");
-        }
-      }
-    },
-  });
+  const getQkrwBal = async () => {
+    try {
+      const result = await getQkrwBalance(address);
+      const bal = changeBalanceToForm(BigInt(result));
+      return Number(bal);
+    } catch (e) {
+      console.log(e);
+      return 0;
+    }
+  };
 
-  const { isLoading, isSuccess, write } = useContractWrite({
-    ...config,
-    onSuccess() {
-      getCreatedOrderNum();
-    },
-    onError(error) {
-      console.log(error);
-    },
-  });
-
-  const writeContract = async () => {
+  const validateInput = async () => {
     try {
       // 토큰 사용 권한 체크 로직
       const allowanceData: any = await getAllowance(address);
-      if (allowanceData._hex === "0x00") {
+      if (allowanceData === 0) {
         setShowAllowance(true);
+        return;
       }
-      write?.();
+      // 결제 가격 체크
+      if (Number.isNaN(Number(_orderPrice))) {
+        setErrorMessage("결제가격을 입력해주세요.");
+        return;
+      }
+      // QKRW토큰 체크
+      if (Number(_orderPrice) > (await getQkrwBal())) {
+        setErrorMessage("QKRW토큰이 부족합니다.");
+        return;
+      }
+      // 마감기한 체크
+      if (Number(_deadline) <= Math.floor(Date.now() / 1000)) {
+        setErrorMessage("마감기한은 현재시간 이후로 설정해주세요.");
+        return;
+      }
+      setShowTxBtn(true)
     } catch (e) {
       console.log(e);
       alert("의뢰가 실패되었습니다.");
-      setShowCommissionPage(true)
+      setShowCommissionPage(true);
       navigate("/");
     }
   };
@@ -114,12 +98,12 @@ export default function CreateNewOrder({
       if (newOrderNum !== lastOrder) {
         setCreatedOrderNum(newOrderNum);
         console.log("새 오더넘버 탐색 완료");
-        setUserOrderNumStateTrigger(userOrderNumStateTrigger + 1)
+        setUserOrderNumStateTrigger(userOrderNumStateTrigger + 1);
         clearInterval(intervalId);
       } else {
         console.log("새 오더 번호 감지x");
       }
-    }, 1000);
+    }, 500);
   };
 
   const getLastOrderFromBlochain = async () => {
@@ -141,6 +125,7 @@ export default function CreateNewOrder({
           console.log("db 데이터 저장 로직");
           console.log("db에 저장할 오더번호: " + createdOrderNum);
           setOrderId(parseInt(createdOrderNum));
+          setIsSuccess(false)
           // 로직 마지막은 프로필 오더 내역으로 리다이렉트
         })();
       } else {
@@ -154,17 +139,11 @@ export default function CreateNewOrder({
       console.log("호출됨");
       Handler.post(data, process.env.REACT_APP_SERVER_URL + "order");
       setOrderId(0);
-      setRefreshOrder(true)
-      setShowCommissionPage(true)
+      setRefreshOrder(true);
+      setShowCommissionPage(true);
       navigate("/");
     }
   }, [orderId]);
-
-  useEffect(() => {
-    if (isLoading) {
-      setBtnContent("지갑서명 대기중...");
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     setErrorMessage("");
@@ -176,11 +155,18 @@ export default function CreateNewOrder({
 
   return (
     <>
-      <ConfirmBtn
-        isDisabled={false}
-        content={btnContent}
-        confirmLogic={() => writeContract()}
-      />
+      {!showTxBtn ? (
+        <ConfirmBtn
+          isDisabled={false}
+          content={btnContent}
+          confirmLogic={async () => await validateInput()}
+        />
+      ) : (
+        <SendTxK
+          param={GetContractParams.CreateOrder(_orderPrice, _deadline)}
+          successFunc={async () => {setIsSuccess(true); await getCreatedOrderNum()}}
+        />
+      )}
     </>
   );
 }

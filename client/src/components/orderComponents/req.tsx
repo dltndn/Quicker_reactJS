@@ -4,6 +4,7 @@ import { useAccount } from 'wagmi';
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 import { useOrderDataStore, useOrderStore } from '../../pages/commission';
 import GetQkrwBalance from '../getQkrwBalance';
+import { useConnWalletInfo } from '../../App';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -215,7 +216,7 @@ function Req() {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
-    const { address, isConnected } = useAccount();
+    const { address, isConnected } = useConnWalletInfo();
     const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, weight,  setWeight } = useOrderDataStore();
 
       const handleImgClick = (transport: Transport) => {

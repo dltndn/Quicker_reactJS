@@ -12,6 +12,10 @@ import Orders from "./routes/Orders";
 import Register from "./routes/Register";
 import Room from "./routes/Room";
 import User from "./routes/User";
+
+// Klaytn caver
+import KlaytnCaver from "./klaytnApi/KlaytnCaver";
+
 // 설정
 const cors = require("cors");
 const app: Application = express();
@@ -40,6 +44,15 @@ app.use("/register", Register);
  * @TODO : 안드로이드 라우터 코드 수정
  */ 
 app.use("/current-deliver-location", CurrentLocation);
+
+// 클립 지갑용 임시
+import tempKlipConnect from "./Maria/Connectors/tempKlipConnect";
+app.post("/connectKlip", tempKlipConnect.getRequests)
+
+// 클레이튼 api 연결
+app.post("/getAllowance", KlaytnCaver.getAllowance)
+app.post("/getQkrwBalance", KlaytnCaver.getQkrwBal)
+app.post("/getOrderList", KlaytnCaver.getOrderList)
 
 const server = app.listen(HTTP_PORT, () => console.log(`App is listening on port ${HTTP_PORT} !`));
 

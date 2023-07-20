@@ -53,3 +53,8 @@ export const changeBalanceToForm = (balance:BigInt):string => {
 export const sliceAddress = (address: string):string => {
     return address.slice(0, 8) + "..."
 }
+
+export const to18decimals = (amm: number): string => {
+    const res = amm * 10 ** 18
+    return res.toString()
+}

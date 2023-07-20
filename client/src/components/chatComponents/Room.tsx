@@ -55,7 +55,7 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
           </Div1>
           <Div2>
             <Sp0>
-            {opponentName} {`(${role})`} <Sp1>{time}</Sp1>
+            {opponentName} <StateDiv>{`${role}`}</StateDiv> <Sp1>{time}</Sp1>
             </Sp0>
             <Sp2>{message}</Sp2>
           </Div2>
@@ -65,6 +65,15 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
       </>
     );
 }
+
+
+const StateDiv = styled.span`
+  padding: 1rem 0.75rem 1rem 1rem;
+  padding: 0;
+  color: #5843f5;
+  font-weight: bold;
+  font-size: 12px;
+`;
 
 const Div0 = styled.div`
   display: flex;
