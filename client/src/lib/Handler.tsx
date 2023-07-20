@@ -1,24 +1,36 @@
 export default {
-    post : (data: Object, url: string) => {
-        const response = fetch(url, {
+    post: async (data: Object, url: string) => {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
         })
-        return response.then(response => response.json())
+        return response.json()
     },
 
-    get : (url: string) => {
-        const response = fetch(url, {
+    get: async (url: string) => {
+        const response = await fetch(url, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             }
         })
-        return response.then(res => res.json())
+        return response.json()
     },
+
+    patch: async (data: any, url: string) => {
+        const response = await fetch(url, {
+            method: "PATCH", // or 'PUT'
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        });
+        return response.json();
+    },
+
 }
 
 

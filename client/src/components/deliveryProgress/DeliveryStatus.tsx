@@ -52,7 +52,7 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
         // 값을 불러오는 fetch
         const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
         
-        const response = await fetch(process.env.REACT_APP_SERVER_URL+`test/?quicker=${deliverWalletAddress}`)
+        const response = await fetch(process.env.REACT_APP_SERVER_URL+`current-deliver-location/?quicker=${deliverWalletAddress}`)
         const json = await response.json()
         console.log(json)
         if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")

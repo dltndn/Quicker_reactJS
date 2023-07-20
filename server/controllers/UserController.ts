@@ -12,7 +12,7 @@ export default {
   // NOTE : 이름 변경 필
   getRequests: async (req: Request, res: Response) => {
     try {
-      const userWalletAdress = req.body.userWalletAdress;
+      const userWalletAdress = req.params.userWalletAdress;
       console.log("USER_WALLET_ADRESS : ", userWalletAdress);
       const userId = await SelectUser.getUserId(userWalletAdress);
       // @ts-ignore
