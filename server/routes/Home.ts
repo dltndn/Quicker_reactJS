@@ -1,9 +1,8 @@
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 
-const express = require("express");
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
+router.use("/", (req: Request, res: Response) => {
   res.send(`
     <form action="/AssociateOrder/single" method="POST">
         삭제할 오더의 행 번호를 입력하면 오더 테이블과 연관된 테이블들의 정보가 삭제됩니다.<br>

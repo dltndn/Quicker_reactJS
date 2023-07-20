@@ -123,7 +123,7 @@ function App() {
   });
 
   const getUserInfo = async () => {
-    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "getUserNameUseByWalletAddress")
+    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "user/name")
     if (Object.keys(result).length !== 0) {
       setIsMember(true)
       setUserName(result.name)

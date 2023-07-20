@@ -10,13 +10,12 @@ interface ReceipientConfirmProp {
 export default function ReceipientConfirm({ orderNum ,validationInfo}: ReceipientConfirmProp) {
   const [hasImg, setHasImg] = useState<boolean>();
   const [base64String, setBase64String] = useState("");
-
   const getPicture = async () => {
     // 배송완료 사진 불러오기
     try {
       const response = await fetch(
         process.env.REACT_APP_SERVER_URL +
-          `order-complete-image/?orderNum=${orderNum}`
+          `order/image/complete/?orderNum=${orderNum}`
       );
       const buffer = await response.json();
       const bufferImage = buffer.imageBuffer.data;

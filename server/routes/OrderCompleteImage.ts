@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
-import multer from "multer";
 import mongoose from "mongoose";
-// import ImageFileSchema from "../Mongo/Schemas/ImageFile";
+import multer from "multer";
 import connectMongo from "../Mongo/Connector";
 import ImageFileSchema from "../Mongo/Schemas/ImageFile";
 

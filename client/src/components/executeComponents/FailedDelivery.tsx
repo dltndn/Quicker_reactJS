@@ -141,7 +141,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
           formData.append("reason" , "")
         }
         
-        const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-fail-image", {
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + "order/image/fail", {
           method: 'POST', 
           body: formData
         });

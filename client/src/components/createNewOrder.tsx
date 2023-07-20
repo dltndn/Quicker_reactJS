@@ -137,7 +137,7 @@ export default function CreateNewOrder({
   useEffect(() => {
     if (orderId !== 0) {
       console.log("호출됨");
-      Handler.post(data, process.env.REACT_APP_SERVER_URL + "request");
+      Handler.post(data, process.env.REACT_APP_SERVER_URL + "order");
       setOrderId(0);
       setRefreshOrder(true);
       setShowCommissionPage(true);
