@@ -1,138 +1,154 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState, useRef } from "react";
 
-const Topdiv = styled.div`
-    display: flex;
-    padding: var(--padding);
-    color: var(--black-color);
-    justify-content: center;
-`;
-
-const Topimg = styled.div`
-    margin: 10px;
-    width: 8rem;
-    height: 8rem;
-    border-radius: 100%;
+const Ip = styled.input`
+width: 100%;
+height: 2.25rem;
+font-size: var(--font-small);
+border-radius: 0.313rem;
+border: 1px solid #efefef; /* 테두리 */
+outline: none; /* 포커스 시 발생하는 외곽선 제거 */
+background-color: #efefef;
+padding-left: 0.625rem;
+padding-right: 0.625rem;
+text-align: left;
+color: #a6a6a6;
+&:focus {
+    border-color: #efefef; /* 포커스 시 테두리 색상 변경 */
     background-color: #ffffff;
+}
 `;
 
-
-const Sc0 = styled.section`
-    display: flex;
-    margin: 0 0.563rem;
-    flex-direction: column;
-    justify-content: center;
-    height: 3rem;
-    border-radius: 0.313rem 0.313rem 0 0;
-    border: 0rem;
-    background-color: var(--white-color);
-`;
-
-const Sc1 = styled(Sc0)`
-    border-radius: 0px 0px 0.313rem 0.313rem;
-    margin-bottom: 0.375rem;
-`;
-
-const Sc2 = styled.section`
-    display: flex;
-    margin: 0 0.563rem;
-    flex-direction: column;
-    justify-content: center;
-    height: 3rem;
-    border: 0;
-    background-color: var(--white-color);
-`;
-
-const Sc3 = styled.section`
-    display: flex;
-    margin: 0 0.563rem;
-    flex-direction: column;
-    justify-content: center;
-    height: 3rem;
-    border-radius: 0.313rem;
-    border: 0;
-    background-color: var(--white-color);
-    margin-bottom: 0.375rem;
-`;
-
-const Div0 = styled.div`
-    display: flex;
-    align-items: center;
-    font-size: var(--font-md1);
-    font-weight: bold;
-    margin-left: 0.75rem;
-`;
-
-const Sp0 = styled.div`
-    margin-left: auto;
-    margin-right: 0.75rem;
-`;
-
-const Sp2 = styled.div`
-    margin-left: 10px;
-`;
-
-const Hr = styled.hr`
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
-    height: 0.063rem;
-    border: 0;
-    background: #efefef;
-`;
-
-
-function Profilesetting(){
+function Profilesetting() {
     const navigate = useNavigate();
-
-    return(
-        <>
-        <Topdiv>
-            <Topimg></Topimg>
-        </Topdiv>
-        <Sc0>
-            <Div0>
-                <Sp2>이름</Sp2>
-                <Sp0>000</Sp0>
-            </Div0>
-        </Sc0>
+    const [profilePhoto, setProfilePhoto] = useState<null | string>("https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" // 트위터 기본 이미지 URL
+    ); // 타입 수정
+    const fileInputRef = useRef<HTMLInputElement>(null);
+  
+    const handleChangeProfilePhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      const reader = new FileReader();
+  
+      reader.onload = () => {
+        const result = reader.result as string;
+        setProfilePhoto(result);
+      };
+  
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    };
+  
+  return (
+    <>
+      <Topdiv>
+        <label>
+          <Topimg
+            src={profilePhoto ? profilePhoto : ""}
+            alt="Profile"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            ref={fileInputRef}
+            onChange={handleChangeProfilePhoto}
+          />
+        </label>
+      </Topdiv>
+        <Set_div_top>
+            <span>이름</span>
+            <Ip>배영준</Ip>
+        </Set_div_top>
         <Hr></Hr>
-        <Sc2>
-            <Div0>
-                <Sp2>생년월일</Sp2>
-                <Sp0>2001/02/13</Sp0>
-            </Div0>
-        </Sc2>
+        <Set_div_mid>
+                <span>생년월일</span>
+                <Set_span>2001.02.13</Set_span>
+        </Set_div_mid>
         <Hr></Hr>
-        <Sc2>
-            <Div0>
-                <Sp2>이메일</Sp2>
-                <Sp0>dudwns0213@naver.com</Sp0>
-            </Div0>
-        </Sc2>
+        <Set_div_mid>
+                <span>연락처</span>
+                <Set_span>010-9086-9502</Set_span>
+        </Set_div_mid>
         <Hr></Hr>
-        <Sc2>
-            <Div0>
-                <Sp2>연락처</Sp2>
-                <Sp0>000-0000-0000</Sp0>
-            </Div0>
-        </Sc2>
-        <Hr></Hr>
-        <Sc1>
-            <Div0>
-                <Sp2>탈퇴하기</Sp2>
-            </Div0>
-        </Sc1>
-        <Sc3>
-            <Div0>
-                <Sp2>예시1</Sp2>
-            </Div0>
-            <Div0></Div0>
-        </Sc3>
+        <Set_div_bot>
+                <span>이메일</span>
+                <Set_span>dudwns0213@naver.com</Set_span>
+        </Set_div_bot>
+        <Set_div>
+                <span>집 주소</span>
+                <Set_span>경기도 김포시 김포대로 926번길 46<br/>309동 704호</Set_span>
+        </Set_div>
         </>
     );
 }
 
 
 export default Profilesetting;
+
+
+const Topdiv = styled.div`
+  display: flex;
+  padding: var(--padding);
+  color: var(--black-color);
+  justify-content: center;
+`;
+
+const Topimg = styled.img`
+  margin: 10px;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 100%;
+  background-color: #ffffff;
+`;
+
+const Hr = styled.hr`
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  height: 0.063rem;
+  border: 0;
+  background: #efefef;
+`;
+const Set_div = styled.div`
+  display: flex;
+  flex-direction:column;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0.563rem;
+  padding: 14px;
+  border-radius: 0.313rem;
+  border: 0rem;
+  background-color: var(--white-color);
+`;
+
+const Set_div_top = styled(Set_div)`
+  display: flex;
+  flex-direction:column;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0.563rem;
+  padding: 14px;
+  border-radius: 0.313rem 0.313rem 0 0;
+  border: 0rem;
+  background-color: var(--white-color);
+`;
+
+const Set_div_mid = styled(Set_div)`
+    border-radius: 0;
+    margin: 0 0.563rem;
+`;
+
+const Set_div_bot = styled(Set_div)`
+  border-radius: 0px 0px 0.313rem 0.313rem;
+  margin: 0 0.563rem;
+  margin-bottom: 0.375rem;
+`;
+
+const Set_span = styled.div`
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: normal;
+`;
+
