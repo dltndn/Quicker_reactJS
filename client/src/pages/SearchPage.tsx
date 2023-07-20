@@ -194,18 +194,20 @@ function SearchPage() {
     setTmap(new Map("TMapSearch", "51em"));
     Geolocation.getCurrentLocation(setUserLocation);
 
-    const exec = async () => {
-      try {
-        let data = await Handler.get(
-          process.env.REACT_APP_SERVER_URL + "orders/" + `?userWalletAdress=${address}`
-        );
-        console.log(data)
-        setRequestListContents(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    exec();
+    if (address !== undefined) {
+      const exec = async () => {
+        try {
+          let data = await Handler.get(
+            process.env.REACT_APP_SERVER_URL + "orders/" + `?userWalletAdress=${address}`
+          );
+          console.log(data)
+          setRequestListContents(data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      exec();
+    }
   }, [address]);
 
   useEffect(() => {

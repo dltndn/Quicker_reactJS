@@ -9,15 +9,17 @@ initModels(sequelize);
 const crypto = require("crypto");
 
 export default {
+  
   // NOTE : 이름 변경 필
   getRequests: async (req: Request, res: Response) => {
     try {
-      const userWalletAdress = req.params.userWalletAdress;
-      console.log("USER_WALLET_ADRESS : ", userWalletAdress);
-      const userId = await SelectUser.getUserId(userWalletAdress);
-      // @ts-ignore
-      let data = await SelectOrder.getRequests(userId.id);
-      res.send(data);
+      const userWalletAdress = req.query.userWalletAdress;
+      if (typeof userWalletAdress === "string") {
+        const userId = await SelectUser.getUserId(userWalletAdress);
+        // @ts-ignore
+        let data = await SelectOrder.getRequests(userId.id);
+        res.send(data);
+      }
     } catch (error) {
       console.log(error)
       res.send(error);
