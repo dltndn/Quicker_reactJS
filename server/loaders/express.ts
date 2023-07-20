@@ -21,7 +21,6 @@ const router = {
     app.use("/order", Order);
     app.use("/orders", Orders);
     app.use("/register", Register);
-
     /**
      * @TODO : 안드로이드 라우터 코드 수정
      */
