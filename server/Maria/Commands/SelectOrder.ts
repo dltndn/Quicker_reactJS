@@ -39,7 +39,6 @@ export default {
   },
 
   getRequests: (userId : string) => {
-    console.log("USER_ID : ",userId)
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
