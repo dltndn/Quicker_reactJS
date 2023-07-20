@@ -11,6 +11,9 @@ import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import QR from "../../pages/QR";
 import { useDeliveredComponent } from "./DeliveredItem";
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
+import { useConnWalletInfo } from "../../App";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -35,7 +38,7 @@ font-weight: bold;
 export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState()
   const { hasScanResult } = useDeliveredComponent()
-  const { address } = useAccount()
+  const { address } = useConnWalletInfo()
     // const videoRef = useRef<HTMLVideoElement>(null);
 
     const deliveredRogic = async () => {
@@ -66,12 +69,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        <BottomConfirmBtn
-                content="확인"
-                confirmLogic={ () => {
-                    deliveredRogic();
-                }} isDisabled={!hasScanResult}
-            />
+        {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
     </>
   );
 };

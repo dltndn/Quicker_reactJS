@@ -52,8 +52,14 @@ export default function CreateNewOrder({
   const getQkrwBal = async () => {
     try {
       const result = await getQkrwBalance(address);
-      const bal = changeBalanceToForm(BigInt(result));
-      return Number(bal);
+      // const bal = changeBalanceToForm(BigInt(result));
+      let balance: number
+      if (Number(result) === 0) {
+        return 0
+      } else {
+        balance = parseInt(BigInt(result).toString().slice(0, -18))
+        return balance;
+      }
     } catch (e) {
       console.log(e);
       return 0;
@@ -100,6 +106,7 @@ export default function CreateNewOrder({
         console.log("새 오더넘버 탐색 완료");
         setUserOrderNumStateTrigger(userOrderNumStateTrigger + 1);
         clearInterval(intervalId);
+        navigate("/");
       } else {
         console.log("새 오더 번호 감지x");
       }

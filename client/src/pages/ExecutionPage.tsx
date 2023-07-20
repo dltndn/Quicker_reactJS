@@ -42,22 +42,21 @@ export default function ExecutionPage() {
   const twelveHoursToSec = 12 * 60 * 60
 
   const isClientConfirmBefore = (order: any) => {
-    if (order.state === 1 && order.deliveredTime.toNumber() !== 0)
+    if (order.state === "1" && Number(order.deliveredTime) !== 0)
       return true
 
     return false
   }
 
   const isDeliveryFailed = (order: any) => {
-    if (order.deliveredTime.toNumber() === 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime)
+    if (Number(order.deliveredTime) === 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime)
       return true
 
     return false
   }
 
   const isCLientConfirm = (order: any) => {
-    
-    if (order.state === 2 || (order.deliveredTime.toNumber() !== 0 && (order.limitedTime.toNumber() + twelveHoursToSec) < currentTime))
+    if (order.state === "2" || (Number(order.deliveredTime) !== 0 && (Number(order.limitedTime) + twelveHoursToSec) < currentTime))
       return true
     
     return false
@@ -87,13 +86,13 @@ export default function ExecutionPage() {
         if (isCLientConfirm(blockchainOrder)) {
           let securityDeposit: number
           let isReceived: boolean = false
-          if (blockchainOrder.deliveredTime.toNumber() > blockchainOrder.limitedTime.toNumber()) {
+          if (Number(blockchainOrder.deliveredTime) > Number(blockchainOrder.limitedTime)) {
             securityDeposit = 0
           } else {
-            securityDeposit = calSecurityDepositNum(blockchainOrder.orderPrice.toNumber())
+            securityDeposit = calSecurityDepositNum(Number(blockchainOrder.orderPrice))
           }
-          const income = calQuickerIncomeNum(blockchainOrder.orderPrice.toNumber())
-          if(blockchainOrder.securityDeposit.toNumber() === 0) {
+          const income = calQuickerIncomeNum(Number(blockchainOrder.orderPrice))
+          if(Number(blockchainOrder.securityDeposit) === 0) {
             isReceived = true
           }
           setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit} isReceived={isReceived}/>)

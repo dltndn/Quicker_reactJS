@@ -3,13 +3,13 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDeliveredComponent } from "../components/executeComponents/DeliveredItem";
-import { useAccount } from "wagmi";
 import { useParams } from "react-router-dom";
+import { useConnWalletInfo } from "../App";
 
 export default function QR() {
     const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
     const { isFace, hasScanResult, setHasScanResult } = useDeliveredComponent()
-    const {address} = useAccount();
+    const { address } = useConnWalletInfo();
     const { orderNumber } = useParams();
 
     const qrCodeSuccessCallback = (decodedText: any, decodedResult: any) => {

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
 import { useContractEvent, useTransaction, useAccount } from "wagmi";
-import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS } from "../contractInformation";
+import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
@@ -16,7 +16,7 @@ import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import { useConnWalletInfo } from "../App";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
-import { getOrderList } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrdersForLatest, getOrders } from "../utils/ExecuteOrderFromBlockchain";
 import {
   prepare,
   request as klipRequest,
@@ -26,6 +26,10 @@ import {
 import { KlipSdk } from "../utils/KlipSdk";
 import { KaikasConnect } from "../utils/KaikasConnect";
 import { changeBalanceToForm } from "../utils/CalAny";
+
+// socket test
+import { socket } from "../components/chatComponents/socket";
+
 var QRCode = require('qrcode')
 
 //Qkrw token contract information - polygon mumbai network
@@ -44,6 +48,7 @@ export default function TestPage2() {
   const handleClick = (_orderNum: string) => {
     setOrderNum(_orderNum);
   };
+
 
   useContractEvent({
     address: Quicker_address,
@@ -116,9 +121,22 @@ const getAddress = async () => {
 
 const allowanceTest = async () => {
   // increaseAllowance test
-  const result = await getOrderList("0x4068f9E751954D162ab858276f2F208D79f10930", true)
+  const result = await getOrders(["0", "1"])
   console.log("test func: ", result)
 }
+
+// socket test
+const [socketId, setSocketId] = useState<string>()
+useEffect(() => {
+  // socket.on("connect", () => setSocketId(socket.id))
+  console.log("???")
+}, [socket])
+
+useEffect(() => {
+  if(socketId !== undefined) {
+    console.log(socketId)
+  }
+}, [socketId])
 
   return (
     <>

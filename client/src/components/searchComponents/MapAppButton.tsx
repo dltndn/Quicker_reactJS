@@ -6,7 +6,7 @@ const naverMapIcon = require('../../image/naverMap_icon.webp')
 const kakaoMapIcon = require('../../image/kakaoMap_icon.webp')
 
 interface MapBtnProps {
-    address: `0x${string}` | undefined;
+    address: string | undefined;
     order: OrderObj | undefined;
     isUsingCurrent: boolean;
   }

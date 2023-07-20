@@ -1,7 +1,10 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { SendTxType } from "../../utils/KaikasConnect";
 import { to18decimals } from "../../utils/CalAny";
-import { QKRW_ADDRESS_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../../contractInformation";
+import {
+  QKRW_ADDRESS_KLAYTN,
+  QUICKER_DLVR_ADDRESS_KLAYTN,
+} from "../../contractInformation";
 
 export default {
   SendQkrwToken: (reciever: string, ammount: number): SendTxType => {
@@ -35,31 +38,37 @@ export default {
       to: QKRW_ADDRESS_KLAYTN,
       params: `["${reciever}", "${amm}"]`,
     };
-  },  
+  },
   IncreaseAllowanceQkrw: (): SendTxType => {
     return {
       abi: `{
         "inputs": [
           {
-            "internalType": "uint256",
-            "name": "_orderPrice",
-            "type": "uint256"
+            "internalType": "address",
+            "name": "spender",
+            "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "_limitedTime",
+            "name": "addedValue",
             "type": "uint256"
           }
         ],
-        "name": "createOrder",
-        "outputs": [],
+        "name": "increaseAllowance",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
-      value: '0',
+      value: "0",
       to: QKRW_ADDRESS_KLAYTN,
-      params: `["${QUICKER_DLVR_ADDRESS_KLAYTN}", "100000000000000000000000000"]`
-    }
+      params: `["${QUICKER_DLVR_ADDRESS_KLAYTN}", "100000000000000000000000000"]`,
+    };
   },
   CreateOrder: (orderPrice: string, deadLine: string): SendTxType => {
     return {
@@ -81,9 +90,129 @@ export default {
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
-      value: '0',
+      value: "0",
       to: QUICKER_DLVR_ADDRESS_KLAYTN,
-      params: `["${orderPrice}", "${deadLine}"]`
+      params: `["${orderPrice}", "${deadLine}"]`,
+    };
+  },
+  AcceptOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "acceptOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
     }
-  }
+  },
+  DeliveredOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "deliveredOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
+  WithdrawFromOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "withdrawFromOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
+  CompleteOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "completeOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
+  CancelOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "cancelOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
+  FailedOrder: (orderNum: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_orderNum",
+            "type": "uint256"
+          }
+        ],
+        "name": "failedOrder",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      params: `["${orderNum}"]`
+    }
+  },
 };

@@ -18,7 +18,7 @@ import {
 } from "../utils/CalAny";
 import { useOrderStore } from "./commission";
 import IncreaseAllowance from "../components/IncreaseAllowance";
-import { useAccount } from "wagmi";
+import { useConnWalletInfo } from "../App";
 
 export interface OrderObj {
   orderNum: string;
@@ -89,7 +89,7 @@ const getOrderFromBlochchain = async (orderNum: string) => {
 };
 
 function SearchPage() {
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } =
     useSearchState();
   const { showAllowance } = useOrderStore();
@@ -108,73 +108,76 @@ function SearchPage() {
 
       (async () => {
         // @ts-ignore
-        const orderFromBlockchain = getOrderFromBlochchain(element.id);
-        if ((await orderFromBlockchain).state === "created") {
-          const deadLine = formatedDate(
-            (await orderFromBlockchain).limitedTime
-          );
-          let orderPrice = (await orderFromBlockchain).orderPrice;
-          let orderPriceNum: number;
-          if (orderPrice === null) {
-            orderPriceNum = 0;
-          } else {
-            orderPriceNum = extractNumber(orderPrice);
+        const orderFromBlockchain = await getOrderFromBlochchain(element.id);
+        if (orderFromBlockchain !== null) {
+          if (orderFromBlockchain.state === "created") {
+            const deadLine = formatedDate(
+              orderFromBlockchain.limitedTime
+            );
+            let orderPrice = orderFromBlockchain.orderPrice;
+            let orderPriceNum: number;
+            if (orderPrice === null) {
+              orderPriceNum = 0;
+            } else {
+              orderPriceNum = extractNumber(orderPrice);
+            }
+            const income = calQuickerIncome(orderPriceNum);
+            const securityDeposit = calSecurityDeposit(orderPriceNum);
+  
+            // @ts-ignore
+            let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
+            // @ts-ignore
+            let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X);
+            // @ts-ignore
+            let distance = await tmap.getDistance(element.Departure, element.Destination);
+  
+            // @ts-ignore
+            let depatureRaw = {X: element.Departure.X, Y: element.Departure.Y}
+            // @ts-ignore
+            let destinationRaw = {X: element.Destination.X, Y: element.Destination.Y}
+  
+            let obj: OrderObj = {
+              // @ts-ignore
+              orderNum: element.id,
+              // @ts-ignore
+              departure: departure.address_name,
+              // @ts-ignore
+              departure_region_1depth_name: departure.region_1depth_name,
+              // @ts-ignore
+              departure_region_3depth_name: departure.region_3depth_name,
+              // @ts-ignore
+              dep_detail: element.Departure.DETAIL,
+              // @ts-ignore
+              destination: destination.address_name,
+              // @ts-ignore
+              destination_region_1depth_name: destination.region_1depth_name,
+              // @ts-ignore
+              destination_region_3depth_name: destination.region_3depth_name,
+              // @ts-ignore
+              des_detail: element.Destination.DETAIL,
+              // @ts-ignore
+              distance: distance.distanceInfo.distance,
+              // @ts-ignore
+              volume: `가로 ${element.Product.WIDTH}cm, 세로 ${element.Product.LENGTH}cm, 높이 ${element.Product.HEIGHT}cm`,
+              // @ts-ignore
+              weight: `${element.Product.WEIGHT}kg 이상`,
+              // @ts-ignore
+              detail: element.DETAIL,
+              // @ts-ignore
+              deadline: deadLine,
+              // @ts-ignore
+              transportation: transportations,
+              // @ts-ignore
+              income: income,
+              // @ts-ignore
+              securityDeposit: securityDeposit,
+              depatureRaw,
+              destinationRaw
+            };
+            setMockData((mockData) => [...mockData, obj]);
           }
-          const income = calQuickerIncome(orderPriceNum);
-          const securityDeposit = calSecurityDeposit(orderPriceNum);
-
-          // @ts-ignore
-          let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
-          // @ts-ignore
-          let destination = await Kakao.reverseGeoCording(element.Destination.Y, element.Destination.X);
-          // @ts-ignore
-          let distance = await tmap.getDistance(element.Departure, element.Destination);
-
-          // @ts-ignore
-          let depatureRaw = {X: element.Departure.X, Y: element.Departure.Y}
-          // @ts-ignore
-          let destinationRaw = {X: element.Destination.X, Y: element.Destination.Y}
-
-          let obj: OrderObj = {
-            // @ts-ignore
-            orderNum: element.id,
-            // @ts-ignore
-            departure: departure.address_name,
-            // @ts-ignore
-            departure_region_1depth_name: departure.region_1depth_name,
-            // @ts-ignore
-            departure_region_3depth_name: departure.region_3depth_name,
-            // @ts-ignore
-            dep_detail: element.Departure.DETAIL,
-            // @ts-ignore
-            destination: destination.address_name,
-            // @ts-ignore
-            destination_region_1depth_name: destination.region_1depth_name,
-            // @ts-ignore
-            destination_region_3depth_name: destination.region_3depth_name,
-            // @ts-ignore
-            des_detail: element.Destination.DETAIL,
-            // @ts-ignore
-            distance: distance.distanceInfo.distance,
-            // @ts-ignore
-            volume: `가로 ${element.Product.WIDTH}cm, 세로 ${element.Product.LENGTH}cm, 높이 ${element.Product.HEIGHT}cm`,
-            // @ts-ignore
-            weight: `${element.Product.WEIGHT}kg 이상`,
-            // @ts-ignore
-            detail: element.DETAIL,
-            // @ts-ignore
-            deadline: deadLine,
-            // @ts-ignore
-            transportation: transportations,
-            // @ts-ignore
-            income: income,
-            // @ts-ignore
-            securityDeposit: securityDeposit,
-            depatureRaw,
-            destinationRaw
-          };
-          setMockData((mockData) => [...mockData, obj]);
         }
+        
       })();
     });
   };
@@ -197,13 +200,12 @@ function SearchPage() {
           process.env.REACT_APP_SERVER_URL + "orders/" + `?userWalletAdress=${address}`
         );
         setRequestListContents(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       }
     };
     exec();
-  }, []);
+  }, [address]);
 
   useEffect(() => {
     let requestListContentLength = Object.keys(requestListContents).length;
