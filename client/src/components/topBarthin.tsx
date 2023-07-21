@@ -37,13 +37,13 @@ const Tbtleft = styled(Tbt)`
 const Tbhome = styled(Tbt)`
     margin-left: auto;
     margin-right: 0.625rem;
-    font-size: var(--font-md1)
+    font-size: var(--font-md1);
 `;
 
 const Tbsp = styled.div`
-    font-size: var(--font-md1);
+    font-size: 14px;
     font-weight: thin;
-    margin-top: 0.125rem;
+    margin-top: 2.5px;
     margin-left: 0.313rem;
 `;
 
@@ -55,12 +55,15 @@ interface Props {
 
 function TopBarThin({ title, title2, redirectLogic }: Props) {
     const navigate = useNavigate();
+    const goBack = () => {
+        navigate(-1); 
+      };
 
     return (
         <section>
             <Divhid/>
             <Tdiv>
-                <Tbtleft onClick={() => redirectLogic()}><BsChevronLeft></BsChevronLeft></Tbtleft>
+                <Tbtleft onClick={goBack}><BsChevronLeft></BsChevronLeft></Tbtleft>
                 <Tbsp>{title}</Tbsp>
                 <Tbhome>{title2}</Tbhome>
             </Tdiv>

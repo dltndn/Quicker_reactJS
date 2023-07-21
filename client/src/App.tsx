@@ -24,6 +24,7 @@ import Notification from "./components/Notification";
 import ExecutionPage from "./pages/ExecutionPage";
 import ClientConfirmPage from "./pages/ClientConfirmPage";
 import Profile_noticePage from "./pages/Profile_noticePage";
+import Profile_notice_writePage from "./pages/Profile_notice_writePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
@@ -35,6 +36,7 @@ import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import QRCode from "./pages/QRCode";
+
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -231,6 +233,7 @@ function App() {
             <Route path="/test2" element={<TestPage2 />} />
             <Route path="/profile/setting" element={<Profile_settingPage />} />
             <Route path="/profile/notice" element={<Profile_noticePage />} />
+            <Route path="/profile/notice/write" element={<Profile_notice_writePage />} />
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
