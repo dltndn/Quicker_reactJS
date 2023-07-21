@@ -101,7 +101,7 @@ export default function ({
         });
         const roomInfo = await Handler.post(
           { orderNum: roomName },
-          process.env.REACT_APP_SERVER_URL + "getRoomInfo"
+          process.env.REACT_APP_SERVER_URL + "room"
         );
 
         if (

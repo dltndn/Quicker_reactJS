@@ -1,6 +1,6 @@
+import express from "express"
 import AdminController from "../Controllers/AdminController";
 
-const express = require("express");
 const router = express.Router();
 
 router

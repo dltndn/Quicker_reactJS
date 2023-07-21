@@ -169,7 +169,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
       let orderListInDB: any;
       orderListInDB = await Handler.post(
         { list: intLisBlockChainId },
-        process.env.REACT_APP_SERVER_URL + "orderlist"
+        process.env.REACT_APP_SERVER_URL + "orders"
       );
       // @ts-ignore
       for (const [index, BlockChainElement] of dataInBlockChain.entries()) {

@@ -39,7 +39,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
     // }
 
     // 배송시ㄹ패 사진 불러오기
-    const response = await fetch(process.env.REACT_APP_SERVER_URL + `order-fail-image/?orderNum=${orderNum}`)
+    const response = await fetch(process.env.REACT_APP_SERVER_URL + `order/image/fail/?orderNum=${orderNum}`)
     const json = await response.json();
     const bufferImage = json.imageBuffer.data
 

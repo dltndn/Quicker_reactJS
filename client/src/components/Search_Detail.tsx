@@ -47,14 +47,11 @@ function Search_Detail() {
     if (showOrder !== undefined) {
       const sdta = new SendDataToAndroid(address);
       try {
-        const requestTosServer = await Handler.post(
-          {
-            orderId: order!.orderNum,
-            userWalletAddress: address,
-          },
-          process.env.REACT_APP_SERVER_URL + "updateorder"
-        );
-        console.log(requestTosServer);
+        const requestTosServer = await Handler.patch({
+          orderId : order!.orderNum,
+          userWalletAddress : address
+        }, process.env.REACT_APP_SERVER_URL + "order")
+        console.log(requestTosServer)
         // Android로 isDelivering 데이터 true값 전송
         sdta.sendIsDelivering(true);
         setRefreshOrder(true);
