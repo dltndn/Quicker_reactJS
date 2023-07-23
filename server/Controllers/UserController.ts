@@ -4,7 +4,7 @@ import CreateUser from "../Maria/Commands/CreateUser";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 import SelectUser from "../Maria/Commands/SelectUser";
-import { findUserNameByWalletAddress } from "./User";
+import {findUserNameByWalletAddress} from "../service/User";
 
 initModels(sequelize);
 const crypto = require("crypto");
