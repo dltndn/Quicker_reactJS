@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateOrder from "../Maria/Commands/CreateOrder";
@@ -11,6 +11,7 @@ import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 import sendMessage from "../sendMessage"
 import { encrypt, decrypt } from "../lib/cryto";
+import { findRoomInfoByOrderNumber } from "../service/Room";
 
 initModels(sequelize);
 
@@ -104,14 +105,14 @@ export default {
     }
   },
 
-  getRoomInfo : async (req: Request, res: Response) => {
+  getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
       const orderNum = req.body.orderNum;
-      let data = await SelectRoomInfo.getRoomInfo(orderNum)
-      return res.send(JSON.stringify(data))
+      const room = await findRoomInfoByOrderNumber(orderNum)
+      res.json(room)
     } catch (error) {
-      console.log(error)
-      return res.send({msg : "fail"})
+      console.error(error)
+      next(error)
     }
   },
 };
