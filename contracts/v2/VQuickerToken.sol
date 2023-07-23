@@ -13,6 +13,8 @@ contract VQuickerToken is ERC20, ERC20Burnable, ERC20Snapshot, AccessControl, Pa
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant BURN_ROLE = keccak256("BURN_ROLE");
+    bytes32 public constant TRANSFER_ROLE = keccak256("BURN_ROLE");
 
     constructor() ERC20("vQuicker", "VQUICKER") ERC20Permit("vQuicker") {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -35,6 +37,25 @@ contract VQuickerToken is ERC20, ERC20Burnable, ERC20Snapshot, AccessControl, Pa
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
         _mint(to, amount);
+    }
+
+    function burn(uint256 amount) public override onlyRole(BURN_ROLE) {
+        _burn(_msgSender(), amount);
+    }
+
+    function burnFrom(address account, uint256 amount) public override onlyRole(BURN_ROLE) {
+        _burn(account, amount);
+    }
+
+    function transfer(address to, uint256 amount) public override onlyRole(TRANSFER_ROLE) returns(bool){
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 amount) public override onlyRole(TRANSFER_ROLE) returns (bool) {
+        _transfer(from, to, amount);
+        return true;
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount)
