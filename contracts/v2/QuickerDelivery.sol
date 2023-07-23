@@ -247,8 +247,10 @@ contract QuickerDelivery is Ownable, AccessControl {
         }
     }
 
+    // _num == 0, platform fee
+    // _num == 1, insurance fee
+    // _num == 2, security deposit fee
     function changeCommissionRate(uint8 _num, uint16 _changedRate) public onlyRole(CHANGE_FEE_ROLE) {
-        require(hasRole(CHANGE_FEE_ROLE, msg.sender), "Caller must have CHANGE_FEE_ROLE");
         setCommissionRate(_num, _changedRate);
     }
 

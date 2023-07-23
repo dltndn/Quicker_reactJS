@@ -123,6 +123,7 @@ export const getOrderList = async (
     functionName = "getQuickerOrderList";
   }
   let dataRes;
+  console.log(address)
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrderList`, {
       owner: address, 
