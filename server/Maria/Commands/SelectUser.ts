@@ -26,14 +26,10 @@ export default {
   },
 
   getUserName: (walletAddress: string) => {
-    return new Promise((resolve, reject) => {
-      resolve(
-        User.findOne({
-          attributes: ["name"],
-          where: { wallet_address: walletAddress},
-        })
-      );
-      reject("fail");
-    });
+    return User.findOne({
+      attributes: ["name"],
+      where: { wallet_address: walletAddress},
+      raw: true,
+    })
   },
 };
