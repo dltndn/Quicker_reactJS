@@ -1,4 +1,6 @@
-import { Application } from "express";
+import { Application,Request, Response, NextFunction } from "express";
+
+import { ErrorHander } from "../Controllers/Error";
 
 import AssociateOrder from "../routes/AssociateOrder";
 import CurrentLocation from "../routes/CurrentLocation";
@@ -22,14 +24,11 @@ const router = {
     app.use("/order", Order);
     app.use("/orders", Orders);
     app.use("/register", Register);
-    app.use("/caver", Caver);
-
-    app.get("/test", (req, res) => {res.send({"test": 1234})})
-
-    /**
-     * @TODO : 안드로이드 라우터 코드 수정
-     */
     app.use("/current-deliver-location", CurrentLocation);
+
+    app.use("/caver", Caver);
+    
+    app.use(ErrorHander);
 
     return app;
   },
