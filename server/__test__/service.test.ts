@@ -9,14 +9,12 @@ describe("서비스 계층 테스트", () => {
     test("존재하는 지갑 주소", async () => {
       const userWallet = process.env.USER_WALLET;
       // @ts-ignore
-      const user: { name: string } | null = await findUserNameByWalletAddress(userWallet);
+      const user = await findUserNameByWalletAddress(userWallet);
       expect(user?.name).toBe("김퀵커");
     });
 
     test("존재하지 않는 지갑 주소", async () => {
-      const user: { name: string } | null = await findUserNameByWalletAddress(
-        "ddd"
-      );
+      const user = await findUserNameByWalletAddress("ddd");
       expect(user).toBe(null);
     });
   });
