@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateUser from "../Maria/Commands/CreateUser";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 import SelectUser from "../Maria/Commands/SelectUser";
+import { findUserNameByWalletAddress } from "./User";
 
 initModels(sequelize);
 const crypto = require("crypto");
@@ -47,16 +48,14 @@ export default {
     }
   },
 
-  getUserNameUseByWalletAddress: async (req: Request, res: Response) => {
+  findUserNameByWalletAddress: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const walletAddress = req.body.walletAddress;
-      let data = (await SelectUser.getUserName(walletAddress)) as {
-        name: string | null;
-      };
-      res.send({ name: data.name });
+      const userName = await findUserNameByWalletAddress(walletAddress);
+      res.json(userName);
     } catch (error) {
-      console.log(error)
-      res.send(error);
+      console.error(error)
+      next(error)
     }
   },
 };
