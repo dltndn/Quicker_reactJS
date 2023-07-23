@@ -11,7 +11,7 @@ const initializePort = (app : Application) => {
 }
 
 const startServer = async () => {
-    const app: Application = express();
+    const app = express();
 
     loader.init(app);
 
