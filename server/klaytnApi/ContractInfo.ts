@@ -2094,6 +2094,11 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 			},
 			{
 				"internalType": "address",
+				"name": "_Quicker",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
 				"name": "_Platform",
 				"type": "address"
 			},
@@ -2101,6 +2106,11 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 				"internalType": "address",
 				"name": "_Insurance",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_claimQuickerAmount",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -2307,6 +2317,32 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 	{
 		"inputs": [],
 		"name": "DEFAULT_ADMIN_ROLE",
+		"outputs": [
+			{
+				"internalType": "bytes32",
+				"name": "",
+				"type": "bytes32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "QuickerToken",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "SET_ROLE",
 		"outputs": [
 			{
 				"internalType": "bytes32",
@@ -2985,7 +3021,7 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 		"name": "qkrwToken",
 		"outputs": [
 			{
-				"internalType": "contract ERC20",
+				"internalType": "contract IERC20",
 				"name": "",
 				"type": "address"
 			}
@@ -3051,6 +3087,19 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 			}
 		],
 		"name": "revokeRole",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "setClaimQuickerAmount",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -3128,7 +3177,7 @@ export const QUICKER_DLVR_ABI_KLAYTN = [
 	}
 ]
 
-export const QUICKER_DLVR_ADDRESS_KLAYTN = "0x4818F7b01a4Aaa259774E7935eF5470253A2ac79"
+export const QUICKER_DLVR_ADDRESS_KLAYTN = "0xaeebC7B4c860D40698e006Be0561536a3dCD6A72"
 
 export const QUICKER_STAKING_ABI_KLAYTN = [
 	{

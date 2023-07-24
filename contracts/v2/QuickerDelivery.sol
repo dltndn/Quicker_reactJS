@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
 // @custom:security-contact james98099@gmail.com
@@ -15,6 +17,9 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract QuickerDelivery is Ownable, AccessControl {
     bytes32 public constant CHANGE_FEE_ROLE = keccak256("Only the quicker CA can change the fee.");
+    bytes32 public constant SET_ROLE = keccak256("SET_ROLE");
+    using SafeERC20 for IERC20;
+    using SafeMath for uint256;
     // unit is % / 10 ex) 10 = 1%, 15 = 1.5%
     /**
      * @dev indicating the commission from order price
@@ -31,7 +36,9 @@ contract QuickerDelivery is Ownable, AccessControl {
      */
     address feeCollector;
     address insuranceFeeCollector;
-    ERC20 public qkrwToken;
+    uint256 claimQuickerTokenAmount; // ex) 1 * 1e18
+    IERC20 public QuickerToken;
+    IERC20 public qkrwToken;
     // Qkrw public token;
 
     event OrderCreated(uint256 orderNum);
@@ -101,17 +108,21 @@ contract QuickerDelivery is Ownable, AccessControl {
         uint16 _insuranceFee,
         uint16 _securityDeposit,
         address _QkrwToken,
+        address _Quicker,
         address _Platform,
-        address _Insurance
+        address _Insurance,
+        uint256 _claimQuickerAmount
     ) Ownable() {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(CHANGE_FEE_ROLE, msg.sender);
         setCommissionRate(0, _platFormFee);
         setCommissionRate(1, _insuranceFee);
         setCommissionRate(2, _securityDeposit);
-        qkrwToken = ERC20(_QkrwToken);
+        qkrwToken = IERC20(_QkrwToken);
+        QuickerToken = IERC20(_Quicker);
         feeCollector = _Platform;
         insuranceFeeCollector = _Insurance;
+        claimQuickerTokenAmount = _claimQuickerAmount;
     }
 
     modifier isClientOfOrder(uint256 _orderNum, address _client) {
@@ -130,17 +141,12 @@ contract QuickerDelivery is Ownable, AccessControl {
         _;
     }
 
-    function setFeeCollectionAddress(address _newAddress) public onlyOwner {
+    function setFeeCollectionAddress(address _newAddress) external onlyOwner {
         feeCollector = _newAddress;
     }
 
-    function setInsuranceFeeCollection(address _newAddress) public onlyOwner {
+    function setInsuranceFeeCollection(address _newAddress) external onlyOwner {
         insuranceFeeCollector = _newAddress;
-    }
-
-    function getTokenDecimals() internal view returns (uint8) {
-        ERC20 token = qkrwToken;
-        return token.decimals();
     }
 
     function getCurrentTime() internal view returns (uint256) {
@@ -160,10 +166,10 @@ contract QuickerDelivery is Ownable, AccessControl {
         view
         returns (uint256)
     {
-        return _amount * (10**getTokenDecimals());
+        return _amount.mul(1e18);
     }
 
-    function getOrder(uint256 _orderNum) public view returns (Order memory) {
+    function getOrder(uint256 _orderNum) external view returns (Order memory) {
         return orderList[_orderNum];
     }
 
@@ -195,7 +201,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @param _bundleNum The index of the bundle to return, starting from 1.
     @return An array of _amount orders starting from the (_amount * (_bundleNum - 1) + 1)-th most recent order.
     */
-    function getOrdersForLatestBundle(uint256 _amount, uint256 _bundleNum) public view returns (Order[] memory) {
+    function getOrdersForLatestBundle(uint256 _amount, uint256 _bundleNum) external view returns (Order[] memory) {
         require(_amount > 0, "_amount must be bigger than 0!");
         require(_amount <= orderList.length, "_amount is wrong!");
         require(_bundleNum > 0, "_bundleNum must be bigger than 0!");
@@ -212,7 +218,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     }
 
     function getClientOrderList(address _client)
-        public
+        external
         view
         returns (uint256[] memory)
     {
@@ -220,7 +226,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     }
 
     function getQuickerOrderList(address _quicker)
-        public
+        external
         view
         returns (uint256[] memory)
     {
@@ -250,26 +256,41 @@ contract QuickerDelivery is Ownable, AccessControl {
     // _num == 0, platform fee
     // _num == 1, insurance fee
     // _num == 2, security deposit fee
-    function changeCommissionRate(uint8 _num, uint16 _changedRate) public onlyRole(CHANGE_FEE_ROLE) {
+    function changeCommissionRate(uint8 _num, uint16 _changedRate) external onlyRole(CHANGE_FEE_ROLE) {
         setCommissionRate(_num, _changedRate);
     }
 
-    function getCommissionRate() view public returns(Commission memory){
+    function setClaimQuickerAmount(uint256 _amount) external onlyRole(SET_ROLE) {
+        claimQuickerTokenAmount = _amount;
+    }
+
+    function getCommissionRate() view external returns(Commission memory){
         return commissionRate;
     }
 
     function transferTokensToOtherAddress(address _to, uint256 _amount)
         internal
     {
-        ERC20 token = qkrwToken;
-        token.transfer(_to, _amount);
+        (bool success, ) = address(qkrwToken).call(
+            abi.encodeWithSignature(
+                "transfer(address,uint256)",
+                _to,
+                _amount
+            )
+        );
     }
 
     function recieveTokensFromOtherAddress(address _from, uint256 _amount)
         internal
     {
-        ERC20 token = qkrwToken;
-        token.transferFrom(_from, address(this), _amount);
+        (bool success, ) = address(qkrwToken).call(
+            abi.encodeWithSignature(
+                "transferFrom(address,address,uint256)",
+                _from,
+                address(this),
+                _amount
+            )
+        );
     }
 
     /**
@@ -278,7 +299,7 @@ contract QuickerDelivery is Ownable, AccessControl {
      * @return Order array
      */
     function getOrdersForState(State _state)
-        public
+        external
         view
         returns (Order[] memory)
     {
@@ -311,7 +332,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @notice After the Order object is created and a new order number is issued, it is added to the list associated with the client account and the overall order list.
     @notice Finally, QKRW tokens are transferred from the client address to this contract account.
      */
-    function createOrder(uint256 _orderPrice, uint256 _limitedTime) public {
+    function createOrder(uint256 _orderPrice, uint256 _limitedTime) external {
         require(
             _limitedTime >= getCurrentTime(),
             "The deadline must later than the current time!"
@@ -350,7 +371,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @notice If the order is canceled successfully, the corresponding QKRW tokens will be refunded to the client's wallet.
     */
     function cancelOrder(uint256 _orderNum)
-        public
+        external
         isClientOfOrder(_orderNum, msg.sender)
     {
         require(
@@ -376,7 +397,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @notice When the delivery person accepts the order, the information for the order is updated and the order is changed to a matched state with the current delivery person.
     @notice The security deposit is entrusted to the delivery person's account and will be returned when the order is completed and settled.
     */
-    function acceptOrder(uint256 _orderNum) public {
+    function acceptOrder(uint256 _orderNum) external {
         Order storage order = orderList[_orderNum];
         require(
             order.state == State.created,
@@ -402,7 +423,7 @@ contract QuickerDelivery is Ownable, AccessControl {
 
     // 배송원 배달완료 시간 기입 함수
     function deliveredOrder(uint256 _orderNum)
-        public
+        external
         isQuickerOfOrder(_orderNum, msg.sender)
     {
         Order storage order = orderList[_orderNum];
@@ -419,7 +440,7 @@ contract QuickerDelivery is Ownable, AccessControl {
 
     // client 계약 완료 함수
     function completeOrder(uint256 _orderNum)
-        public
+        external
         isClientOfOrder(_orderNum, msg.sender)
     {
         require(
@@ -428,6 +449,13 @@ contract QuickerDelivery is Ownable, AccessControl {
         );
         orderList[_orderNum].state = State.completed;
         orderList[_orderNum].completedTime = getCurrentTime();
+        (bool mintSuccess, ) = address(QuickerToken).call(
+            abi.encodeWithSignature(
+                "mint(address,uint256)",
+                msg.sender,
+                claimQuickerTokenAmount
+            )
+        );
         emit OrderResult(true);
         emit completedOrderNumber(_orderNum);
     }
@@ -442,7 +470,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @notice The information related to function execution can be confirmed through events.
     */
     function withdrawFromOrder(uint256 _orderNum)
-        public
+        external
         isQuickerOfOrder(_orderNum, msg.sender)
     {
         Order storage order = orderList[_orderNum];
@@ -486,6 +514,13 @@ contract QuickerDelivery is Ownable, AccessControl {
         );
         order.state = State.completed;
         order.securityDeposit = 0;
+        (bool mintSuccess, ) = address(QuickerToken).call(
+            abi.encodeWithSignature(
+                "mint(address,uint256)",
+                msg.sender,
+                claimQuickerTokenAmount
+            )
+        );
         emit DepositedFee(true);
         emit ChangedBalance(true);
     }
@@ -497,7 +532,7 @@ contract QuickerDelivery is Ownable, AccessControl {
     @notice If the deadline + 12 hours is less than the current time and deliveredTime is 0, the function can be executed.
     @notice The security deposit and order price (excluding commission) are returned to the client.
     */
-    function failedOrder(uint256 _orderNum) public isClientOfOrder(_orderNum, msg.sender) {
+    function failedOrder(uint256 _orderNum) external isClientOfOrder(_orderNum, msg.sender) {
         Order storage order = orderList[_orderNum];
         require(order.state == State.matched, "State is not matched");
         require((order.limitedTime + 12 hours < getCurrentTime()) && (order.deliveredTime == 0), "You can't process order to failed");
@@ -526,6 +561,13 @@ contract QuickerDelivery is Ownable, AccessControl {
         );
         order.state = State.failed;
         order.securityDeposit = 0;
+        (bool mintSuccess, ) = address(QuickerToken).call(
+            abi.encodeWithSignature(
+                "mint(address,uint256)",
+                msg.sender,
+                claimQuickerTokenAmount
+            )
+        );
         emit OrderResult(true);
         emit DepositedFee(true);
         emit ChangedBalance(true);
