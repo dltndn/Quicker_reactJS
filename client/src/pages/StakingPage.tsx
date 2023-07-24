@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
 
+type StakingComponentType = { onClickBackBtn: () => void }
+
 const StakingPage = () => {
   const [showStaking, setShowStaking] = useState<boolean | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-
     return () => {
-        setShowStaking(null)
-    }
-  }, [])
+      setShowStaking(null);
+    };
+  }, []);
 
   return (
     <>
@@ -26,18 +27,34 @@ const StakingPage = () => {
           <button onClick={() => setShowStaking(false)}>언스테이킹</button>
         </>
       ) : (
-        <>{showStaking ? <StakingToken /> : <UnstakingToken />}</>
+        <>
+          {showStaking ? (
+            <StakingToken onClickBackBtn={() => setShowStaking(null)} />
+          ) : (
+            <UnstakingToken onClickBackBtn={() => setShowStaking(null)} />
+          )}
+        </>
       )}
     </>
   );
 };
 
-const StakingToken = () => {
-  return <>스테이킹 상세 화면</>;
+const StakingToken = ({ onClickBackBtn }: StakingComponentType) => {
+  return (
+    <>
+      <TopBarOthers title="스테이킹" redirectLogic={onClickBackBtn} />
+      스테이킹 상세 화면
+    </>
+  );
 };
 
-const UnstakingToken = () => {
-  return <>언스테이킹 상세 화면</>;
+const UnstakingToken = ({ onClickBackBtn }: StakingComponentType) => {
+  return (
+    <>
+      <TopBarOthers title="언스테이킹" redirectLogic={onClickBackBtn} />
+      언스테이킹 상세 화면
+    </>
+  );
 };
 
 export default StakingPage;
