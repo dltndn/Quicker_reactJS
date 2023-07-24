@@ -38,11 +38,10 @@
 <img width="468" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/20f9a65e-9c76-4e1c-a97c-63acf6503c3c">
 
 
-## 스크린샷
-|기능|스크린샷|
+## 시연 화면
+|기능|링크|
 |--|--|
-|지갑연결|<img width="234" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/13a1a9eb-32ad-414f-9e3f-5042fb1b779f">
-|거래현황|<img width="234" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/3ad647d2-14f7-4840-b45f-f894bb386f41">
+|v1.0|(https://www.youtube.com/@Quicker-Youtube/featured)
 |작업중|...|
 
 ---
