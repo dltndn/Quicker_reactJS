@@ -42,7 +42,10 @@ contract QuickerStaking is Ownable, AccessControl {
         require(lastSetPeriod[msg.sender] <= _period);
 
         // 이자가 있다면 지급
-        (bool claimSuccess) = claimPendingRewards();
+        bool claimSuccess = claimPendingRewards();
+        if (!claimSuccess) {
+            startAt[msg.sender] = block.number;
+        }
         
         endAt[msg.sender] = block.number.add(_period.mul(2592000)); // 스테이킹 기간 * 30 days
         lastSetPeriod[msg.sender] = _period;
@@ -73,7 +76,10 @@ contract QuickerStaking is Ownable, AccessControl {
         require(block.number >= endAt[msg.sender]);
 
         // 이자 지급
-        (bool claimSuccess) = claimPendingRewards();
+        bool claimSuccess = claimPendingRewards();
+        if (!claimSuccess) {
+            return false;
+        }
 
         (bool burnSuccess, ) = address(vQuickerToken).call(
             abi.encodeWithSignature(
@@ -98,8 +104,7 @@ contract QuickerStaking is Ownable, AccessControl {
 
     // 이자 수령
     function claimPendingRewards() public returns (bool) {
-        require(stakerAmounts[msg.sender] != 0, "didn't stake yet");
-        if (startAt[msg.sender] == 0) {
+        if (stakerAmounts[msg.sender] == 0) {
             return false;
         }
         (bool mintSuccess, ) = address(QuickerToken).call(
