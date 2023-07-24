@@ -121,7 +121,7 @@ contract QuickerStaking is Ownable, AccessControl {
             return 0;
         }
         uint256 totalBlocks = block.number.sub(startAt[_staker]);
-        return stakerAmounts[_staker].mul(1e18).mul(totalBlocks).mul(interestRate).div(864000000);
+        return vQuickerToken.balanceOf(_staker).mul(totalBlocks).mul(interestRate).div(864000000);
     }
 
     function setInterestRate(uint256 _rate) external onlyRole(SET_ROLE) {
