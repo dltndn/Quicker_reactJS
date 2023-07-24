@@ -7,4 +7,5 @@ export default new Sequelize("Quicker", env.user, env.password, {
   dialect: "mariadb",
   host: env.host,
   port: env.port,
+  logging: false
 });
