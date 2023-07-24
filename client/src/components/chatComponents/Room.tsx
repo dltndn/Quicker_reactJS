@@ -1,24 +1,24 @@
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import type { RoomInterface } from "./interface/RoomInterface"
 import Handler from "../../lib/Handler"
-import { useAccount } from "wagmi"
 import getName from "./getName"
 import styled from "styled-components"
 import BottomBar from "../BottomBar"
 import Time from "../../lib/Time"
+import { useConnWalletInfo } from "../../App"
 
 const Chatman = require('../../image/Chatman.png')
 const operator = require('../../image/operator.png')
 
-export default function ({ setStates, orderNum, blockchainElement }: RoomInterface) {
-    const { address } = useAccount();
+export default function ({ setStates, orderNum, blockchainElement, role }: RoomInterface) {
+    const { address } = useConnWalletInfo();
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
     const [opponentName, setOponentName] = useState("");
     const [time ,setTime] = useState("");
 
     const getRecentMessage = async () => {
-        const recentMessageInfo = await Handler.post({ orderNum: orderNum }, process.env.REACT_APP_SERVER_URL + "getRecentMessageInfo")
+        const recentMessageInfo = await Handler.post({ orderNum: orderNum }, process.env.REACT_APP_SERVER_URL + "room/message")
         
         const parsedTime = Time.getDiff(recentMessageInfo.date)
         setTime(parsedTime);
@@ -44,6 +44,7 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
         <div
           ref={roomComponent}
           onClick={() => {
+            setStates.setRole(role)
             setStates.setIsRoomClicked(true);
             setStates.setSelectedOrderNum(orderNum);
           }}
@@ -54,7 +55,7 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
           </Div1>
           <Div2>
             <Sp0>
-            {opponentName} <Sp1>{time}</Sp1>
+            {opponentName} <StateDiv>{`${role}`}</StateDiv> <Sp1>{time}</Sp1>
             </Sp0>
             <Sp2>{message}</Sp2>
           </Div2>
@@ -64,6 +65,15 @@ export default function ({ setStates, orderNum, blockchainElement }: RoomInterfa
       </>
     );
 }
+
+
+const StateDiv = styled.span`
+  padding: 1rem 0.75rem 1rem 1rem;
+  padding: 0;
+  color: #5843f5;
+  font-weight: bold;
+  font-size: 12px;
+`;
 
 const Div0 = styled.div`
   display: flex;

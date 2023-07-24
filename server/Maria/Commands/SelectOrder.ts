@@ -16,30 +16,26 @@ export default {
   location : (orderId : number) => {
     Order.hasOne(Destination, {foreignKey : "id"})
     Order.hasOne(Departure, {foreignKey : "id"})
-    return new Promise ((resolve, reject) => {
-      const orderLocation = Order.findOne({
-        attributes: ["id"],
-        where: { id: orderId },
-        include: [
-          {
-            model: Destination,
-            attributes: { exclude: ["id", "DETAIL"] },
-            required: true,
-          },
-          {
-            model: Departure,
-            attributes: { exclude: ["ID", "DETAIL"] },
-            required: true,
-          },
-        ],
-      });
-      resolve(orderLocation)
-      reject("fail")
-    })
+    return Order.findOne({
+      attributes: ["id"],
+      where: { id: orderId },
+      include: [
+        {
+          model: Destination,
+          attributes: { exclude: ["id", "DETAIL"] },
+          required: true,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "DETAIL"] },
+          required: true,
+        },
+      ],
+      raw : true
+    });
   },
 
   getRequests: (userId : string) => {
-    console.log("USER_ID : ",userId)
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });

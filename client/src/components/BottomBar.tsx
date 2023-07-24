@@ -6,6 +6,7 @@ import styled, { keyframes } from "styled-components";
 import Lottie from "lottie-react";
 import BottombarAni from "../Lottie/BottomBarAni.json";
 import { useVerificationStore } from "../App";
+import { useConnWalletInfo } from "../App";
 
 const white1 = require("../image/white1.png");
 const black1 = require("../image/black1.png");
@@ -57,7 +58,7 @@ const Container = styled.div`
 
 function BottomBar() {
   const navigate = useNavigate();
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnWalletInfo();
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
   const [showWalletAni, setShowWalletAni] = useState(false);
   const [showSignUpAni, setShowSignUpAni] = useState(false);

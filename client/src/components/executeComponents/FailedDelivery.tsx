@@ -8,6 +8,7 @@ import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import { BsPlusCircle } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 
 const CameraContainer = styled.div`
@@ -126,6 +127,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     const [fileImage, setFileImage] = useState<File | undefined | null>(undefined);
     const { address } = useAccount()
     const { setTitle } = useExecutionState()
+    const navigate = useNavigate();
 
     const postImage = async () => {
       if (fileImage !== null && fileImage && orderNum !== undefined ) {
@@ -139,7 +141,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
           formData.append("reason" , "")
         }
         
-        const response = await fetch(process.env.REACT_APP_SERVER_URL + "order-fail-image", {
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + "order/image/fail", {
           method: 'POST', 
           body: formData
         });
@@ -158,6 +160,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
         }
         // 배송 실패 사진 업로드 로직 작성
         await postImage()
+        navigate("/");
       } catch(e) {
         console.log(e)
       }

@@ -33,6 +33,7 @@ export default {
                 ]
               },
             ],
+            raw : true
         })
       );
       reject(undefined);

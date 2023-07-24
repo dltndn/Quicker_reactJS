@@ -92,21 +92,23 @@ export default function MainOrderInformation() {
               </Div1>
               <Sc3>
                 <Divmain>
-                  메인
+                  <Divmain1>
+                    배송을 시작해보세요!
+                  </Divmain1>
                   <DelPo>
                     <Lottie animationData={mainDelivery} />
                   </DelPo>
                 </Divmain>
               </Sc3>
               <Sc0>
-                <Sc4>
-                  <Divmain1 onClick={() => navigate("/search")}>
+                <Sc4 onClick={() => navigate("/search")}>
+                  <Divmain1 >
                     주변 의뢰<br></br>확인하기
                     <Img src={note} />
                   </Divmain1>
                 </Sc4>
-                <Sc4>
-                  <Divmain1 onClick={() => navigate("/explorer")}>
+                <Sc4 onClick={() => navigate("/explorer")}>
+                  <Divmain1 >
                     실시간 거래 현황
                     <Img src={transaction} />
                   </Divmain1>
@@ -136,26 +138,28 @@ export default function MainOrderInformation() {
                   <Div1></Div1>
                   <Sc3>
                     <Divmain>
+                      <Divmain1>
                       {formatedDate(showOrderObj.limitedTime)} 까지
                       <br></br>
                         {showOrderObj.destination.address_name}에 배달을
-                        완료해주세요
+                        완료해주세요.
                       <br></br>
                       {showOrderObj.orderPrice}의 수익이 예상돼요!
+                      </Divmain1>
                       <DelPo>
                         <Lottie animationData={mainDelivery} />
                       </DelPo>
                     </Divmain>
                   </Sc3>
                   <Sc0>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/fulfillmentlist")}>
+                    <Sc4 onClick={() => navigate("/fulfillmentlist")}>
+                      <Divmain1 >
                         배송 목록<br></br>확인하기
                         <Img src={note} />
                       </Divmain1>
                     </Sc4>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/explorer")}>
+                    <Sc4 onClick={() => navigate("/explorer")}>
+                      <Divmain1 >
                         실시간 거래 현황
                         <Img src={transaction} />
                       </Divmain1>
@@ -176,7 +180,9 @@ export default function MainOrderInformation() {
                   </Div1>
                   <Sc3>
                     <Divmain>
-                      조금만 기다려 주세요!
+                      <Divmain1>
+                      조금만 기다려주세요!
+                      </Divmain1>
                       <DelPo>
                         <Lottie animationData={mainDelivery} />
                       </DelPo>

@@ -7,12 +7,12 @@ const getName = async ({ blockchainElement, address, setState }: getNameInterfac
     let clientWalletAddress = delelteDoubleQuote(blockchainElement.client)
     if (clientWalletAddress === address) {
         const walletAddress = delelteDoubleQuote(blockchainElement.quicker)
-        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "getUserNameUseByWalletAddress")
+        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
         isMember(data, setState)
     }
     else {
         const walletAddress = delelteDoubleQuote(blockchainElement.client)
-        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "getUserNameUseByWalletAddress")
+        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
         isMember(data, setState)
     }
 }

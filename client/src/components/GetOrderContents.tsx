@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import { useContractRead, useContractEvent } from "wagmi";
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
+// import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
 import GetQkrwBalance from "./getQkrwBalance";
 
-const Quicker_abi = QUICKER_CONTRACT_ABI;
-const Quicker_address = QUICKER_ADDRESS;
+// const Quicker_abi = QUICKER_CONTRACT_ABI;
+// const Quicker_address = QUICKER_ADDRESS;
 
 type OrderProps = {
   orderNum: string;
 };
 
-export default function GetOrderContents({ orderNum }: OrderProps) {
+ function GetOrderContents({ orderNum }: OrderProps) {
   const [objData, setObjData] = useState<any>();
 
-  const { data, isError, isLoading } = useContractRead({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrder",
-    args: [orderNum],
-    onSuccess(data) {
-      setObjData(data);
-    },
-    onError(error) {
-      // console.log('Error', error)
-    },
-  });
+  // const { data, isError, isLoading } = useContractRead({
+  //   address: Quicker_address,
+  //   abi: Quicker_abi,
+  //   functionName: "getOrder",
+  //   args: [orderNum],
+  //   onSuccess(data) {
+  //     setObjData(data);
+  //   },
+  //   onError(error) {
+  //     // console.log('Error', error)
+  //   },
+  // });
 
   return (
     <>
-      {isLoading && <div>loading...</div>}
+      {/* {isLoading && <div>loading...</div>} */}
       {objData === undefined ? (<div>데이터 없음</div>):(<div>Result: <TemplateOrder data={objData} /></div>)}
     </>
   );

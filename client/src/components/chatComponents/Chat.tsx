@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import { socket } from "./socket";
-import { useAccount } from "wagmi";
 import { ChatInterface } from "./interface/ChatInterface";
 import getName from "./getName";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
@@ -20,6 +19,7 @@ import OtherMessageTemplate from "./OtherMessageTemplate";
 import MyMessageTemplate from "./MyMessageTemplate";
 import React from "react";
 import TopBarChat from "../topBarChat";
+import { useConnWalletInfo } from "../../App";
 
 import { MessageInfo } from "./interface/MessageInfo";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
 
 export default function ({
+  role,
   roomName,
   realAddress,
   phoneNumbers,
@@ -44,7 +45,7 @@ export default function ({
   const [receiverAddress, setReceiverAddress] = useState();
   const [parsedAddress, setParsedAddress] = useState();
 
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
 
   // 이벤트 처리
   const addMessage = (messageInfo: MessageInfo) => {
@@ -100,7 +101,7 @@ export default function ({
         });
         const roomInfo = await Handler.post(
           { orderNum: roomName },
-          process.env.REACT_APP_SERVER_URL + "getRoomInfo"
+          process.env.REACT_APP_SERVER_URL + "room"
         );
 
         if (
@@ -162,7 +163,8 @@ export default function ({
   return (
     <>
           <TopBarChat
-        title={opponentName}
+        title={`${opponentName}`}
+        role={`${role}`}
         redirectLogic={() => {
           navigate("/");
         }}

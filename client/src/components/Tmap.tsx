@@ -11,6 +11,10 @@ const Tmap = ({states, containerId }: props) => {
     useEffect(() => {
         setTmap(new Map("TMapApp", "30em"))
         console.log("tmap 객체 생성")
+        return () => {
+            setTmap(null)
+            console.log("tmap 객체 제거")
+        }
     }, [])
 
     useEffect(() => {

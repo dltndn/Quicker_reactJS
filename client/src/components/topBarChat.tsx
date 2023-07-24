@@ -45,22 +45,37 @@ const Tbsp = styled.div`
     margin-top: 0.125rem;
     margin-left: 0.313rem;
 `;
+const Div0_1 = styled.div`
+  padding: 1rem 0.75rem 1rem 1rem;
+`;
 
+const StateDiv = styled(Div0_1)`
+  display: flex;
+  border-radius: 1.25rem;
+  border-color: #5843f5;
+  width: 3.75rem;
+  height: 1.438rem;
+  justify-content: center;
+  padding: 0;
+  color: #5843f5;
+  font-weight: bold;
+`;
 
 interface Props {
     title: string
+    role: string
     redirectLogic: ()=> void
   }
 
-function TopBarChat({ title, redirectLogic }: Props) {
+function TopBarChat({ title, role, redirectLogic }: Props) {
     const navigate = useNavigate();
 
     return (
         <section>
-            <Divhid/>
             <Tdiv>
                 <Tbtleft onClick={() => redirectLogic()}><BsChevronLeft></BsChevronLeft></Tbtleft>
                 <Tbsp>{title}</Tbsp>
+                <StateDiv>{role}</StateDiv>
                 <Tbhome onClick={() => navigate('/')}><BsHouseDoor></BsHouseDoor></Tbhome>
                 <Tbt>
                 <BsExclamationTriangle/>

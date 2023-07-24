@@ -1,4 +1,5 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import {RequestHandler} from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateOrder from "../Maria/Commands/CreateOrder";
@@ -11,6 +12,8 @@ import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 import sendMessage from "../sendMessage"
 import { encrypt, decrypt } from "../lib/cryto";
+import { findRoomInfoByOrderNumber } from "../service/Room";
+import { findDestinationAndDepartureByOrderId } from "../service/Order";
 
 initModels(sequelize);
 
@@ -49,19 +52,15 @@ export default {
       res.send("fail");
     }
   },
-
-  order: async (req: Request, res: Response) => {
+  
+  order: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const query = req.query;
-      const orderId = query.orderid;
-      
-      if (typeof orderId === "string") {
-        const instance = await SelectOrder.location(parseInt(orderId))
-        res.send(instance)
-      }
+      const instance = await findDestinationAndDepartureByOrderId(query);
+      res.send(instance)
     } catch (error){
-      console.log(error)
-      res.send("fail");
+      console.error(error)
+      next(error)
     }
   },
 
@@ -104,14 +103,14 @@ export default {
     }
   },
 
-  getRoomInfo : async (req: Request, res: Response) => {
+  getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
       const orderNum = req.body.orderNum;
-      let data = await SelectRoomInfo.getRoomInfo(orderNum)
-      return res.send(JSON.stringify(data))
+      const room = await findRoomInfoByOrderNumber(orderNum)
+      res.json(room)
     } catch (error) {
-      console.log(error)
-      return res.send({msg : "fail"})
+      console.error(error)
+      next(error)
     }
   },
 };

@@ -1,10 +1,7 @@
-import { BsChevronRight } from "react-icons/bs";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Web3Button } from "@web3modal/react";
 import { useVerificationStore } from "../../App";
-import { useAccount } from "wagmi";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import MainOrderInformation from "./MainOrderInformation";
@@ -13,8 +10,9 @@ import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
 import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
-import KakaoNaviDeepLinkButton from "../searchComponents/KakaoNaviDeepLinkButton";
 import { TwoPointRoute } from "../searchComponents/interface/route";
+import { useConnWalletInfo } from "../../App";
+import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -67,7 +65,9 @@ type isConnectToWallet = {
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
   const { isMember } = useVerificationStore();
-  const { address } = useAccount();
+  // const { address } = useAccount();
+  const { address } = useConnWalletInfo();
+
 
   const sdta = new SendDataToAndroid(address);
   const testVal: boolean = true;
@@ -154,7 +154,8 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         <>
                 <Div1_1>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
-                <Web3Button icon="hide" label="지갑연결" balance="hide" />
+                {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
+                <WalletConnectBtn />
               </Sp2>
                 </Div1_1>
                 <Div1>
@@ -169,15 +170,15 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 </Divmain>
                 </Sc3>
                 <Sc0>
-                  <Sc4>
-                  <Divmain1 onClick={()=>{window.open(walletWebsiteUrl)}}>
+                  <Sc4 onClick={()=>{window.open(walletWebsiteUrl)}}>
+                  <Divmain1 >
                     암호화폐 지갑이<br></br>
                     없으신가요?
                     <Img src={wallet} />
                   </Divmain1>
                   </Sc4>
-                  <Sc4>
-                  <Divmain1 onClick={() => navigate('/explorer')}>
+                  <Sc4 onClick={() => navigate('/explorer')}>
+                  <Divmain1 >
                     실시간 거래 현황
                     <Img src={transaction} />
                   </Divmain1>

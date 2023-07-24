@@ -2,7 +2,6 @@ import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
@@ -11,6 +10,9 @@ import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import QR from "../../pages/QR";
 import { useDeliveredComponent } from "./DeliveredItem";
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
+import { useConnWalletInfo } from "../../App";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -35,16 +37,13 @@ font-weight: bold;
 export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState()
   const { hasScanResult } = useDeliveredComponent()
-  const { address } = useAccount()
+  const { address } = useConnWalletInfo()
     // const videoRef = useRef<HTMLVideoElement>(null);
 
     const deliveredRogic = async () => {
       if (orderNum !== undefined) {
-          const wttb = new WriteTransactionToBlockchain(orderNum)
           const sdta = new SendDataToAndroid(address)
           try {
-              const result = await wttb.deliveredOrder()
-              console.log(result)
               // 배송원 수행 중인 오더 확인 후 false값 전송
               if (!(await checkIsDelivering(address))) {
                   sdta.sendIsDelivering(false)
@@ -66,12 +65,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        <BottomConfirmBtn
-                content="확인"
-                confirmLogic={ () => {
-                    deliveredRogic();
-                }} isDisabled={!hasScanResult}
-            />
+        {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
     </>
   );
 };

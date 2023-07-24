@@ -24,17 +24,17 @@ import Notification from "./components/Notification";
 import ExecutionPage from "./pages/ExecutionPage";
 import ClientConfirmPage from "./pages/ClientConfirmPage";
 import Profile_noticePage from "./pages/Profile_noticePage";
+import Profile_notice_writePage from "./pages/Profile_notice_writePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
 import QR from "./pages/QR"
 import { create } from 'zustand'
-
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
 import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import QRCode from "./pages/QRCode";
+
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -59,18 +59,36 @@ const wagmiClient = createClient({
 
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 
+interface UseConnWalletInfoType {
+  address: string | undefined;
+  setAddress: (data: string | undefined) => void;
+  isMobile: boolean | null;
+  setIsMobile: (data: boolean | null) => void;
+  isConnected: boolean;
+  setIsConneted: (data: boolean) => void;
+}
+
+export const useConnWalletInfo = create<UseConnWalletInfoType>((set) => ({
+  address: undefined,
+  setAddress: (address: string | undefined) => set({address}),
+  isMobile: null, 
+  setIsMobile: (isMobile: boolean | null) => set({isMobile}),
+  isConnected: false,
+  setIsConneted: (isConnected: boolean) => set({isConnected})
+}))
+
 interface UseVerifiaction {
   isMember: boolean;
   setIsMember: (newIsMember:boolean) => void;
   userName: string | null;
-  setUserName: (newUserName:string) => void;
+  setUserName: (newUserName:string | null) => void;
 }
 
 export const useVerificationStore = create<UseVerifiaction>((set) => ({
   isMember: false,
   setIsMember: (isMember: boolean) => set({isMember}),
   userName: null,
-  setUserName: (userName: string) => set({userName}),
+  setUserName: (userName: string | null) => set({userName}),
 }))
 
 interface UseUserOrderStateType {
@@ -93,7 +111,8 @@ export const UseUserOrderState = create<UseUserOrderStateType>((set) => ({
 
 function App() {
   const { theme, setTheme } = useWeb3ModalTheme();
-  const { address } = useAccount()
+  // const { address } = useAccount()
+  const { address, setAddress, setIsConneted, setIsMobile } = useConnWalletInfo()
   const { isMember, setIsMember, setUserName } = useVerificationStore();
   const { clientOrderNums, setClientOrderNums, quickerOrderNums, setQuickerOrderNums, userOrderNumStateTrigger} = UseUserOrderState()
 
@@ -104,7 +123,7 @@ function App() {
   });
 
   const getUserInfo = async () => {
-    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "getUserNameUseByWalletAddress")
+    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "user/name")
     if (Object.keys(result).length !== 0) {
       setIsMember(true)
       setUserName(result.name)
@@ -119,54 +138,71 @@ function App() {
   }
 
   const sdta = new SendDataToAndroid(address)
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "AcceptedOrderNumber",
-    async listener(node: any, label: any) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      console.log(orderNum)
-      for (const element of clientOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsMatchedOrder(true)
-          break
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "AcceptedOrderNumber",
+  //   async listener(node: any, label: any) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     console.log(orderNum)
+  //     for (const element of clientOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsMatchedOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
 
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "deliveredOrderNumber",
-    async listener(node: any, label: any, owner) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      for (const element of clientOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsDeliveredOrder(true)
-          break
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "deliveredOrderNumber",
+  //   async listener(node: any, label: any, owner) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     for (const element of clientOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsDeliveredOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
 
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "completedOrderNumber",
-    async listener(node: any, label: any ,log: any) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      for (const element of quickerOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsCompletedOrder(true)
-          break
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "completedOrderNumber",
+  //   async listener(node: any, label: any ,log: any) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     for (const element of quickerOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsCompletedOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
+
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("kaikas_address");
+    const storedIsMobile = localStorage.getItem("kaikas_isMobile");
+    if (storedAddress === "undefined") {
+        setAddress(undefined)
+        setIsConneted(false)
+    } else if (storedAddress !== null){
+        setAddress(storedAddress)
+        setIsConneted(true)
+        if (storedIsMobile === "true") {
+          setIsMobile(true)
+        } else {
+          setIsMobile(false)
         }
-      }
-    },
-  });
+    }
+  }, [])
 
   useEffect(() => {
     // 지갑주소 유저 여부 조회
@@ -195,6 +231,7 @@ function App() {
             <Route path="/test2" element={<TestPage2 />} />
             <Route path="/profile/setting" element={<Profile_settingPage />} />
             <Route path="/profile/notice" element={<Profile_noticePage />} />
+            <Route path="/profile/notice/write" element={<Profile_notice_writePage />} />
             <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
             <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
             <Route path="/notification" element={<Notification />} />
@@ -207,12 +244,12 @@ function App() {
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
-      <Web3Modal
+      {/* <Web3Modal
         projectId={projectId ?? ""}
         ethereumClient={ethereumClient}
         themeBackground={theme.themeBackground}
         // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
-      />
+      /> */}
     </>
   );
 }

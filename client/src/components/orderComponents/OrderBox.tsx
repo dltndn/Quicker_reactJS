@@ -1,8 +1,6 @@
 import React, { CSSProperties, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAccount } from "wagmi";
 import { useOrderState } from "../ShowOrders";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
 import { calQuickerIncome, extractNumber } from "../../utils/CalAny";
 import {
@@ -11,6 +9,9 @@ import {
 } from "../../utils/ConvertTimestampToDate";
 import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useConnWalletInfo } from "../../App";
+import SendTxK from "../blockChainTx/SendTxK";
+import GetContractParams from "../blockChainTx/GetContractParams";
 
 interface OrderBoxProps {
   orderObj: any;
@@ -18,16 +19,24 @@ interface OrderBoxProps {
 }
 
 export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
-  let orderPriceNum: number;
-  let income = "";
-  if (!isClient) {
-    if (orderObj.orderPrice === null) {
-      orderPriceNum = 0;
-    } else {
-      orderPriceNum = extractNumber(orderObj.orderPrice);
+  const [incomeData, setIncomeData] = useState<string | null>(null)
+  
+  useEffect(() => {
+    const getIncome = async() => {
+      let orderPriceNum: number;
+      if (orderObj) {
+        if (!isClient) {
+          if (orderObj.orderPrice === null) {
+            orderPriceNum = 0;
+          } else {
+            orderPriceNum = extractNumber(orderObj.orderPrice);
+          }
+          setIncomeData(await calQuickerIncome(orderPriceNum)) 
+        }
+      }
     }
-    income = calQuickerIncome(orderPriceNum);
-  }
+    getIncome()
+  }, [orderObj])  
 
   return (
     <>
@@ -93,7 +102,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               </Div1>
               <Div1>
                 <Spsc0>수익</Spsc0>
-                <Spsc1>{income}원</Spsc1>
+                <Spsc1>{incomeData}원</Spsc1>
               </Div1>
               <Div1>
                 <Spprofit2>
@@ -118,26 +127,32 @@ interface OrderModalProps {
 }
 
 export function OrderModal({ isClient }: OrderModalProps) {
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
+  const [incomeData, setIncomeData] = useState<string | null>(null)
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setOrder(null);
   };
 
-  let orderPriceNum: number;
-  let income = "";
-  if (order) {
-    if (!isClient) {
-      if (order.orderPrice === null) {
-        orderPriceNum = 0;
-      } else {
-        orderPriceNum = extractNumber(order.orderPrice);
+  const getIncome = async() => {
+    let orderPriceNum: number;
+    if (order) {
+      if (!isClient) {
+        if (order.orderPrice === null) {
+          orderPriceNum = 0;
+        } else {
+          orderPriceNum = extractNumber(order.orderPrice);
+        }
+        setIncomeData(await calQuickerIncome(orderPriceNum)) 
       }
-      income = calQuickerIncome(orderPriceNum);
     }
   }
+
+  useEffect(() => {
+    getIncome()
+  }, [order])  
 
   const modalStyle: CSSProperties = {
     position: "fixed",
@@ -171,6 +186,12 @@ export function OrderModal({ isClient }: OrderModalProps) {
   };
 
   useEffect(() => {
+    return () => {
+      handleCloseModal();
+    };
+  }, []);
+
+  useEffect(() => {
     // 모달이 열렸을 때 body의 overflow 스타일 속성을 hidden으로 변경
     document.body.style.overflow = isModalOpen ? "hidden" : "auto";
   }, [isModalOpen]);
@@ -186,192 +207,206 @@ export function OrderModal({ isClient }: OrderModalProps) {
               </button>
               {isClient ? (
                 <>
-                  <Div0>
-                    <Sp0>주문 상세</Sp0>
+                  <Order_Div>
+                    <Order_Span_md_bold>주문 상세</Order_Span_md_bold>
                     <ViewState orderObj={order} isClient={true} />
-                  </Div0>
-                  <Div1>
-                    <Sp2>수락 시간</Sp2>
+                  </Order_Div>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>수락 시간</Order_Span_md1_grey>
                     {order?.matchedTime === null ? (
-                      <Sp1>-</Sp1>
+                      <Order_Span_md1_left>-</Order_Span_md1_left>
                     ) : (
-                      <Sp1>{formatedDate(order?.matchedTime)}</Sp1>
+                      <Order_Span_md1_left>
+                        {formatedDate(order?.matchedTime)}
+                      </Order_Span_md1_left>
                     )}
-                  </Div1>
-                  <Div1>
-                    <Sp2>도착 시간</Sp2>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>도착 시간</Order_Span_md1_grey>
                     {order?.deliveredTime === null ? (
-                      <Sp1>-</Sp1>
+                      <Order_Span_md1_left>-</Order_Span_md1_left>
                     ) : (
-                      <Sp1>{formatedDate(order?.deliveredTime)}</Sp1>
+                      <Order_Span_md1_left>
+                        {formatedDate(order?.deliveredTime)}
+                      </Order_Span_md1_left>
                     )}
-                  </Div1>
-                  <Div1>
-                    <Sp2>출발지</Sp2>
-                    <Sp1>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>출발지</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.realdepartureAdress !== undefined
                         ? order.realdepartureAdress.address_name
                         : "없음"}
                       <br />
-                      <Sp3>
+                      <Order_Span_mc_ab>
                         {order.realdepartureAdress !== undefined
                           ? order.realdepartureAdress.DETAIL
                           : "없음"}
-                      </Sp3>
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>발송인</Sp2>
-                    <Sp1>
+                      </Order_Span_mc_ab>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>발송인</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Sender.NAME !== undefined
                         ? order.Sender.NAME
                         : "없음"}
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>도착지</Sp2>
-                    <Sp1>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>도착지</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.realdestinationAdress.address_name !== undefined
                         ? order.realdestinationAdress.address_name
                         : "없음"}
                       <br />
-                      <Sp3>
+                      <Order_Span_mc_ab>
                         {order.realdestinationAdress !== undefined
                           ? order.realdestinationAdress.DETAIL
                           : "없음"}
-                      </Sp3>
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>수령인</Sp2>
-                    <Sp1>
+                      </Order_Span_mc_ab>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>수령인</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Recipient.NAME !== undefined
                         ? order.Recipient.NAME
                         : "없음"}
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>물품 세부 정보</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.DETAIL !== undefined ? order.DETAIL : "없음"}
                       <br />
-                      <Sp3>
+                      <Order_Span_mc_ab>
                         {order.Product !== undefined
                           ? order.Product.WEIGHT
                           : "없음"}
                         kg
-                      </Sp3>
-                    </Sp1>
-                  </Div1>
-                  <Hr />
-                  <Div1>
-                    <Sp4>수익</Sp4>
-                    <Sp5>{order?.orderPrice}</Sp5>
-                  </Div1>
-                  <Div1>
-                    <Sp2>결제 일시</Sp2>
-                    <Sp1>{formatedDate(order?.createdTime)}</Sp1>
-                  </Div1>
+                      </Order_Span_mc_ab>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Hr />
+                  <Order_Div_detail>
+                    <Order_Span_md1_blue>수익</Order_Span_md1_blue>
+                    <Order_Span_md1_blue_left>
+                      {order?.orderPrice}
+                    </Order_Span_md1_blue_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>결제 일시</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
+                      {formatedDate(order?.createdTime)}
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
                   <BottomBtn order={order} address={address} />
                 </>
               ) : (
                 <>
-                  <Div0>
-                    <Sp0>세부 정보</Sp0>
-                  </Div0>
-                  <Div1>
-                    <Sp2>배송 기한</Sp2>
-                    <Sp1>{formatedDate(order?.limitedTime)}</Sp1>
-                  </Div1>
-                  <Hr />
-                  <Div1>
-                    <Sp2>출발지</Sp2>
-                    <Sp1>
+                  <Order_Div>
+                    <Order_Span_md_bold>세부 정보</Order_Span_md_bold>
+                  </Order_Div>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>배송 기한</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
+                      {formatedDate(order?.limitedTime)}
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Hr />
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>출발지</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.realdepartureAdress !== undefined
                         ? order.realdepartureAdress.address_name
                         : "없음"}
                       <br />
-                      <Sp3>
+                      <Order_Span_mc_ab>
                         {order.realdepartureAdress !== undefined
                           ? order.realdepartureAdress.DETAIL
                           : "없음"}
-                      </Sp3>
-                    </Sp1>
-                    <Ic>
+                      </Order_Span_mc_ab>
+                    </Order_Span_md1_left>
+                    <Order_Span_mc_left>
                       <BsStickies />
-                    </Ic>
-                  </Div1>
-                  <Div1>
-                    <Sp2>발송인</Sp2>
-                    <Sp1>
+                    </Order_Span_mc_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>발송인</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Sender.NAME !== undefined
                         ? order.Sender.NAME
                         : "없음"}
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>연락처</Sp2>
-                    <Sp1>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>연락처</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Sender.PHONE !== undefined
                         ? order.Sender.PHONE
                         : "없음"}
-                    </Sp1>
-                    <Ic>
+                    </Order_Span_md1_left>
+                    <Order_Span_mc_left>
                       <BsStickies />
-                    </Ic>
-                  </Div1>
-                  <Hr />
-                  <Div1>
-                    <Sp2>도착지</Sp2>
-                    <Sp1>
+                    </Order_Span_mc_left>
+                  </Order_Div_detail>
+                  <Order_Hr />
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>도착지</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.realdestinationAdress !== undefined
                         ? order.realdestinationAdress.address_name
                         : "없음"}
                       <br />
-                      <Sp3>
+                      <Order_Span_mc_ab>
                         {order.realdestinationAdress !== undefined
                           ? order.realdestinationAdress.DETAIL
                           : "없음"}
-                      </Sp3>
-                    </Sp1>
-                    <Ic>
+                      </Order_Span_mc_ab>
+                    </Order_Span_md1_left>
+                    <Order_Span_mc_left>
                       <BsStickies />
-                    </Ic>
-                  </Div1>
-                  <Div1>
-                    <Sp2>수령인</Sp2>
-                    <Sp1>
+                    </Order_Span_mc_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>수령인</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Recipient.NAME !== undefined
                         ? order.Recipient.NAME
                         : "없음"}
-                    </Sp1>
-                  </Div1>
-                  <Div1>
-                    <Sp2>연락처</Sp2>
-                    <Sp1>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>연락처</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.Recipient.PHONE !== undefined
                         ? order.Recipient.PHONE
                         : "없음"}
-                    </Sp1>
-                    <Ic>
+                    </Order_Span_md1_left>
+                    <Order_Span_mc_left>
                       <BsStickies />
-                    </Ic>
-                  </Div1>
-                  <Hr />
-                  <Div1>
-                    <Sp2>물품 세부 정보</Sp2>
-                    <Sp1>
+                    </Order_Span_mc_left>
+                  </Order_Div_detail>
+                  <Order_Hr />
+                  <Order_Div_detail>
+                    <Order_Span_md1_grey>물품 세부 정보</Order_Span_md1_grey>
+                    <Order_Span_md1_left>
                       {order.DETAIL !== undefined ? order.DETAIL : "없음"}
                       <br />
-                      <Sp3>60kg</Sp3>
-                    </Sp1>
-                  </Div1>
-                  <Hr />
-                  <Div1>
-                    <Sp4>수익</Sp4>
-                    <Sp5>{income}</Sp5>
-                  </Div1>
-                  <QuickerBottomBtn order={order}/>
+                      <Order_Span_mc_detail>
+                        {order.Product.WEIGHT}kg 이상
+                      </Order_Span_mc_detail>
+                    </Order_Span_md1_left>
+                  </Order_Div_detail>
+                  <Order_Hr />
+                  <Order_Div_detail>
+                    <Order_Span_md1_blue>수익</Order_Span_md1_blue>
+                    <Order_Span_md1_blue_left>
+                      {incomeData}
+                    </Order_Span_md1_blue_left>
+                  </Order_Div_detail>
+                  <QuickerBottomBtn order={order} />
                 </>
               )}
             </>
@@ -405,29 +440,23 @@ const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
 
 interface BottomBtnProps {
   order: any;
-  address: `0x${string}` | undefined;
+  address: string | undefined;
 }
 // 모달 하단 버튼 컴포넌트
 const BottomBtn = ({ order, address }: BottomBtnProps) => {
-  const wttb = new WriteTransactionToBlockchain(order.orderNum);
   const { setOrder, setIsModalOpen, setReloadOrderNum } = useOrderState();
-  const navigate = useNavigate()
+  const [showTxBtn, setShowTxBtn] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      setShowTxBtn(false);
+    };
+  }, []);
 
   const closeModal = () => {
     setIsModalOpen(false);
     setOrder(null);
-  };
-  // 주문 취소 로직
-  const createdLogic = async () => {
-    try {
-      const result = await wttb.cancelOrder();
-      console.log(result);
-    } catch(e) {
-      console.log(e)
-    }
-    setReloadOrderNum(order.orderNum);
-    closeModal();
-    navigate("/")
   };
 
   // 거래 확인 로직
@@ -436,23 +465,41 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
   };
 
   const redirectExecutionPage = () => {
-    navigate(`/client_confirm/${order.orderNum}`)
-  }
+    navigate(`/client_confirm/${order.orderNum}`);
+  };
   // 다시 의뢰하기 로직
   const cancelLogic = () => {
     console.log("다시 의뢰하기 로직 구현");
     // 의뢰하기 페이지 리다이렉트
-    navigate("/commission")
+    navigate("/commission");
   };
   switch (order?.state) {
     case "created":
-      return <Button onClick={() => createdLogic()}>주문취소</Button>;
+      return (
+        <>
+          {!showTxBtn ? (
+            <Button onClick={() => setShowTxBtn(true)}>주문취소</Button>
+          ) : (
+            <SendTxK
+              param={GetContractParams.CancelOrder(order.orderNum)}
+              successFunc={() => {
+                setReloadOrderNum(order.orderNum);
+                closeModal();
+              }}
+            />
+          )}
+        </>
+      );
     case "matched":
-      return <Button onClick={() => redirectExecutionPage()}>배송현황확인</Button>;
+      return (
+        <Button onClick={() => redirectExecutionPage()}>배송현황확인</Button>
+      );
     case "completed":
       return <Button onClick={() => completeLogic()}>거래완료</Button>;
     case "failed":
-      return <Button onClick={() => redirectExecutionPage()}>실패사유확인</Button>;
+      return (
+        <Button onClick={() => redirectExecutionPage()}>실패사유확인</Button>
+      );
     case "canceled":
       return <Button onClick={() => cancelLogic()}>다시의뢰하기</Button>;
     default:
@@ -483,6 +530,81 @@ const QuickerBottomBtn = ({ order }: any) => {
       return <Button onClick={() => acceptLogic()}>수행 현황</Button>;
   }
 };
+
+const Order_Div = styled.div`
+  //div0
+  display: flex;
+  padding: 1.75rem 0 1.25rem 0;
+`;
+
+const Order_Div_detail = styled(Order_Div)`
+  //div1
+  padding: 0.625rem 0px 0.625rem 0px;
+`;
+
+const Order_Span_md_bold = styled.span`
+  //sp0
+  font-size: var(--font-md);
+  font-weight: bold;
+`;
+
+const Order_Span_md1 = styled.span`
+  font-size: var(--font-md1);
+`;
+
+const Order_Span_md1_blue = styled(Order_Span_md1)`
+  color: #0d6efd;
+  font-weight: bold;
+`;
+const Order_Span_md1_blue_left = styled(Order_Span_md1)`
+  //sp5
+  font-size: var(--font-md1);
+  color: #0d6efd;
+  margin-left: auto;
+  font-weight: bold;
+`;
+const Order_Span_md1_left = styled(Order_Span_md1)`
+  //sp1
+  margin-left: auto;
+  position: relative;
+  font-weight: bold;
+`;
+const Order_Span_md1_grey = styled(Order_Span_md1)`
+  //sp2
+  color: #646464;
+`;
+
+const Order_Span_mc_ab = styled.span`
+  //sp3
+  font-size: var(--font-micro);
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  font-weight: lighter;
+`;
+
+const Order_Span_mc_detail = styled.div`
+  //sp3
+  font-size: var(--font-micro);
+  top: 1rem;
+  right: 0;
+  font-weight: lighter;
+`;
+
+const Order_Span_mc_left = styled.span`
+  font-size: var(--font-micro);
+  margin-left: 0.188rem;
+`;
+
+const Order_Hr = styled.hr`
+  //hr
+  margin: 0.75rem auto 0.75rem auto;
+  width: 100%;
+  border: 0;
+  height: 0;
+  border-top: 0.063rem solid #dfdfdf;
+  padding: 0 0 0 0;
+`;
 
 const Div0 = styled.div`
   display: flex;
@@ -528,28 +650,6 @@ const Sp3 = styled(Sp1)`
   margin-bottom: 1rem;
 `;
 
-const Sp4 = styled.span`
-  font-size: var(--font-md1);
-  color: #0d6efd;
-  font-weight: bold;
-`;
-
-const Sp5 = styled.span`
-  font-size: var(--font-md1);
-  color: #0d6efd;
-  margin-left: auto;
-  font-weight: bold;
-`;
-
-const Hr = styled.hr`
-  margin: 0.75rem auto 0.75rem auto;
-  width: 100%;
-  border: 0;
-  height: 0;
-  border-top: 0.063rem solid #dfdfdf;
-  padding: 0 0 0 0;
-`;
-
 const Button = styled.button`
   width: 100%;
   height: 4.313rem;
@@ -580,19 +680,10 @@ const Spprofit0 = styled.span`
   font-weight: bold;
 `;
 
-const Spprofit1 = styled(Spprofit0)`
-  margin-left: auto;
-`;
-
 const Spprofit2 = styled(Spprofit0)`
   padding-top: 0px;
   font-size: var(--font-small);
   color: #979797;
-`;
-
-const Spprofit3 = styled(Spprofit2)`
-  margin-left: auto;
-  color: #79afff;
 `;
 
 const Spsc0 = styled(Spprofit0)`
@@ -605,9 +696,4 @@ const Spsc1 = styled(Spsc0)`
 
 const Spsc2 = styled(Spprofit2)`
   margin-left: auto;
-`;
-
-const Ic = styled.span`
-  font-size: var(--font-md1);
-  margin-left: 0.188rem;
 `;

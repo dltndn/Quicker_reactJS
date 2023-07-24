@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import {useEffect, useRef, useState } from "react";
-import { useAccount } from 'wagmi';
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 import { useOrderDataStore, useOrderStore } from '../../pages/commission';
 import GetQkrwBalance from '../getQkrwBalance';
+import { useConnWalletInfo } from '../../App';
 
 const walk = require('../../image/walk.png')
 const bike = require('../../image/bike.png')
@@ -215,8 +215,8 @@ function Req() {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
-    const { address, isConnected } = useAccount();
-    const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, setWeight } = useOrderDataStore();
+    const { address, isConnected } = useConnWalletInfo();
+    const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, weight,  setWeight } = useOrderDataStore();
 
       const handleImgClick = (transport: Transport) => {
         let changeIsChecked = () => {
@@ -248,6 +248,10 @@ function Req() {
         }
         return result
     }
+    
+    useEffect(()=> {
+        setWeight(5)
+    }, [])
     
     return (
     <>
@@ -390,9 +394,15 @@ function Req() {
             </div>
             <InputDiv>
             {/* ERROR : 타입이 String 타입임 */}
-            <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value))}} name="weight">
-                <option value="10">10 이상</option>
-                <option value="20">20 이상</option>
+            <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value)); console.log(weight)}} name="weight">
+                <option value={5} selected>5kg 이상</option>
+                <option value={10}>10kg 이상</option>
+                <option value={15}>15kg 이상</option>
+                <option value={20}>20kg 이상</option>
+                <option value={25}>25kg 이상</option>
+                <option value={30}>30kg 이상</option>
+                <option value={35}>35kg 이상</option>
+                <option value={40}>40kg 이상</option>
             </SelectInput>
             </InputDiv>
         </Box>

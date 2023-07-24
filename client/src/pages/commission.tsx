@@ -8,9 +8,9 @@ import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { createGlobalStyle } from "styled-components";
-import { useAccount } from "wagmi";
 import { create } from 'zustand'
 import Time from "../lib/Time"
+import { useConnWalletInfo } from "../App";
 
 interface OrderState {
   cost: number;
@@ -98,6 +98,8 @@ interface useOrderDataStore {
 
   isChecked: isChecked;
   setIsChecked: (value: any) => void;
+
+  reset: () => void;
 }
 
 interface isChecked {
@@ -158,6 +160,35 @@ export const useOrderDataStore = create<useOrderDataStore>(set => ({
     truck: false,
   },
   setIsChecked : (isChecked : isChecked) => set({isChecked}),
+  reset: () => {
+    set({
+      orderId: 0,
+      startAddress: '',
+      sender: '',
+      senderPhoneNumber: '',
+      arriveAddress: '',
+      receiver: '',
+      receiverPhoneNumber: '',
+      width: 0,
+      height: 0,
+      length: 0,
+      weight: 0,
+      AMPM: '오전',
+      date: null,
+      hour: null,
+      minute: null,
+      details: '',
+      cost: 0,
+      isChecked: {
+        walk: false,
+        bike: false,
+        kickboard: false,
+        motorcycle: false,
+        car: false,
+        truck: false,
+      },
+    });
+  },
 }))
 
 const GlobalStyle = createGlobalStyle`
@@ -184,16 +215,14 @@ const getLatLon = () => {
 
 export default function CommissionPage() {
   const navigate = useNavigate();
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const startinputDiv = useRef<HTMLInputElement>(null);
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const {showCommissionPage, setShowCommissionPage} = useDivHandler();
 
   const { title, setTitle, setDeadLine } = useOrderStore()
-  const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, } = useOrderDataStore();  
+  const {orderId, startAddress, sender, senderPhoneNumber, arriveAddress, receiver, receiverPhoneNumber, width, height, length, weight, AMPM, date, hour, minute, details, cost, isChecked, reset} = useOrderDataStore();
 
-
-  
   const [arrivePosition, setArrivePosition] = useState({})
   const [startPosition, setStartPosition] = useState({})
 
@@ -284,6 +313,14 @@ export default function CommissionPage() {
   const handleCommissionPage = () => {
     setShowCommissionPage(false);
   };
+
+  useEffect(() => {
+    return () => {
+      reset()
+      setShowCommissionPage(true)
+      setTitle("출발지 입력")
+    }
+  }, [])
 
   useEffect(() => {
     setDeadlineToProp()
