@@ -34,6 +34,7 @@ import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import QRCode from "./pages/QRCode";
+import StakingPage from "./pages/StakingPage";
 
 
 Buffer.from("anything", "base64");
@@ -241,6 +242,7 @@ function App() {
             <Route path="/receipient" element={<ReceipientPage />}/>
             <Route path="/chatcss" element={<ChatcssPage />}/>
             <Route path="/testQR" element={<QR />}/>
+            <Route path="/staking" element={<StakingPage />} />
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
