@@ -12,5 +12,6 @@ router.post("/getOrder", KlaytnCaver.getOrder)
 router.post("/getOrders", KlaytnCaver.getOrders)
 router.post("/getQkrwBalance", KlaytnCaver.getQkrwBal)
 router.post("/getOrdersForState", KlaytnCaver.getOrdersForState)
+router.get("/getOwner", KlaytnCaver.getOwner)
 
 export default router;

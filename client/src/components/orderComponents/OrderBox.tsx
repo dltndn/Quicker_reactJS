@@ -19,16 +19,24 @@ interface OrderBoxProps {
 }
 
 export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
-  let orderPriceNum: number;
-  let income = "";
-  if (!isClient) {
-    if (orderObj.orderPrice === null) {
-      orderPriceNum = 0;
-    } else {
-      orderPriceNum = extractNumber(orderObj.orderPrice);
+  const [incomeData, setIncomeData] = useState<string | null>(null)
+  
+  useEffect(() => {
+    const getIncome = async() => {
+      let orderPriceNum: number;
+      if (orderObj) {
+        if (!isClient) {
+          if (orderObj.orderPrice === null) {
+            orderPriceNum = 0;
+          } else {
+            orderPriceNum = extractNumber(orderObj.orderPrice);
+          }
+          setIncomeData(await calQuickerIncome(orderPriceNum)) 
+        }
+      }
     }
-    income = calQuickerIncome(orderPriceNum);
-  }
+    getIncome()
+  }, [orderObj])  
 
   return (
     <>
@@ -94,7 +102,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               </Div1>
               <Div1>
                 <Spsc0>수익</Spsc0>
-                <Spsc1>{income}원</Spsc1>
+                <Spsc1>{incomeData}원</Spsc1>
               </Div1>
               <Div1>
                 <Spprofit2>
@@ -122,23 +130,29 @@ export function OrderModal({ isClient }: OrderModalProps) {
   const { address } = useConnWalletInfo();
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
+  const [incomeData, setIncomeData] = useState<string | null>(null)
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setOrder(null);
   };
 
-  let orderPriceNum: number;
-  let income = "";
-  if (order) {
-    if (!isClient) {
-      if (order.orderPrice === null) {
-        orderPriceNum = 0;
-      } else {
-        orderPriceNum = extractNumber(order.orderPrice);
+  const getIncome = async() => {
+    let orderPriceNum: number;
+    if (order) {
+      if (!isClient) {
+        if (order.orderPrice === null) {
+          orderPriceNum = 0;
+        } else {
+          orderPriceNum = extractNumber(order.orderPrice);
+        }
+        setIncomeData(await calQuickerIncome(orderPriceNum)) 
       }
-      income = calQuickerIncome(orderPriceNum);
     }
   }
+
+  useEffect(() => {
+    getIncome()
+  }, [order])  
 
   const modalStyle: CSSProperties = {
     position: "fixed",
@@ -389,7 +403,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                   <Order_Div_detail>
                     <Order_Span_md1_blue>수익</Order_Span_md1_blue>
                     <Order_Span_md1_blue_left>
-                      {income}
+                      {incomeData}
                     </Order_Span_md1_blue_left>
                   </Order_Div_detail>
                   <QuickerBottomBtn order={order} />

@@ -26,6 +26,7 @@ import {
 import { KlipSdk } from "../utils/KlipSdk";
 import { KaikasConnect } from "../utils/KaikasConnect";
 import { changeBalanceToForm } from "../utils/CalAny";
+import axios from "axios";
 
 // socket test
 import { socket } from "../components/chatComponents/socket";
@@ -120,9 +121,12 @@ const getAddress = async () => {
 //
 
 const allowanceTest = async () => {
-  // increaseAllowance test
-  const result = await getOrders(["0", "1"])
-  console.log("test func: ", result)
+  try {
+    const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
+    console.log(data.data)
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 // socket test
@@ -151,7 +155,7 @@ const allowanceTest = async () => {
           <button onClick={async() => await getAddress()}>kaikas address</button>
           {/* <SendTxK recieverAddress={""} amm={10}/> */}
           <SendTxK param={GetContractParams.IncreaseAllowanceQkrw()} successFunc={() => console.log("success func")}/>
-          <button onClick={async() => await allowanceTest()}>balance test</button>
+          <button onClick={async() => await allowanceTest()}>get owner</button>
           <div>오더 생성하기(의뢰인)</div>
           <input
             placeholder="오더가격"
