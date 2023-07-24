@@ -3,7 +3,6 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "../confirmBtn";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import BottomConfirmBtn from "../bottomconfirmBtn";
 import styled, { createGlobalStyle } from "styled-components";
 import Lottie from "lottie-react";

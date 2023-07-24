@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
+import { QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { create } from "zustand";
 import { useState, useEffect } from "react";
 import {
@@ -223,7 +223,7 @@ export default function ExplorerPage() {
           </div>
           <Div0>
             <span>컨트랙트</span>
-            <div>({sliceAddress(QUICKER_ADDRESS)})</div>
+            <div>({sliceAddress(CONTRACT_ADDRESS)})</div>
             <Sp1>{isBlinkCo ? (<BlinkDiv>{contractBal}원</BlinkDiv>):(<>{contractBal}원</>)}</Sp1>
           </Div0>
           <Div0>

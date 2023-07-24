@@ -7,15 +7,23 @@ import {
   QKRW_ADDRESS_KLAYTN,
   QUICKER_DLVR_ABI_KLAYTN,
   QUICKER_DLVR_ADDRESS_KLAYTN,
+  QUICKER_STAKING_ABI_KLAYTN,
+  QUICKER_STAKING_ADDRESS_KLAYTN,
 } from "./ContractInfo";
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 config();
 
 // @ts-ignore
-const qkrw_token_contract = caver.contract.create(QKRW_CONTRACT_ABI_KLAYTN, QKRW_ADDRESS_KLAYTN
+const qkrw_token_contract = caver.contract.create(QKRW_CONTRACT_ABI_KLAYTN,
+  QKRW_ADDRESS_KLAYTN
 );
 // @ts-ignore
-const quicker_drvr_contract = caver.contract.create(QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN
+const quicker_drvr_contract = caver.contract.create(QUICKER_DLVR_ABI_KLAYTN,
+  QUICKER_DLVR_ADDRESS_KLAYTN
+);
+// @ts-ignore
+const quicker_staking_contract = caver.contract.create(QUICKER_STAKING_ABI_KLAYTN,
+  QUICKER_STAKING_ADDRESS_KLAYTN
 );
 
 export default {
@@ -105,4 +113,15 @@ export default {
       res.send(e);
     }
   },
+  getOrdersForState: async (req: Request, res: Response) => {
+    try {
+      const { stateNum } = req.body;
+      const result = await quicker_drvr_contract.call("getOrdersForState", stateNum);
+      res.send(result);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
+    }
+  },
+  // function call test
 };

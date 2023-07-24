@@ -30,8 +30,6 @@ import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
 import QR from "./pages/QR"
 import { create } from 'zustand'
-
-import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "./contractInformation";
 import { SendDataToAndroid } from "./utils/SendDataToAndroid";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
@@ -140,54 +138,54 @@ function App() {
   }
 
   const sdta = new SendDataToAndroid(address)
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "AcceptedOrderNumber",
-    async listener(node: any, label: any) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      console.log(orderNum)
-      for (const element of clientOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsMatchedOrder(true)
-          break
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "AcceptedOrderNumber",
+  //   async listener(node: any, label: any) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     console.log(orderNum)
+  //     for (const element of clientOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsMatchedOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
 
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "deliveredOrderNumber",
-    async listener(node: any, label: any, owner) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      for (const element of clientOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsDeliveredOrder(true)
-          break
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "deliveredOrderNumber",
+  //   async listener(node: any, label: any, owner) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     for (const element of clientOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsDeliveredOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
 
-  useContractEvent({
-    address: QUICKER_ADDRESS,
-    abi: QUICKER_CONTRACT_ABI,
-    eventName: "completedOrderNumber",
-    async listener(node: any, label: any ,log: any) {
-      const logArr = (await label.getTransactionReceipt()).logs
-      const orderNum = Number(logArr[logArr.length-2].data)
-      for (const element of quickerOrderNums) {
-        if (element === orderNum.toString()) {
-          sdta.sendIsCompletedOrder(true)
-          break
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: QUICKER_ADDRESS,
+  //   abi: QUICKER_CONTRACT_ABI,
+  //   eventName: "completedOrderNumber",
+  //   async listener(node: any, label: any ,log: any) {
+  //     const logArr = (await label.getTransactionReceipt()).logs
+  //     const orderNum = Number(logArr[logArr.length-2].data)
+  //     for (const element of quickerOrderNums) {
+  //       if (element === orderNum.toString()) {
+  //         sdta.sendIsCompletedOrder(true)
+  //         break
+  //       }
+  //     }
+  //   },
+  // });
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("kaikas_address");

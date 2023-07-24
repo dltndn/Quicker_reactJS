@@ -1,11 +1,11 @@
-import GetOrderContents from "../components/GetOrderContents";
+// import GetOrderContents from "../components/GetOrderContents";
 import CreateNewOrder from "../components/createNewOrder";
-import NewOrderTest from "../components/newOrderTest";
+// import NewOrderTest from "../components/newOrderTest";
 import styled from "styled-components";
-import TransactOrder from "../components/transactOrder";
+// import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
 import { useContractEvent, useTransaction, useAccount } from "wagmi";
-import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
+// import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
 
@@ -16,7 +16,7 @@ import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import { useConnWalletInfo } from "../App";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
-import { getOrdersForLatest, getOrders } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrders } from "../utils/ExecuteOrderFromBlockchain";
 import {
   prepare,
   request as klipRequest,
@@ -33,8 +33,8 @@ import { socket } from "../components/chatComponents/socket";
 var QRCode = require('qrcode')
 
 //Qkrw token contract information - polygon mumbai network
-const Quicker_abi = QUICKER_CONTRACT_ABI;
-const Quicker_address = QUICKER_ADDRESS;
+// const Quicker_abi = QUICKER_CONTRACT_ABI;
+// const Quicker_address = QUICKER_ADDRESS;
 
 export default function TestPage2() {
   const [orderNum, setOrderNum] = useState<string>("");
@@ -50,23 +50,23 @@ export default function TestPage2() {
   };
 
 
-  useContractEvent({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    eventName: "OrderResult",
-    async listener(node: any, label: any, owner) {
-      let resTx = await label.getTransactionReceipt()
-      if(txHash !== resTx.transactionHash) {
-        setTxHash(resTx.transactionHash)
-        setTxSender(resTx.from)
-        if(address === txSender){
-          alert("트랜잭션 성공!")
-        } else {
-          console.log("다른 트랜잭션")
-        }
-      }
-    },
-  });
+  // useContractEvent({
+  //   address: Quicker_address,
+  //   abi: Quicker_abi,
+  //   eventName: "OrderResult",
+  //   async listener(node: any, label: any, owner) {
+  //     let resTx = await label.getTransactionReceipt()
+  //     if(txHash !== resTx.transactionHash) {
+  //       setTxHash(resTx.transactionHash)
+  //       setTxSender(resTx.from)
+  //       if(address === txSender){
+  //         alert("트랜잭션 성공!")
+  //       } else {
+  //         console.log("다른 트랜잭션")
+  //       }
+  //     }
+  //   },
+  // });
 
   // 오더 상태별 오더 데이터들 배열로 반환
 //     created -> 0
@@ -126,17 +126,17 @@ const allowanceTest = async () => {
 }
 
 // socket test
-const [socketId, setSocketId] = useState<string>()
-useEffect(() => {
-  // socket.on("connect", () => setSocketId(socket.id))
-  console.log("???")
-}, [socket])
+// const [socketId, setSocketId] = useState<string>()
+// useEffect(() => {
+//   // socket.on("connect", () => setSocketId(socket.id))
+//   console.log("???")
+// }, [socket])
 
-useEffect(() => {
-  if(socketId !== undefined) {
-    console.log(socketId)
-  }
-}, [socketId])
+// useEffect(() => {
+//   if(socketId !== undefined) {
+//     console.log(socketId)
+//   }
+// }, [socketId])
 
   return (
     <>
@@ -163,7 +163,7 @@ useEffect(() => {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
           />
-          <NewOrderTest _orderPrice={orderPrice} _deadLine={deadline} />
+          {/* <NewOrderTest _orderPrice={orderPrice} _deadLine={deadline} />
           <TransactOrder
             _functionName="cancelOrder"
             title="오더 취소하기(의뢰인)"
@@ -187,7 +187,7 @@ useEffect(() => {
           <TransactOrder
             _functionName="failedOrder"
             title="실패 오더 환불받기(의뢰인)"
-          />
+          /> */}
         </div>
         <div>
           <div>오더 조회하기</div>
@@ -197,7 +197,7 @@ useEffect(() => {
             onChange={(e) => handleClick(e.target.value)}
           />
           <br></br>
-          <GetOrderContents orderNum={orderNum} />
+          {/* <GetOrderContents orderNum={orderNum} /> */}
         </div>
       </TopDiv>
     </>

@@ -1,6 +1,5 @@
 import { useContractRead } from "wagmi";
 import { useState, useEffect } from "react";
-import { QKRW_CONTRACT_ABI, QKRW_ADDRESS } from "../contractInformation";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm } from "../utils/CalAny";
 

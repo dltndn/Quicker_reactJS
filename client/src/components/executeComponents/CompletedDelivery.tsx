@@ -5,7 +5,6 @@ import Dropzone from "react-dropzone";
 import { isMobileOnly } from "react-device-detect";
 import styled, { createGlobalStyle } from "styled-components";
 import money1 from "../../image/money1.gif"
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { useNavigate } from "react-router-dom";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import SendTxK from "../blockChainTx/SendTxK";

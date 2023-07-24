@@ -4,19 +4,8 @@ import {
   prepareWriteContract,
   writeContract,
 } from "@wagmi/core";
-import {
-  QKRW_CONTRACT_ABI,
-  QKRW_ADDRESS,
-  QUICKER_ADDRESS,
-  QUICKER_CONTRACT_ABI,
-} from "../contractInformation";
 import { getDateFromTimestamp } from "./ConvertTimestampToDate";
 import axios from "axios";
-
-const Qkrw_abi = QKRW_CONTRACT_ABI;
-const Qkrw_address = QKRW_ADDRESS;
-const Quicker_abi = QUICKER_CONTRACT_ABI;
-const Quicker_address = QUICKER_ADDRESS;
 
 const env = process.env;
 
@@ -183,69 +172,82 @@ export const checkIsDelivering = async (address: string | undefined) => {
 //     failed -> 3
 //     canceled -> 4
 export const getOrdersForState = async (_state: number) => {
-  const data: any = await readContract({
-    address: Quicker_address,
-    abi: Quicker_abi,
-    functionName: "getOrdersForState",
-    args: [_state.toString()],
-  });
+  // const data: any = await readContract({
+  //   address: Quicker_address,
+  //   abi: Quicker_abi,
+  //   functionName: "getOrdersForState",
+  //   args: [_state.toString()],
+  // });
+  // let result: any[] = [];
+  // data.forEach((element: any) => result.push(TemplateOrder(element)));
+  // return result;
+  let dataRes;
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrdersForState`, {
+      stateNum: _state, 
+    });
+    dataRes = data.data; // type: number
+  } catch(e) {
+    console.log(e)
+    dataRes = []
+  }
   let result: any[] = [];
-  data.forEach((element: any) => result.push(TemplateOrder(element)));
+  dataRes.forEach((element: any) => result.push(TemplateOrder(element)));
   return result;
 };
 
-export class WriteTransactionToBlockchain {
-  private orderNum: string;
-  private writeTransaction = async (funcName: string) => {
-    const config = await prepareWriteContract({
-      address: Quicker_address,
-      abi: Quicker_abi,
-      functionName: funcName,
-      args: [this.orderNum],
-    });
-    const data = await writeContract(config);
-    return data;
-  };
-  constructor(orderNum: string) {
-    this.orderNum = orderNum;
-  }
+// export class WriteTransactionToBlockchain {
+//   private orderNum: string;
+//   private writeTransaction = async (funcName: string) => {
+//     const config = await prepareWriteContract({
+//       address: Quicker_address,
+//       abi: Quicker_abi,
+//       functionName: funcName,
+//       args: [this.orderNum],
+//     });
+//     const data = await writeContract(config);
+//     return data;
+//   };
+//   constructor(orderNum: string) {
+//     this.orderNum = orderNum;
+//   }
 
-  // 의뢰인 오더 취소 함수
-  public cancelOrder = async () => {
-    const result = await this.writeTransaction("cancelOrder");
-    return result;
-  };
+//   // 의뢰인 오더 취소 함수
+//   public cancelOrder = async () => {
+//     const result = await this.writeTransaction("cancelOrder");
+//     return result;
+//   };
 
-  // 배송원 오더 수락 함수
-  public acceptOrder = async () => {
-    const result = await this.writeTransaction("acceptOrder");
-    return result;
-  };
+//   // 배송원 오더 수락 함수
+//   public acceptOrder = async () => {
+//     const result = await this.writeTransaction("acceptOrder");
+//     return result;
+//   };
 
-  // 배송원 배달 완료 함수
-  public deliveredOrder = async () => {
-    const result = await this.writeTransaction("deliveredOrder");
-    return result;
-  };
+//   // 배송원 배달 완료 함수
+//   public deliveredOrder = async () => {
+//     const result = await this.writeTransaction("deliveredOrder");
+//     return result;
+//   };
 
-  // 의뢰인 계약 확정 함수
-  public completeOrder = async () => {
-    const result = await this.writeTransaction("completeOrder");
-    return result;
-  };
+//   // 의뢰인 계약 확정 함수
+//   public completeOrder = async () => {
+//     const result = await this.writeTransaction("completeOrder");
+//     return result;
+//   };
 
-  // 배송원 정산 함수
-  public withdrawFromOrder = async () => {
-    const result = await this.writeTransaction("withdrawFromOrder");
-    return result;
-  };
+//   // 배송원 정산 함수
+//   public withdrawFromOrder = async () => {
+//     const result = await this.writeTransaction("withdrawFromOrder");
+//     return result;
+//   };
 
-  // 의뢰인 배송 실패오더 환불 함수
-  public failedOrder = async () => {
-    const result = await this.writeTransaction("failedOrder");
-    return result;
-  };
-}
+//   // 의뢰인 배송 실패오더 환불 함수
+//   public failedOrder = async () => {
+//     const result = await this.writeTransaction("failedOrder");
+//     return result;
+//   };
+// }
 
 // caver-js
 const TemplateOrder = (data: any) => {

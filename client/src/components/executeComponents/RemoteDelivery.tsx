@@ -4,7 +4,6 @@ import BottomConfirmBtn from "../bottomconfirmBtn";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import WaitClientConfirm from "./WaitClientConfirm";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";

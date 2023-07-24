@@ -2,7 +2,6 @@ import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { isMobile } from "react-device-detect";
-import { WriteTransactionToBlockchain } from "../../utils/ExecuteOrderFromBlockchain";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
@@ -43,11 +42,8 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
 
     const deliveredRogic = async () => {
       if (orderNum !== undefined) {
-          const wttb = new WriteTransactionToBlockchain(orderNum)
           const sdta = new SendDataToAndroid(address)
           try {
-              const result = await wttb.deliveredOrder()
-              console.log(result)
               // 배송원 수행 중인 오더 확인 후 false값 전송
               if (!(await checkIsDelivering(address))) {
                   sdta.sendIsDelivering(false)
