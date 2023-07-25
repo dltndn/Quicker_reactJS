@@ -99,10 +99,10 @@ export default function ({
           address: address,
           setState: setOponentName,
         });
-        const roomInfo = await Handler.post(
-          { orderNum: roomName },
-          process.env.REACT_APP_SERVER_URL + "room"
+        const roomInfo = await Handler.get(
+          process.env.REACT_APP_SERVER_URL + `room/?orderNum=${roomName}`
         );
+        console.log(roomInfo)
 
         if (
           roomInfo.Recipient.PHONE !== undefined &&

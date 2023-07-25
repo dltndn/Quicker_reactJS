@@ -4,7 +4,8 @@ import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 initModels(sequelize);
 
-export const findRoomInfoByOrderNumber = async (orderNum : number) => {
+export const findRoomInfoByOrderNumber = async (query : any) => {
+    const orderNum : number = query.orderNum
     const data = await SelectRoomInfo.getRoomInfo(orderNum)
     return data
 }

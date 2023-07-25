@@ -105,8 +105,8 @@ export default {
 
   getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const orderNum = req.body.orderNum;
-      const room = await findRoomInfoByOrderNumber(orderNum)
+      const query = req.query;
+      const room = await findRoomInfoByOrderNumber(query)
       res.json(room)
     } catch (error) {
       console.error(error)

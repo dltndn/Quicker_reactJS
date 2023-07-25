@@ -1,17 +1,20 @@
 import { SetStateAction } from "react"
 import Handler from "../../lib/Handler"
 import { getNameInterface } from "./interface/getNameInterface"
-import delelteDoubleQuote from "../../lib/DeleteDoubleQuote"
 
 const getName = async ({ blockchainElement, address, setState }: getNameInterface) => {
-    let clientWalletAddress = delelteDoubleQuote(blockchainElement.client)
+    /**
+     * @TODO blockchainElement.client 값 문제 있음
+     * EX ) address 와 blockchainElement.client의 값이 다름
+     */
+    let clientWalletAddress = blockchainElement.client
     if (clientWalletAddress === address) {
-        const walletAddress = delelteDoubleQuote(blockchainElement.quicker)
+        const walletAddress = blockchainElement.quicker
         const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
         isMember(data, setState)
     }
     else {
-        const walletAddress = delelteDoubleQuote(blockchainElement.client)
+        const walletAddress = blockchainElement.client
         const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
         isMember(data, setState)
     }
