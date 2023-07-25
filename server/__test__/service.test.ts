@@ -21,15 +21,17 @@ describe("서비스 계층 테스트", () => {
 
   describe("방에대한 정보를 오더 넘버를 이용하여 조회하는 서비스", () => {
     test("존재하지 않는 오더 넘버 입력", async () => {
-      const roomInfo = await findRoomInfoByOrderNumber(0);
+      const query = {orderNum : 0}
+      const roomInfo = await findRoomInfoByOrderNumber(query);
       expect(roomInfo).toBe(null);
     });
 
     test("존재하는 오더 넘버 입력", async () => {
       if (process.env.USER_ROOM_INFO === undefined) throw new Error(".env를 확인하세요")
       
+      const query = {orderNum : 2}
       const resultString = process.env.USER_ROOM_INFO
-      const roomInfo = await findRoomInfoByOrderNumber(2);
+      const roomInfo = await findRoomInfoByOrderNumber(query);
       const result = JSON.parse(resultString)
       expect(roomInfo).toStrictEqual(result);
     });
@@ -51,7 +53,6 @@ describe("서비스 계층 테스트", () => {
       }
       
       const instance = await findDestinationAndDepartureByOrderId(query);
-      console.log(instance)
       expect(instance).toStrictEqual(result);
     });
   });
