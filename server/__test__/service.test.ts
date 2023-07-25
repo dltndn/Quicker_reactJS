@@ -29,8 +29,7 @@ describe("서비스 계층 테스트", () => {
       if (process.env.USER_ROOM_INFO === undefined) throw new Error(".env를 확인하세요")
       
       const resultString = process.env.USER_ROOM_INFO
-      const roomInfo = await findRoomInfoByOrderNumber(35);
-      
+      const roomInfo = await findRoomInfoByOrderNumber(2);
       const result = JSON.parse(resultString)
       expect(roomInfo).toStrictEqual(result);
     });
@@ -44,17 +43,15 @@ describe("서비스 계층 테스트", () => {
     });
 
     test("존재하는 오더 넘버 입력", async () => {
-      const query = { orderid: "35" };
+      const query = { orderid: "2" };
       const result = {
-        id: 35,
-        'Destination.X': 126.493995014515,
-        'Destination.Y': 37.7446207414936,
-        'Departure.X': 127.023150432187,
-        'Departure.Y': 37.5182112402056,
-        'Departure.id': 35
+        id: 2,
+        Destination: { X: 126.493995014515, Y: 37.7446207414936 },
+        Departure: { X: 126.673599070054, Y: 37.5142297784135, id: 2 }
       }
-
+      
       const instance = await findDestinationAndDepartureByOrderId(query);
+      console.log(instance)
       expect(instance).toStrictEqual(result);
     });
   });

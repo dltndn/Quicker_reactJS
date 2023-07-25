@@ -6,9 +6,7 @@ export default {
     Order.hasOne(Recipient, { foreignKey: "id", });
     Sender.hasOne(Departure, { foreignKey: "id", });
     Recipient.hasOne(Destination, { foreignKey: "id", });
-    return new Promise((resolve, reject) => {
-      resolve(
-        Order.findOne({
+    return Order.findOne({
             attributes : ["id"],
             where: {id : orderNum},
             include: [
@@ -33,10 +31,8 @@ export default {
                 ]
               },
             ],
-            raw : true
+            raw : true,
+            nest : true
         })
-      );
-      reject(undefined);
-    });
   },
 };
