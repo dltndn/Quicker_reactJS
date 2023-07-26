@@ -1,5 +1,5 @@
 import { findDestinationAndDepartureByOrderId } from "../service/Order";
-import { findRoomInfoByOrderNumber } from "../service/Room";
+import { findRecentMessage, findRoomInfoByOrderNumber } from "../service/Room";
 import { findUserNameByWalletAddress } from "../service/User";
 
 require("dotenv").config();
@@ -56,4 +56,5 @@ describe("서비스 계층 테스트", () => {
       expect(instance).toStrictEqual(result);
     });
   });
+
 });
