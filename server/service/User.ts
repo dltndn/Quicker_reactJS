@@ -1,6 +1,7 @@
 import SelectUser from "../Maria/Commands/SelectUser"
 
-export const findUserNameByWalletAddress = async (walletAddress : string) => {
-  const user : {name : string} | null = await SelectUser.getUserName(walletAddress)
+export const findUserNameByWalletAddress = async (body : any) => {
+  const walletAddress = body.walletAddress
+  const user = await SelectUser.getUserName(walletAddress)
   return user
 }
