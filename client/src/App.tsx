@@ -137,8 +137,7 @@ function App() {
     setClientOrderNums(clientOrderNumsArr)
     setQuickerOrderNums(quickerOrderNumsArr)
   }
-
-  const sdta = new SendDataToAndroid(address)
+  
   // useContractEvent({
   //   address: QUICKER_ADDRESS,
   //   abi: QUICKER_CONTRACT_ABI,
@@ -246,12 +245,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </WagmiConfig>
-      {/* <Web3Modal
-        projectId={projectId ?? ""}
-        ethereumClient={ethereumClient}
-        themeBackground={theme.themeBackground}
-        // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
-      /> */}
     </>
   );
 }

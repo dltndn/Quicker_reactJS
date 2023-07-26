@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-import { useLiveState } from "./ReceipientPage";
 import { redirect, useNavigate } from "react-router-dom";
 import { useConnWalletInfo } from "../App";
 

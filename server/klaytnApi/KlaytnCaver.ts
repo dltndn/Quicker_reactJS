@@ -126,7 +126,7 @@ export default {
   // function call test
   getOwner: async (req: Request, res: Response) => {
     try {
-      const result = await quicker_drvr_contract.call("owner");
+      const result = await quicker_drvr_contract.call("clientOfOrder", "0");
       res.send(result);
     } catch (e) {
       console.log(e);

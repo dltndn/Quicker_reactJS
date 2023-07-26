@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import QRCode from "../../pages/QRCode";
-import ConfirmBtn from "../confirmBtn";
 import { useState, useEffect } from "react";
 
 interface ReceipientConfirmProp {

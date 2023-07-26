@@ -1,9 +1,7 @@
 import React, { createElement, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
-import { request } from "http";
 import RequestPage from "../components/RequestPage";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";

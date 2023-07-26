@@ -1,4 +1,3 @@
-import BottomConfirmBtn from "../bottomconfirmBtn"
 import { useState, useEffect } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import FaceToFaceDelivery from "./FaceToFaceDelivery";
@@ -6,7 +5,6 @@ import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { create } from "zustand";
-import { Html5Qrcode } from "html5-qrcode";
 
 const Div0 = styled.div`
     display: flex;
