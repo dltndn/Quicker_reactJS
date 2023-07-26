@@ -7,14 +7,14 @@ require("dotenv").config();
 describe("서비스 계층 테스트", () => {
   describe("지갑주소를 이용하여 사용자의 이름을 가지고 오는 서비스", () => {
     test("존재하는 지갑 주소", async () => {
-      const body = {walletAddress : process.env.USER_WALLET};
-      const user = await findUserNameByWalletAddress(body);
+      const query = {walletAddress : process.env.USER_WALLET};
+      const user = await findUserNameByWalletAddress(query);
       expect(user?.name).toBe("김퀵커");
     });
 
     test("존재하지 않는 지갑 주소", async () => {
-      const body = {walletAddress : null};
-      const user = await findUserNameByWalletAddress(body);
+      const query = {walletAddress : null};
+      const user = await findUserNameByWalletAddress(query);
       expect(user).toBe(null);
     });
   });

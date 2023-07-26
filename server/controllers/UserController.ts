@@ -50,8 +50,8 @@ export default {
 
   findUserNameByWalletAddress: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const body = req.body;
-      const userName = await findUserNameByWalletAddress(body);
+      const query = req.query;
+      const userName = await findUserNameByWalletAddress(query);
       res.json(userName);
     } catch (error) {
       console.error(error)

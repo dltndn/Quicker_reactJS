@@ -10,12 +10,14 @@ const getName = async ({ blockchainElement, address, setState }: getNameInterfac
     let clientWalletAddress = blockchainElement.client
     if (clientWalletAddress === address) {
         const walletAddress = blockchainElement.quicker
-        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
+        const data = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${walletAddress}`)
+        console.log(data)
         isMember(data, setState)
     }
     else {
         const walletAddress = blockchainElement.client
-        const data = await Handler.post({ walletAddress: walletAddress }, process.env.REACT_APP_SERVER_URL + "user/name")
+        const data = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${walletAddress}`)
+        console.log(data)
         isMember(data, setState)
     }
 }
