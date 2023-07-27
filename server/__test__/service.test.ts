@@ -1,4 +1,4 @@
-import { findDestinationAndDepartureByOrderId } from "../service/Order";
+import { findDestinationAndDepartureByOrderId, findOrdersByWalletAddress } from "../service/Order";
 import { findRecentMessage, findRoomInfoByOrderNumber } from "../service/Room";
 import { findUserNameByWalletAddress } from "../service/User";
 

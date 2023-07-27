@@ -5,6 +5,7 @@ import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 import SelectUser from "../Maria/Commands/SelectUser";
 import {findUserNameByWalletAddress} from "../service/User";
+import { findOrdersByWalletAddress } from "../service/Order";
 
 initModels(sequelize);
 const crypto = require("crypto");
@@ -12,18 +13,14 @@ const crypto = require("crypto");
 export default {
   
   // NOTE : 이름 변경 필
-  getRequests: async (req: Request, res: Response) => {
+  getRequests: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const userWalletAdress = req.query.userWalletAdress;
-      if (typeof userWalletAdress === "string") {
-        const userId = await SelectUser.getUserId(userWalletAdress);
-        // @ts-ignore
-        let data = await SelectOrder.getRequests(userId.id);
-        res.send(data);
-      }
+      const query = req.query
+      const orders = await findOrdersByWalletAddress(query)
+      res.send(orders)
     } catch (error) {
-      console.log(error)
-      res.send(error);
+      console.error(error)
+      next(error);
     }
   },
 

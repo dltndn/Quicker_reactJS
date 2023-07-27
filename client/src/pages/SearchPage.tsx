@@ -198,7 +198,7 @@ function SearchPage() {
       const exec = async () => {
         try {
           let data = await Handler.get(
-            process.env.REACT_APP_SERVER_URL + "orders/" + `?userWalletAdress=${address}`
+            process.env.REACT_APP_SERVER_URL + `orders/?userWalletAdress=${address}`
           );
           console.log(data)
           setRequestListContents(data);

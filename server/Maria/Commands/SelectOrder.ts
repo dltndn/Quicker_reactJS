@@ -36,6 +36,7 @@ export default {
     });
   },
 
+  // 검색페이지의 오더 리스트 목록
   getRequests: (userId : string) => {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
