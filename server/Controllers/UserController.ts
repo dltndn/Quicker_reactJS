@@ -1,14 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import SelectOrder from "../Maria/Commands/SelectOrder";
-import CreateUser from "../Maria/Commands/CreateUser";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
-import SelectUser from "../Maria/Commands/SelectUser";
-import {findUserNameByWalletAddress} from "../service/User";
 import { findOrdersByWalletAddress } from "../service/Order";
+import { findUserNameByWalletAddress, registerUser } from "../service/User";
 
+require("dotenv").config();
 initModels(sequelize);
-const crypto = require("crypto");
 
 export default {
   
@@ -24,24 +21,14 @@ export default {
     }
   },
 
-  register: async (req: Request, res: Response) => {
+  register: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const secret = process.env.cryptoKey;
-      const userInstance = req.body.User;
-      const userBirthDate = req.body.Birthday;
-      //NOTE : 전화번호를 기반으로 암호화한 id 사용
-      const hashed = crypto
-        .createHmac("sha256", secret)
-        .update(userInstance.contact)
-        .digest("hex");
-      userInstance.id = hashed;
-      userBirthDate.id = hashed;
-      console.log(userInstance, userBirthDate, hashed)
-      await CreateUser.registerUser(userInstance, userBirthDate, hashed);
+      const body = req.body
+      await registerUser(body)
       res.send({ msg: "done" });
     } catch (error) {
-      console.log(error)
-      res.send(error);
+      console.error(error)
+      next(error);
     }
   },
 
