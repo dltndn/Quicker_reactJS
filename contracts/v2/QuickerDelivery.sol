@@ -1828,7 +1828,7 @@ contract QuickerDelivery is Ownable, AccessControl {
 
     function getMulTokenAmount(uint256 _amount)
         internal
-        view
+        pure
         returns (uint256)
     {
         return _amount.mul(1e18);
@@ -1943,6 +1943,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 _amount
             )
         );
+        require(success);
     }
 
     function recieveTokensFromOtherAddress(address _from, uint256 _amount)
@@ -1956,6 +1957,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 _amount
             )
         );
+        require(success);
     }
 
     /**
@@ -2121,6 +2123,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 claimQuickerTokenAmount
             )
         );
+        require(mintSuccess);
         emit OrderResult(true);
         emit completedOrderNumber(_orderNum);
     }
@@ -2175,6 +2178,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 getMulTokenAmount(platformFee)
             )
         );
+        require(success);
         transferTokensToOtherAddress(
             insuranceFeeCollector,
             getMulTokenAmount(insuranceFee)
@@ -2192,6 +2196,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 claimQuickerTokenAmount
             )
         );
+        require(mintSuccess);
         emit DepositedFee(true);
         emit ChangedBalance(true);
     }
@@ -2226,6 +2231,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 getMulTokenAmount(platformFee)
             )
         );
+        require(success);
         transferTokensToOtherAddress(
             insuranceFeeCollector,
             getMulTokenAmount(insuranceFee)
@@ -2245,6 +2251,7 @@ contract QuickerDelivery is Ownable, AccessControl {
                 claimQuickerTokenAmount
             )
         );
+        require(mintSuccess);
         emit OrderResult(true);
         emit DepositedFee(true);
         emit ChangedBalance(true);
