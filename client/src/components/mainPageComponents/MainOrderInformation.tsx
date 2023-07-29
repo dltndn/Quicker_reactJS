@@ -1,6 +1,5 @@
 import Handler from "../../lib/Handler";
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
 import {
   getOrderList,
   getOrders,
@@ -13,13 +12,14 @@ import { useVerificationStore } from "../../App";
 import Lottie from "lottie-react";
 import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
+import { useConnWalletInfo } from "../../App";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
 const pin = require("../../image/redPin.png");
 
 export default function MainOrderInformation() {
-  const { address } = useAccount();
+  const { address } = useConnWalletInfo();
   const [isDelivering, setIsDelivering] = useState<boolean | null>(null);
   const [showOrderObj, setShowOrderObj] = useState<any | null>(null);
 
