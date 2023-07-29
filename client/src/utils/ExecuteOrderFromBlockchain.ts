@@ -185,7 +185,19 @@ export const getStakingInfo = async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getStakingInfo`, {
       address, 
     });
-    return data.data; // type: number
+    return data.data; // type: json
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const getQtokenAllowance =async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQtokenAllowance`, {
+      address, 
+    });
+    return data.data; // type: string
   } catch (e) {
     console.log(e)
     return null

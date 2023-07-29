@@ -130,8 +130,9 @@ export default {
   // function call test
   getOwner: async (req: Request, res: Response) => {
     try {
-      const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", "0xCddac757405Eb41D080334B0A72264b35a2e5f08")
-      res.send(userStakedQuickerBal);
+      // const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", "0xCddac757405Eb41D080334B0A72264b35a2e5f08")
+      const allowance = await quicker_token.allowance("0x4068f9E751954D162ab858276f2F208D79f10930", QUICKER_STAKING_ADDRESS_KLAYTN)
+      res.send(allowance);
     } catch (e) {
       console.log(e);
       res.send(e);
@@ -145,10 +146,12 @@ export default {
       let quickerTotalStakingAmount = (await quicker_token.balanceOf(QUICKER_STAKING_ADDRESS_KLAYTN)).toString()
       quickerTotalStakingAmount = floorDecimals(caver.utils.convertFromPeb(quickerTotalStakingAmount, 'KLAY')) 
       let userVQuickerBal = (await vQuicker_token.balanceOf(address)).toString()
-      userVQuickerBal = floorDecimals(caver.utils.convertFromPeb(userVQuickerBal, 'KLAY')) 
+      userVQuickerBal = floorDecimals(caver.utils.convertFromPeb(userVQuickerBal, 'KLAY'))
+      let userQuickerBal = (await quicker_token.balanceOf(address)).toString()
+      userQuickerBal = floorDecimals(caver.utils.convertFromPeb(userQuickerBal, 'KLAY')) 
       const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", address)
       const interestRate = await quicker_staking_contract.call("interestRate")
-      const rewardRate = (Number(userVQuickerBal) / Number(userStakedQuickerBal) * Number(interestRate) * 3.65).toString()
+      let rewardRate = (Number(userVQuickerBal) / Number(userStakedQuickerBal) * Number(interestRate) * 3.65).toString()
       const endBlockNum = await quicker_staking_contract.call("endAt", address)
       let pendingRewards = await quicker_staking_contract.call("getPendingReqwards", address);
       pendingRewards = caver.utils.convertFromPeb(pendingRewards, 'KLAY')
@@ -157,15 +160,20 @@ export default {
       const currentBlockNum = caver.utils.hexToNumber(currentBlockNumS)
       const index = Number(endBlockNum) - currentBlockNum
       const currentTimeStamp = new Date().getTime() / 1000;
-      const endTimeStamp = currentTimeStamp + index
-      
+      let endTimeStamp = currentTimeStamp + index
+
+      if (userVQuickerBal === "0") {
+        endTimeStamp = 0
+        rewardRate = ""
+      }
       const result = {
         quickerTotalSuupply,
         quickerTotalStakingAmount,
         rewardRate,
         endTimeStamp,
         pendingRewards,
-        userStakedQuickerBal
+        userStakedQuickerBal,
+        userQuickerBal,
       }
       res.send(result);
     } catch (e) {
@@ -173,11 +181,11 @@ export default {
       res.send(e);
     }
   },
-  getPendingReqwards: async (req: Request, res: Response) => {
+  getQtokenAllowance: async (req: Request, res: Response) => {
     try {
       const { address } = req.body;
-      const result = await quicker_staking_contract.call("getPendingReqwards", address);
-      res.send(result);
+      const allowance = await quicker_token.allowance(address, QUICKER_STAKING_ADDRESS_KLAYTN)
+      res.send(allowance);
     } catch (e) {
       console.log(e);
       res.send(e);
