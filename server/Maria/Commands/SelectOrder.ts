@@ -31,10 +31,12 @@ export default {
           required: true,
         },
       ],
-      raw : true
+      raw : true,
+      nest : true
     });
   },
 
+  // 검색페이지의 오더 리스트 목록
   getRequests: (userId : string) => {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
@@ -86,6 +88,7 @@ export default {
     });
   },
 
+  // 
   getOrderlist: (id: number) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });

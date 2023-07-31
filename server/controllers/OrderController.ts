@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import {RequestHandler} from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import CreateOrder from "../Maria/Commands/CreateOrder";
@@ -8,12 +7,11 @@ import {initModels} from "../Maria/Models/init-models";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import SelectUser from "../Maria/Commands/SelectUser";
-import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 import sendMessage from "../sendMessage"
 import { encrypt, decrypt } from "../lib/cryto";
 import { findRoomInfoByOrderNumber } from "../service/Room";
-import { findDestinationAndDepartureByOrderId } from "../service/Order";
+import { findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation } from "../service/Order";
 
 initModels(sequelize);
 
@@ -105,11 +103,33 @@ export default {
 
   getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const orderNum = req.body.orderNum;
-      const room = await findRoomInfoByOrderNumber(orderNum)
+      const query = req.query;
+      const room = await findRoomInfoByOrderNumber(query)
       res.json(room)
     } catch (error) {
       console.error(error)
+      next(error)
+    }
+  },
+
+  postLocation :  async (req: Request, res: Response, next : NextFunction) => {
+    try {
+      const body = req.body
+      await postCurrentLocation(body)
+      res.send({ msg: "done" });
+    } catch (error) {
+      console.error(error);
+      next(error)
+    }
+  },
+
+  getLocation : async (req: Request, res: Response,  next : NextFunction) => {
+    try {
+      const query = req.query
+      const loaction = await findCurrentLocation(query);
+      res.json(loaction)
+    } catch (error) {
+      console.error(error);
       next(error)
     }
   },

@@ -1,21 +1,18 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import MessageModel from "../Mongo/Schemas/Message";
 import connectMongo from "../Mongo/Connector";
+import { findRecentMessage } from "../service/Room";
 
 export default {
-  getRecentMessageInfo: async (req: Request, res: Response) => {
+  getRecentMessageInfo: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orderNum = req.body.orderNum;
-      console.log(String(orderNum));
-      const conn = await connectMongo("chat");
-      const Message = conn.model(String(orderNum), MessageModel);
-      const recentMessage = await Message.findOne().sort({ $natural: -1 });
-      conn.close();
+      const query = req.query;
+      const recentMessage = await findRecentMessage(query)
       res.send(recentMessage);
     } catch (error) {
       console.error(error);
-      return res.send({ msg: "fail" });
+      next(error)
     }
   },
 };

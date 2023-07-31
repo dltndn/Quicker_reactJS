@@ -18,8 +18,8 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
     const [time ,setTime] = useState("");
 
     const getRecentMessage = async () => {
-        const recentMessageInfo = await Handler.post({ orderNum: orderNum }, process.env.REACT_APP_SERVER_URL + "room/message")
-        
+      
+      const recentMessageInfo = await Handler.get(process.env.REACT_APP_SERVER_URL + `room/message/?orderNum=${orderNum}`)
         const parsedTime = Time.getDiff(recentMessageInfo.date)
         setTime(parsedTime);
 

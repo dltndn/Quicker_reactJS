@@ -2,17 +2,12 @@ import { User, Order } from "../Models/init-models";
 
 export default {
   getUserId: (userWalletAddress: string) => {
-    return new Promise((resolve, reject) => {
-      resolve(
-        User.findOne({
-          attributes: ["id"],
-          where: { wallet_address: userWalletAddress },
-        })
-      );
-      reject("fail");
-    });
+    return User.findOne({
+      attributes: ["id"],
+      where: { wallet_address: userWalletAddress },
+    }) 
   },
-
+  
   getRequesterId: (orderId: number) => {
     return new Promise((resolve, reject) => {
       resolve(
