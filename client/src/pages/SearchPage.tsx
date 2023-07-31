@@ -121,8 +121,8 @@ function SearchPage() {
             } else {
               orderPriceNum = extractNumber(orderPrice);
             }
-            const income = calQuickerIncome(orderPriceNum);
-            const securityDeposit = calSecurityDeposit(orderPriceNum);
+            const income = await calQuickerIncome(orderPriceNum);
+            const securityDeposit = await calSecurityDeposit(orderPriceNum);
   
             // @ts-ignore
             let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
