@@ -3,12 +3,10 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
-import Handler from "../../lib/Handler";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
 import Lottie from "lottie-react";
 import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
-import { GrAddCircle } from "react-icons/gr";
 import finduser from "../../Lottie/81378-find-user-location.json";
 
 const whitePin = require('../../image/dep-icon-gif-unscreen.gif');

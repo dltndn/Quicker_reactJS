@@ -89,9 +89,9 @@ export default function ExecutionPage() {
           if (Number(blockchainOrder.deliveredTime) > Number(blockchainOrder.limitedTime)) {
             securityDeposit = 0
           } else {
-            securityDeposit = calSecurityDepositNum(Number(blockchainOrder.orderPrice))
+            securityDeposit = await calSecurityDepositNum(Number(blockchainOrder.orderPrice))
           }
-          const income = calQuickerIncomeNum(Number(blockchainOrder.orderPrice))
+          const income = await calQuickerIncomeNum(Number(blockchainOrder.orderPrice))
           if(Number(blockchainOrder.securityDeposit) === 0) {
             isReceived = true
           }

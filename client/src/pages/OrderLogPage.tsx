@@ -1,5 +1,4 @@
 import TopBarOthers from "../components/topBarOthers";
-import BottomBar from "../components/BottomBar";
 import { createGlobalStyle } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ShowOrders from "../components/ShowOrders";

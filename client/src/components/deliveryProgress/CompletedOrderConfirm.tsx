@@ -2,8 +2,6 @@ import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ConfirmBtn from "../confirmBtn";
-import BottomConfirmBtn from "../bottomconfirmBtn";
 import styled, { createGlobalStyle } from "styled-components";
 import Lottie from "lottie-react";
 import OrderDelivery from "../../Lottie/89626-order-delivery.json";

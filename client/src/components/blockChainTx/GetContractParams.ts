@@ -3,7 +3,9 @@ import { SendTxType } from "../../utils/KaikasConnect";
 import { to18decimals } from "../../utils/CalAny";
 import {
   QKRW_ADDRESS_KLAYTN,
+  QUICKER_TOKEN_ADDRESS_KLAYTN,
   QUICKER_DLVR_ADDRESS_KLAYTN,
+  QUICKER_STAKING_ADDRESS_KLAYTN
 } from "../../contractInformation";
 
 export default {
@@ -214,5 +216,67 @@ export default {
       to: QUICKER_DLVR_ADDRESS_KLAYTN,
       params: `["${orderNum}"]`
     }
+  },
+  stakeQuicker: (amount: string, period: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_period",
+            "type": "uint256"
+          }
+        ],
+        "name": "stakeQuicker",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_STAKING_ADDRESS_KLAYTN,
+      params: `["${amount}", "${period}"]`
+    }
+  },
+  increaseAllowanceQuicker_staking: (): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "addedValue",
+            "type": "uint256"
+          }
+        ],
+        "name": "increaseAllowance",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_TOKEN_ADDRESS_KLAYTN,
+      params: `["${QUICKER_STAKING_ADDRESS_KLAYTN}", "10000000000000000000000000000"]`,
+    };
   },
 };
