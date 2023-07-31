@@ -47,7 +47,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
       formData.append("uploadImage", file);
       formData.append("orderNum", orderNum);
       const response = await fetch(
-        process.env.REACT_APP_SERVER_URL + "order-complete-image",
+        process.env.REACT_APP_SERVER_URL + "order/image/complete",
         {
           method: "POST",
           body: formData,
