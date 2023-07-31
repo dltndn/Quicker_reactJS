@@ -2,6 +2,7 @@ import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useState, useEffect } from "react";
 import { generateQRCode } from "../../utils/GenerateQr";
 import { SendTxType } from "../../utils/KaikasConnect";
+import { useConnWalletInfo } from "../../App";
 
 type SendTokenProps = {
   param: SendTxType;
@@ -11,7 +12,8 @@ type SendTokenProps = {
 const SendTxK = ({ param, successFunc }: SendTokenProps) => {
   const [showQr, setShowQr] = useState<boolean>(false);
   const [qrUrl, setQrUrl] = useState<string>("");
-  const [txHash, setTxHash] = useState<unknown>("");
+
+  const { isMobile } = useConnWalletInfo();
 
   const kConn = new KaikasConnect();
 
@@ -19,8 +21,7 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     const reqKey = await kConn.getKaikasReqKeyTx(param);
     try {
       const res = await kConn.getTxResult(reqKey, true);
-      setTxHash(res);
-      successFunc()
+      successFunc();
     } catch (e) {
       console.log(e);
     }
@@ -33,10 +34,9 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     setShowQr(true);
     try {
       const res = await kConn.getTxResult(reqKey, false);
-      setTxHash(res);
       setShowQr(false);
       setQrUrl("");
-      successFunc()
+      successFunc();
     } catch (e) {
       console.log(e);
     }
@@ -46,22 +46,29 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     return () => {
       setShowQr(false);
       setQrUrl("");
-      setTxHash("");
     };
   }, []);
 
   return (
     <>
-      <button onClick={mobileConnect}>모바일에서 실행</button>
-      <button onClick={qrConnect}>데탑에서 실행</button>
-      {showQr && (
-        <img
-          src={qrUrl}
-          onClick={() => setShowQr(false)}
-          alt="Qr_wallet_connect"
-        />
+      {isMobile === null ? (<>로그아웃 상태입니다</>):(
+        <>
+          {isMobile ? (
+            <button onClick={mobileConnect}>모바일에서 실행</button>
+          ) : (
+            <>
+              <button onClick={qrConnect}>데탑에서 실행</button>
+              {showQr && (
+                <img
+                  src={qrUrl}
+                  onClick={() => setShowQr(false)}
+                  alt="Qr_wallet_connect"
+                />
+              )}
+            </>
+          )}
+        </>
       )}
-      {txHash}
     </>
   );
 };

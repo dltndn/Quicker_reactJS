@@ -93,10 +93,14 @@ function App() {
   } = UseUserOrderState();
 
   const getUserInfo = async () => {
-    const result = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${address}`)
-    if (Object.keys(result).length !== 0) {
-      setIsMember(true);
-      setUserName(result.name);
+    try {
+      const result = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${address}`)
+      if (result) {
+        setIsMember(true);
+        setUserName(result.name);
+      }
+    } catch(e) {
+      console.log(e)
     }
   };
 
