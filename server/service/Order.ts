@@ -1,6 +1,7 @@
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
-import { findLocation, saveLocation } from "../Mongo/Command/location";
+import { saveLocation, findLocation } from "../Mongo/Command/Location";
+
 
 export const findDestinationAndDepartureByOrderId = async (query: any) => {
   const orderId = query.orderid;

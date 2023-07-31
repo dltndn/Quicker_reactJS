@@ -88,6 +88,7 @@ export default {
     });
   },
 
+  // 
   getOrderlist: (id: number) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
