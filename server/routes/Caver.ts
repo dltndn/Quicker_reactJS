@@ -15,5 +15,6 @@ router.post("/getOrdersForState", KlaytnCaver.getOrdersForState)
 router.get("/getOwner", KlaytnCaver.getOwner)
 router.post("/getStakingInfo", KlaytnCaver.getStakingInfo)
 router.post("/getQtokenAllowance", KlaytnCaver.getQtokenAllowance)
+router.post("/getFeeGovernorRoundLogs", KlaytnCaver.getFeeGovernorRoundLogs)
 
 export default router;
