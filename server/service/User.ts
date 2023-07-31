@@ -9,6 +9,11 @@ export const findUserNameByWalletAddress = async (query : any) => {
   return user
 }
 
+export const findUserId = async (walletAddress : any) => {
+  const userId = await SelectUser.getUserId(walletAddress);
+  return userId
+}
+
 export const registerUser = async (body : any) => {
   const secret = process.env.cryptoKey;
   const userInstance = body.User;
