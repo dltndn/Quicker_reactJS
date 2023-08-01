@@ -178,6 +178,10 @@ function Imfo() {
     navigate("/explorer");
   };
 
+  const ClickStakingPage = () => {
+    navigate("/staking");
+  };
+
   const disConnect = () => {
     setAddress(undefined);
     setIsMobile(null);
@@ -237,6 +241,12 @@ function Imfo() {
         <Div0 onClick={ClickExplorerPage}>
           <BsCoin></BsCoin>
           <Sp2>실시간 거래 현황</Sp2>
+        </Div0>
+      </Sc3>
+      <Sc3>
+        <Div0 onClick={ClickStakingPage}>
+          <BsCoin></BsCoin>
+          <Sp2>스테이킹</Sp2>
         </Div0>
       </Sc3>
       <Sc0>
