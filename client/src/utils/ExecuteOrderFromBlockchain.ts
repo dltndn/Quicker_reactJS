@@ -1,15 +1,9 @@
-import {
-  readContract,
-  readContracts,
-  prepareWriteContract,
-  writeContract,
-} from "@wagmi/core";
 import { getDateFromTimestamp } from "./ConvertTimestampToDate";
 import axios from "axios";
 
 const env = process.env;
 
-// 최신순 오더 배열 반환
+// 최신순 오더 배열 반환(delivery)
 export const getOrdersForLatest = async (amount: string) => {
   let result: any[] = [];
   try {
@@ -24,7 +18,7 @@ export const getOrdersForLatest = async (amount: string) => {
   }
 };
 
-// 수수료 조회
+// 수수료 조회(delivery)
 export const getCommissionRate = async () => {
   try {
     const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
@@ -34,7 +28,7 @@ export const getCommissionRate = async () => {
   }
 };
 
-// QKRW balance 확인
+// QKRW balance 확인(qkrw)
 export const getQkrwBalance = async (address: string | undefined) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQkrwBalance`, {
@@ -46,7 +40,7 @@ export const getQkrwBalance = async (address: string | undefined) => {
   }
 };
 
-// QKRW token 권한 확인
+// QKRW token 권한 확인(qkrw)
 export const getAllowance = async (address: string | undefined) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getAllowance`, {
@@ -58,7 +52,7 @@ export const getAllowance = async (address: string | undefined) => {
   }
 };
 
-// 오더 객체 배열 반환
+// 오더 객체 배열 반환(delivery)
 export const getOrders = async (orderNumList: string[]) => {
   let orderList: any[] = [];
   try {
@@ -73,7 +67,7 @@ export const getOrders = async (orderNumList: string[]) => {
   // getOrders 백엔드 처리
 };
 
-// 오더 객체 반환
+// 오더 객체 반환(delivery)
 export const getOrder = async (orderNum: string) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
@@ -85,7 +79,7 @@ export const getOrder = async (orderNum: string) => {
   }
 };
 
-// 오더 객체 반환(블록체인 raw 값)
+// 오더 객체 반환(블록체인 raw 값)(delivery)
 export const getOrderRawData = async (orderNum: string) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
@@ -97,7 +91,7 @@ export const getOrderRawData = async (orderNum: string) => {
   }
 };
 
-// 오더 내역 번호 배열 반환
+// 오더 내역 번호 배열 반환(delivery)
 export const getOrderList = async (
   address: string | undefined,
   isClient: boolean
@@ -112,7 +106,6 @@ export const getOrderList = async (
     functionName = "getQuickerOrderList";
   }
   let dataRes;
-  console.log(address)
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrderList`, {
       owner: address, 
@@ -128,7 +121,7 @@ export const getOrderList = async (
   return result;
 };
 
-// 의뢰인 마지막 오더 번호 반환
+// 의뢰인 마지막 오더 번호 반환(delivery)
 export const getLastClientOrder = async (address: string | undefined) => {
   if (address === undefined) {
     return undefined;
@@ -146,7 +139,7 @@ export const getLastClientOrder = async (address: string | undefined) => {
   }
 };
 
-// 배송원 배송 여부 확인
+// 배송원 배송 여부 확인(delivery)
 export const checkIsDelivering = async (address: string | undefined) => {
   let orderNumArr: string[] | undefined;
   try {
@@ -164,7 +157,7 @@ export const checkIsDelivering = async (address: string | undefined) => {
   return false;
 };
 
-// 오더 상태에 해당하는 오더정보 배열 반환
+// 오더 상태에 해당하는 오더정보 배열 반환(delivery)
 // 오더 상태별 오더 데이터들 배열로 반환
 //     created -> 0
 //     matched -> 1
@@ -172,15 +165,6 @@ export const checkIsDelivering = async (address: string | undefined) => {
 //     failed -> 3
 //     canceled -> 4
 export const getOrdersForState = async (_state: number) => {
-  // const data: any = await readContract({
-  //   address: Quicker_address,
-  //   abi: Quicker_abi,
-  //   functionName: "getOrdersForState",
-  //   args: [_state.toString()],
-  // });
-  // let result: any[] = [];
-  // data.forEach((element: any) => result.push(TemplateOrder(element)));
-  // return result;
   let dataRes;
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrdersForState`, {
@@ -195,6 +179,30 @@ export const getOrdersForState = async (_state: number) => {
   dataRes.forEach((element: any) => result.push(TemplateOrder(element)));
   return result;
 };
+
+export const getStakingInfo = async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getStakingInfo`, {
+      address, 
+    });
+    return data.data; // type: json
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+export const getQtokenAllowance =async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQtokenAllowance`, {
+      address, 
+    });
+    return data.data; // type: string
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
 
 // export class WriteTransactionToBlockchain {
 //   private orderNum: string;

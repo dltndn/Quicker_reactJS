@@ -23,6 +23,7 @@ function Search({ clickOrder }: Props) {
   const accordionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log(orders)
     if (isOpen) {
       accordionRef.current?.scrollIntoView({ behavior: "smooth" });
     }

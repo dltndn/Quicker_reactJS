@@ -1,4 +1,4 @@
-import express, { Application, Response, Request, NextFunction } from "express";
+import express, { Application } from "express";
 
 // 필요한 모듈 import
 import chat from "./chat/socket";

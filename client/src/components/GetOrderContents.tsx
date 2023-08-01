@@ -14,19 +14,6 @@ type OrderProps = {
  function GetOrderContents({ orderNum }: OrderProps) {
   const [objData, setObjData] = useState<any>();
 
-  // const { data, isError, isLoading } = useContractRead({
-  //   address: Quicker_address,
-  //   abi: Quicker_abi,
-  //   functionName: "getOrder",
-  //   args: [orderNum],
-  //   onSuccess(data) {
-  //     setObjData(data);
-  //   },
-  //   onError(error) {
-  //     // console.log('Error', error)
-  //   },
-  // });
-
   return (
     <>
       {/* {isLoading && <div>loading...</div>} */}

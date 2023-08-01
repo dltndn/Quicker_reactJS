@@ -10,7 +10,6 @@ import {
 } from "../utils/ExecuteOrderFromBlockchain";
 import Room from "../components/chatComponents/Room";
 import Chat from "../components/chatComponents/Chat";
-import delelteDoubleQuote from "../lib/DeleteDoubleQuote";
 import { useConnWalletInfo } from "../App";
 
 const nochat = require("../image/nochat.png");
@@ -60,9 +59,10 @@ const Div1 = styled.div`
 `;
 
 const isMyOrder = (element: any, address: string) => {
-  const clientWalletAddress = delelteDoubleQuote(element.client);
-  const quickerWalletAddress = delelteDoubleQuote(element.quicker);
-  if (clientWalletAddress === address || quickerWalletAddress === address)
+  const clientWalletAddress = element.client.toLowerCase();
+  const quickerWalletAddress = element.quicker.toLowerCase();
+  const lowerAddress = address.toLowerCase();
+  if (clientWalletAddress === lowerAddress || quickerWalletAddress === lowerAddress)
     return true;
   else return false;
 };
@@ -142,7 +142,7 @@ function ChattingPage() {
           combinedBlockChainData.map((blockchainElement: any) => {
             let role = ""
             console.log(blockchainElement)
-            if (address === delelteDoubleQuote(blockchainElement.client)) {
+            if (address === blockchainElement.client) {
               // 계정 주인이 의뢰인 즉 상대방은 배송원
               role = "배송원"
             } else {

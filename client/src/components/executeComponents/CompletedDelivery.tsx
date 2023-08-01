@@ -1,8 +1,5 @@
-import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useState, useEffect } from "react";
 import { useExecutionState } from "../../pages/ExecutionPage";
-import Dropzone from "react-dropzone";
-import { isMobileOnly } from "react-device-detect";
 import styled, { createGlobalStyle } from "styled-components";
 import money1 from "../../image/money1.gif"
 import { useNavigate } from "react-router-dom";
@@ -22,24 +19,6 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
     const [securityDpositString] = useState(securityDeposit.toLocaleString())
     const [total] = useState((income + securityDeposit).toLocaleString())
     const navigate = useNavigate()
-
-    // const confirmLogic = async () => {
-    //     if (isReceived) {
-    //         navigate("/")
-    //         return
-    //     }
-    //     if (orderNum !== undefined) {
-    //         const wttb = new WriteTransactionToBlockchain(orderNum)
-    //         try {
-    //             const result = await wttb.withdrawFromOrder()
-    //             console.log(result)
-    //         } catch(e) {
-    //             console.log(e)
-    //             alert("정산이 완료됐습니다.")
-    //         }
-            
-    //     }
-    // }
 
     useEffect(() => {
         setTitle("배송결과")

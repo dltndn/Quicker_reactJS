@@ -1,52 +1,36 @@
 import { NextFunction, Request, Response } from "express";
-import {RequestHandler} from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
-import CreateOrder from "../Maria/Commands/CreateOrder";
 import sequelize from "../Maria/Connectors/SequelizeConnector"
 import {initModels} from "../Maria/Models/init-models";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import SelectUser from "../Maria/Commands/SelectUser";
-import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
 
 import sendMessage from "../sendMessage"
 import { encrypt, decrypt } from "../lib/cryto";
 import { findRoomInfoByOrderNumber } from "../service/Room";
-import { findDestinationAndDepartureByOrderId } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation } from "../service/Order";
 
 initModels(sequelize);
 
 export default {
   request: async (req: Request, res: Response) => {
     try {
-      const data = req.body;
-      console.log("data: ", data)
-      // 사용자의 아이디를 찾아서 ID_REQ에 집어 넣어야함
-      let userId = await SelectUser.getUserId(data.userWalletAddress);
-      console.log(userId)
-      if (userId) {
-        // @ts-ignore
-        data.Order.ID_REQ = userId.dataValues.id;
-
-        await CreateOrder.Order(data);
-
-        return res.send({ msg: "done" });
-      } else {
-        res.send(res.send({msg : "회원이 아님"}))
-      }
-      return res.send({ msg: "fail" });
+      const body = req.body;
+      await createOrder(body);
+      res.send({ msg: "fail" });
     } catch (error) {
-      console.log(error)
-      return res.send({ msg: error });
+      console.error(error)
+      res.send(error);
     }
   },
 
   orderlist: async (req: Request, res: Response) => {
     try {
       const data = req.body.list;
-      let instance = await SelectOrder.getOrderlist(data);
-      res.send(instance)
+      const orders = await SelectOrder.getOrderlist(data);
+      res.send(orders)
     } catch (error){
       console.log(error)
       res.send("fail");
@@ -105,11 +89,33 @@ export default {
 
   getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const orderNum = req.body.orderNum;
-      const room = await findRoomInfoByOrderNumber(orderNum)
+      const query = req.query;
+      const room = await findRoomInfoByOrderNumber(query)
       res.json(room)
     } catch (error) {
       console.error(error)
+      next(error)
+    }
+  },
+
+  postLocation :  async (req: Request, res: Response, next : NextFunction) => {
+    try {
+      const body = req.body
+      await postCurrentLocation(body)
+      res.send({ msg: "done" });
+    } catch (error) {
+      console.error(error);
+      next(error)
+    }
+  },
+
+  getLocation : async (req: Request, res: Response,  next : NextFunction) => {
+    try {
+      const query = req.query
+      const loaction = await findCurrentLocation(query);
+      res.json(loaction)
+    } catch (error) {
+      console.error(error);
       next(error)
     }
   },

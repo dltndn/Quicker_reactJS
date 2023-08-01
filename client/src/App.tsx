@@ -1,14 +1,4 @@
-import { WagmiConfig, createClient, configureChains, useAccount, useContractEvent } from "wagmi";
-import { polygonMumbai } from "wagmi/chains";
-import {
-  EthereumClient,
-  modalConnectors,
-  walletConnectProvider,
-} from "@web3modal/ethereum";
-import { alchemyProvider } from 'wagmi/providers/alchemy'
-import { Web3Modal, useWeb3ModalTheme, } from "@web3modal/react";
 import { Buffer } from "buffer";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CommissionPage from "./pages/commission";
 import MainPage from "./pages/mainPage";
@@ -28,36 +18,15 @@ import Profile_notice_writePage from "./pages/Profile_notice_writePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
-import QR from "./pages/QR"
-import { create } from 'zustand'
-import { SendDataToAndroid } from "./utils/SendDataToAndroid";
+import QR from "./pages/QR";
+import { create } from "zustand";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import QRCode from "./pages/QRCode";
-
+import StakingPage from "./pages/StakingPage";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
-
-const chains = [polygonMumbai];
-const projectId = process.env.REACT_APP_PROJECTID
-
-const { provider } = configureChains(chains, [
-  alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY ?? "" }),
-]);
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: modalConnectors({
-    projectId,
-    version: "1",
-    appName: "web3Modal",
-    chains,
-  }),
-  provider,
-});
-
-const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 interface UseConnWalletInfoType {
   address: string | undefined;
@@ -70,26 +39,26 @@ interface UseConnWalletInfoType {
 
 export const useConnWalletInfo = create<UseConnWalletInfoType>((set) => ({
   address: undefined,
-  setAddress: (address: string | undefined) => set({address}),
-  isMobile: null, 
-  setIsMobile: (isMobile: boolean | null) => set({isMobile}),
+  setAddress: (address: string | undefined) => set({ address }),
+  isMobile: null,
+  setIsMobile: (isMobile: boolean | null) => set({ isMobile }),
   isConnected: false,
-  setIsConneted: (isConnected: boolean) => set({isConnected})
-}))
+  setIsConneted: (isConnected: boolean) => set({ isConnected }),
+}));
 
 interface UseVerifiaction {
   isMember: boolean;
-  setIsMember: (newIsMember:boolean) => void;
+  setIsMember: (newIsMember: boolean) => void;
   userName: string | null;
-  setUserName: (newUserName:string | null) => void;
+  setUserName: (newUserName: string | null) => void;
 }
 
 export const useVerificationStore = create<UseVerifiaction>((set) => ({
   isMember: false,
-  setIsMember: (isMember: boolean) => set({isMember}),
+  setIsMember: (isMember: boolean) => set({ isMember }),
   userName: null,
-  setUserName: (userName: string | null) => set({userName}),
-}))
+  setUserName: (userName: string | null) => set({ userName }),
+}));
 
 interface UseUserOrderStateType {
   clientOrderNums: string[];
@@ -102,42 +71,46 @@ interface UseUserOrderStateType {
 
 export const UseUserOrderState = create<UseUserOrderStateType>((set) => ({
   clientOrderNums: [],
-  setClientOrderNums: (clientOrderNums: string[]) => set({clientOrderNums}),
+  setClientOrderNums: (clientOrderNums: string[]) => set({ clientOrderNums }),
   quickerOrderNums: [],
-  setQuickerOrderNums: (quickerOrderNums: string[]) => set({quickerOrderNums}),
+  setQuickerOrderNums: (quickerOrderNums: string[]) =>
+    set({ quickerOrderNums }),
   userOrderNumStateTrigger: 0,
-  setUserOrderNumStateTrigger: (userOrderNumStateTrigger: number) => set({userOrderNumStateTrigger}),
-}))
+  setUserOrderNumStateTrigger: (userOrderNumStateTrigger: number) =>
+    set({ userOrderNumStateTrigger }),
+}));
 
 function App() {
-  const { theme, setTheme } = useWeb3ModalTheme();
-  // const { address } = useAccount()
-  const { address, setAddress, setIsConneted, setIsMobile } = useConnWalletInfo()
+  const { address, setAddress, setIsConneted, setIsMobile } =
+    useConnWalletInfo();
   const { isMember, setIsMember, setUserName } = useVerificationStore();
-  const { clientOrderNums, setClientOrderNums, quickerOrderNums, setQuickerOrderNums, userOrderNumStateTrigger} = UseUserOrderState()
-
-  setTheme({
-    themeMode: "dark",
-    themeColor: "default",
-    themeBackground: "gradient",
-  });
+  const {
+    clientOrderNums,
+    setClientOrderNums,
+    quickerOrderNums,
+    setQuickerOrderNums,
+    userOrderNumStateTrigger,
+  } = UseUserOrderState();
 
   const getUserInfo = async () => {
-    const result = await Handler.post({walletAddress: address}, process.env.REACT_APP_SERVER_URL + "user/name")
-    if (Object.keys(result).length !== 0) {
-      setIsMember(true)
-      setUserName(result.name)
+    try {
+      const result = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${address}`)
+      if (result) {
+        setIsMember(true);
+        setUserName(result.name);
+      }
+    } catch(e) {
+      console.log(e)
     }
-  }
+  };
 
   const getAndSetOrders = async () => {
-    const clientOrderNumsArr = await getOrderList(address, true)
-    const quickerOrderNumsArr = await getOrderList(address, false)
-    setClientOrderNums(clientOrderNumsArr)
-    setQuickerOrderNums(quickerOrderNumsArr)
-  }
+    const clientOrderNumsArr = await getOrderList(address, true);
+    const quickerOrderNumsArr = await getOrderList(address, false);
+    setClientOrderNums(clientOrderNumsArr);
+    setQuickerOrderNums(quickerOrderNumsArr);
+  };
 
-  const sdta = new SendDataToAndroid(address)
   // useContractEvent({
   //   address: QUICKER_ADDRESS,
   //   abi: QUICKER_CONTRACT_ABI,
@@ -191,65 +164,67 @@ function App() {
     const storedAddress = localStorage.getItem("kaikas_address");
     const storedIsMobile = localStorage.getItem("kaikas_isMobile");
     if (storedAddress === "undefined") {
-        setAddress(undefined)
-        setIsConneted(false)
-    } else if (storedAddress !== null){
-        setAddress(storedAddress)
-        setIsConneted(true)
-        if (storedIsMobile === "true") {
-          setIsMobile(true)
-        } else {
-          setIsMobile(false)
-        }
+      setAddress(undefined);
+      setIsConneted(false);
+    } else if (storedAddress !== null) {
+      setAddress(storedAddress);
+      setIsConneted(true);
+      if (storedIsMobile === "true") {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     // 지갑주소 유저 여부 조회
-    console.log("changed user wallet")
-    console.log(address)
-    getUserInfo()
-    getAndSetOrders()
-  }, [address])
+    console.log("changed user wallet");
+    console.log(address);
+    getUserInfo();
+    getAndSetOrders();
+  }, [address]);
 
   useEffect(() => {
-    getAndSetOrders()
-    console.log("userOrderNumStateTrigger 직동")
-  }, [userOrderNumStateTrigger])
+    getAndSetOrders();
+    console.log("userOrderNumStateTrigger 직동");
+  }, [userOrderNumStateTrigger]);
 
   return (
     <>
-      <WagmiConfig client={wagmiClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/signUp" element={<SignUpPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/chatting" element={<ChattingPage />} />
-            <Route path="/commission" element={<CommissionPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/test2" element={<TestPage2 />} />
-            <Route path="/profile/setting" element={<Profile_settingPage />} />
-            <Route path="/profile/notice" element={<Profile_noticePage />} />
-            <Route path="/profile/notice/write" element={<Profile_notice_writePage />} />
-            <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
-            <Route path="/fulfillmentlist" element={<OrderLogPage isClient={false} />} />
-            <Route path="/notification" element={<Notification />} />
-            <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
-            <Route path="/client_confirm/:orderNumber" element={<ClientConfirmPage />} />
-            <Route path="/explorer" element={<ExplorerPage />} />
-            <Route path="/receipient" element={<ReceipientPage />}/>
-            <Route path="/chatcss" element={<ChatcssPage />}/>
-            <Route path="/testQR" element={<QR />}/>
-          </Routes>
-        </BrowserRouter>
-      </WagmiConfig>
-      {/* <Web3Modal
-        projectId={projectId ?? ""}
-        ethereumClient={ethereumClient}
-        themeBackground={theme.themeBackground}
-        // themeVariables={{"--w3m-text-xsmall-bold-weight": "bold"}}
-      /> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/signUp" element={<SignUpPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/chatting" element={<ChattingPage />} />
+          <Route path="/commission" element={<CommissionPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/test2" element={<TestPage2 />} />
+          <Route path="/profile/setting" element={<Profile_settingPage />} />
+          <Route path="/profile/notice" element={<Profile_noticePage />} />
+          <Route
+            path="/profile/notice/write"
+            element={<Profile_notice_writePage />}
+          />
+          <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
+          <Route
+            path="/fulfillmentlist"
+            element={<OrderLogPage isClient={false} />}
+          />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
+          <Route
+            path="/client_confirm/:orderNumber"
+            element={<ClientConfirmPage />}
+          />
+          <Route path="/explorer" element={<ExplorerPage />} />
+          <Route path="/receipient" element={<ReceipientPage />} />
+          <Route path="/chatcss" element={<ChatcssPage />} />
+          <Route path="/testQR" element={<QR />} />
+          <Route path="/staking" element={<StakingPage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

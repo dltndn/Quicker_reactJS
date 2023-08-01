@@ -121,8 +121,8 @@ function SearchPage() {
             } else {
               orderPriceNum = extractNumber(orderPrice);
             }
-            const income = calQuickerIncome(orderPriceNum);
-            const securityDeposit = calSecurityDeposit(orderPriceNum);
+            const income = await calQuickerIncome(orderPriceNum);
+            const securityDeposit = await calSecurityDeposit(orderPriceNum);
   
             // @ts-ignore
             let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
@@ -198,7 +198,7 @@ function SearchPage() {
       const exec = async () => {
         try {
           let data = await Handler.get(
-            process.env.REACT_APP_SERVER_URL + "orders/" + `?userWalletAdress=${address}`
+            process.env.REACT_APP_SERVER_URL + `orders/?userWalletAdress=${address}`
           );
           console.log(data)
           setRequestListContents(data);

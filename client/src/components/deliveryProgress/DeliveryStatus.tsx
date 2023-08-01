@@ -3,13 +3,10 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
-import Handler from "../../lib/Handler";
 import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
-import delelteDoubleQuote from "../../lib/DeleteDoubleQuote";
 import Lottie from "lottie-react";
 import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
-import { GrAddCircle } from "react-icons/gr";
 import finduser from "../../Lottie/81378-find-user-location.json";
 
 const whitePin = require('../../image/dep-icon-gif-unscreen.gif');
@@ -50,7 +47,7 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
     try {
       if (orderData !== undefined && orderData.quicker !== undefined ) {
         // 값을 불러오는 fetch
-        const deliverWalletAddress = delelteDoubleQuote(orderData.quicker)
+        const deliverWalletAddress = orderData.quicker
         
         const response = await fetch(process.env.REACT_APP_SERVER_URL+`current-deliver-location/?quicker=${deliverWalletAddress}`)
         const json = await response.json()

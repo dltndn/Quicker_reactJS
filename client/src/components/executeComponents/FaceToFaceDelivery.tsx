@@ -1,12 +1,9 @@
-import BottomConfirmBtn from "../bottomconfirmBtn"
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
-import { isMobile } from "react-device-detect";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import QR from "../../pages/QR";
 import { useDeliveredComponent } from "./DeliveredItem";

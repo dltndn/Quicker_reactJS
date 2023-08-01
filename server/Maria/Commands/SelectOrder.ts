@@ -31,10 +31,12 @@ export default {
           required: true,
         },
       ],
-      raw : true
+      raw : true,
+      nest : true
     });
   },
 
+  // 검색페이지의 오더 리스트 목록
   getRequests: (userId : string) => {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
@@ -86,15 +88,14 @@ export default {
     });
   },
 
+  // 
   getOrderlist: (id: number) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
     Order.hasOne(Product, {foreignKey: "id"})
-    return new Promise((resolve, reject) => {
-      resolve(
-        Order.findAll({
+    return Order.findAll({
           where: { id: id },
           attributes: ["id", "DETAIL"],
           include: [
@@ -124,10 +125,7 @@ export default {
               required: false,
             },
           ],
-        })
-      );
-
-      reject( new Error ("message : fail"));
-    });
+        }
+      )
   },
 };

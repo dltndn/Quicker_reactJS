@@ -1,11 +1,9 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import styled from "styled-components";
-import BottomConfirmBtn from "../bottomconfirmBtn";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import { BsPlusCircle } from "react-icons/bs";
 import { useConnWalletInfo } from "../../App";
@@ -27,7 +25,6 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState();
   const { address } = useConnWalletInfo();
   const [file, setFile] = useState<File | null | undefined>(undefined);
-  const [showTx, setShowTx] = useState<Boolean>(false);
 
   const fileInput = useRef<HTMLInputElement>(null);
 
@@ -50,7 +47,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
       formData.append("uploadImage", file);
       formData.append("orderNum", orderNum);
       const response = await fetch(
-        process.env.REACT_APP_SERVER_URL + "order-complete-image",
+        process.env.REACT_APP_SERVER_URL + "order/image/complete",
         {
           method: "POST",
           body: formData,

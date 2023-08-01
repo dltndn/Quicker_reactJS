@@ -1,5 +1,3 @@
-import TopBarOthers from "../components/topBarOthers"
-import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from 'styled-components';
 import Notice_write from "../components/Notice_write";

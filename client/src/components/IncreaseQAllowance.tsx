@@ -6,7 +6,9 @@ import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../App";
 
-export default function IncreaseAllowance() {
+
+
+export default function IncreaseQAllowance() {
   const { setShowAllowance } = useOrderStore();
   const { address } = useConnWalletInfo();
   const onSuccess = () => {
@@ -17,7 +19,7 @@ export default function IncreaseAllowance() {
       <Div0>
         <Lottie animationData={Done} />
         <Div1>
-          컨트랙에 QKRW토큰 전송 권한을 허용하는 과정이에요. 처음 한 번만
+          컨트랙에 Quicker토큰 전송 권한을 허용하는 과정이에요. 처음 한 번만
           실행해요.
         </Div1>
       </Div0>
@@ -25,7 +27,7 @@ export default function IncreaseAllowance() {
         <>지갑 연결 해제됨</>
       ) : (
         <SendTxK
-          param={GetContractParams.IncreaseAllowanceQkrw()}
+          param={GetContractParams.increaseAllowanceQuicker_staking()}
           successFunc={onSuccess}
         />
       )}
