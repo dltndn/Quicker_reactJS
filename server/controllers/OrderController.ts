@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
-import CreateOrder from "../Maria/Commands/CreateOrder";
 import sequelize from "../Maria/Connectors/SequelizeConnector"
 import {initModels} from "../Maria/Models/init-models";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
@@ -11,40 +10,27 @@ import SelectUser from "../Maria/Commands/SelectUser";
 import sendMessage from "../sendMessage"
 import { encrypt, decrypt } from "../lib/cryto";
 import { findRoomInfoByOrderNumber } from "../service/Room";
-import { findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation } from "../service/Order";
 
 initModels(sequelize);
 
 export default {
   request: async (req: Request, res: Response) => {
     try {
-      const data = req.body;
-      console.log("data: ", data)
-      // 사용자의 아이디를 찾아서 ID_REQ에 집어 넣어야함
-      let userId = await SelectUser.getUserId(data.userWalletAddress);
-      console.log(userId)
-      if (userId) {
-        // @ts-ignore
-        data.Order.ID_REQ = userId.dataValues.id;
-
-        await CreateOrder.Order(data);
-
-        return res.send({ msg: "done" });
-      } else {
-        res.send(res.send({msg : "회원이 아님"}))
-      }
-      return res.send({ msg: "fail" });
+      const body = req.body;
+      await createOrder(body);
+      res.send({ msg: "fail" });
     } catch (error) {
-      console.log(error)
-      return res.send({ msg: error });
+      console.error(error)
+      res.send(error);
     }
   },
 
   orderlist: async (req: Request, res: Response) => {
     try {
       const data = req.body.list;
-      let instance = await SelectOrder.getOrderlist(data);
-      res.send(instance)
+      const orders = await SelectOrder.getOrderlist(data);
+      res.send(orders)
     } catch (error){
       console.log(error)
       res.send("fail");

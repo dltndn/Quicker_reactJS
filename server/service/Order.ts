@@ -1,5 +1,7 @@
+import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
+
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
 
 
@@ -33,3 +35,17 @@ export const findCurrentLocation = async (query: any) => {
   const location = await findLocation(address)  
   return location;
 };
+
+export const createOrder = async (body : any) => {
+  const walletAddress = body.userWalletAddress
+  const userId = await SelectUser.getUserId(walletAddress);
+  if (userId) {
+    body.Order.ID_REQ = userId.id;
+
+    await CreateOrder.Order(body);
+
+    return { msg: "done" }
+  } else {
+    return new Error("회원이 아님")
+  }
+}

@@ -5,6 +5,8 @@ export default {
     return User.findOne({
       attributes: ["id"],
       where: { wallet_address: userWalletAddress },
+      raw: true,
+      nest : true,
     }) 
   },
   

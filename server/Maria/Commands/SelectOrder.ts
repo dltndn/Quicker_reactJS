@@ -95,9 +95,7 @@ export default {
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
     Order.hasOne(Product, {foreignKey: "id"})
-    return new Promise((resolve, reject) => {
-      resolve(
-        Order.findAll({
+    return Order.findAll({
           where: { id: id },
           attributes: ["id", "DETAIL"],
           include: [
@@ -127,10 +125,7 @@ export default {
               required: false,
             },
           ],
-        })
-      );
-
-      reject( new Error ("message : fail"));
-    });
+        }
+      )
   },
 };
