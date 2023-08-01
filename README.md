@@ -28,10 +28,18 @@
 - 배송물품 대면 전달 시 QR코드 인증
 - 의뢰인과 배송원 사이 채팅 기능
 - 유저간 토큰 전송기능(예정)
-- DAO(Decentralized Autonomous Organization) 시스템(예정)
+
+## 추가 기능(v2)
+- 블록체인 가스비 대납
+- 토큰 스테이킹
+- 거래 수수료 투표
 
 ## 프로세스
 <img width="799" alt="스크린샷 2023-06-02 오후 3 56 02" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/ba37075e-ff43-4919-a7c8-26c3f892935f">
+
+## 스마트컨트랙 구조
+<img width="1078" alt="스크린샷 2023-07-30 오후 6 19 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/099843a3-9b11-4de2-a792-6dbfcd9999ec">
+
 
 ## 데이터베이스 ERD
 <img width="472" alt="스크린샷 2023-06-02 오후 4 00 45" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/b6547008-08f8-4d72-8420-061ced8eaf6c">
