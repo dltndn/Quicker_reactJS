@@ -95,7 +95,7 @@ export const findImage =async (query: any) => {
   return {imageBuffer : images[0].image}
 }
 
-export const postImage =async (body:any, documentFile : any) => {
+export const saveImage =async (body:any, documentFile : any) => {
   const orderNum = body.orderNum
   const bufferImage = documentFile.buffer
   await saveImageToBufferString(orderNum, bufferImage)

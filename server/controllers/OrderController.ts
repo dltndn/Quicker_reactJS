@@ -4,8 +4,9 @@ import SelectOrder from "../Maria/Commands/SelectOrder";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation, updateOrder } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findImage, postCurrentLocation, saveImage, updateOrder } from "../service/Order";
 import { findRoomInfoByOrderNumber } from "../service/Room";
+import { MulterRequest } from "../routes/OrderCompleteImage";
 
 initModels(sequelize);
 
@@ -86,6 +87,29 @@ export default {
       next(error)
     }
   },
+
+  getImage : async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const query = req.query;
+      const image = findImage(query);
+      res.send(image);
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  },
+
+  postImage : async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const body = req.body;
+      const documentFile = (req as MulterRequest).file;
+      await saveImage(body, documentFile);
+      res.send({ msg: "done" });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
 };
 
 
