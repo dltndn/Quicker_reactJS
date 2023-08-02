@@ -3,6 +3,7 @@ import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
+import { findImageByOrderId } from "../Mongo/Command/FindImage";
 
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
 import { encrypt } from "../lib/cryto";
@@ -85,4 +86,10 @@ export const updateOrder = async (body:any) => {
   
   await sendMessage(receiverPhoneNumber.PHONE, url)  
   
+}
+
+export const findImage =async (query: any) => {
+  const orderId = query.orderNum;
+  const images = await findImageByOrderId(orderId)
+  return {imageBuffer : images[0].image}
 }

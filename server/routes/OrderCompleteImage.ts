@@ -1,29 +1,23 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+
 import connectMongo from "../Mongo/Connector";
-import ImageFileSchema from "../Mongo/Schemas/ImageFile";
+import { findImage } from "../service/Order";
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 const router = express.Router();
 
-router
-  .get("/", async (req: Request, res: Response): Promise<any> => {
+router.get("/", async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const orderId = req.query.orderNum;
-
-      const conn = await connectMongo("orderComplete");
-      if (typeof orderId === "string") {
-        const imageModel = conn.model(orderId, ImageFileSchema);
-        const images = await imageModel.find();
-        conn.destroy();
-        res.send({imageBuffer : images[0].image})
-      }
+      const query = req.query
+      const image = findImage(query)
+      res.send(image)
     } catch (error) {
-      console.log(error)
-      res.send({msg : 'fail'})
+      console.error(error)
+      next(error)
     }
   })
   .post("/" , upload.single('uploadImage'), async (req: Request, res: Response): Promise<any> => {

@@ -1,16 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
-import sequelize from "../Maria/Connectors/SequelizeConnector"
-import {initModels} from "../Maria/Models/init-models";
-import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
-import SelectUser from "../Maria/Commands/SelectUser";
+import sequelize from "../Maria/Connectors/SequelizeConnector";
+import { initModels } from "../Maria/Models/init-models";
 
-import sendMessage from "../sendMessage"
-import { encrypt, decrypt } from "../lib/cryto";
-import { findRoomInfoByOrderNumber } from "../service/Room";
 import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation, updateOrder } from "../service/Order";
+import { findRoomInfoByOrderNumber } from "../service/Room";
 
 initModels(sequelize);
 
