@@ -3,10 +3,11 @@ import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import { findImageByOrderId } from "../Mongo/Command/FindImage";
+import { findImageByOrderId, saveImageToBufferString } from "../Mongo/Command/Image";
 
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
 import { encrypt } from "../lib/cryto";
+import { MulterRequest } from "../routes/OrderCompleteImage";
 import sendMessage from "../sendMessage";
 
 
@@ -92,4 +93,10 @@ export const findImage =async (query: any) => {
   const orderId = query.orderNum;
   const images = await findImageByOrderId(orderId)
   return {imageBuffer : images[0].image}
+}
+
+export const postImage =async (body:any, documentFile : any) => {
+  const orderNum = body.orderNum
+  const bufferImage = documentFile.buffer
+  await saveImageToBufferString(orderNum, bufferImage)
 }
