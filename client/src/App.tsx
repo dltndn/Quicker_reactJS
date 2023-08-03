@@ -18,12 +18,14 @@ import Profile_notice_writePage from "./pages/Profile_notice_writePage";
 import ExplorerPage from "./pages/ExplorerPage";
 import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
+import StakingPage from "./pages/StakingPage";
+import FeeGovernorPage from "./pages/FeeGovernorPage";
 import QR from "./pages/QR";
 import { create } from "zustand";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import QRCode from "./pages/QRCode";
-import StakingPage from "./pages/StakingPage";
+
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -223,6 +225,7 @@ function App() {
           <Route path="/chatcss" element={<ChatcssPage />} />
           <Route path="/testQR" element={<QR />} />
           <Route path="/staking" element={<StakingPage />} />
+          <Route path="/feeGovernor" element={<FeeGovernorPage />} />
         </Routes>
       </BrowserRouter>
     </>
