@@ -19,7 +19,7 @@ interface UseFeeGovernorType {
 const useFeeGovernor = create<UseFeeGovernorType>((set) => ({
   title: "거래수수료 투표",
   setTitle: (title: string) => set({ title }),
-  pageState: "loading", // loading | main | previousResult | vote
+  pageState: "loading", // loading | main | previousResult | vote | claimRewards
   setPageState: (pageState: string) => set({ pageState }),
 }));
 
@@ -57,14 +57,22 @@ const FeeGovernorPage = () => {
       case "vote":
         setTitle("투표하기");
         break;
+      case "claimRewards":
+        setTitle("수익정산")
+        break
     }
   }, [pageState]);
 
   // 사용자 투표권, 현재 라운드 정보 불러오기
   const getFeeGovernorData = async (address: string) => {
     try {
-        setRoundInfo(await getFeeGovernorInfo(address))
-        setPageState("main")
+        const roundData = await getFeeGovernorInfo(address)
+        setRoundInfo(roundData)
+        if (roundData.userRewards !== "0") {
+            setPageState("claimRewards")
+        } else {
+            setPageState("main")
+        }
     } catch(e) {
         console.log(e)
         navigate("/profile")
@@ -82,6 +90,9 @@ const FeeGovernorPage = () => {
       case "vote":
         setPageState("main");
         break;
+      case "claimRewards":
+        setPageState("previousResult")
+        break
     }
   };
 
@@ -94,6 +105,7 @@ const FeeGovernorPage = () => {
           main: <Main roundInfo={roundInfo}/>,
           previousResult: <PreviousResult userRewards={roundInfo.userRewards}/>,
           vote: <Vote userVoteEnable={roundInfo.userVoteEnable}/>,
+          claimRewards: <ClaimRewards />
         }[pageState]
       }
     </>
@@ -116,39 +128,32 @@ const Main = (roundInfo: any) => {
     };
   }, []);
 
-  const converToLocale = (data: string) => {
-    return Number(data).toLocaleString()
-  }
-
   const calculateShares = (input1: string, input2: string, input3: string) => {
-    const number1 = parseFloat(input1);
-    const number2 = parseFloat(input2);
-    const number3 = parseFloat(input3);
+    const number1 = Number(input1);
+    const number2 = Number(input2);
+    const number3 = Number(input3);
   
     if (isNaN(number1) || isNaN(number2) || isNaN(number3)) {
         return [0, 0, 0]
     }
-  
     const total = number1 + number2 + number3;
-  
     if (total === 0) {
       return [0, 0, 0]
     }
-  
     const share1 = (number1 / total) * 100;
     const share2 = (number2 / total) * 100;
     const share3 = (number3 / total) * 100;
-  
     return [Number(share1.toFixed(2)), Number(share2.toFixed(2)), Number(share3.toFixed(2))];
   }
 
   return (
     <>
-    {roundData && (<div> <div>보유 투표권 {converToLocale(roundData.userVotePower)} vQuicker</div>
-      <div>가용 투표권 {converToLocale(roundData.userVoteEnable)} vQuicker</div>
+    {roundData && (<div>
+        <div>보유 투표권 {convertToLocale(roundData.userVotePower)} vQuicker</div>
+      <div>가용 투표권 {convertToLocale(roundData.userVoteEnable)} vQuicker</div>
       <div>이번주 투표현황</div>
-      <div>누적 수수료 | {converToLocale(roundData.totalIncome)} KRW</div>
-      <div>현재 투표량 | {converToLocale(roundData.totalVotePower)} vQuicker</div>
+      <div>누적 수수료 | {convertToLocale(roundData.totalIncome)} KRW</div>
+      <div>현재 투표량 | {convertToLocale(roundData.totalVotePower)} vQuicker</div>
       <br></br>
       <div>거래수수료 - {roundData.currentFee}%</div>
       <div>인상 | 원형그래프 | {feeShares[0]}%</div>
@@ -168,6 +173,7 @@ const Main = (roundInfo: any) => {
 
 // 지난투표 화면
 const PreviousResult = (userRewards: any) => {
+    const { setPageState } = useFeeGovernor();
   useEffect(() => {
     return () => {
       
@@ -176,7 +182,7 @@ const PreviousResult = (userRewards: any) => {
 
   return (
     <>
-      <>지난투표 결과</>
+      <div></div>
     </>
   );
 };
@@ -200,7 +206,7 @@ const Vote = (userVoteEnable: any) => {
       {isInfoPage ? (
         <div>
           <>animation</>
-          <>가용 투표권은 {"100"}vQuicker 입니다.</>
+          <>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</>
           <ConfirmBtn
             content={"다음"}
             confirmLogic={onClick}
@@ -213,5 +219,20 @@ const Vote = (userVoteEnable: any) => {
     </>
   );
 };
+
+// 수수료 수익 정산 화면
+const ClaimRewards = () => {
+    const { setPageState } = useFeeGovernor();
+
+    return(<>
+        <div>animation</div>
+        <div>지난 투표한 주의 수수료 수익을 분배받아요</div>
+        <SendTxK param={GetContractParams.claimRewards()} successFunc={() => {setPageState("main");}}/>
+    </>)
+}
+
+const convertToLocale = (data: string) => {
+    return Number(data).toLocaleString()
+  }
 
 export default FeeGovernorPage;

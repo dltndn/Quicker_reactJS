@@ -5,7 +5,8 @@ import {
   QKRW_ADDRESS_KLAYTN,
   QUICKER_TOKEN_ADDRESS_KLAYTN,
   QUICKER_DLVR_ADDRESS_KLAYTN,
-  QUICKER_STAKING_ADDRESS_KLAYTN
+  QUICKER_STAKING_ADDRESS_KLAYTN,
+  QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN
 } from "../../contractInformation";
 
 export default {
@@ -279,4 +280,25 @@ export default {
       params: `["${QUICKER_STAKING_ADDRESS_KLAYTN}", "10000000000000000000000000000"]`,
     };
   },
+  // FeeGovernor contract 이자 정산 함수
+  claimRewards: (): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [],
+        "name": "claimRewards",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
+      params: ``,
+    };
+  }
 };
