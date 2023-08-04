@@ -2,7 +2,6 @@ import React, { useState, useRef, ReactDOM } from 'react';
 import { Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { BsAt } from "react-icons/bs";
-import { useAccount } from 'wagmi';
 import { useConnWalletInfo } from '../App';
 
 const Maintx = styled.div`

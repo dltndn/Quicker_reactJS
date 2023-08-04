@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
 import circles from "./animation/circles.gif";
 import styled, { keyframes } from "styled-components";
 import Lottie from "lottie-react";
