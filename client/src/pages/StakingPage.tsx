@@ -42,7 +42,7 @@ const Sc01 = styled.section`
   background-color: #ffffff;
   box-shadow: none;
   position: static;
-`
+`;
 
 const Sc02 = styled(Sc3)`
   height: 170px;
@@ -50,8 +50,8 @@ const Sc02 = styled(Sc3)`
   border-radius: 0px 0px 5px 5px;
   border-top: none;
   box-shadow: 0px 3px 0px #bebebe;
-  background: linear-gradient(to right, #FFFFFF, #DFF9FF, #D9F8FF, #A3EEFF);
-`
+  background: linear-gradient(to right, #ffffff, #dff9ff, #d9f8ff, #a3eeff);
+`;
 
 const Sc4 = styled.section`
   flex: 1 1 50%;
@@ -74,74 +74,74 @@ const Sc0 = styled.section`
 
 const Div1 = styled.div`
   display: flex;
-`
+`;
 const QuickerTx = styled.div`
   font-size: 16px;
   font-weight: bold;
-`
+`;
 
 const Quickertxsm = styled.div`
   font-size: 12px;
   font-weight: bold;
   text-align: center;
   margin: 12px 0 12px 0;
-  color: #6C6C6C;
-`
+  color: #6c6c6c;
+`;
 
 const PercentDiv = styled.div`
   flex: 1 1 33%;
   margin: 8px;
-`
+`;
 
 const PercentTx1 = styled.div`
   margin-bottom: 6px;
   font-size: 13px;
   font-weight: bold;
-  color: #6C6C6C;
+  color: #6c6c6c;
   text-align: center;
-`
+`;
 const PercentTx2 = styled(PercentTx1)`
   font-size: 22px;
-  color: #FF0A0A;
-`
+  color: #ff0a0a;
+`;
 const PercentTx3 = styled.span`
   font-size: 14px;
   font-weight: bold;
   color: #000000;
-`
+`;
 const StakingTx = styled.div`
   font-size: 22px;
-  color: #00A3FF;
+  color: #00a3ff;
   font-weight: bold;
   margin: 16px 16px 16px 0px;
-`
+`;
 const StakingTx1 = styled(StakingTx)`
   margin-top: 40px;
-`
+`;
 const StakingTxQuicker = styled.span`
   font-size: 14px;
   font-weight: bold;
-  color: #8ED6FF;
+  color: #8ed6ff;
   padding-left: 8px;
-`
+`;
 const StakingTxSm1 = styled.div`
   font-size: 10px;
   font-weight: bold;
-  color: #C6C6C6;
-`
+  color: #c6c6c6;
+`;
 const StakingTxSm2 = styled.span`
   font-size: 10px;
   font-weight: bold;
   color: #757575;
   padding-left: 8px;
-`
+`;
 const Lot = styled.div`
   position: absolute;
   margin-right: 20px;
   right: 0;
   top: 290px;
   width: 130px;
-`
+`;
 const CenteredDiv = styled.div`
   position: relative;
   width: 100px;
@@ -154,35 +154,35 @@ const StakingTx2 = styled.div`
   text-align: center;
   font-size: 16px;
   font-weight: bold;
-`
+`;
 const StakingTx3 = styled(StakingTx2)`
   line-height: normal;
-  color: #44D9FB;
-`
+  color: #44d9fb;
+`;
 const HideDiv = styled.div`
   height: 3.2rem;
-`
+`;
 const Margin = styled.div`
-margin: 0px 10px 0px 10px;
-`
+  margin: 0px 10px 0px 10px;
+`;
 
 const Ip = styled.input`
-width: 100%;
-height: 40px;
-font-size: 16px;
-border-radius: 0.313rem;
-border: 1px solid #efefef; 
-outline: none; 
-background-color: #ffffff;
-padding-left: 0.625rem;
-padding-right: 0.625rem;
-margin: 0px;
-text-align: left;
-color: #000000;
-&:focus {
-    border-color: #efefef; 
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  border-radius: 0.313rem;
+  border: 1px solid #efefef;
+  outline: none;
+  background-color: #ffffff;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  margin: 0px;
+  text-align: left;
+  color: #000000;
+  &:focus {
+    border-color: #efefef;
     background-color: #ffffff;
-}
+  }
 `;
 type StakingComponentType = {
   onClickBackBtn: () => void;
@@ -200,6 +200,7 @@ const StakingPage = () => {
   const [endDate, setEndDate] = useState<string>("-");
   const [rewardsAmount, setRewardsAmount] = useState<string>("0");
   const [userQuickerBal, setUserQuickerBal] = useState<string>("0");
+  const [showClaim, setShowClaim] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const { address } = useConnWalletInfo();
@@ -240,9 +241,18 @@ const StakingPage = () => {
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));
   };
 
+  const moveToClaimPage = () => {
+    if (rewardsAmount === "0") {
+      alert("받으실 보상이 없습니다");
+    } else {
+      setShowClaim(true);
+    }
+  };
+
   useEffect(() => {
     return () => {
       setShowStaking(null);
+      setShowClaim(false);
     };
   }, []);
 
@@ -260,51 +270,89 @@ const StakingPage = () => {
             title="토큰스테이킹"
             redirectLogic={() => navigate("/profile")}
           />
-          <Sc3>
-            <QuickerTx>Quicker</QuickerTx>
-            <Quickertxsm>스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.</Quickertxsm>
-            <Div1>
-              <PercentDiv>
-                <PercentTx1>총 스테이킹률</PercentTx1>
-                <PercentTx2>{stakingRate}<PercentTx3> %</PercentTx3></PercentTx2>
-              </PercentDiv>
-              <PercentDiv>
-                <PercentTx1>총 유통량</PercentTx1>
-                <PercentTx2>{quickerTotalSuupply}<PercentTx3> %</PercentTx3></PercentTx2>
-              </PercentDiv>
-              <PercentDiv>
-                <PercentTx1>총 스테이킹량</PercentTx1>
-                <PercentTx2>{quickerTotalStaking}<PercentTx3> %</PercentTx3></PercentTx2>
-              </PercentDiv>
-            </Div1>
-          </Sc3>
-          
-          <Sc01>
-            <QuickerTx>스테이킹 수량</QuickerTx>
-            <StakingTx>{userStakedAmount}<StakingTxQuicker>Quicker</StakingTxQuicker></StakingTx>
-            <StakingTxSm1>예상 수익률<StakingTxSm2>{rewardRate}%</StakingTxSm2></StakingTxSm1>
-            <StakingTxSm1>종료 일자<StakingTxSm2>{endDate}</StakingTxSm2></StakingTxSm1>
-            <Lot><Lottie animationData={Stacking}/></Lot>
-          </Sc01>
-          <Sc02>
-            <QuickerTx>보상 수량</QuickerTx>
-            <StakingTx1>{rewardsAmount}<StakingTxQuicker>Quicker</StakingTxQuicker></StakingTx1>
-          </Sc02>
-          <Sc0>
-            <Sc4 onClick={() => setShowStaking(false)}>
-            <StakingTx2>언스테이킹</StakingTx2>
-            </Sc4>
-            <Sc4 onClick={() => setShowStaking(true)}>
-            <StakingTx3>
-            스테이킹
-            </StakingTx3>
-            <CenteredDiv>
-              <Lottie animationData={StackingGo}/>
-            </CenteredDiv>
-            </Sc4>
-          </Sc0>
-          <HideDiv></HideDiv>
-          <BottomBar></BottomBar>
+          {showClaim ? (
+            <div>
+              <div>animation</div>
+              <div>{rewardsAmount} Quicker를 수령해요</div>
+              <SendTxK
+                param={GetContractParams.claimPendingRewards()}
+                successFunc={() => {
+                  setShowClaim(false);
+                  setRewardsAmount("0");
+                }}
+              />
+            </div>
+          ) : (
+            <div>
+              <Sc3>
+                <QuickerTx>Quicker</QuickerTx>
+                <Quickertxsm>
+                  스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.
+                </Quickertxsm>
+                <Div1>
+                  <PercentDiv>
+                    <PercentTx1>총 스테이킹률</PercentTx1>
+                    <PercentTx2>
+                      {stakingRate}
+                      <PercentTx3> %</PercentTx3>
+                    </PercentTx2>
+                  </PercentDiv>
+                  <PercentDiv>
+                    <PercentTx1>총 유통량</PercentTx1>
+                    <PercentTx2>
+                      {quickerTotalSuupply}
+                      <PercentTx3> %</PercentTx3>
+                    </PercentTx2>
+                  </PercentDiv>
+                  <PercentDiv>
+                    <PercentTx1>총 스테이킹량</PercentTx1>
+                    <PercentTx2>
+                      {quickerTotalStaking}
+                      <PercentTx3> %</PercentTx3>
+                    </PercentTx2>
+                  </PercentDiv>
+                </Div1>
+              </Sc3>
+
+              <Sc01>
+                <QuickerTx>스테이킹 수량</QuickerTx>
+                <StakingTx>
+                  {userStakedAmount}
+                  <StakingTxQuicker>Quicker</StakingTxQuicker>
+                </StakingTx>
+                <StakingTxSm1>
+                  예상 수익률<StakingTxSm2>{rewardRate}%</StakingTxSm2>
+                </StakingTxSm1>
+                <StakingTxSm1>
+                  종료 일자<StakingTxSm2>{endDate}</StakingTxSm2>
+                </StakingTxSm1>
+                <Lot>
+                  <Lottie animationData={Stacking} />
+                </Lot>
+              </Sc01>
+              <Sc02>
+                <QuickerTx>보상 수량</QuickerTx>
+                <button>수령하기</button>
+                <StakingTx1>
+                  {rewardsAmount}
+                  <StakingTxQuicker>Quicker</StakingTxQuicker>
+                </StakingTx1>
+              </Sc02>
+              <Sc0>
+                <Sc4 onClick={() => setShowStaking(false)}>
+                  <StakingTx2>언스테이킹</StakingTx2>
+                </Sc4>
+                <Sc4 onClick={() => setShowStaking(true)}>
+                  <StakingTx3>스테이킹</StakingTx3>
+                  <CenteredDiv>
+                    <Lottie animationData={StackingGo} />
+                  </CenteredDiv>
+                </Sc4>
+              </Sc0>
+              <HideDiv></HideDiv>
+              <BottomBar></BottomBar>
+            </div>
+          )}
         </>
       ) : (
         <>
@@ -366,7 +414,7 @@ const StakingToken = ({
       if ((await getQtokenAllowance(address)) === "0") {
         setShowAllowance(true);
       }
-      console.log((await getQtokenAllowance(address)))
+      console.log(await getQtokenAllowance(address));
       setShowSendTx(true);
     }
   };
@@ -418,8 +466,8 @@ const StakingToken = ({
             placeholder="정수 단위로만 입력 가능합니다"
           />
           <div>
-            보유 {quickerBalance} 
-            <button>max</button> 
+            보유 {quickerBalance}
+            <button>max</button>
             <div>{alertMessage}</div>
           </div>
 
@@ -429,8 +477,12 @@ const StakingToken = ({
             <div onClick={() => setSelectedPeriod(6)}>2배 - 6개월</div>
             <div onClick={() => setSelectedPeriod(9)}>4배 - 9개월</div>
           </div>
-          <StakingTxSm1>스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2></StakingTxSm1>
-          <StakingTxSm1>추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2></StakingTxSm1>
+          <StakingTxSm1>
+            스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
+          </StakingTxSm1>
+          <StakingTxSm1>
+            추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
+          </StakingTxSm1>
 
           {showConfirm && (
             <>

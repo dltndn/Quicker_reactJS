@@ -280,6 +280,27 @@ export default {
       params: `["${QUICKER_STAKING_ADDRESS_KLAYTN}", "10000000000000000000000000000"]`,
     };
   },
+  // staking contract 이자 정산 함수
+  claimPendingRewards: (): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [],
+        "name": "claimPendingRewards",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_STAKING_ADDRESS_KLAYTN,
+      params: ``,
+    };
+  },
   // FeeGovernor contract 이자 정산 함수
   claimRewards: (): SendTxType => {
     return {
@@ -300,5 +321,5 @@ export default {
       to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
       params: ``,
     };
-  }
+  },
 };
