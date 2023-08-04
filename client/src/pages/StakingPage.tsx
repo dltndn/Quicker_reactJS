@@ -13,7 +13,177 @@ import { useOrderStore } from "./commission";
 import IncreaseQAllowance from "../components/IncreaseQAllowance";
 import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
+import styled from "styled-components";
+import BottomBar from "../components/BottomBar";
+import Stacking from "../Lottie/Stacking.json";
+import StackingGo from "../Lottie/Stackinggo.json";
+import Lottie from "lottie-react";
 
+const Sc3 = styled.section`
+  margin: 8px 16px 16px 16px;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 0px #bebebe;
+`;
+
+const Sc01 = styled.section`
+  height: 170px;
+  margin: 8px 16px 0px 16px;
+  padding: 20px;
+  border-radius: 5px 5px 0 0;
+  border: solid;
+  border-width: 1px;
+  border-bottom: none;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: none;
+  position: static;
+`
+
+const Sc02 = styled(Sc3)`
+  height: 170px;
+  margin-top: 0px;
+  border-radius: 0px 0px 5px 5px;
+  border-top: none;
+  box-shadow: 0px 3px 0px #bebebe;
+  background: linear-gradient(to right, #FFFFFF, #DFF9FF, #D9F8FF, #A3EEFF);
+`
+
+const Sc4 = styled.section`
+  flex: 1 1 50%;
+  height: 160px;
+  margin: 8px 8px 0 8px;
+  padding: 16px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 0px #bebebe;
+`;
+
+const Sc0 = styled.section`
+  display: flex;
+  padding: 0 8px 16px 8px;
+  position: static;
+`;
+
+const Div1 = styled.div`
+  display: flex;
+`
+const QuickerTx = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+`
+
+const Quickertxsm = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin: 12px 0 12px 0;
+  color: #6C6C6C;
+`
+
+const PercentDiv = styled.div`
+  flex: 1 1 33%;
+  margin: 8px;
+`
+
+const PercentTx1 = styled.div`
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #6C6C6C;
+  text-align: center;
+`
+const PercentTx2 = styled(PercentTx1)`
+  font-size: 22px;
+  color: #FF0A0A;
+`
+const PercentTx3 = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+`
+const StakingTx = styled.div`
+  font-size: 22px;
+  color: #00A3FF;
+  font-weight: bold;
+  margin: 16px 16px 16px 0px;
+`
+const StakingTx1 = styled(StakingTx)`
+  margin-top: 40px;
+`
+const StakingTxQuicker = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+  color: #8ED6FF;
+  padding-left: 8px;
+`
+const StakingTxSm1 = styled.div`
+  font-size: 10px;
+  font-weight: bold;
+  color: #C6C6C6;
+`
+const StakingTxSm2 = styled.span`
+  font-size: 10px;
+  font-weight: bold;
+  color: #757575;
+  padding-left: 8px;
+`
+const Lot = styled.div`
+  position: absolute;
+  margin-right: 20px;
+  right: 0;
+  top: 290px;
+  width: 130px;
+`
+const CenteredDiv = styled.div`
+  position: relative;
+  width: 100px;
+  top: 0;
+  left: 14px;
+`;
+
+const StakingTx2 = styled.div`
+  line-height: 120px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+`
+const StakingTx3 = styled(StakingTx2)`
+  line-height: normal;
+  color: #44D9FB;
+`
+const HideDiv = styled.div`
+  height: 3.2rem;
+`
+const Margin = styled.div`
+margin: 0px 10px 0px 10px;
+`
+
+const Ip = styled.input`
+width: 100%;
+height: 40px;
+font-size: 16px;
+border-radius: 0.313rem;
+border: 1px solid #efefef; 
+outline: none; 
+background-color: #ffffff;
+padding-left: 0.625rem;
+padding-right: 0.625rem;
+margin: 0px;
+text-align: left;
+color: #000000;
+&:focus {
+    border-color: #efefef; 
+    background-color: #ffffff;
+}
+`;
 type StakingComponentType = {
   onClickBackBtn: () => void;
   address: string | undefined;
@@ -90,24 +260,51 @@ const StakingPage = () => {
             title="토큰스테이킹"
             redirectLogic={() => navigate("/profile")}
           />
-          <div>스테이킹 정보</div>
-          <div>총 스테이킹률</div>
-          <div>원형 그래프</div>
-          <div>{stakingRate}%</div>
-          <div>총 유통량</div>
-          <div>{quickerTotalSuupply} Quicker</div>
-          <div>총 스테이킹량</div>
-          <div>{quickerTotalStaking} Quicker</div>
-
-          <div>사용자 스테이킹 수량</div>
-          <div>{userStakedAmount} Quicker</div>
-          <div>예상 수익률 {rewardRate}%</div>
-          <div>종료 일시 날짜</div>
-          <div>{endDate}</div>
-          <div>보상 수량</div>
-          <div>{rewardsAmount} Quicker</div>
-          <button onClick={() => setShowStaking(false)}>언스테이킹</button>
-          <button onClick={() => setShowStaking(true)}>스테이킹</button>
+          <Sc3>
+            <QuickerTx>Quicker</QuickerTx>
+            <Quickertxsm>스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.</Quickertxsm>
+            <Div1>
+              <PercentDiv>
+                <PercentTx1>총 스테이킹률</PercentTx1>
+                <PercentTx2>{stakingRate}<PercentTx3> %</PercentTx3></PercentTx2>
+              </PercentDiv>
+              <PercentDiv>
+                <PercentTx1>총 유통량</PercentTx1>
+                <PercentTx2>{quickerTotalSuupply}<PercentTx3> %</PercentTx3></PercentTx2>
+              </PercentDiv>
+              <PercentDiv>
+                <PercentTx1>총 스테이킹량</PercentTx1>
+                <PercentTx2>{quickerTotalStaking}<PercentTx3> %</PercentTx3></PercentTx2>
+              </PercentDiv>
+            </Div1>
+          </Sc3>
+          
+          <Sc01>
+            <QuickerTx>스테이킹 수량</QuickerTx>
+            <StakingTx>{userStakedAmount}<StakingTxQuicker>Quicker</StakingTxQuicker></StakingTx>
+            <StakingTxSm1>예상 수익률<StakingTxSm2>{rewardRate}%</StakingTxSm2></StakingTxSm1>
+            <StakingTxSm1>종료 일자<StakingTxSm2>{endDate}</StakingTxSm2></StakingTxSm1>
+            <Lot><Lottie animationData={Stacking}/></Lot>
+          </Sc01>
+          <Sc02>
+            <QuickerTx>보상 수량</QuickerTx>
+            <StakingTx1>{rewardsAmount}<StakingTxQuicker>Quicker</StakingTxQuicker></StakingTx1>
+          </Sc02>
+          <Sc0>
+            <Sc4 onClick={() => setShowStaking(false)}>
+            <StakingTx2>언스테이킹</StakingTx2>
+            </Sc4>
+            <Sc4 onClick={() => setShowStaking(true)}>
+            <StakingTx3>
+            스테이킹
+            </StakingTx3>
+            <CenteredDiv>
+              <Lottie animationData={StackingGo}/>
+            </CenteredDiv>
+            </Sc4>
+          </Sc0>
+          <HideDiv></HideDiv>
+          <BottomBar></BottomBar>
         </>
       ) : (
         <>
@@ -213,28 +410,28 @@ const StakingToken = ({
       {showAllowance ? (
         <IncreaseQAllowance />
       ) : (
-        <div>
-          스테이킹 상세 화면
-          <input
+        <Margin>
+          <Ip
             type="text"
             value={inputAmount}
             onChange={handleInputAmount}
             placeholder="정수 단위로만 입력 가능합니다"
           />
-          <div>Quicker</div>
           <div>
-            보유 {quickerBalance}
-            <button>max</button>
+            보유 {quickerBalance} 
+            <button>max</button> 
             <div>{alertMessage}</div>
           </div>
+
           <div>스테이킹 기간 선택</div>
-          <div onClick={() => setSelectedPeriod(3)}>1배 - 3개월</div>
-          <div onClick={() => setSelectedPeriod(6)}>2배 - 6개월</div>
-          <div onClick={() => setSelectedPeriod(9)}>4배 - 9개월</div>
-          <div>스테이킹 종료 일시</div>
-          <div>{endTime}</div>
-          <div>추가 투표권</div>
-          <div>{voteAmount} vQuicker</div>
+          <div>
+            <div onClick={() => setSelectedPeriod(3)}>1배 - 3개월</div>
+            <div onClick={() => setSelectedPeriod(6)}>2배 - 6개월</div>
+            <div onClick={() => setSelectedPeriod(9)}>4배 - 9개월</div>
+          </div>
+          <StakingTxSm1>스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2></StakingTxSm1>
+          <StakingTxSm1>추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2></StakingTxSm1>
+
           {showConfirm && (
             <>
               {!showSendTx ? (
@@ -258,7 +455,7 @@ const StakingToken = ({
               )}
             </>
           )}
-        </div>
+        </Margin>
       )}
     </>
   );
