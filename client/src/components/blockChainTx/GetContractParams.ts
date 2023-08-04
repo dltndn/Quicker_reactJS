@@ -322,4 +322,46 @@ export default {
       params: `[]`,
     };
   },
+  // FeeGovernor contract 투표 함수
+  castVote: (feeIndex: string, secuIndex: string, votePower: string): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [
+          {
+            "internalType": "uint8",
+            "name": "_treasury",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_treasuryVoteAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "_securityDeposit",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_secuVoteAmount",
+            "type": "uint256"
+          }
+        ],
+        "name": "castVote",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
+      params: `["${feeIndex}", "${votePower}", "${secuIndex}", "${votePower}"]`,
+    };
+  },
 };

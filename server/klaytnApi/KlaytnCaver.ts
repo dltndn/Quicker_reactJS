@@ -229,12 +229,14 @@ export default {
       
       const currentRound = await quicker_fee_governor_contract.call("currentRound")
       let userRewards = "0"
-      if (votedInfo.lastVoteRound !== currentRound && votedInfo.lastVoteRound !== "0") {
+      if (votedInfo.lastVoteRound !== "0") {
         for (let i=0; i<votedInfo.treasuryFee.length/2; i++) {
           votedBal += Number(votedInfo.treasuryFee[i])
         }
-        userRewards = String(await calRewards(votedInfo.lastVoteRound, votedBal))
-        userRewards = floorDecimals(caver.utils.convertFromPeb(userRewards, 'KLAY')) // 유저 수익
+        if (votedInfo.lastVoteRound !== currentRound) {
+          userRewards = String(await calRewards(votedInfo.lastVoteRound, votedBal))
+          userRewards = floorDecimals(caver.utils.convertFromPeb(userRewards, 'KLAY')) // 유저 수익
+        } 
       }
       const userVoteEnable = String(Number(userVotePower) - votedBal) // 가용 투표권
 

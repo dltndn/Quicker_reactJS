@@ -7,13 +7,14 @@ import GetContractParams from "../components/blockChainTx/GetContractParams";
 import SendTxK from "../components/blockChainTx/SendTxK";
 import { useConnWalletInfo } from "../App";
 import { getFeeGovernorInfo } from "../utils/ExecuteOrderFromBlockchain";
-import { changeBalanceToForm } from "../utils/CalAny";
 
 interface UseFeeGovernorType {
   title: string;
   setTitle: (para: string) => void;
   pageState: string;
   setPageState: (para: string) => void;
+  roundInfo: any;
+  setRoundInfo: (para: any) => void;
 }
 
 const useFeeGovernor = create<UseFeeGovernorType>((set) => ({
@@ -21,14 +22,14 @@ const useFeeGovernor = create<UseFeeGovernorType>((set) => ({
   setTitle: (title: string) => set({ title }),
   pageState: "loading", // loading | main | previousResult | vote | claimRewards
   setPageState: (pageState: string) => set({ pageState }),
+  roundInfo: {},
+  setRoundInfo: (roundInfo: any) => set({ roundInfo }),
 }));
 
 const FeeGovernorPage = () => {
-  const { pageState, setPageState, title, setTitle } = useFeeGovernor();
+  const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } = useFeeGovernor();
   const { address } = useConnWalletInfo()
   const navigate = useNavigate();
-
-  const [roundInfo, setRoundInfo] = useState<any>({})
 
   useEffect(() => {
     console.log("fee governor");
@@ -41,9 +42,7 @@ const FeeGovernorPage = () => {
   }, []);
 
   useEffect(() => {
-    if (address !== undefined) {
-        getFeeGovernorData(address)
-    }
+    getFeeGovernorData(address)
   }, [address])
 
   useEffect(() => {
@@ -64,18 +63,16 @@ const FeeGovernorPage = () => {
   }, [pageState]);
 
   // 사용자 투표권, 현재 라운드 정보 불러오기
-  const getFeeGovernorData = async (address: string) => {
-    try {
-        const roundData = await getFeeGovernorInfo(address)
-        setRoundInfo(roundData)
-        if (roundData.userRewards !== "0") {
-            setPageState("claimRewards")
-        } else {
+  const getFeeGovernorData = async (address: string | undefined) => {
+    if (address !== undefined) {
+        try {
+            const roundData = await getFeeGovernorInfo(address)
+            setRoundInfo(roundData)
             setPageState("main")
+        } catch(e) {
+            console.log(e)
+            navigate("/profile")
         }
-    } catch(e) {
-        console.log(e)
-        navigate("/profile")
     }
   }
 
@@ -104,7 +101,7 @@ const FeeGovernorPage = () => {
           loading: <div>로딩 애니메이션</div>,
           main: <Main roundInfo={roundInfo}/>,
           previousResult: <PreviousResult userRewards={roundInfo.userRewards}/>,
-          vote: <Vote userVoteEnable={roundInfo.userVoteEnable}/>,
+          vote: <Vote userVoteEnable={roundInfo.userVoteEnable} successFunc={async () => await getFeeGovernorData(address)}/>,
           claimRewards: <ClaimRewards />
         }[pageState]
       }
@@ -113,16 +110,14 @@ const FeeGovernorPage = () => {
 };
 
 // 메인 화면
-const Main = (roundInfo: any) => {
+const Main = ({ roundInfo }: any) => {
   const { setPageState } = useFeeGovernor();
   const [feeShares, setFeeShares] = useState<number[]>([0, 0, 0]) // 거래 수수료 득표 지분율 배열
   const [secuDepoShares, setSecuDepoShares] = useState<number[]>([0, 0, 0]) // 배송원 보증금 득표 지분율 배열
 
-  const roundData = roundInfo.roundInfo
-
   useEffect(() => {
-    setFeeShares(calculateShares(roundData.increaseFee, roundData.freezeFee, roundData.decreaseFee))
-    setSecuDepoShares(calculateShares(roundData.increaseSecuDepo, roundData.freezeSecuDepo, roundData.decreaseSecuDepo))
+    setFeeShares(calculateShares(roundInfo.increaseFee, roundInfo.freezeFee, roundInfo.decreaseFee))
+    setSecuDepoShares(calculateShares(roundInfo.increaseSecuDepo, roundInfo.freezeSecuDepo, roundInfo.decreaseSecuDepo))
     return () => {
       console.log("main end");
     };
@@ -148,19 +143,20 @@ const Main = (roundInfo: any) => {
 
   return (
     <>
-    {roundData && (<div>
-        <div>보유 투표권 {convertToLocale(roundData.userVotePower)} vQuicker</div>
-      <div>가용 투표권 {convertToLocale(roundData.userVoteEnable)} vQuicker</div>
+    {roundInfo && (<div>
+        {roundInfo.userRewards !== "0" && (<div><div>{convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!</div><button onClick={() => setPageState("claimRewards")}>정산받기</button></div>)}
+        <div>보유 투표권 {convertToLocale(roundInfo.userVotePower)} vQuicker</div>
+      <div>가용 투표권 {convertToLocale(roundInfo.userVoteEnable)} vQuicker</div>
       <div>이번주 투표현황</div>
-      <div>누적 수수료 | {convertToLocale(roundData.totalIncome)} KRW</div>
-      <div>현재 투표량 | {convertToLocale(roundData.totalVotePower)} vQuicker</div>
+      <div>누적 수수료 | {convertToLocale(roundInfo.totalIncome)} KRW</div>
+      <div>현재 투표량 | {convertToLocale(roundInfo.totalVotePower)} vQuicker</div>
       <br></br>
-      <div>거래수수료 - {roundData.currentFee}%</div>
+      <div>거래수수료 - {roundInfo.currentFee}%</div>
       <div>인상 | 원형그래프 | {feeShares[0]}%</div>
       <div>동결 | 원형그래프 | {feeShares[1]}%</div>
       <div>인하 | 원형그래프 | {feeShares[2]}%</div>
       <br></br>
-      <div>배송원 보증금 - {roundData.currentSecuDepo}%</div>
+      <div>배송원 보증금 - {roundInfo.currentSecuDepo}%</div>
       <div>인상 | 원형그래프 | {secuDepoShares[0]}%</div>
       <div>동결 | 원형그래프 | {secuDepoShares[1]}%</div>
       <div>인하 | 원형그래프 | {secuDepoShares[2]}%</div>
@@ -187,19 +183,39 @@ const PreviousResult = (userRewards: any) => {
   );
 };
 
+type VoteType = {
+    userVoteEnable: any;
+    successFunc: () => void;
+}
 // 투표하기 화면
-const Vote = (userVoteEnable: any) => {
+const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
   const [isInfoPage, setIsInfoPage] = useState<boolean>(true);
+  const [feeIndex, setFeeIndex] = useState<string>("1") // 거래수수료 - 인상(0) | 동결(1) | 인하(2)
+  const [secuIndex, setSecuIndex] = useState<string>("1") // 배송원 보증금 - 인상(0) | 동결(1) | 인하(2)
 
   useEffect(() => {
     return () => {
       setIsInfoPage(true)
+      setFeeIndex("1")
+      setSecuIndex("1")
     };
   }, []);
 
   const onClick = () => {
-    setIsInfoPage(false);
+    if (userVoteEnable === "0") {
+        alert("가용 투표권이 없습니다")
+    } else {
+        setIsInfoPage(false);
+    }
   };
+
+  const setFeeIndexState = (e: any) => {
+    setFeeIndex(e.target.value)
+  }
+
+  const setSecuIndexState = (e: any) => {
+    setSecuIndex(e.target.value)
+  }
 
   return (
     <>
@@ -214,7 +230,39 @@ const Vote = (userVoteEnable: any) => {
           />
         </div>
       ) : (
-        <div>인상, 동결, 인하</div>
+        <div>
+            <div>
+                <div>거래수수료</div>
+                <label>
+                    <input type="radio" name="feeType" value={"0"} onChange={setFeeIndexState}/>
+                    인상
+                </label>
+                <label>
+                    <input type="radio" name="feeType" value={"1"} onChange={setFeeIndexState} defaultChecked/>
+                    동결
+                </label>
+                <label>
+                    <input type="radio" name="feeType" value={"2"} onChange={setFeeIndexState}/>
+                    인하
+                </label>
+            </div>
+            <div>
+                <div>배송원 보증금</div>
+                <label>
+                    <input type="radio" name="secuType" value={"0"} onChange={setSecuIndexState}/>
+                    인상
+                </label>
+                <label>
+                    <input type="radio" name="secuType" value={"1"} onChange={setSecuIndexState} defaultChecked/>
+                    동결
+                </label>
+                <label>
+                    <input type="radio" name="secuType" value={"2"} onChange={setSecuIndexState}/>
+                    인하
+                </label>
+            </div>
+            <SendTxK param={GetContractParams.castVote(feeIndex, secuIndex, userVoteEnable)} successFunc={successFunc}/>
+        </div>
       )}
     </>
   );
@@ -222,12 +270,19 @@ const Vote = (userVoteEnable: any) => {
 
 // 수수료 수익 정산 화면
 const ClaimRewards = () => {
-    const { setPageState } = useFeeGovernor();
+    const { setPageState, roundInfo, setRoundInfo } = useFeeGovernor();
+
+    const successFunc = () => {
+        let roundData = roundInfo
+        roundData.userRewards = "0"
+        setRoundInfo(roundData)
+        setPageState("main");
+    }
 
     return(<>
         <div>animation</div>
         <div>지난 투표한 주의 수수료 수익을 분배받아요</div>
-        <SendTxK param={GetContractParams.claimRewards()} successFunc={() => {setPageState("main");}}/>
+        <SendTxK param={GetContractParams.claimRewards()} successFunc={successFunc}/>
     </>)
 }
 
