@@ -298,7 +298,7 @@ export default {
       }`,
       value: "0",
       to: QUICKER_STAKING_ADDRESS_KLAYTN,
-      params: ``,
+      params: `[]`,
     };
   },
   // FeeGovernor contract 이자 정산 함수
@@ -319,7 +319,7 @@ export default {
       }`,
       value: "0",
       to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
-      params: ``,
+      params: `[]`,
     };
   },
 };

@@ -332,7 +332,7 @@ const StakingPage = () => {
               </Sc01>
               <Sc02>
                 <QuickerTx>보상 수량</QuickerTx>
-                <button>수령하기</button>
+                <button onClick={() => setShowClaim(true)}>수령하기</button>
                 <StakingTx1>
                   {rewardsAmount}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
