@@ -204,6 +204,18 @@ export const getQtokenAllowance =async (address: string) => {
   }
 }
 
+export const getFeeGovernorInfo = async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getCurrentFeeGovernorInfo`, {
+      address, 
+    });
+    return data.data; // type: json
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
 // export class WriteTransactionToBlockchain {
 //   private orderNum: string;
 //   private writeTransaction = async (funcName: string) => {

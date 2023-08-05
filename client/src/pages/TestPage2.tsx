@@ -4,7 +4,6 @@ import CreateNewOrder from "../components/createNewOrder";
 import styled from "styled-components";
 // import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
-import { useContractEvent, useTransaction, useAccount } from "wagmi";
 // import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";

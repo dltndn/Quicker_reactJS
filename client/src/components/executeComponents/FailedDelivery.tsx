@@ -5,11 +5,10 @@ import styled from "styled-components";
 import { isMobile } from "react-device-detect";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { useAccount } from "wagmi";
 import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
 import { BsPlusCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-
+import { useConnWalletInfo } from "../../App";
 
 const CameraContainer = styled.div`
   width: 95%;
@@ -125,7 +124,7 @@ export default function FailedDelivery({ orderNum }: ExecutionComponentProps) {
     const textArea = useRef<HTMLTextAreaElement>(null);
     const file = useRef<HTMLInputElement>(null);
     const [fileImage, setFileImage] = useState<File | undefined | null>(undefined);
-    const { address } = useAccount()
+    const { address } = useConnWalletInfo()
     const { setTitle } = useExecutionState()
     const navigate = useNavigate();
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useContractRead, useContractEvent } from "wagmi";
 // import { QUICKER_ADDRESS, QUICKER_CONTRACT_ABI } from "../contractInformation";
 import { getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
 import GetQkrwBalance from "./getQkrwBalance";
