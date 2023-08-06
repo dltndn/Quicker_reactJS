@@ -283,14 +283,13 @@ export default {
       res.send(e);
     }
   },
-  // function call test
-  getOwner: async (req: Request, res: Response) => {
+  // 가스비 대납
+  getFeeDeligation: async (req: Request, res: Response) => {
     try {
-      // const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", "0xCddac757405Eb41D080334B0A72264b35a2e5f08")
-      // const allowance = await quicker_token.allowance("0x4068f9E751954D162ab858276f2F208D79f10930", QUICKER_STAKING_ADDRESS_KLAYTN)
-      const currentRound = await quicker_fee_governor_contract.call("currentRound");
-      console.log(typeof(currentRound))
-      res.send(currentRound);
+      const { signedHash } = req.body
+      const result = await caver.klay.accounts.feePayerSignTransaction(signedHash, `${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`, `${process.env.KLAYTN_DELIGATION_PRIVATE_KEY}`)
+      const txResult = await caver.klay.sendSignedTransaction(`${result.rawTransaction}`)
+      res.send(txResult);
     } catch (e) {
       console.log(e);
       res.send(e);
