@@ -1,6 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import multer from "multer";
-import ImageFileSchema from "../Mongo/Schemas/ImageFile";
+import {ImageFileSchema} from "../Mongo/Schemas/ImageFile";
 import connectMongo from "../Mongo/Connector";
 
 require("dotenv").config();

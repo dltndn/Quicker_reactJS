@@ -1,16 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
 import SelectOrder from "../Maria/Commands/SelectOrder";
-import sequelize from "../Maria/Connectors/SequelizeConnector"
-import {initModels} from "../Maria/Models/init-models";
-import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
-import SelectUser from "../Maria/Commands/SelectUser";
+import sequelize from "../Maria/Connectors/SequelizeConnector";
+import { initModels } from "../Maria/Models/init-models";
 
-import sendMessage from "../sendMessage"
-import { encrypt, decrypt } from "../lib/cryto";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findImage, postCurrentLocation, saveImage, updateOrder } from "../service/Order";
 import { findRoomInfoByOrderNumber } from "../service/Room";
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, postCurrentLocation } from "../service/Order";
+import { MulterRequest } from "../routes/OrderCompleteImage";
 
 initModels(sequelize);
 
@@ -48,42 +44,14 @@ export default {
     }
   },
 
-  updateOrder: async (req: Request, res: Response) => {
+  updateOrder: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const userWalletAddress = req.body.userWalletAddress;
-      const orderId = req.body.orderId;
-      const deliver = await SelectUser.getUserId(userWalletAddress);
-    
-      // @ts-ignore
-      await UpdateOrder.updateOrder(deliver.dataValues.id, orderId)
-      // @ts-ignore
-      let requesterId = await SelectUser.getRequesterId(orderId);
-      // @ts-ignore
-      await CreateChatRoom.createChatRoom(orderId, deliver.dataValues.id, requesterId.dataValues.ID_REQ)
-      
-      const receiver = await SelectOrder.receiverPhoneNumber(orderId)
-    
-      if ((typeof receiver === "object") && (receiver !== null && "PHONE" in receiver && typeof receiver.PHONE === "string")) {
-        // 기본 url
-        let url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key="
-        // url 수정 
-        if (typeof url === "string") {
-          const encryptedUrl = encrypt(req.body)
-          url = url + encryptedUrl
-          // 문자 발송
-
-          await sendMessage(receiver.PHONE, url)  
-        } else {
-          throw new Error ("CLIENT_SERVER_DOMAIN 이 정상적인 값이 아님")
-        }
-      } else {
-        throw new Error ("전송 받은 데이터에 문제가 있음")
-      }
-      
-      return res.send({msg : "done"})
+      const body = req.body
+      await updateOrder(body)
+      res.send({msg : "done"})
     } catch (error){
-      console.log(error)
-      return res.send({msg : "fail"})
+      console.error(error)
+      next(error)
     }
   },
 
@@ -119,6 +87,29 @@ export default {
       next(error)
     }
   },
+
+  getImage : async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const query = req.query;
+      const image = findImage(query);
+      res.send(image);
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  },
+
+  postImage : async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const body = req.body;
+      const documentFile = (req as MulterRequest).file;
+      await saveImage(body, documentFile);
+      res.send({ msg: "done" });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
 };
 
 

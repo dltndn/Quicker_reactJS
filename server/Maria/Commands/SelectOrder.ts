@@ -1,21 +1,17 @@
-import { Transportation, Sender, Recipient, Destination, Departure, Product, Order,} from "../Models/init-models";
+import { Transportation, Sender, Recipient, Destination, Departure, Product, Order} from "../Models/init-models";
 const { Op } = require("sequelize");
 
 export default {
-  receiverPhoneNumber : (orderId : number) => {
-    return new Promise ((resolve, reject) => {
-      const receiverPhoneNumber = Recipient.findOne({
-        attributes: ["id", "PHONE"],
-        where: { id: orderId },
-      });
-      resolve(receiverPhoneNumber)
-      reject("fail")
-    })
+  receiverPhoneNumber: (orderId: number) => {
+    return Recipient.findOne({
+      attributes: ["id", "PHONE"],
+      where: { id: orderId },
+    });
   },
 
-  location : (orderId : number) => {
-    Order.hasOne(Destination, {foreignKey : "id"})
-    Order.hasOne(Departure, {foreignKey : "id"})
+  location: (orderId: number) => {
+    Order.hasOne(Destination, { foreignKey: "id" });
+    Order.hasOne(Departure, { foreignKey: "id" });
     return Order.findOne({
       attributes: ["id"],
       where: { id: orderId },
@@ -31,13 +27,13 @@ export default {
           required: true,
         },
       ],
-      raw : true,
-      nest : true
+      raw: true,
+      nest: true,
     });
   },
 
   // 검색페이지의 오더 리스트 목록
-  getRequests: (userId : string) => {
+  getRequests: (userId: string) => {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
@@ -88,44 +84,43 @@ export default {
     });
   },
 
-  // 
+  //
   getOrderlist: (id: number) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
-    Order.hasOne(Product, {foreignKey: "id"})
+    Order.hasOne(Product, { foreignKey: "id" });
     return Order.findAll({
-          where: { id: id },
-          attributes: ["id", "DETAIL"],
-          include: [
-            {
-              model: Destination,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-            {
-              model: Departure,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-            {
-              model: Recipient,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-            {
-              model: Sender,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-            {
-              model: Product,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-          ],
-        }
-      )
+      where: { id: id },
+      attributes: ["id", "DETAIL"],
+      include: [
+        {
+          model: Destination,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Recipient,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Sender,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Product,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+      ],
+    });
   },
 };

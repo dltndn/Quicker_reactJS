@@ -6,27 +6,22 @@ export default {
       attributes: ["id"],
       where: { wallet_address: userWalletAddress },
       raw: true,
-      nest : true,
-    }) 
+      nest: true,
+    });
   },
-  
+
   getRequesterId: (orderId: number) => {
-    return new Promise((resolve, reject) => {
-      resolve(
-        Order.findOne({
-          attributes: ["id", "ID_REQ", "ID_DVRY"],
-          where: { id: orderId },
-        })
-      );
-      reject("fail");
+    return Order.findOne({
+      attributes: ["id", "ID_REQ", "ID_DVRY"],
+      where: { id: orderId },
     });
   },
 
   getUserName: (walletAddress: string) => {
     return User.findOne({
       attributes: ["name"],
-      where: { wallet_address: walletAddress},
+      where: { wallet_address: walletAddress },
       raw: true,
-    })
+    });
   },
 };
