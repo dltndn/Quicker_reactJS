@@ -22,9 +22,9 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     try {
       // @ts-ignore
       if (param.fee_delegated) {
-        await kConn.getTxResultFeeDeligation(reqKey, false)
+        await kConn.getTxResultFeeDeligation(reqKey, true)
       } else {
-        await kConn.getTxResult(reqKey, false);
+        await kConn.getTxResult(reqKey, true);
       }
       successFunc();
     } catch (e) {
