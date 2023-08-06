@@ -99,6 +99,26 @@ export class KaikasConnect {
         }, 1000);
       });
   }
+  public getTxResultFeeDeligation = async (reqKey: string, isMobile: boolean) => {
+    if (isMobile) {
+        window.location.href = `kaikas://wallet/api?request_key=${reqKey}`
+    }
+    return new Promise(async (resolve) => {
+        const timerId = setInterval(async () => {
+          const res = await axios.get(
+            `https://api.kaikas.io/api/v1/k/result/${reqKey}`
+          );
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (res.data.status === "completed") {
+            clearInterval(timerId);
+            const resDel = await axios.post(`${process.env.REACT_APP_SERVER_URL}caver/getFeeDeligation`, {signedHash: res.data.result.signed_tx})
+            resolve(resDel)
+          } else if (currentTime > res.data.expiration_time) {
+            clearInterval(timerId);
+          }
+        }, 1000);
+      });
+  }
 }
 
 export interface SendTxType {
@@ -106,4 +126,8 @@ export interface SendTxType {
     value: string;
     to: string;
     params: string;
+}
+
+export interface SendTxDelegationType extends SendTxType {
+  fee_delegated : boolean;
 }
