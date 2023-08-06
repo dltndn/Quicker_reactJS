@@ -11,7 +11,7 @@
 - NodeJS
 - Typescript
 - Kotlin(Android)
-- Polygon(Ethereum's side chain)
+- Klaytn
 - MariaDB
 - MongoDB
 - Figma
@@ -29,7 +29,9 @@
 - 의뢰인과 배송원 사이 채팅 기능
 - 유저간 토큰 전송기능(예정)
 
-## 추가 기능(v2)
+## 추가 기능 및 변경 사항(v2)
+- 블록체인 네트워크 변경(Polygon -> Klaytn)
+- 암호화폐 지갑 연결 방식 변경
 - 블록체인 가스비 대납
 - 토큰 스테이킹
 - 거래 수수료 투표
