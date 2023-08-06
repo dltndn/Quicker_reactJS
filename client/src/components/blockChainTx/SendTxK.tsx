@@ -1,11 +1,11 @@
 import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useState, useEffect } from "react";
 import { generateQRCode } from "../../utils/GenerateQr";
-import { SendTxType } from "../../utils/KaikasConnect";
+import { SendTxType, SendTxDelegationType } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
 
 type SendTokenProps = {
-  param: SendTxType;
+  param: SendTxType | SendTxDelegationType;
   successFunc: () => void;
 };
 
@@ -20,7 +20,12 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
   const mobileConnect = async () => {
     const reqKey = await kConn.getKaikasReqKeyTx(param);
     try {
-      const res = await kConn.getTxResult(reqKey, true);
+      // @ts-ignore
+      if (param.fee_delegated) {
+        await kConn.getTxResultFeeDeligation(reqKey, false)
+      } else {
+        await kConn.getTxResult(reqKey, false);
+      }
       successFunc();
     } catch (e) {
       console.log(e);
@@ -33,7 +38,12 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     setQrUrl(qrUrlStr);
     setShowQr(true);
     try {
-      const res = await kConn.getTxResult(reqKey, false);
+      // @ts-ignore
+      if (param.fee_delegated) {
+        await kConn.getTxResultFeeDeligation(reqKey, false)
+      } else {
+        await kConn.getTxResult(reqKey, false);
+      }
       setShowQr(false);
       setQrUrl("");
       successFunc();

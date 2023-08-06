@@ -4,7 +4,6 @@ import CreateNewOrder from "../components/createNewOrder";
 import styled from "styled-components";
 // import TransactOrder from "../components/transactOrder";
 import { useState, useEffect } from "react";
-import { useContractEvent, useTransaction, useAccount } from "wagmi";
 // import { QUICKER_CONTRACT_ABI, QUICKER_ADDRESS, QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
 import { getOrdersForState } from "../utils/ExecuteOrderFromBlockchain";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
@@ -146,6 +145,7 @@ const allowanceTest = async () => {
     <>
       {klaytnAddr}
       <TopDiv>
+        <SendTxK param={GetContractParams.CreateOrderTest("21000", "1692543600")} successFunc={() => {console.log("success")}}/>
         <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>

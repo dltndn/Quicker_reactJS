@@ -209,14 +209,87 @@ export default {
       res.send(e);
     }
   },
-  // function call test
-  getOwner: async (req: Request, res: Response) => {
+  getCurrentFeeGovernorInfo: async (req: Request, res: Response) => {
+    const calRewards = async (roundNum: string, votedbal: number) => {
+      const roundInfo = await quicker_fee_governor_contract.call("roundLog", roundNum)
+      let totalIncome = roundInfo.totalIncome 
+      totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY')) // 해당 라운드 수익
+      let totalVotePower = 0 // 전체 투표량
+      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+        totalVotePower += Number(roundInfo.treasuryFee[i])
+      }
+      return Number(totalIncome) * (votedbal / totalVotePower) 
+    }
     try {
-      // const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", "0xCddac757405Eb41D080334B0A72264b35a2e5f08")
-      // const allowance = await quicker_token.allowance("0x4068f9E751954D162ab858276f2F208D79f10930", QUICKER_STAKING_ADDRESS_KLAYTN)
-      const currentRound = await quicker_fee_governor_contract.call("currentRound");
-      console.log(typeof(currentRound))
-      res.send(currentRound);
+      let { address } = req.body
+      let userVotePower = (await vQuicker_token.balanceOf(address)).toString()
+      userVotePower = floorDecimals(caver.utils.convertFromPeb(userVotePower, 'KLAY')) // 보유 투표권
+      const votedInfo = await quicker_fee_governor_contract.call("voters", address)
+      let votedBal = 0 // 유저 이번 라운드 투표량
+      
+      const currentRound = await quicker_fee_governor_contract.call("currentRound")
+      let userRewards = "0"
+      if (votedInfo.lastVoteRound !== "0") {
+        for (let i=0; i<votedInfo.treasuryFee.length/2; i++) {
+          votedBal += Number(votedInfo.treasuryFee[i])
+        }
+        if (votedInfo.lastVoteRound !== currentRound) {
+          userRewards = String(await calRewards(votedInfo.lastVoteRound, votedBal))
+          userRewards = floorDecimals(caver.utils.convertFromPeb(userRewards, 'KLAY')) // 유저 수익
+        } 
+      }
+      const userVoteEnable = String(Number(userVotePower) - votedBal) // 가용 투표권
+
+      const roundInfo = await quicker_fee_governor_contract.call("roundLog", currentRound) // 현재 라운드 정보 
+      let totalIncome = roundInfo.totalIncome 
+      totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY'))
+      let totalVoted = 0 // 전체 투표량
+      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+        totalVoted += Number(roundInfo.treasuryFee[i])
+      }
+      const totalVotePower = totalVoted.toString()
+      const currentCommissionRate = await quicker_drvr_contract.call("getCommissionRate");
+      const currentFee = String(Number(currentCommissionRate[0]) / 10) // 현재 거래 수수료
+      const currentSecuDepo = String(Number(currentCommissionRate[2]) / 10) // 현재 배송원 보증금
+
+      // 거래 수수료 득표량
+      const increaseFee = roundInfo.treasuryFee[0]
+      const freezeFee = roundInfo.treasuryFee[1]
+      const decreaseFee = roundInfo.treasuryFee[2]
+
+      // 배송원 보증금 득표량
+      const increaseSecuDepo = roundInfo.securityDepositFee[0]
+      const freezeSecuDepo = roundInfo.securityDepositFee[1]
+      const decreaseSecuDepo = roundInfo.securityDepositFee[2]
+      
+      const result = {
+        userVotePower,
+        userVoteEnable,
+        userRewards,
+        totalIncome,
+        totalVotePower,
+        currentFee,
+        increaseFee,
+        freezeFee,
+        decreaseFee,
+        currentSecuDepo,
+        increaseSecuDepo,
+        freezeSecuDepo,
+        decreaseSecuDepo,
+      }
+      res.send(result);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
+    }
+  },
+  // 가스비 대납
+  getFeeDeligation: async (req: Request, res: Response) => {
+    try {
+      const { signedHash } = req.body
+      const result = await caver.klay.accounts.feePayerSignTransaction(signedHash, `${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`, `${process.env.KLAYTN_DELIGATION_PRIVATE_KEY}`)
+      const txResult = await caver.klay.sendSignedTransaction(`${result.rawTransaction}`)
+      res.send(txResult);
     } catch (e) {
       console.log(e);
       res.send(e);
