@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { config } from "dotenv";
 import Caver from "caver-js";
 import {
@@ -36,7 +36,7 @@ const quicker_token = new caver.kct.kip7(QUICKER_TOKEN_ADDRESS_KLAYTN)
 const vQuicker_token = new caver.kct.kip7(VQUICKER_TOKEN_ADDRESS_KLAYTN)
 
 export default {
-  getAllowance: async (req: Request, res: Response) => {
+  getAllowance: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const para = req.body.owner;
       const result = await qkrw_token_contract.call(
@@ -46,32 +46,32 @@ export default {
       );
       res.send(result);
     } catch (error) {
-      console.log(error);
       res.send(error);
+      next(error)
     }
   },
-  getQkrwBal: async (req: Request, res: Response) => {
+  getQkrwBal: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const para = req.body.owner;
       const result = await qkrw_token_contract.call("balanceOf", para);
       res.send(result);
     } catch (e) {
-      console.log(e);
       res.send(e);
+      next(e)
     }
   },
-  getOrderList: async (req: Request, res: Response) => {
+  getOrderList: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const funcName = req.body.funcName;
       const para = req.body.owner;
       const result = await quicker_drvr_contract.call(funcName, para);
       res.send(result);
     } catch (e) {
-      console.log(e);
       res.send(e);
+      next(e)
     }
   },
-  getOrdersForLatest: async (req: Request, res: Response) => {
+  getOrdersForLatest: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const para = req.body.amount;
       const result: any = await quicker_drvr_contract.call(
@@ -85,30 +85,30 @@ export default {
       }
       res.send(cResult);
     } catch (e) {
-      console.log(e);
       res.send(e);
+      next(e)
     }
   },
-  getCommissionRate: async (req: Request, res: Response) => {
+  getCommissionRate: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const result: any = await quicker_drvr_contract.call("getCommissionRate");
       res.send(result);
     } catch (e) {
-      console.log(e);
       res.send(e);
+      next(e)
     }
   },
-  getOrder: async (req: Request, res: Response) => {
+  getOrder: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const para = req.body.orderNum;
       const result = await quicker_drvr_contract.call("getOrder", para);
       res.send(result);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getOrders: async (req: Request, res: Response) => {
+  getOrders: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const orders: any[] = [];
       const orderNums: string[] = req.body.orderNumList;
@@ -118,21 +118,21 @@ export default {
       }
       res.send(orders);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getOrdersForState: async (req: Request, res: Response) => {
+  getOrdersForState: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const { stateNum } = req.body;
       const result = await quicker_drvr_contract.call("getOrdersForState", stateNum);
       res.send(result);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getStakingInfo: async (req: Request, res: Response) => {
+  getStakingInfo: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const { address } = req.body;
       let quickerTotalSuupply = (await quicker_token.totalSupply()).toString()
@@ -171,21 +171,21 @@ export default {
       }
       res.send(result);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getQtokenAllowance: async (req: Request, res: Response) => {
+  getQtokenAllowance: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const { address } = req.body;
       const allowance = await quicker_token.allowance(address, QUICKER_STAKING_ADDRESS_KLAYTN)
       res.send(allowance);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getFeeGovernorRoundLogs: async (req: Request, res: Response) => {
+  getFeeGovernorRoundLogs: async (req: Request, res: Response, next : NextFunction) => {
     try {
       let { index } = req.body
       let currentRound = await quicker_fee_governor_contract.call("currentRound"); // string
@@ -205,11 +205,11 @@ export default {
       }
       res.send(resultArr);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
-  getCurrentFeeGovernorInfo: async (req: Request, res: Response) => {
+  getCurrentFeeGovernorInfo: async (req: Request, res: Response, next : NextFunction) => {
     const calRewards = async (roundNum: string, votedbal: number) => {
       const roundInfo = await quicker_fee_governor_contract.call("roundLog", roundNum)
       let totalIncome = roundInfo.totalIncome 
@@ -279,19 +279,19 @@ export default {
       }
       res.send(result);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
   // 가스비 대납
-  getFeeDeligation: async (req: Request, res: Response) => {
+  getFeeDeligation: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const { signedHash } = req.body
       const result = await caver.klay.accounts.feePayerSignTransaction(signedHash, `${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`, `${process.env.KLAYTN_DELIGATION_PRIVATE_KEY}`)
       const txResult = await caver.klay.sendSignedTransaction(`${result.rawTransaction}`)
       res.send(txResult);
     } catch (e) {
-      console.log(e);
+      next(e)
       res.send(e);
     }
   },
