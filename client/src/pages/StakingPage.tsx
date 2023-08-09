@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BsCaretRightFill} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
 import { useConnWalletInfo } from "../App";
@@ -17,6 +18,7 @@ import styled from "styled-components";
 import BottomBar from "../components/BottomBar";
 import Stacking from "../Lottie/Stacking.json";
 import StackingGo from "../Lottie/Stackinggo.json";
+import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 
 const Sc3 = styled.section`
@@ -29,6 +31,9 @@ const Sc3 = styled.section`
   background-color: #ffffff;
   box-shadow: 0px 3px 0px #bebebe;
 `;
+const ReciDiv1 = styled.div`
+text-align: center;
+`
 
 const Sc01 = styled.section`
   height: 170px;
@@ -88,6 +93,10 @@ const Quickertxsm = styled.div`
   color: #6c6c6c;
 `;
 
+const Receivetx = styled(Quickertxsm)`
+  font-size: 16px;
+`
+
 const PercentDiv = styled.div`
   flex: 1 1 33%;
   margin: 8px;
@@ -102,10 +111,12 @@ const PercentTx1 = styled.div`
 `;
 const PercentTx2 = styled(PercentTx1)`
   font-size: 22px;
+  margin-bottom: 0px;
   color: #ff0a0a;
 `;
-const PercentTx3 = styled.span`
-  font-size: 14px;
+const PercentTx3 = styled.div` 
+  margin-top: -18px;
+  font-size: 10px;
   font-weight: bold;
   color: #000000;
 `;
@@ -118,6 +129,13 @@ const StakingTx = styled.div`
 const StakingTx1 = styled(StakingTx)`
   margin-top: 40px;
 `;
+const Bt1 = styled.span`
+  position: absolute;
+  margin-right: 40px;
+  right: 0;
+  top: 515px;
+`;
+
 const StakingTxQuicker = styled.span`
   font-size: 14px;
   font-weight: bold;
@@ -271,9 +289,12 @@ const StakingPage = () => {
             redirectLogic={() => navigate("/profile")}
           />
           {showClaim ? (
-            <div>
-              <div>animation</div>
-              <div>{rewardsAmount} Quicker를 수령해요</div>
+            <>
+            <Sc3>
+              <div><Lottie animationData={receiveQuicker} /></div>
+              <Receivetx>{rewardsAmount} Quicker를 수령해요</Receivetx>
+            </Sc3>
+            <ReciDiv1>
               <SendTxK
                 param={GetContractParams.claimPendingRewards()}
                 successFunc={() => {
@@ -281,7 +302,8 @@ const StakingPage = () => {
                   setRewardsAmount("0");
                 }}
               />
-            </div>
+            </ReciDiv1>
+            </>
           ) : (
             <div>
               <Sc3>
@@ -294,21 +316,21 @@ const StakingPage = () => {
                     <PercentTx1>총 스테이킹률</PercentTx1>
                     <PercentTx2>
                       {stakingRate}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3> <br/>Quicker</PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalSuupply}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3> <br/>Quicker</PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 스테이킹량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalStaking}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3> <br/>Quicker</PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                 </Div1>
@@ -326,16 +348,16 @@ const StakingPage = () => {
                 <StakingTxSm1>
                   종료 일자<StakingTxSm2>{endDate}</StakingTxSm2>
                 </StakingTxSm1>
-                <Lot>
+                {/* <Lot>
                   <Lottie animationData={Stacking} />
-                </Lot>
+                </Lot> */}
               </Sc01>
               <Sc02>
                 <QuickerTx>보상 수량</QuickerTx>
-                <button onClick={() => setShowClaim(true)}>수령하기</button>
                 <StakingTx1>
                   {rewardsAmount}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
+                  <Bt1 onClick={() => setShowClaim(true)}><BsCaretRightFill></BsCaretRightFill>  </Bt1>
                 </StakingTx1>
               </Sc02>
               <Sc0>
@@ -344,9 +366,9 @@ const StakingPage = () => {
                 </Sc4>
                 <Sc4 onClick={() => setShowStaking(true)}>
                   <StakingTx3>스테이킹</StakingTx3>
-                  <CenteredDiv>
+                  {/* <CenteredDiv>
                     <Lottie animationData={StackingGo} />
-                  </CenteredDiv>
+                  </CenteredDiv> */}
                 </Sc4>
               </Sc0>
               <HideDiv></HideDiv>
