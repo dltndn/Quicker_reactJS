@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BsCaretRightFill} from "react-icons/bs";
+import { BsCaretRightFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
 import { useConnWalletInfo } from "../App";
@@ -32,8 +32,8 @@ const Sc3 = styled.section`
   box-shadow: 0px 3px 0px #bebebe;
 `;
 const ReciDiv1 = styled.div`
-text-align: center;
-`
+  text-align: center;
+`;
 
 const Sc01 = styled.section`
   height: 170px;
@@ -95,7 +95,7 @@ const Quickertxsm = styled.div`
 
 const Receivetx = styled(Quickertxsm)`
   font-size: 16px;
-`
+`;
 
 const PercentDiv = styled.div`
   flex: 1 1 33%;
@@ -114,7 +114,7 @@ const PercentTx2 = styled(PercentTx1)`
   margin-bottom: 0px;
   color: #ff0a0a;
 `;
-const PercentTx3 = styled.div` 
+const PercentTx3 = styled.div`
   margin-top: -18px;
   font-size: 10px;
   font-weight: bold;
@@ -290,19 +290,21 @@ const StakingPage = () => {
           />
           {showClaim ? (
             <>
-            <Sc3>
-              <div><Lottie animationData={receiveQuicker} /></div>
-              <Receivetx>{rewardsAmount} Quicker를 수령해요</Receivetx>
-            </Sc3>
-            <ReciDiv1>
-              <SendTxK
-                param={GetContractParams.claimPendingRewards()}
-                successFunc={() => {
-                  setShowClaim(false);
-                  setRewardsAmount("0");
-                }}
-              />
-            </ReciDiv1>
+              <Sc3>
+                <div>
+                  <Lottie animationData={receiveQuicker} />
+                </div>
+                <Receivetx>{rewardsAmount} Quicker를 수령해요</Receivetx>
+              </Sc3>
+              <ReciDiv1>
+                <SendTxK
+                  param={GetContractParams.claimPendingRewards()}
+                  successFunc={() => {
+                    setShowClaim(false);
+                    setRewardsAmount("0");
+                  }}
+                />
+              </ReciDiv1>
             </>
           ) : (
             <div>
@@ -316,21 +318,33 @@ const StakingPage = () => {
                     <PercentTx1>총 스테이킹률</PercentTx1>
                     <PercentTx2>
                       {stakingRate}
-                      <PercentTx3> <br/>Quicker</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        %
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalSuupply}
-                      <PercentTx3> <br/>Quicker</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        Quicker
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 스테이킹량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalStaking}
-                      <PercentTx3> <br/>Quicker</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        Quicker
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                 </Div1>
@@ -357,14 +371,22 @@ const StakingPage = () => {
                 <StakingTx1>
                   {rewardsAmount}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
-                  <Bt1 onClick={() => setShowClaim(true)}><BsCaretRightFill></BsCaretRightFill>  </Bt1>
+                  <Bt1 onClick={() => moveToClaimPage()}>
+                    <BsCaretRightFill></BsCaretRightFill>{" "}
+                  </Bt1>
                 </StakingTx1>
               </Sc02>
               <Sc0>
                 <Sc4 onClick={() => setShowStaking(false)}>
                   <StakingTx2>언스테이킹</StakingTx2>
                 </Sc4>
-                <Sc4 onClick={() => setShowStaking(true)}>
+                <Sc4
+                  onClick={() => {
+                    if (rewardsAmount !== "0") {
+                      setShowClaim(true);
+                    }
+                  }}
+                >
                   <StakingTx3>스테이킹</StakingTx3>
                   {/* <CenteredDiv>
                     <Lottie animationData={StackingGo} />
