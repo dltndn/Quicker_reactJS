@@ -19,7 +19,7 @@ const transaction = require("../../image/transactionstatus.png");
 const pin = require("../../image/redPin.png");
 const wallet = require("../../image/wallet.png");
 
-const walletWebsiteUrl = "https://www.tokenpocket.pro/ko";
+const walletWebsiteUrl = "https://kaikas.zendesk.com/hc/ko/articles/10915901333913-%EB%AA%A8%EB%B0%94%EC%9D%BC-Kaikas-%EC%84%A4%EC%B9%98%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%98%EB%82%98%EC%9A%94-";
 
 const Div0 = styled.div`
   display: flex;

@@ -3,6 +3,23 @@ import { useState, useEffect } from "react";
 import { generateQRCode } from "../../utils/GenerateQr";
 import { SendTxType, SendTxDelegationType } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
+import styled from "styled-components";
+
+const LoadButton = styled.button`
+  width: 45%;
+  background-color: #17a2b8;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #117a8b;
+  }
+`;
+
 
 type SendTokenProps = {
   param: SendTxType | SendTxDelegationType;
@@ -22,9 +39,9 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
     try {
       // @ts-ignore
       if (param.fee_delegated) {
-        await kConn.getTxResultFeeDeligation(reqKey, false)
+        await kConn.getTxResultFeeDeligation(reqKey, true)
       } else {
-        await kConn.getTxResult(reqKey, false);
+        await kConn.getTxResult(reqKey, true);
       }
       successFunc();
     } catch (e) {
@@ -64,10 +81,10 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
-            <button onClick={mobileConnect}>모바일에서 실행</button>
+            <LoadButton onClick={mobileConnect}>모바일에서 실행</LoadButton>
           ) : (
             <>
-              <button onClick={qrConnect}>데탑에서 실행</button>
+              <LoadButton onClick={qrConnect}>데탑에서 실행</LoadButton>
               {showQr && (
                 <img
                   src={qrUrl}
