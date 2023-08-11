@@ -14,7 +14,7 @@ import { useOrderStore } from "./commission";
 import IncreaseQAllowance from "../components/IncreaseQAllowance";
 import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import BottomBar from "../components/BottomBar";
 import Stacking from "../Lottie/Stacking.json";
 import StackingGo from "../Lottie/Stackinggo.json";
@@ -217,7 +217,9 @@ const StakingPage = () => {
   const [rewardRate, setRewardRate] = useState<string>("0");
   const [endDate, setEndDate] = useState<string>("-");
   const [rewardsAmount, setRewardsAmount] = useState<string>("0");
+  const [rewardsBlink, setRewardsBlink] = useState(true);
   const [userQuickerBal, setUserQuickerBal] = useState<string>("0");
+  const [userVQuickerBal, setUserVQuickerBal] = useState<string>("0");
   const [showClaim, setShowClaim] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -232,6 +234,7 @@ const StakingPage = () => {
       pendingRewards,
       userStakedQuickerBal,
       userQuickerBal,
+      userVQuickerBal
     } = await getStakingInfo(address);
     setStakingRate(
       (
@@ -257,6 +260,7 @@ const StakingPage = () => {
     }
     setRewardsAmount(floorDecimals(pendingRewards, 7));
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));
+    setUserVQuickerBal(userVQuickerBal)
   };
 
   const moveToClaimPage = () => {
@@ -267,10 +271,17 @@ const StakingPage = () => {
     }
   };
 
+  const blinkRewardsAmount = () => {
+    setRewardsBlink((prevState) => !prevState);
+  };
+
   useEffect(() => {
+    const interval = setInterval(blinkRewardsAmount, 500);
+    console.log("staking")
     return () => {
       setShowStaking(null);
       setShowClaim(false);
+      clearInterval(interval);
     };
   }, []);
 
@@ -279,6 +290,16 @@ const StakingPage = () => {
       getInfo(address);
     }
   }, [address]);
+
+  useEffect(() => {
+    if (rewardsBlink === false && rewardsAmount !== "0") {
+      // 홀더 예상 블록 당 보상 수량 계산 후 더하기
+      // vQuicker balance * 0.00000000347
+      const rewardPerBlock = Number(userVQuickerBal) * 0.00000000347
+      const result = Number(rewardsAmount) + rewardPerBlock
+      setRewardsAmount(floorDecimals(result.toString(), 7))
+    }
+  }, [rewardsBlink])
 
   return (
     <>
@@ -369,7 +390,9 @@ const StakingPage = () => {
               <Sc02>
                 <QuickerTx>보상 수량</QuickerTx>
                 <StakingTx1>
-                  {rewardsAmount}
+                  {rewardsBlink ? (<BlinkDiv>
+                    {rewardsAmount}
+                  </BlinkDiv>):(<div>{rewardsAmount}</div>)}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
                   <Bt1 onClick={() => moveToClaimPage()}>
                     <BsCaretRightFill></BsCaretRightFill>{" "}
@@ -578,3 +601,19 @@ const floorDecimals = (para: string, indexNum: number) => {
   const result = index !== -1 ? para.substring(0, index + indexNum) : para;
   return result;
 };
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const BlinkDiv = styled.div`
+  animation: ${blinkAnimation} 1s;
+`

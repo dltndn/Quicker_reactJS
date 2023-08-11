@@ -168,6 +168,7 @@ export default {
         pendingRewards,
         userStakedQuickerBal,
         userQuickerBal,
+        userVQuickerBal
       }
       res.send(result);
     } catch (e) {
