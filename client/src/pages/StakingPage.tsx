@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { BsCaretRightFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
 import { useConnWalletInfo } from "../App";
@@ -13,10 +14,11 @@ import { useOrderStore } from "./commission";
 import IncreaseQAllowance from "../components/IncreaseQAllowance";
 import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import BottomBar from "../components/BottomBar";
 import Stacking from "../Lottie/Stacking.json";
 import StackingGo from "../Lottie/Stackinggo.json";
+import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 
 const Sc3 = styled.section`
@@ -28,6 +30,9 @@ const Sc3 = styled.section`
   border-color: #d9d9d9;
   background-color: #ffffff;
   box-shadow: 0px 3px 0px #bebebe;
+`;
+const ReciDiv1 = styled.div`
+  text-align: center;
 `;
 
 const Sc01 = styled.section`
@@ -88,6 +93,10 @@ const Quickertxsm = styled.div`
   color: #6c6c6c;
 `;
 
+const Receivetx = styled(Quickertxsm)`
+  font-size: 16px;
+`;
+
 const PercentDiv = styled.div`
   flex: 1 1 33%;
   margin: 8px;
@@ -102,10 +111,12 @@ const PercentTx1 = styled.div`
 `;
 const PercentTx2 = styled(PercentTx1)`
   font-size: 22px;
+  margin-bottom: 0px;
   color: #ff0a0a;
 `;
-const PercentTx3 = styled.span`
-  font-size: 14px;
+const PercentTx3 = styled.div`
+  margin-top: -18px;
+  font-size: 10px;
   font-weight: bold;
   color: #000000;
 `;
@@ -118,6 +129,13 @@ const StakingTx = styled.div`
 const StakingTx1 = styled(StakingTx)`
   margin-top: 40px;
 `;
+const Bt1 = styled.span`
+  position: absolute;
+  margin-right: 40px;
+  right: 0;
+  top: 515px;
+`;
+
 const StakingTxQuicker = styled.span`
   font-size: 14px;
   font-weight: bold;
@@ -199,7 +217,9 @@ const StakingPage = () => {
   const [rewardRate, setRewardRate] = useState<string>("0");
   const [endDate, setEndDate] = useState<string>("-");
   const [rewardsAmount, setRewardsAmount] = useState<string>("0");
+  const [rewardsBlink, setRewardsBlink] = useState(true);
   const [userQuickerBal, setUserQuickerBal] = useState<string>("0");
+  const [userVQuickerBal, setUserVQuickerBal] = useState<string>("0");
   const [showClaim, setShowClaim] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -214,6 +234,7 @@ const StakingPage = () => {
       pendingRewards,
       userStakedQuickerBal,
       userQuickerBal,
+      userVQuickerBal
     } = await getStakingInfo(address);
     setStakingRate(
       (
@@ -239,6 +260,7 @@ const StakingPage = () => {
     }
     setRewardsAmount(floorDecimals(pendingRewards, 7));
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));
+    setUserVQuickerBal(userVQuickerBal)
   };
 
   const moveToClaimPage = () => {
@@ -249,10 +271,17 @@ const StakingPage = () => {
     }
   };
 
+  const blinkRewardsAmount = () => {
+    setRewardsBlink((prevState) => !prevState);
+  };
+
   useEffect(() => {
+    const interval = setInterval(blinkRewardsAmount, 500);
+    console.log("staking")
     return () => {
       setShowStaking(null);
       setShowClaim(false);
+      clearInterval(interval);
     };
   }, []);
 
@@ -261,6 +290,16 @@ const StakingPage = () => {
       getInfo(address);
     }
   }, [address]);
+
+  useEffect(() => {
+    if (rewardsBlink === false && rewardsAmount !== "0") {
+      // 홀더 예상 블록 당 보상 수량 계산 후 더하기
+      // vQuicker balance * 0.00000000347
+      const rewardPerBlock = Number(userVQuickerBal) * 0.00000000347
+      const result = Number(rewardsAmount) + rewardPerBlock
+      setRewardsAmount(floorDecimals(result.toString(), 7))
+    }
+  }, [rewardsBlink])
 
   return (
     <>
@@ -271,17 +310,23 @@ const StakingPage = () => {
             redirectLogic={() => navigate("/profile")}
           />
           {showClaim ? (
-            <div>
-              <div>animation</div>
-              <div>{rewardsAmount} Quicker를 수령해요</div>
-              <SendTxK
-                param={GetContractParams.claimPendingRewards()}
-                successFunc={() => {
-                  setShowClaim(false);
-                  setRewardsAmount("0");
-                }}
-              />
-            </div>
+            <>
+              <Sc3>
+                <div>
+                  <Lottie animationData={receiveQuicker} />
+                </div>
+                <Receivetx>{rewardsAmount} Quicker를 수령해요</Receivetx>
+              </Sc3>
+              <ReciDiv1>
+                <SendTxK
+                  param={GetContractParams.claimPendingRewards()}
+                  successFunc={() => {
+                    setShowClaim(false);
+                    setRewardsAmount("0");
+                  }}
+                />
+              </ReciDiv1>
+            </>
           ) : (
             <div>
               <Sc3>
@@ -294,21 +339,33 @@ const StakingPage = () => {
                     <PercentTx1>총 스테이킹률</PercentTx1>
                     <PercentTx2>
                       {stakingRate}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        %
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalSuupply}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        Quicker
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                   <PercentDiv>
                     <PercentTx1>총 스테이킹량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalStaking}
-                      <PercentTx3> %</PercentTx3>
+                      <PercentTx3>
+                        {" "}
+                        <br />
+                        Quicker
+                      </PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                 </Div1>
@@ -326,27 +383,37 @@ const StakingPage = () => {
                 <StakingTxSm1>
                   종료 일자<StakingTxSm2>{endDate}</StakingTxSm2>
                 </StakingTxSm1>
-                <Lot>
+                {/* <Lot>
                   <Lottie animationData={Stacking} />
-                </Lot>
+                </Lot> */}
               </Sc01>
               <Sc02>
                 <QuickerTx>보상 수량</QuickerTx>
-                <button onClick={() => setShowClaim(true)}>수령하기</button>
                 <StakingTx1>
-                  {rewardsAmount}
+                  {rewardsBlink ? (<BlinkDiv>
+                    {rewardsAmount}
+                  </BlinkDiv>):(<div>{rewardsAmount}</div>)}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
+                  <Bt1 onClick={() => moveToClaimPage()}>
+                    <BsCaretRightFill></BsCaretRightFill>{" "}
+                  </Bt1>
                 </StakingTx1>
               </Sc02>
               <Sc0>
                 <Sc4 onClick={() => setShowStaking(false)}>
                   <StakingTx2>언스테이킹</StakingTx2>
                 </Sc4>
-                <Sc4 onClick={() => setShowStaking(true)}>
+                <Sc4
+                  onClick={() => {
+                    if (rewardsAmount !== "0") {
+                      setShowClaim(true);
+                    }
+                  }}
+                >
                   <StakingTx3>스테이킹</StakingTx3>
-                  <CenteredDiv>
+                  {/* <CenteredDiv>
                     <Lottie animationData={StackingGo} />
-                  </CenteredDiv>
+                  </CenteredDiv> */}
                 </Sc4>
               </Sc0>
               <HideDiv></HideDiv>
@@ -534,3 +601,19 @@ const floorDecimals = (para: string, indexNum: number) => {
   const result = index !== -1 ? para.substring(0, index + indexNum) : para;
   return result;
 };
+
+const blinkAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+const BlinkDiv = styled.div`
+  animation: ${blinkAnimation} 1s;
+`
