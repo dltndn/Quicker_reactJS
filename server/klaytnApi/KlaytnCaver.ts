@@ -186,22 +186,37 @@ export default {
       res.send(e);
     }
   },
+  // 특정 라운드부터 index갯수의 과거 기록 불러오기
   getFeeGovernorRoundLogs: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      let { index } = req.body
-      let currentRound = await quicker_fee_governor_contract.call("currentRound"); // string
+      let { index, startRound } = req.body
+      if (startRound === undefined) {
+        startRound = await quicker_fee_governor_contract.call("currentRound"); // string
+      }
       index = Number(index)
-      currentRound = Number(currentRound)
+      startRound = Number(startRound)
       let resultArr: any[] = []
-      if (currentRound - index < 0) {
-        for(let i=currentRound; i>0; --i) {
+      if (startRound - index < 0) {
+        for(let i=startRound; i>0; --i) {
           const result = await quicker_fee_governor_contract.call("roundLog", i);
-          resultArr.push(result)
+          const obj = {
+            round: i.toString(),
+            treasuryFee: result.treasuryFee,
+            securityDepositFee: result.securityDepositFee,
+            totalIncome: caver.utils.convertFromPeb(result.totalIncome, 'KLAY')
+          }
+          resultArr.push(obj)
         }
       } else {
-        for(let i=currentRound; i>(currentRound-index); --i) {
+        for(let i=startRound; i>(startRound-index); --i) {
           const result = await quicker_fee_governor_contract.call("roundLog", i);
-          resultArr.push(result)
+          const obj = {
+            round: i.toString(),
+            treasuryFee: result.treasuryFee,
+            securityDepositFee: result.securityDepositFee,
+            totalIncome: caver.utils.convertFromPeb(result.totalIncome, 'KLAY')
+          }
+          resultArr.push(obj)
         }
       }
       res.send(resultArr);

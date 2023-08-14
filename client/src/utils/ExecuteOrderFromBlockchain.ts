@@ -180,6 +180,7 @@ export const getOrdersForState = async (_state: number) => {
   return result;
 };
 
+// (staking)
 export const getStakingInfo = async (address: string) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getStakingInfo`, {
@@ -192,6 +193,7 @@ export const getStakingInfo = async (address: string) => {
   }
 }
 
+// (Quicker token)
 export const getQtokenAllowance =async (address: string) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQtokenAllowance`, {
@@ -204,11 +206,35 @@ export const getQtokenAllowance =async (address: string) => {
   }
 }
 
+// (FeeGovernor)
 export const getFeeGovernorInfo = async (address: string) => {
   try {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getCurrentFeeGovernorInfo`, {
       address, 
     });
+    return data.data; // type: json
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+// (FeeGovernor)
+// 특정 라운드부터 index갯수의 과거 기록 불러오기
+// startRound === undefined -> 현재 라운드부터
+export const getRoundLogs = async (index: string, startRound: string | undefined) => {
+  try {
+    let data: any = null
+    if (startRound) {
+      data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getFeeGovernorRoundLogs`, {
+        index,
+        startRound 
+      });
+    } else {
+      data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getFeeGovernorRoundLogs`, {
+        index
+      });
+    }
     return data.data; // type: json
   } catch (e) {
     console.log(e)
