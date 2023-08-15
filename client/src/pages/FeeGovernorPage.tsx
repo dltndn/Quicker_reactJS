@@ -550,7 +550,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 
   const onClick = () => {
     if (userVoteEnable === "0") {
-      alert("가용 투표권이 없습니다");
+      alert("가용 투표권이 없습니다.\n 분배받을 수수료 수익이 있다면 정산받으세요.");
     } else {
       setIsInfoPage(false);
     }
@@ -657,12 +657,13 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 // 수수료 수익 정산 화면
 const ClaimRewards = () => {
   const { setPageState, roundInfo, setRoundInfo } = useFeeGovernor();
+  const navigate = useNavigate()
 
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
     setRoundInfo(roundData);
-    setPageState("main");
+    navigate("/feeGovernor")
   };
 
   return (
