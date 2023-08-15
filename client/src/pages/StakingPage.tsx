@@ -453,9 +453,7 @@ const StakingPage = () => {
                 </Sc4>
                 <Sc4
                   onClick={() => {
-                    if (rewardsAmount !== "0") {
-                      setShowClaim(true);
-                    }
+                    setShowStaking(true)
                   }}
                 >
                   <StakingTx3>스테이킹</StakingTx3>
