@@ -52,6 +52,7 @@ const Sc01 = styled.section`
 const Sc02 = styled(Sc3)`
   height: 170px;
   margin-top: 0px;
+  margin-bottom: 8px;
   border-radius: 0px 0px 5px 5px;
   border-top: none;
   box-shadow: 0px 3px 0px #bebebe;
@@ -81,8 +82,18 @@ const Div1 = styled.div`
   display: flex;
 `;
 const QuickerTx = styled.div`
+  display: flex;
   font-size: 16px;
   font-weight: bold;
+  margin-bottom: 8px;
+`;
+
+const HeadQuickerTx = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
 `;
 
 const Quickertxsm = styled.div`
@@ -98,7 +109,6 @@ const Receivetx = styled(Quickertxsm)`
 `;
 
 const PercentDiv = styled.div`
-  flex: 1 1 33%;
   margin: 8px;
 `;
 
@@ -107,19 +117,26 @@ const PercentTx1 = styled.div`
   font-size: 13px;
   font-weight: bold;
   color: #6c6c6c;
-  text-align: center;
 `;
-const PercentTx2 = styled(PercentTx1)`
+const PercentTx2 = styled.span`
   font-size: 22px;
+  font-weight: bold;
   margin-bottom: 0px;
   color: #ff0a0a;
 `;
-const PercentTx3 = styled.div`
-  margin-top: -18px;
+const PercentTx3 = styled.span`
   font-size: 10px;
   font-weight: bold;
   color: #000000;
 `;
+
+const QuicPcTx = styled.div`
+  text-align: right;
+  font-size: 12px;
+  font-weight: bold;
+  color: #6c6c6c;
+`
+
 const StakingTx = styled.div`
   font-size: 22px;
   color: #00a3ff;
@@ -330,29 +347,30 @@ const StakingPage = () => {
           ) : (
             <div>
               <Sc3>
-                <QuickerTx>Quicker</QuickerTx>
-                <Quickertxsm>
-                  스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.
-                </Quickertxsm>
-                <Div1>
-                  <PercentDiv>
-                    <PercentTx1>총 스테이킹률</PercentTx1>
-                    <PercentTx2>
+                <HeadQuickerTx>
+                  Quicker                
+                  <QuicPcTx>
+                  총 스테이킹률                    
+                  <PercentTx2>
+                      {" "} 
                       {stakingRate}
                       <PercentTx3>
-                        {" "}
-                        <br />
-                        %
+                      {" "}%
                       </PercentTx3>
                     </PercentTx2>
-                  </PercentDiv>
-                  <PercentDiv>
+                  </QuicPcTx>
+                </HeadQuickerTx>
+
+                {/* <Quickertxsm>
+                  스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.
+                </Quickertxsm> */}
+                <Div1>
+                  {/* <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalSuupply}
                       <PercentTx3>
                         {" "}
-                        <br />
                         Quicker
                       </PercentTx3>
                     </PercentTx2>
@@ -363,7 +381,37 @@ const StakingPage = () => {
                       {quickerTotalStaking}
                       <PercentTx3>
                         {" "}
-                        <br />
+                        Quicker
+                      </PercentTx3>
+                    </PercentTx2>
+                  </PercentDiv>
+                  <PercentDiv>
+                    <PercentTx1>총 스테이킹률</PercentTx1>
+                    <PercentTx2>
+                      {stakingRate}
+                      <PercentTx3>
+                      {" "}%
+                      </PercentTx3>
+                    </PercentTx2>
+                  </PercentDiv> */}
+                  <PercentDiv>
+                    <PercentTx1>총 유통량</PercentTx1>
+                      <PercentTx2>
+                        {quickerTotalSuupply}
+                        <PercentTx3>
+                          {" "}
+                          Quicker
+                        </PercentTx3>
+                      </PercentTx2>
+                  </PercentDiv>
+                </Div1>
+                <Div1>
+                <PercentDiv>
+                    <PercentTx1>총 스테이킹량</PercentTx1>
+                    <PercentTx2>
+                      {quickerTotalStaking}
+                      <PercentTx3>
+                        {" "}
                         Quicker
                       </PercentTx3>
                     </PercentTx2>
