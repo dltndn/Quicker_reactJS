@@ -6,7 +6,8 @@ import {
   QUICKER_TOKEN_ADDRESS_KLAYTN,
   QUICKER_DLVR_ADDRESS_KLAYTN,
   QUICKER_STAKING_ADDRESS_KLAYTN,
-  QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN
+  QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
+  PROXY_ADDRESS
 } from "../../contractInformation";
 
 export default {
@@ -373,30 +374,18 @@ export default {
     };
   },
   // test
-  CreateOrderTest: (orderPrice: string, deadLine: string): SendTxDelegationType => {
+  ProxyTest: (): SendTxType => {
     return {
       abi: `{
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "_orderPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_limitedTime",
-            "type": "uint256"
-          }
-        ],
-        "name": "createOrder",
+        "inputs": [],
+        "name": "incrementNum1",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
-      params: `["${orderPrice}", "${deadLine}"]`,
-      fee_delegated: true
+      to: PROXY_ADDRESS,
+      params: `[]`
     };
   },
 };
