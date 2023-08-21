@@ -10,6 +10,11 @@ import {
   getFeeGovernorInfo,
   getRoundLogs,
 } from "../utils/ExecuteOrderFromBlockchain";
+import styled, { createGlobalStyle } from "styled-components";
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from "apexcharts";
+import Lottie from "lottie-react";
+import mainLoaing from "../Lottie/mainLoading.json";
 
 interface UseFeeGovernorType {
   title: string;
@@ -28,6 +33,202 @@ const useFeeGovernor = create<UseFeeGovernorType>((set) => ({
   roundInfo: {},
   setRoundInfo: (roundInfo: any) => set({ roundInfo }),
 }));
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #efefef !important;
+    height: 100%;
+  }
+`;
+
+const Sc3 = styled.section`
+  margin: 0px 16px 16px 16px;
+  padding: 16px;
+  border-radius: 5px;
+  border: none;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+`;
+
+const Sc3_1 = styled(Sc3)`
+  margin: 16px 16px 0px 16px;
+  padding: 16px;
+  border-radius: 5px;
+  border: none;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+`;
+
+const Flex1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Sc2 = styled.section`
+  flex: 1 1 40;
+  width: 45%;
+  height: 150px;
+  margin: 16px 8px 16px 16px;
+  padding: 16px;
+  border-radius: 5px;
+  border: none;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+`;
+
+const Sc2_1 = styled(Sc2)`
+  margin: 16px 16px 16px 8px;
+  background-color: #54E1FF;
+`;
+
+const Tx1 = styled.span`
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+`
+const Tx1color = styled(Tx1)`
+color: #FFF;
+`
+const Tx1_1 = styled(Tx1)`
+  font-size: 16px;
+`
+const Tx1_2 = styled.div`
+  color: #000;
+  font-weight: bold;
+  padding-top: 16px;
+  font-size: 14px;
+`
+const Tx2 = styled.div`
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 30px;
+`
+const Tx3= styled.span`
+  color: #747474;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+`
+const Tx3color = styled(Tx3)`
+color: #FFF;
+`
+const PercentTx1 = styled.div`
+  margin: 12px 0 0px 0px;
+  padding: 6px 0 6px 0px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #6c6c6c;
+`;
+const PercentTx2 = styled.span`
+  font-size: 22px;
+  font-weight: bold;
+  color: #ff0a0a;
+`;
+const PercentTx3 = styled.span`
+  font-size: 10px;
+  font-weight: bold;
+  color: #000000;
+`;
+
+const PercentTx4_1 = styled.div`
+  font-size: 14px;
+  color: #000;
+  font-weight: bold;
+  margin: 16px 16px 0px 0px;
+`;
+
+const PercentTx4_2 = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+  color: #F00;
+  padding-left: 8px;
+`;
+const PercentTx4_3 = styled(PercentTx4_2)`
+  color: #747474;
+`
+const PercentTx4_4 = styled(PercentTx4_2)`
+color: #0047FF;
+`
+const ButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 0;
+  background-color: #efefef;
+`;
+
+const BtWp_1 = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+    padding: 16px 0;
+  justify-content: center;
+  background-color: #efefef;
+`
+
+const SaveButton = styled.button`
+  width: 45%;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+const SaveButton_1 = styled(SaveButton)`
+  width: 90%;
+`;
+
+const LoadButton = styled.button`
+  width: 45%;
+  background-color: #17a2b8;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #117a8b;
+  }
+`;
+const HideDiv = styled.div`
+  height: 3.9rem;
+`;
+const HideDiv_1 = styled.div`
+  height: 5.0rem;
+`;
+const LotDiv = styled.div`
+  position: absolute;
+  width: 100px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const Hr = styled.hr`
+  margin-top: 16px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 0.063rem;
+  border: 0;
+  background: #e6e6e6;
+`;
 
 const FeeGovernorPage = () => {
   const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } =
@@ -102,7 +303,10 @@ const FeeGovernorPage = () => {
       <TopBarOthers title={title} redirectLogic={redirectLogic} />
       {
         {
-          loading: <div>로딩 애니메이션</div>,
+          loading:         
+          <LotDiv>
+          <Lottie animationData={mainLoaing} />
+          </LotDiv>,
           main: <Main roundInfo={roundInfo} />,
           previousResult: <PreviousResult />,
           vote: (
@@ -117,6 +321,7 @@ const FeeGovernorPage = () => {
     </>
   );
 };
+
 
 interface SharesType {
   increase: number;
@@ -157,7 +362,7 @@ const Main = ({ roundInfo }: any) => {
   }, []);
 
   return (
-    <>
+    <><GlobalStyle/>
       {roundInfo && (
         <div>
           {roundInfo.userRewards !== "0" && (
@@ -170,31 +375,51 @@ const Main = ({ roundInfo }: any) => {
               </button>
             </div>
           )}
-          <div>
-            보유 투표권 {convertToLocale(roundInfo.userVotePower)} vQuicker
-          </div>
-          <div>
-            가용 투표권 {convertToLocale(roundInfo.userVoteEnable)} vQuicker
-          </div>
-          <div>이번주 투표현황</div>
-          <div>누적 수수료 | {convertToLocale(roundInfo.totalIncome)} KRW</div>
-          <div>
-            현재 투표량 | {convertToLocale(roundInfo.totalVotePower)} vQuicker
-          </div>
-          <br></br>
-          <div>거래수수료 - {roundInfo.currentFee}%</div>
-          <div>인상 | 원형그래프 | {feeShares.increase}%</div>
-          <div>동결 | 원형그래프 | {feeShares.freeze}%</div>
-          <div>인하 | 원형그래프 | {feeShares.decrease}%</div>
-          <br></br>
-          <div>배송원 보증금 - {roundInfo.currentSecuDepo}%</div>
-          <div>인상 | 원형그래프 | {secuDepoShares.increase}%</div>
-          <div>동결 | 원형그래프 | {secuDepoShares.freeze}%</div>
-          <div>인하 | 원형그래프 | {secuDepoShares.decrease}%</div>
-          <button onClick={() => setPageState("previousResult")}>
-            지난투표
-          </button>
-          <button onClick={() => setPageState("vote")}>투표하기</button>
+          <></>
+          <Flex1>
+          <Sc2>
+            <Tx1>보유 투표권</Tx1>
+            <Tx2>
+            {convertToLocale(roundInfo.userVotePower)} <Tx3>vQuicker</Tx3>
+            </Tx2>
+          </Sc2>
+          <Sc2_1>
+          <Tx1color>가용 투표권</Tx1color>
+          <Tx2>
+          {convertToLocale(roundInfo.userVoteEnable)} <Tx3color>vQuicker</Tx3color>
+          </Tx2>
+          </Sc2_1>
+          </Flex1>
+          <Sc3>
+            <Tx1_1>금주 투표 현황</Tx1_1>
+            <PercentTx1>누적 수수료<br></br>
+              <PercentTx2>{convertToLocale(roundInfo.totalIncome)}</PercentTx2>
+              <PercentTx3> KRW</PercentTx3>
+            </PercentTx1>
+            <PercentTx1>현재 투표량<br></br>
+              <PercentTx2>{convertToLocale(roundInfo.totalVotePower)}</PercentTx2>
+              <PercentTx3> vQuicker</PercentTx3>
+            </PercentTx1>
+          </Sc3>
+          <Sc3>
+            <Tx1_1>거래수수료 - {roundInfo.currentFee}%</Tx1_1>
+            <StrokedGaugeExample></StrokedGaugeExample>
+            <PercentTx4_1>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercentTx4_1>
+            <PercentTx4_1>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercentTx4_1>
+            <PercentTx4_1>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercentTx4_1>
+          </Sc3>
+          <Sc3>
+          <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
+          <StrokedGaugeExample></StrokedGaugeExample>
+          <PercentTx4_1>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercentTx4_1>
+          <PercentTx4_1>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercentTx4_1>
+          <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
+          </Sc3>
+          <ButtonWrapper>
+          <LoadButton onClick={() => setPageState("previousResult")}>지난투표</LoadButton>
+          <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
+          </ButtonWrapper>
+          <HideDiv></HideDiv>
         </div>
       )}
     </>
@@ -247,15 +472,20 @@ const PreviousResult = () => {
 
   return (
     <>
-      <div>라운드</div><div>정보</div>
+      {/* <div>라운드</div><div>정보</div> */}
       {roundLogArr.length === 0 ? (
-        <div>로딩 애니메이션</div>
+                  <LotDiv>
+                  <Lottie animationData={mainLoaing} />
+                  </LotDiv>
       ) : (
         <div>
           {roundLogArr.map((ele: RoundLogType, index: number) => (
             <RoundDataElement ele={ele} key={index} />
           ))}
-          <button onClick={async () => await addRoundLogData()}>더보기</button>
+          <HideDiv_1></HideDiv_1>
+          <BtWp_1>
+          <SaveButton_1 onClick={async () => await addRoundLogData()}>더보기</SaveButton_1>
+          </BtWp_1>
         </div>
       )}
     </>
@@ -280,22 +510,22 @@ const RoundDataElement = ({ ele }: RoundDataElementType) => {
   const secuDepoShares = calculateShares(ele.securityDepositFee[0], ele.securityDepositFee[1], ele.securityDepositFee[2]);
 
   return (
-    <>
-      <div>{ele.round}</div>
-      <div>투표량: {totalVotePower} vQuicker</div>
-      <div>수수료 수익: {convertToLocale(ele.totalIncome)} krw</div>
-      <div>
-        거래 수수료
-        <div>인상 | {feeShares.increase}%</div>
-        <div>동결 | {feeShares.freeze}%</div>
-        <div>인하 | {feeShares.decrease}%</div>
-      </div>
-      <div>
-        배송원 보증금
-        <div>인상 | {secuDepoShares.increase}%</div>
-        <div>동결 | {secuDepoShares.freeze}%</div>
-        <div>인하 | {secuDepoShares.decrease}%</div>
-      </div>
+    <><GlobalStyle/>
+      <Sc3_1>
+            <Tx1_1>투표 - {ele.round}회차</Tx1_1>
+            <PercentTx4_1>투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3></PercentTx4_1>
+            <PercentTx4_1>수수료 수익 <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4></PercentTx4_1>
+            <Hr></Hr>
+            <Tx1_2>거래수수료</Tx1_2>
+            <PercentTx4_1>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercentTx4_1>
+            <PercentTx4_1>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercentTx4_1>
+            <PercentTx4_1>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercentTx4_1>
+            <Hr></Hr>
+            <Tx1_2>배송원 보증금</Tx1_2>
+            <PercentTx4_1>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercentTx4_1>
+            <PercentTx4_1>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercentTx4_1>
+            <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
+      </Sc3_1>
     </>
   );
 };
@@ -320,7 +550,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 
   const onClick = () => {
     if (userVoteEnable === "0") {
-      alert("가용 투표권이 없습니다");
+      alert("가용 투표권이 없습니다.\n 분배받을 수수료 수익이 있다면 정산받으세요.");
     } else {
       setIsInfoPage(false);
     }
@@ -427,12 +657,13 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 // 수수료 수익 정산 화면
 const ClaimRewards = () => {
   const { setPageState, roundInfo, setRoundInfo } = useFeeGovernor();
+  const navigate = useNavigate()
 
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
     setRoundInfo(roundData);
-    setPageState("main");
+    navigate("/feeGovernor")
   };
 
   return (
@@ -477,6 +708,44 @@ const calculateShares = (
 
 const convertToLocale = (data: string) => {
   return Number(data).toLocaleString();
+};
+
+const StrokedGaugeExample: React.FC = () => {
+  const options = {
+    chart: {
+      type: 'radialBar',
+      height: 50, // 그래프의 높이 설정
+      width: 50, // 그래프의 너비 설정 (예: '300px')
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 15,
+          size: "60%"
+        },
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "12px"
+          },
+          value: {
+            color: "#111",
+            fontSize: "20px",
+            show: true
+          }
+        },
+      },
+    },
+    series: [100], // 데이터 값 (0부터 100 사이의 값)
+    labels: ['Stroked Gauge'],
+  } as ApexOptions;
+
+  return (
+      <ReactApexChart options={options} series={options.series} type="radialBar" />
+  );
 };
 
 export default FeeGovernorPage;
