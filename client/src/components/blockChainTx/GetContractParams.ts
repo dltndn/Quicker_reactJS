@@ -7,7 +7,7 @@ import {
   QUICKER_DLVR_ADDRESS_KLAYTN,
   QUICKER_STAKING_ADDRESS_KLAYTN,
   QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
-  PROXY_ADDRESS
+  QUICKER_DLVR_PROXY_ADDRESS
 } from "../../contractInformation";
 
 export default {
@@ -71,7 +71,7 @@ export default {
       }`,
       value: "0",
       to: QKRW_ADDRESS_KLAYTN,
-      params: `["${QUICKER_DLVR_ADDRESS_KLAYTN}", "100000000000000000000000000"]`,
+      params: `["${QUICKER_DLVR_PROXY_ADDRESS}", "100000000000000000000000000"]`,
       fee_delegated: true
     };
   },
@@ -96,7 +96,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderPrice}", "${deadLine}"]`,
       fee_delegated: true
     };
@@ -117,7 +117,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -138,7 +138,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -159,7 +159,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -180,7 +180,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -201,7 +201,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -222,7 +222,7 @@ export default {
         "type": "function"
       }`,
       value: "0",
-      to: QUICKER_DLVR_ADDRESS_KLAYTN,
+      to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${orderNum}"]`,
       fee_delegated: true
     }
@@ -377,15 +377,21 @@ export default {
   ProxyTest: (): SendTxType => {
     return {
       abi: `{
-        "inputs": [],
-        "name": "incrementNum1",
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_newAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setFeeCollectionAddress",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       }`,
       value: "0",
-      to: PROXY_ADDRESS,
-      params: `[]`
+      to: QUICKER_DLVR_PROXY_ADDRESS,
+      params: `["${QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN}"]`
     };
   },
 };
