@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
@@ -37,6 +38,8 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
   const { address } = useConnWalletInfo()
     // const videoRef = useRef<HTMLVideoElement>(null);
 
+  const navigate = useNavigate()
+
     const deliveredRogic = async () => {
       if (orderNum !== undefined) {
           const sdta = new SendDataToAndroid(address)
@@ -45,7 +48,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
               if (!(await checkIsDelivering(address))) {
                   sdta.sendIsDelivering(false)
               }
-              setShowComponent(<WaitClientConfirm />)
+              navigate("/")
           } catch(e) {
               console.log(e)
           }

@@ -65,18 +65,9 @@ type isConnectToWallet = {
 function Main_phrase({ isConnect }: isConnectToWallet) {
   const navigate = useNavigate();
   const { isMember } = useVerificationStore();
-  // const { address } = useAccount();
   const { address } = useConnWalletInfo();
 
-
   const sdta = new SendDataToAndroid(address);
-  const testVal: boolean = true;
-
-  const testFunc = () => {
-    const timeId = setInterval(() => {
-      sdta.sendIsMatchedOrder(true)
-    }, 3000)
-  }
 
   // const testData = {"sX":127.04951606332,"sY":37.5701609651972,"name":"서울 서초구 우면동 1","x":127.024170188781,"y":37.4687523234136,"coordType":"wgs84"}
   const routeStartPointToEndPoint : TwoPointRoute = {

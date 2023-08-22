@@ -189,14 +189,14 @@ export default function MainOrderInformation() {
                     </Divmain>
                   </Sc3>
                   <Sc0>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/orderlist")}>
+                    <Sc4 onClick={() => navigate("/orderlist")}>
+                      <Divmain1>
                         의뢰 목록<br></br>확인하기
                         <Img src={pin} />
                       </Divmain1>
                     </Sc4>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/explorer")}>
+                    <Sc4 onClick={() => navigate("/explorer")}>
+                      <Divmain1>
                         실시간 거래 현황
                         <Img src={transaction} />
                       </Divmain1>

@@ -222,7 +222,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const { showCommissionPage, setShowCommissionPage } = useDivHandler();
 
-  const { title, setTitle, setDeadLine, showAllowance } = useOrderStore();
+  const { title, setTitle, setDeadLine, showAllowance, setCost } = useOrderStore();
   const {
     orderId,
     startAddress,
@@ -346,6 +346,7 @@ export default function CommissionPage() {
       reset();
       setShowCommissionPage(true);
       setTitle("출발지 입력");
+      setCost(0)
     };
   }, []);
 
