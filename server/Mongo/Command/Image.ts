@@ -12,7 +12,7 @@ export const findImageByOrderId = async (orderId: string) => {
 export const saveImageToBufferString = async (orderNum: string, bufferImage : any) => {
   const conn = await connectMongo("orderComplete");
   const imageModel = conn.model(orderNum, ImageFile);
-  const image = new imageModel(ImageFile);
+  const image = new imageModel({image:bufferImage});
   await image.save();
   conn.destroy();
 };
