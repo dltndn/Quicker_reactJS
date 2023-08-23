@@ -81,10 +81,10 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
-            <LoadButton onClick={mobileConnect}>모바일에서 실행</LoadButton>
+            <LoadButton onClick={mobileConnect}>서명</LoadButton>
           ) : (
             <>
-              <LoadButton onClick={qrConnect}>데탑에서 실행</LoadButton>
+              <LoadButton onClick={qrConnect}>서명</LoadButton>
               {showQr && (
                 <img
                   src={qrUrl}

@@ -68,8 +68,8 @@ const WalletConnectBtn = () => {
     <>
       {address === undefined ? (
         <>
-          <button onClick={mobileConnect}>모바일 연결</button>
-          <button onClick={qrConnect}>큐알 연결</button>
+          <button onClick={mobileConnect}>앱연결</button>
+          <button onClick={qrConnect}>큐알연결</button>
           {showQr && (
             <img
               src={qrUrl}
@@ -79,7 +79,7 @@ const WalletConnectBtn = () => {
           )}
         </>
       ) : (
-        <button onClick={disConnect}>지갑 연결 해제</button>
+        <button onClick={disConnect}>연결해제</button>
       )}
     </>
   );
