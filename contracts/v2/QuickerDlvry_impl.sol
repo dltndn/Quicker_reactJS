@@ -1346,224 +1346,6 @@ abstract contract Ownable is Context {
     }
 }
 
-// File: @openzeppelin/contracts/utils/math/SafeMath.sol
-
-
-// OpenZeppelin Contracts (last updated v4.9.0) (utils/math/SafeMath.sol)
-
-pragma solidity ^0.8.0;
-
-// CAUTION
-// This version of SafeMath should only be used with Solidity 0.8 or later,
-// because it relies on the compiler's built in overflow checks.
-
-/**
- * @dev Wrappers over Solidity's arithmetic operations.
- *
- * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler
- * now has built in overflow checking.
- */
-library SafeMath {
-    /**
-     * @dev Returns the addition of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            uint256 c = a + b;
-            if (c < a) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b > a) return (false, 0);
-            return (true, a - b);
-        }
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-            // benefit is lost if 'b' is also tested.
-            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-            if (a == 0) return (true, 0);
-            uint256 c = a * b;
-            if (c / a != b) return (false, 0);
-            return (true, c);
-        }
-    }
-
-    /**
-     * @dev Returns the division of two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a / b);
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
-     *
-     * _Available since v3.4._
-     */
-    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a % b);
-        }
-    }
-
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `+` operator.
-     *
-     * Requirements:
-     *
-     * - Addition cannot overflow.
-     */
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a + b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting on
-     * overflow (when the result is negative).
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a - b;
-    }
-
-    /**
-     * @dev Returns the multiplication of two unsigned integers, reverting on
-     * overflow.
-     *
-     * Counterpart to Solidity's `*` operator.
-     *
-     * Requirements:
-     *
-     * - Multiplication cannot overflow.
-     */
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a * b;
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator.
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a / b;
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting when dividing by zero.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a % b;
-    }
-
-    /**
-     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
-     * overflow (when the result is negative).
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {trySub}.
-     *
-     * Counterpart to Solidity's `-` operator.
-     *
-     * Requirements:
-     *
-     * - Subtraction cannot overflow.
-     */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b <= a, errorMessage);
-            return a - b;
-        }
-    }
-
-    /**
-     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
-     * division by zero. The result is rounded towards zero.
-     *
-     * Counterpart to Solidity's `/` operator. Note: this function uses a
-     * `revert` opcode (which leaves remaining gas untouched) while Solidity
-     * uses an invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a / b;
-        }
-    }
-
-    /**
-     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
-     * reverting with custom message when dividing by zero.
-     *
-     * CAUTION: This function is deprecated because it requires allocating memory for the error
-     * message unnecessarily. For custom revert reasons use {tryMod}.
-     *
-     * Counterpart to Solidity's `%` operator. This function uses a `revert`
-     * opcode (which leaves remaining gas untouched) while Solidity uses an
-     * invalid opcode to revert (consuming all remaining gas).
-     *
-     * Requirements:
-     *
-     * - The divisor cannot be zero.
-     */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a % b;
-        }
-    }
-}
-
 // File: @openzeppelin/contracts/utils/Address.sol
 
 
@@ -2077,6 +1859,224 @@ library SafeERC20 {
     }
 }
 
+// File: @openzeppelin/contracts/utils/math/SafeMath.sol
+
+
+// OpenZeppelin Contracts (last updated v4.9.0) (utils/math/SafeMath.sol)
+
+pragma solidity ^0.8.0;
+
+// CAUTION
+// This version of SafeMath should only be used with Solidity 0.8 or later,
+// because it relies on the compiler's built in overflow checks.
+
+/**
+ * @dev Wrappers over Solidity's arithmetic operations.
+ *
+ * NOTE: `SafeMath` is generally not needed starting with Solidity 0.8, since the compiler
+ * now has built in overflow checking.
+ */
+library SafeMath {
+    /**
+     * @dev Returns the addition of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            uint256 c = a + b;
+            if (c < a) return (false, 0);
+            return (true, c);
+        }
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b > a) return (false, 0);
+            return (true, a - b);
+        }
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, with an overflow flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
+            // benefit is lost if 'b' is also tested.
+            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
+            if (a == 0) return (true, 0);
+            uint256 c = a * b;
+            if (c / a != b) return (false, 0);
+            return (true, c);
+        }
+    }
+
+    /**
+     * @dev Returns the division of two unsigned integers, with a division by zero flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a / b);
+        }
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers, with a division by zero flag.
+     *
+     * _Available since v3.4._
+     */
+    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
+        unchecked {
+            if (b == 0) return (false, 0);
+            return (true, a % b);
+        }
+    }
+
+    /**
+     * @dev Returns the addition of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     *
+     * - Addition cannot overflow.
+     */
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a + b;
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a - b;
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `*` operator.
+     *
+     * Requirements:
+     *
+     * - Multiplication cannot overflow.
+     */
+    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a * b;
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers, reverting on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator.
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a / b;
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * reverting when dividing by zero.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a % b;
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on
+     * overflow (when the result is negative).
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {trySub}.
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
+    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        unchecked {
+            require(b <= a, errorMessage);
+            return a - b;
+        }
+    }
+
+    /**
+     * @dev Returns the integer division of two unsigned integers, reverting with custom message on
+     * division by zero. The result is rounded towards zero.
+     *
+     * Counterpart to Solidity's `/` operator. Note: this function uses a
+     * `revert` opcode (which leaves remaining gas untouched) while Solidity
+     * uses an invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        unchecked {
+            require(b > 0, errorMessage);
+            return a / b;
+        }
+    }
+
+    /**
+     * @dev Returns the remainder of dividing two unsigned integers. (unsigned integer modulo),
+     * reverting with custom message when dividing by zero.
+     *
+     * CAUTION: This function is deprecated because it requires allocating memory for the error
+     * message unnecessarily. For custom revert reasons use {tryMod}.
+     *
+     * Counterpart to Solidity's `%` operator. This function uses a `revert`
+     * opcode (which leaves remaining gas untouched) while Solidity uses an
+     * invalid opcode to revert (consuming all remaining gas).
+     *
+     * Requirements:
+     *
+     * - The divisor cannot be zero.
+     */
+    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        unchecked {
+            require(b > 0, errorMessage);
+            return a % b;
+        }
+    }
+}
+
 // File: contracts/QuickerDlvry_proxy.sol
 
 
@@ -2352,256 +2352,357 @@ contract QuickerDlvry_proxy is Ownable, AccessControl, Initializable {
     }
 }
 
-// File: contracts/QuickerFeeGovernor.sol
+// File: contracts/QuickerDlvry_Impl.sol
 
 
 pragma solidity ^0.8.9;
 
 
 
+// @custom:security-contact james98099@gmail.com
+// @dev:This contract was created for use in graduation project
+//      This contract uses QKRW token as currency
 
-
-
-
-/// @custom:security-contact james98099@gmail.com
-contract QuickerFeeGovernor is Ownable, AccessControl {
-    bytes32 public constant ADD_TOTAL_INCOME_ROLE = keccak256("ADD_TOTAL_INCOME_ROLE");
-    using SafeERC20 for IERC20;
+contract QuickerDlvry_impl is QuickerDlvry_proxy {
     using SafeMath for uint256;
 
-    event changedRound(uint256);
-    event updatedVote(bool);
-    event addTotalIncomeData(uint256);
-
-    IERC20 public QkrwToken;
-    IERC20 public QuickerToken;
-    IERC20 public vQuickerToken; // 투표권 역할 토큰
-    address public quickerDelivery; // 배송 컨트랙
-
-    uint256 public insuranceFeeRate; // 보험 수수료는 관리자만 조정 가능
-    uint256 public currentRound; // 현재 라운드
-    uint256 public nextSundayMidnight; // 다음 일요일 자정(한국 시간)
-    uint16 public changeFeeIndex; // 수수료 변동값 ex) 5 -> 0.5%
-    uint256 public finishRoundRewards; // finishRound함수 호출 유저 보상량, 단위 :  1e18
-
-    // 투표 주제별 수량 정보
-    struct Topic {
-        uint256 totalVotedIncrease; // 수수료 인상
-        uint256 totalVotedFreeze; // 수수료 동결
-        uint256 totalVotedDecrease; // 수수료 인하
+    modifier isClientOfOrder(uint256 _orderNum, address _client) {
+        require(
+            clientOfOrder[_orderNum] == _client,
+            "not client of this order"
+        );
+        _;
     }
 
-    // 유권자가 투표한 수량 정보
-    struct Voter { 
-        Topic treasuryFee;
-        Topic securityDepositFee;
-        uint256 lastVoteRound; // 0 -> 투표 x 상태, 개별 라운드 정보 업데이트 여부 판별
+    modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
+        require(
+            quickerOfOrder[_orderNum] == _quicker,
+            "not quicker of this order"
+        );
+        _;
     }
 
-    // 개별 라운드 정보 (주제별 득표량, Qkrw수익금)
-    struct RoundInfo {
-        Topic treasuryFee; // 정수
-        Topic securityDepositFee; // 정수
-        uint256 totalIncome; // 단위 : 1e18
+    function setFeeCollectionAddress(address _newAddress) external onlyOwner {
+        feeGovernor = _newAddress;
     }
 
-    // 라운드 기록
-    mapping(uint256 => RoundInfo) public roundLog;
-    // 유권자 투표 정보
-    mapping(address => Voter) public voters;
-
-    constructor (IERC20 _qkrwToken, IERC20 _quickerToken, IERC20 _vQuickerToken, address _deliveryContract, uint256 _nextSundayMidnight) Ownable() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(ADD_TOTAL_INCOME_ROLE, msg.sender);
-        QkrwToken = _qkrwToken;
-        QuickerToken = _quickerToken;
-        vQuickerToken = _vQuickerToken;
-        quickerDelivery = _deliveryContract;
-        currentRound = 1;
-        nextSundayMidnight = _nextSundayMidnight;
-        changeFeeIndex = 5;
-        finishRoundRewards = 1000000000000000000;
+    function setInsuranceFeeCollection(address _newAddress) external onlyOwner {
+        insuranceFeeCollector = _newAddress;
     }
 
-    // 현재 라운드 이자 수익 호출 함수
-    function getCurrentTreasuryIncome() public view returns(uint256) {
-        return roundLog[currentRound].totalIncome;
+    
+
+    function calculateFee(uint256 _orderPrice, uint16 _feeRate)
+        internal
+        pure
+        returns (uint256)
+    {
+        return (_orderPrice * uint256(_feeRate)) / 1000;
     }
 
-    // 유저 이전 투표 라운드 이자 수익 호출 함수
-
-    // 투표 함수
-    // _treasury -> 인상0, 동결1, 인하2, _securityDeposit -> 인상0, 동결1, 인하2
-    function castVote(uint8 _treasury, uint256 _treasuryVoteAmount, uint8 _securityDeposit, uint256 _secuVoteAmount) external returns(bool) {
-        uint256 userVotePower = vQuickerToken.balanceOf(msg.sender).div(1e18);
-        require(_treasuryVoteAmount == _secuVoteAmount, "vote power must be same");
-        require(_treasury == 0 || _treasury == 1 || _treasury == 2, "vote number is wrong");
-        require(_securityDeposit == 0 || _securityDeposit == 1 || _securityDeposit == 2, "vote number is wrong");
-        // 투표
-        Topic storage votedTreasury = voters[msg.sender].treasuryFee;
-        require(userVotePower.sub(votedTreasury.totalVotedIncrease.add(votedTreasury.totalVotedFreeze).add(votedTreasury.totalVotedDecrease)) >= _treasuryVoteAmount, "insufficient vote power");
-        
-        Topic storage votedSecu = voters[msg.sender].securityDepositFee;
-        Topic storage totalVotedTreasury = roundLog[currentRound].treasuryFee;
-        Topic storage totalVotedSecu = roundLog[currentRound].securityDepositFee;
-        // 투표 내역 저장
-        if (_treasury == 0) {
-            votedTreasury.totalVotedIncrease = votedTreasury.totalVotedIncrease.add(_treasuryVoteAmount);
-            totalVotedTreasury.totalVotedIncrease = totalVotedTreasury.totalVotedIncrease.add(_treasuryVoteAmount);
-        } else if (_treasury == 1) {
-            votedTreasury.totalVotedFreeze = votedTreasury.totalVotedFreeze.add(_treasuryVoteAmount);
-            totalVotedTreasury.totalVotedFreeze = totalVotedTreasury.totalVotedFreeze.add(_treasuryVoteAmount);
-        } else {
-            votedTreasury.totalVotedDecrease = votedTreasury.totalVotedDecrease.add(_treasuryVoteAmount);
-            totalVotedTreasury.totalVotedDecrease = totalVotedTreasury.totalVotedDecrease.add(_treasuryVoteAmount);
-        }
-        if (_securityDeposit == 0) {
-            votedSecu.totalVotedIncrease = votedSecu.totalVotedIncrease.add(_secuVoteAmount);
-            totalVotedSecu.totalVotedIncrease = totalVotedSecu.totalVotedIncrease.add(_secuVoteAmount);
-        } else if (_securityDeposit == 1) {
-            votedSecu.totalVotedFreeze = votedSecu.totalVotedFreeze.add(_secuVoteAmount);
-            totalVotedSecu.totalVotedFreeze = totalVotedSecu.totalVotedFreeze.add(_secuVoteAmount);
-        } else {
-            votedSecu.totalVotedDecrease = votedSecu.totalVotedDecrease.add(_secuVoteAmount);
-            totalVotedSecu.totalVotedDecrease = totalVotedSecu.totalVotedDecrease.add(_secuVoteAmount);
-        }
-        voters[msg.sender].lastVoteRound = currentRound;
-        emit updatedVote(true);
-        return true;
+    function getMulTokenAmount(uint256 _amount)
+        internal
+        pure
+        returns (uint256)
+    {
+        return _amount.mul(1e18);
     }
 
-    // 수수료 정산 함수
-    function claimRewards() public returns(bool) {
-        Topic storage votedTreasury = voters[msg.sender].treasuryFee;
-        uint256 userVotedAmount = votedTreasury.totalVotedIncrease.add(votedTreasury.totalVotedFreeze).add(votedTreasury.totalVotedDecrease);
-        // 수령 여부 확인
-        if (voters[msg.sender].lastVoteRound == currentRound || voters[msg.sender].lastVoteRound == 0) {
-            return false;
-        } else {
-            // 해당 라운드 수익 * 유저 투표량 / 전체 투표량
-            Topic memory votePowerInfo = roundLog[voters[msg.sender].lastVoteRound].treasuryFee;
-            Topic storage votedSecu = voters[msg.sender].securityDepositFee;
-            uint256 totalVotePower = votePowerInfo.totalVotedIncrease.add(votePowerInfo.totalVotedFreeze).add(votePowerInfo.totalVotedDecrease);
-            uint256 voterIncome = roundLog[voters[msg.sender].lastVoteRound].totalIncome.mul(userVotedAmount.div(totalVotePower));
-            (bool transferSuccess, ) = address(QkrwToken).call(
-                abi.encodeWithSignature(
-                    "transfer(address,uint256)",
-                    msg.sender,
-                    voterIncome
-                )
-            );
-            require(transferSuccess, "QkrwToken call failed");
-            votedTreasury.totalVotedIncrease = 0;
-            votedTreasury.totalVotedFreeze = 0;
-            votedTreasury.totalVotedDecrease = 0;
-            votedSecu.totalVotedIncrease = 0;
-            votedSecu.totalVotedFreeze = 0;
-            votedSecu.totalVotedDecrease = 0;
-            voters[msg.sender].lastVoteRound = 0;
-            return true;
-        }
-
+    function setClaimQuickerAmount(uint256 _amount) external onlyRole(SET_ROLE) {
+        claimQuickerTokenAmount = _amount;
     }
 
-    // 라운드 넘기는 함수 - 일요일 자정 이후로 호출 가능
-    function finishRound() external returns(bool) {
-        require(block.timestamp >= nextSundayMidnight, "Not sundayMidnight");
-        (uint16 currentPlatform, uint16 currentSecu) = getCommissionRate();
-        uint16[2] memory voteResult = getTopVotedTopics();
-        uint16 nextPlatformFee = currentPlatform;
-        uint16 nextSecuFee = currentSecu;
-        if (voteResult[0] == 1) {
-            nextPlatformFee = currentPlatform + changeFeeIndex;
-        } else if (voteResult[0] == 3) {
-            nextPlatformFee = currentPlatform - changeFeeIndex;
-        }
-        if (voteResult[1] == 1) {
-            nextSecuFee = currentSecu + changeFeeIndex;
-        } else if (voteResult[1] == 3) {
-            nextSecuFee = currentSecu - changeFeeIndex;
-        }
-        (bool isSetPlatform, ) = address(quickerDelivery).call(
+    function transferTokensToOtherAddress(address _to, uint256 _amount)
+        internal
+    {
+        (bool success, ) = address(qkrwToken).call(
             abi.encodeWithSignature(
-                "changeCommissionRate(uint8,uint16)",
-                0,
-                nextPlatformFee
+                "transfer(address,uint256)",
+                _to,
+                _amount
             )
         );
-        require(isSetPlatform, "quickerDelivery call failed");
-        (bool isSetSecu, ) = address(quickerDelivery).call(
+        require(success);
+    }
+
+    function recieveTokensFromOtherAddress(address _from, uint256 _amount)
+        internal
+    {
+        (bool success, ) = address(qkrwToken).call(
             abi.encodeWithSignature(
-                "changeCommissionRate(uint8,uint16)",
-                2,
-                nextSecuFee
+                "transferFrom(address,address,uint256)",
+                _from,
+                address(this),
+                _amount
             )
         );
-        require(isSetSecu, "quickerDelivery call failed");
+        require(success);
+    }
+
+    /**
+    @dev Creates a new Order by the client and deposits QKRW tokens to the contract
+    @param _orderPrice The payment amount of the client
+    @param _limitedTime Timestamp value (in seconds) for the delivery deadline
+    @notice This function is used by the client to create a new Order and deposit QKRW tokens.
+    @notice _orderPrice must be greater than or equal to 0, and _limitedTime must be later than the current time.
+    @notice After the Order object is created and a new order number is issued, it is added to the list associated with the client account and the overall order list.
+    @notice Finally, QKRW tokens are transferred from the client address to this contract account.
+     */
+    function createOrder(uint256 _orderPrice, uint256 _limitedTime) external {
+        require(
+            _limitedTime >= block.timestamp,
+            "The deadline must later than the current time!"
+        );
+        require(_orderPrice > 0, "Order price must bigger than 0!");
+        uint256 orderNum = orderList.length;
+        uint256 amount = getMulTokenAmount(_orderPrice);
+        clientOfOrder[orderNum] = msg.sender;
+        Order memory newOrder = Order(
+            orderNum,
+            msg.sender,
+            address(0),
+            State.created,
+            _orderPrice,
+            0,
+            _limitedTime,
+            block.timestamp,
+            0,
+            0,
+            0
+        );
+        recieveTokensFromOtherAddress(msg.sender, amount);
+        orderList.push(newOrder);
+        clientOrderList[msg.sender].push(orderNum);
+        emit OrderCreated(orderNum);
+        emit ChangedBalance(true);
+        emit OrderResult(true);
+    }
+
+    /**
+    @dev Function for a client to cancel an Order
+    Cannot be canceled once matched with a delivery person
+    @param _orderNum Order number
+    @notice This function allows clients to cancel their Orders.
+    Orders that have been matched with a delivery person cannot be canceled.
+    @notice If the order is canceled successfully, the corresponding QKRW tokens will be refunded to the client's wallet.
+    */
+    function cancelOrder(uint256 _orderNum)
+        external
+        isClientOfOrder(_orderNum, msg.sender)
+    {
+        require(
+            orderList[_orderNum].state == State.created,
+            "Matched with another quicker..."
+        );
+        orderList[_orderNum].state = State.canceled;
+        uint256 refundAmount = getMulTokenAmount(
+            orderList[_orderNum].orderPrice
+        );
+        transferTokensToOtherAddress(msg.sender, refundAmount);
+        emit ChangedBalance(true);
+        emit OrderResult(true);
+    }
+
+    /**
+    @dev Function executed when a delivery person accepts an order created by a client
+    @param _orderNum Order number
+    @notice This function is used when a delivery person accepts an order created by a client.
+    @notice It cannot be executed if the order is already matched with another delivery person or canceled.
+    @notice It cannot be executed if the delivery deadline for the order has already passed.
+    @notice The security deposit fee is calculated based on the price of the order and transferred from the delivery person's account to the contract account.
+    @notice When the delivery person accepts the order, the information for the order is updated and the order is changed to a matched state with the current delivery person.
+    @notice The security deposit is entrusted to the delivery person's account and will be returned when the order is completed and settled.
+    */
+    function acceptOrder(uint256 _orderNum) external {
+        Order storage order = orderList[_orderNum];
+        require(
+            order.state == State.created,
+            "Already matched with another quicker..."
+        );
+        require(order.limitedTime > block.timestamp, "Already canceled");
+        uint256 _securityDeposit = calculateFee(
+            order.orderPrice,
+            commissionRate.securityDepositRate
+        );
+        order.quicker = msg.sender;
+        order.securityDeposit = _securityDeposit;
+        order.state = State.matched;
+        order.matchedTime = block.timestamp;
+        quickerOfOrder[_orderNum] = msg.sender;
+        quickerOrderList[msg.sender].push(_orderNum);
+        uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
+        recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
+        emit OrderResult(true);
+        emit ChangedBalance(true);
+        emit AcceptedOrderNumber(_orderNum);
+    }
+
+    // 배송원 배달완료 시간 기입 함수
+    function deliveredOrder(uint256 _orderNum)
+        external
+        isQuickerOfOrder(_orderNum, msg.sender)
+    {
+        Order storage order = orderList[_orderNum];
+        require(
+            order.state == State.matched,
+            "State is not matched"
+        );
+        require(order.deliveredTime == 0, "Already delivered");
+        require(order.limitedTime + 12 hours >= block.timestamp, "Please contact customer service center");
+        order.deliveredTime = block.timestamp;
+        emit OrderResult(true);
+        emit deliveredOrderNumber(_orderNum);
+    }
+
+    // client 계약 완료 함수
+    function completeOrder(uint256 _orderNum)
+        external
+        isClientOfOrder(_orderNum, msg.sender)
+    {
+        require(
+            orderList[_orderNum].state == State.matched,
+            "You can not complete before matched"
+        );
+        orderList[_orderNum].state = State.completed;
+        orderList[_orderNum].completedTime = block.timestamp;
         (bool mintSuccess, ) = address(QuickerToken).call(
             abi.encodeWithSignature(
                 "mint(address,uint256)",
                 msg.sender,
-                finishRoundRewards
+                claimQuickerTokenAmount
             )
         );
-        require(mintSuccess, "QuickerToken call failed");
-        nextSundayMidnight = nextSundayMidnight.add(604800);
-        currentRound = currentRound.add(1);
-        emit changedRound(currentRound.add(1)); // 다음 라운드 값 방출
-        return true;
+        require(mintSuccess);
+        emit OrderResult(true);
+        emit completedOrderNumber(_orderNum);
     }
 
-    // 현재 라운드 totalIncome 추가 함수 (QuickerDelivery 컨트랙이 QKRW 토큰 전송 후 호출), _income -> 1e18
-    function addTotalIncome(uint256 _income) external onlyRole(ADD_TOTAL_INCOME_ROLE) {
-        roundLog[currentRound].totalIncome = roundLog[currentRound].totalIncome.add(_income);
-        emit addTotalIncomeData(_income);
-    }
-
-    // QuickerDelivery 컨트랙의 플랫폼 수수료 호출 함수
-    function getCommissionRate() internal view returns (uint16 platformFeeRate, uint16 securityDepositRate) {
-        QuickerDlvry_proxy quickerDrvy = QuickerDlvry_proxy(quickerDelivery);
-        (uint16 platformFeeRateIndex, , uint16 securityDepositRateIndex) = quickerDrvy.commissionRate();
-        return (platformFeeRateIndex, securityDepositRateIndex);
-    }
-
-    // 주제별 최다 득표 반환 함수, 1 -> 인상, 2 -> 동결, 3 -> 인하
-    function getTopVotedTopics() internal view returns (uint16[2] memory) {
-        uint16[2] memory topVotedTopics;
-        RoundInfo memory roundInfo = roundLog[currentRound];
-        // 플랫폼 수수료 투표 결과
-        if (roundInfo.treasuryFee.totalVotedIncrease >= roundInfo.treasuryFee.totalVotedFreeze && roundInfo.treasuryFee.totalVotedIncrease >= roundInfo.treasuryFee.totalVotedDecrease) {
-            topVotedTopics[0] = 1;
-        } else if (roundInfo.treasuryFee.totalVotedFreeze >= roundInfo.treasuryFee.totalVotedIncrease && roundInfo.treasuryFee.totalVotedFreeze >= roundInfo.treasuryFee.totalVotedDecrease) {
-            topVotedTopics[0] = 2;
+    /**
+    @dev Function for the settlement of quicker.
+    @param _orderNum : The order number
+    @notice This function is used when the quicker requests to withdraw the security deposit after the order is completed.
+    @notice Quicker can withdraw the security deposit only after the order is completed or when the limited time for the order has passed.
+    @notice If the delivery is made after the limited time, the security deposit is returned to the client, and the order price minus platform fee and insurance fee is transferred to the quicker.
+    @notice If the delivery is made before the limited time, the security deposit and the order price minus platform fee and insurance fee is transferred to the quicker.
+    @notice The information related to function execution can be confirmed through events.
+    */
+    function withdrawFromOrder(uint256 _orderNum)
+        external
+        isQuickerOfOrder(_orderNum, msg.sender)
+    {
+        Order storage order = orderList[_orderNum];
+        require(order.securityDeposit != 0, "already withdraw!");
+        require(
+            order.state == State.completed ||
+                (order.limitedTime + 12 hours < block.timestamp &&
+                    order.state == State.matched),
+            "You can't withdraw deposit now"
+        );
+        uint256 platformFee = calculateFee(
+            order.orderPrice,
+            commissionRate.platformFeeRate
+        );
+        uint256 insuranceFee = calculateFee(
+            order.orderPrice,
+            commissionRate.insuranceFeeRate
+        );
+        uint256 toQuickerAmount;
+        // deadline 넘김
+        if (order.deliveredTime > order.limitedTime) {
+            toQuickerAmount = order.orderPrice - platformFee - insuranceFee;
+            transferTokensToOtherAddress(
+            order.client,
+            getMulTokenAmount(order.securityDeposit)
+            );
         } else {
-            topVotedTopics[0] = 3;
+            toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
         }
-        // 보증금 투표 결과
-        if (roundInfo.securityDepositFee.totalVotedIncrease >= roundInfo.securityDepositFee.totalVotedFreeze && roundInfo.securityDepositFee.totalVotedIncrease >= roundInfo.securityDepositFee.totalVotedDecrease) {
-            topVotedTopics[1] = 1;
-        } else if (roundInfo.securityDepositFee.totalVotedFreeze >= roundInfo.securityDepositFee.totalVotedIncrease && roundInfo.securityDepositFee.totalVotedFreeze >= roundInfo.securityDepositFee.totalVotedDecrease) {
-            topVotedTopics[1] = 2;
-        } else {
-            topVotedTopics[1] = 3;
-        }
-        return topVotedTopics;
-    }
-    // 보험 수수료 설정 함수
-    function setInsuranceFee(uint256 _rate) external onlyOwner {
-        insuranceFeeRate = _rate;
+        transferTokensToOtherAddress(
+            feeGovernor,
+            getMulTokenAmount(platformFee)
+        ); 
+        (bool success, ) = address(feeGovernor).call(
+            abi.encodeWithSignature(
+                "addTotalIncome(uint256)",
+                getMulTokenAmount(platformFee)
+            )
+        );
+        require(success);
+        transferTokensToOtherAddress(
+            insuranceFeeCollector,
+            getMulTokenAmount(insuranceFee)
+        );
+        transferTokensToOtherAddress(
+            msg.sender,
+            getMulTokenAmount(toQuickerAmount)
+        );
+        order.state = State.completed;
+        order.securityDeposit = 0;
+        (bool mintSuccess, ) = address(QuickerToken).call(
+            abi.encodeWithSignature(
+                "mint(address,uint256)",
+                msg.sender,
+                claimQuickerTokenAmount
+            )
+        );
+        require(mintSuccess);
+        emit DepositedFee(true);
+        emit ChangedBalance(true);
     }
 
-    // 수수료 변동률 설정 함수
-    function setChangeFeeIndex(uint16 _rate) external onlyOwner {
-        changeFeeIndex = _rate;
-    }
-
-    // finishRound 함수 실행 보상 수량 설정 함수
-    function setFinishRoundRewards(uint256 _amount) external onlyOwner {
-        finishRoundRewards = _amount;
-    }
-
-    // 긴급 투표 마감시간 변경 함수
-    function emergencySetNextSunday(uint256 _timestamp) external onlyOwner {
-        nextSundayMidnight = _timestamp;
+    /**
+    @dev failedOrder function
+    @param _orderNum order number
+    @notice This function is executed when the delivery person fails to deliver the package and the client executes the function.
+    @notice If the deadline + 12 hours is less than the current time and deliveredTime is 0, the function can be executed.
+    @notice The security deposit and order price (excluding commission) are returned to the client.
+    */
+    function failedOrder(uint256 _orderNum) external isClientOfOrder(_orderNum, msg.sender) {
+        Order storage order = orderList[_orderNum];
+        require(order.state == State.matched, "State is not matched");
+        require((order.limitedTime + 12 hours < block.timestamp) && (order.deliveredTime == 0), "You can't process order to failed");
+        // todo: 보증금 + 의뢰금 반환(수수료 제외)
+        uint256 platformFee = calculateFee(
+            order.orderPrice,
+            commissionRate.platformFeeRate
+        );
+        uint256 insuranceFee = calculateFee(
+            order.orderPrice,
+            commissionRate.insuranceFeeRate
+        );
+        transferTokensToOtherAddress(
+            feeGovernor,
+            getMulTokenAmount(platformFee)
+        );
+        (bool success, ) = address(feeGovernor).call(
+            abi.encodeWithSignature(
+                "addTotalIncome(uint256)",
+                getMulTokenAmount(platformFee)
+            )
+        );
+        require(success);
+        transferTokensToOtherAddress(
+            insuranceFeeCollector,
+            getMulTokenAmount(insuranceFee)
+        );
+        // 수수료를 제외한 반환금 전송 (의뢰 가격 + 배송원 보증금)
+        uint256 toClientAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
+        transferTokensToOtherAddress(
+            msg.sender,
+            getMulTokenAmount(toClientAmount)
+        );
+        order.state = State.failed;
+        order.securityDeposit = 0;
+        (bool mintSuccess, ) = address(QuickerToken).call(
+            abi.encodeWithSignature(
+                "mint(address,uint256)",
+                msg.sender,
+                claimQuickerTokenAmount
+            )
+        );
+        require(mintSuccess);
+        emit OrderResult(true);
+        emit DepositedFee(true);
+        emit ChangedBalance(true);
     }
 }
