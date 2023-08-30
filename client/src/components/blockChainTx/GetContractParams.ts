@@ -394,4 +394,25 @@ export default {
       params: `["${QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN}"]`
     };
   },
+  // test
+  FinishRoundTest: (): SendTxType => {
+    return {
+      abi: `{
+        "inputs": [],
+        "name": "finishRound",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }`,
+      value: "0",
+      to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
+      params: `[]`
+    };
+  },
 };

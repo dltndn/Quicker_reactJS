@@ -145,7 +145,7 @@ const allowanceTest = async () => {
     <>
       {klaytnAddr}
       <TopDiv>
-        <SendTxK param={GetContractParams.ProxyTest()} successFunc={() => {console.log("success")}}/>
+        <SendTxK param={GetContractParams.FinishRoundTest()} successFunc={() => {console.log("success")}}/>
         <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
