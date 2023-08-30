@@ -663,7 +663,7 @@ const ClaimRewards = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
     setRoundInfo(roundData);
-    navigate("/feeGovernor")
+    setPageState("main")
   };
 
   return (
