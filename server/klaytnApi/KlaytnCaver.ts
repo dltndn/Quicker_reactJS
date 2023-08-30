@@ -238,7 +238,7 @@ export default {
       let totalIncome = roundInfo.totalIncome 
       totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY')) // 해당 라운드 수익
       let totalVotePower = 0 // 전체 투표량
-      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+      for (let i=0; i<roundInfo.treasuryFee.length; i++) {
         totalVotePower += Number(roundInfo.treasuryFee[i])
       }
       return Number(totalIncome) * (votedbal / totalVotePower) 
@@ -253,13 +253,14 @@ export default {
       let userRewards = "0"
       let userVoteEnable = String(Number(userVotePower))
       if (votedInfo.lastVoteRound !== "0") {
-        for (let i=0; i<votedInfo.treasuryFee.length/2; i++) {
-          votedBal += Number(votedInfo.treasuryFee[i])
-        }
         if (votedInfo.lastVoteRound !== currentRound) {
           const userRewardsS = await calRewards(votedInfo.lastVoteRound, votedBal)
           userRewards = Math.round(Number(userRewardsS)).toString()
+          userVoteEnable = "0"
         } else {
+          for (let i=0; i<votedInfo.treasuryFee.length; i++) {
+            votedBal += Number(votedInfo.treasuryFee[i])
+          }
           userVoteEnable = String(Number(userVoteEnable) - votedBal) // 가용 투표권
         }
       }
@@ -268,9 +269,10 @@ export default {
       let totalIncome = roundInfo.totalIncome 
       totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY'))
       let totalVoted = 0 // 전체 투표량
-      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+      for (let i=0; i<roundInfo.treasuryFee.length; i++) {
         totalVoted += Number(roundInfo.treasuryFee[i])
       }
+      
       const totalVotePower = totalVoted.toString()
       const currentCommissionRate = await quicker_drvr_contract.call("commissionRate");
       const currentFee = String(Number(currentCommissionRate[0]) / 10) // 현재 거래 수수료
