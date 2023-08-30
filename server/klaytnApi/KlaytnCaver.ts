@@ -257,8 +257,8 @@ export default {
           votedBal += Number(votedInfo.treasuryFee[i])
         }
         if (votedInfo.lastVoteRound !== currentRound) {
-          userRewards = String(await calRewards(votedInfo.lastVoteRound, votedBal))
-          userRewards = floorDecimals(caver.utils.convertFromPeb(userRewards, 'KLAY')) // 유저 수익
+          const userRewardsS = await calRewards(votedInfo.lastVoteRound, votedBal)
+          userRewards = Math.round(Number(userRewardsS)).toString()
         } else {
           userVoteEnable = String(Number(userVoteEnable) - votedBal) // 가용 투표권
         }
