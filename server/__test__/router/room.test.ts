@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { sequelize } from "../connectors/sequelizeConnector";
 import { initModels } from "../../Maria/Models/init-models";
 import { findRoomInfoByOrderNumber } from "../../service/Room";
 import { findRecentMessageByOrderNumber } from "../../Mongo/Command/FindMessages";
@@ -6,12 +6,6 @@ import mongoose from "mongoose";
 
 describe("/room", () => {
   describe("/ 라우터 테스트", () => {
-    const sequelize = new Sequelize("Quicker", "root", "11111111", {
-      dialect: "mariadb",
-      host: "localhost",
-      port: 3306,
-      logging: false,
-    });
   
     beforeAll(() => {
       initModels(sequelize);
