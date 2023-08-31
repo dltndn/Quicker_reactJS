@@ -12,7 +12,10 @@ import {
   QUICKER_STAKING_ADDRESS_KLAYTN,
   QUICEKR_FEE_GOVERNOR_ABI_KLAYTN,
   QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
+  QUICKER_DLVR_PROXY_ABI,
+  QUICKER_DLVR_PROXY_ADDRESS
 } from "./ContractInfo";
+import BigNumber from "bignumber.js";
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 config();
 
@@ -21,8 +24,8 @@ const qkrw_token_contract = caver.contract.create(QKRW_CONTRACT_ABI_KLAYTN,
   QKRW_ADDRESS_KLAYTN
 );
 // @ts-ignore
-const quicker_drvr_contract = caver.contract.create(QUICKER_DLVR_ABI_KLAYTN,
-  QUICKER_DLVR_ADDRESS_KLAYTN
+const quicker_drvr_contract = caver.contract.create(QUICKER_DLVR_PROXY_ABI,
+  QUICKER_DLVR_PROXY_ADDRESS
 );
 // @ts-ignore
 const quicker_staking_contract = caver.contract.create(QUICKER_STAKING_ABI_KLAYTN,
@@ -42,7 +45,7 @@ export default {
       const result = await qkrw_token_contract.call(
         "allowance",
         para,
-        QUICKER_DLVR_ADDRESS_KLAYTN
+        QUICKER_DLVR_PROXY_ADDRESS
       );
       res.send(result);
     } catch (error) {
@@ -91,8 +94,12 @@ export default {
   },
   getCommissionRate: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const result: any = await quicker_drvr_contract.call("getCommissionRate");
-      res.send(result);
+      let resultArr = []
+      const result: any = await quicker_drvr_contract.call("commissionRate");
+      resultArr.push(Number(result.platformFeeRate))
+      resultArr.push(Number(result.insuranceFeeRate))
+      resultArr.push(Number(result.securityDepositRate))
+      res.send(resultArr);
     } catch (e) {
       res.send(e);
       next(e)
@@ -100,8 +107,8 @@ export default {
   },
   getOrder: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const para = req.body.orderNum;
-      const result = await quicker_drvr_contract.call("getOrder", para);
+      const { orderNum } = req.body;
+      const result = await quicker_drvr_contract.call("orderList", orderNum);
       res.send(result);
     } catch (e) {
       next(e)
@@ -113,7 +120,7 @@ export default {
       const orders: any[] = [];
       const orderNums: string[] = req.body.orderNumList;
       for (const val of orderNums) {
-        const result = await quicker_drvr_contract.call("getOrder", val);
+        const result = await quicker_drvr_contract.call("orderList", val);
         orders.push(result);
       }
       res.send(orders);
@@ -135,14 +142,14 @@ export default {
   getStakingInfo: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const { address } = req.body;
-      let quickerTotalSuupply = (await quicker_token.totalSupply()).toString()
-      quickerTotalSuupply = floorDecimals(caver.utils.convertFromPeb(quickerTotalSuupply, 'KLAY')) 
-      let quickerTotalStakingAmount = (await quicker_token.balanceOf(QUICKER_STAKING_ADDRESS_KLAYTN)).toString()
-      quickerTotalStakingAmount = floorDecimals(caver.utils.convertFromPeb(quickerTotalStakingAmount, 'KLAY')) 
-      let userVQuickerBal = (await vQuicker_token.balanceOf(address)).toString()
-      userVQuickerBal = floorDecimals(caver.utils.convertFromPeb(userVQuickerBal, 'KLAY'))
-      let userQuickerBal = (await quicker_token.balanceOf(address)).toString()
-      userQuickerBal = floorDecimals(caver.utils.convertFromPeb(userQuickerBal, 'KLAY')) 
+      const quickerTotalSuupplyS = (await quicker_token.totalSupply())
+      const quickerTotalSuupply = floorDecimals(caver.utils.convertFromPeb(quickerTotalSuupplyS, 'KLAY')) 
+      const quickerTotalStakingAmountS = (await quicker_token.balanceOf(QUICKER_STAKING_ADDRESS_KLAYTN))
+      const quickerTotalStakingAmount = floorDecimals(caver.utils.convertFromPeb(quickerTotalStakingAmountS, 'KLAY')) 
+      const userVQuickerBalS = (await vQuicker_token.balanceOf(address))
+      const userVQuickerBal = floorDecimals(caver.utils.convertFromPeb(userVQuickerBalS, 'KLAY'))
+      const userQuickerBalS = (await quicker_token.balanceOf(address))
+      const userQuickerBal = floorDecimals(caver.utils.convertFromPeb(userQuickerBalS, 'KLAY')) 
       const userStakedQuickerBal = await quicker_staking_contract.call("stakerAmounts", address)
       const interestRate = await quicker_staking_contract.call("interestRate")
       let rewardRate = (Number(userVQuickerBal) / Number(userStakedQuickerBal) * Number(interestRate) * 3.65).toString()
@@ -150,7 +157,7 @@ export default {
       let pendingRewards = await quicker_staking_contract.call("getPendingReqwards", address);
       pendingRewards = caver.utils.convertFromPeb(pendingRewards, 'KLAY')
   
-      let currentBlockNumS = await caver.rpc.klay.getBlockNumber()
+      const currentBlockNumS = await caver.rpc.klay.getBlockNumber()
       const currentBlockNum = caver.utils.hexToNumber(currentBlockNumS)
       const index = Number(endBlockNum) - currentBlockNum
       const currentTimeStamp = new Date().getTime() / 1000;
@@ -231,30 +238,30 @@ export default {
       let totalIncome = roundInfo.totalIncome 
       totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY')) // 해당 라운드 수익
       let totalVotePower = 0 // 전체 투표량
-      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+      for (let i=0; i<roundInfo.treasuryFee.length; i++) {
         totalVotePower += Number(roundInfo.treasuryFee[i])
       }
       return Number(totalIncome) * (votedbal / totalVotePower) 
     }
     try {
       let { address } = req.body
-      let userVotePower = (await vQuicker_token.balanceOf(address)).toString()
-      userVotePower = floorDecimals(caver.utils.convertFromPeb(userVotePower, 'KLAY')) // 보유 투표권
+      const userVotePowerS = (await vQuicker_token.balanceOf(address))
+      let userVotePower = floorDecimals(caver.utils.convertFromPeb(userVotePowerS, 'KLAY')) // 보유 투표권
       const votedInfo = await quicker_fee_governor_contract.call("voters", address)
       let votedBal = 0 // 유저 이번 라운드 투표량
-      
       const currentRound = await quicker_fee_governor_contract.call("currentRound")
       let userRewards = "0"
-      let userVoteEnable = "0"
+      let userVoteEnable = String(Number(userVotePower))
       if (votedInfo.lastVoteRound !== "0") {
-        for (let i=0; i<votedInfo.treasuryFee.length/2; i++) {
-          votedBal += Number(votedInfo.treasuryFee[i])
-        }
         if (votedInfo.lastVoteRound !== currentRound) {
-          userRewards = String(await calRewards(votedInfo.lastVoteRound, votedBal))
-          userRewards = floorDecimals(caver.utils.convertFromPeb(userRewards, 'KLAY')) // 유저 수익
+          const userRewardsS = await calRewards(votedInfo.lastVoteRound, votedBal)
+          userRewards = Math.round(Number(userRewardsS)).toString()
+          userVoteEnable = "0"
         } else {
-          userVoteEnable = String(Number(userVotePower) - votedBal) // 가용 투표권
+          for (let i=0; i<votedInfo.treasuryFee.length; i++) {
+            votedBal += Number(votedInfo.treasuryFee[i])
+          }
+          userVoteEnable = String(Number(userVoteEnable) - votedBal) // 가용 투표권
         }
       }
       
@@ -262,11 +269,12 @@ export default {
       let totalIncome = roundInfo.totalIncome 
       totalIncome = floorDecimals(caver.utils.convertFromPeb(totalIncome, 'KLAY'))
       let totalVoted = 0 // 전체 투표량
-      for (let i=0; i<roundInfo.treasuryFee.length/2; i++) {
+      for (let i=0; i<roundInfo.treasuryFee.length; i++) {
         totalVoted += Number(roundInfo.treasuryFee[i])
       }
+      
       const totalVotePower = totalVoted.toString()
-      const currentCommissionRate = await quicker_drvr_contract.call("getCommissionRate");
+      const currentCommissionRate = await quicker_drvr_contract.call("commissionRate");
       const currentFee = String(Number(currentCommissionRate[0]) / 10) // 현재 거래 수수료
       const currentSecuDepo = String(Number(currentCommissionRate[2]) / 10) // 현재 배송원 보증금
 

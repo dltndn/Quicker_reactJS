@@ -22,7 +22,7 @@ export const getOrdersForLatest = async (amount: string) => {
 export const getCommissionRate = async () => {
   try {
     const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
-    return data.data; // type: string[]
+    return data.data; // type: number[]
   } catch (e) {
     return null;
   }

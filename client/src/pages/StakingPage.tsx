@@ -20,6 +20,7 @@ import Stacking from "../Lottie/Stacking.json";
 import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
+import Decimal from "decimal.js";
 
 const Sc3 = styled.section`
   margin: 8px 16px 16px 16px;
@@ -385,9 +386,12 @@ const StakingPage = () => {
     if (rewardsBlink === false && rewardsAmount !== "0") {
       // 홀더 예상 블록 당 보상 수량 계산 후 더하기
       // vQuicker balance * 0.00000000347
-      const rewardPerBlock = Number(userVQuickerBal) * 0.00000000347
-      const result = Number(rewardsAmount) + rewardPerBlock
-      setRewardsAmount(floorDecimals(result.toString(), 7))
+      
+      const rewardsAmountDecimal = new Decimal(rewardsAmount);
+      const userVQuickerBalDecimal = new Decimal(userVQuickerBal);
+      const rewardPerBlock = userVQuickerBalDecimal.times("0.00000000347");
+      const result = rewardsAmountDecimal.plus(rewardPerBlock);
+      setRewardsAmount(result.toString());
     }
   }, [rewardsBlink])
 

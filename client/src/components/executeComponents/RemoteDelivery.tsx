@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
@@ -27,6 +28,8 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   const [file, setFile] = useState<File | null | undefined>(undefined);
 
   const fileInput = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate()
 
   const handleDivClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -73,7 +76,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
         }
         // 배송원 사진 업로드 로직 작성
         await postImage();
-        setShowComponent(<WaitClientConfirm />);
+        navigate("/")
       } catch (e) {
         console.log(e);
       }
