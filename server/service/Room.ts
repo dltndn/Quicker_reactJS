@@ -1,9 +1,8 @@
-import sequelize from "../Maria/Connectors/SequelizeConnector"
-import {initModels} from "../Maria/Models/init-models";
 import SelectRoomInfo from "../Maria/Commands/SelectRoomInfo";
-import connectMongo from "../Mongo/Connector";
-import MessageModel from "../Mongo/Schemas/Message"
+import sequelize from "../Maria/Connectors/SequelizeConnector";
+import { initModels } from "../Maria/Models/init-models";
 import { findRecentMessageByOrderNumber } from "../Mongo/Command/FindMessages";
+import connectMongo from "../Mongo/Connector";
 
 initModels(sequelize);
 
