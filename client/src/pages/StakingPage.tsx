@@ -21,6 +21,7 @@ import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 import Decimal from "decimal.js";
+import BottomConfirmBtn from "../components/bottomconfirmBtn";
 
 const Sc3 = styled.section`
   margin: 8px 16px 16px 16px;
@@ -98,15 +99,13 @@ const Div1_2 = styled.div`
 const Div3 = styled.div`
   text-align: center;
   margin-bottom: 8px;
-    cursor: pointer;
+  cursor: pointer;
   color: initial;
   &.clicked {
     color: blue;
   }
   cursor: pointer;
 `;
-
-
 
 const Div1_3 = styled(Div1_2)`
   font-size: 16px;
@@ -183,7 +182,7 @@ const QuicPcTx = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: #6c6c6c;
-`
+`;
 
 const StakingTx = styled.div`
   font-size: 22px;
@@ -196,16 +195,16 @@ const StakingTx1 = styled(StakingTx)`
 `;
 const Bt1 = styled.span`
   position: absolute;
-  margin-right: 40px;
+  margin-right: 30px;
   right: 0;
-  top: 515px;
+  top: 535px;
 `;
 
 const StakingTxQuicker = styled.span`
   font-size: 14px;
   font-weight: bold;
   color: #8ed6ff;
-  padding-left: 8px;
+  padding-left: 0px;
 `;
 const StakingTxSm1 = styled.div`
   font-size: 10px;
@@ -292,7 +291,6 @@ const Ip = styled.input`
   }
 `;
 
-
 type StakingComponentType = {
   onClickBackBtn: () => void;
   address: string | undefined;
@@ -325,7 +323,7 @@ const StakingPage = () => {
       pendingRewards,
       userStakedQuickerBal,
       userQuickerBal,
-      userVQuickerBal
+      userVQuickerBal,
     } = await getStakingInfo(address);
     setStakingRate(
       (
@@ -351,7 +349,7 @@ const StakingPage = () => {
     }
     setRewardsAmount(floorDecimals(pendingRewards, 7));
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));
-    setUserVQuickerBal(userVQuickerBal)
+    setUserVQuickerBal(userVQuickerBal);
   };
 
   const moveToClaimPage = () => {
@@ -368,7 +366,7 @@ const StakingPage = () => {
 
   useEffect(() => {
     const interval = setInterval(blinkRewardsAmount, 500);
-    console.log("staking")
+    console.log("staking");
     return () => {
       setShowStaking(null);
       setShowClaim(false);
@@ -386,14 +384,14 @@ const StakingPage = () => {
     if (rewardsBlink === false && rewardsAmount !== "0") {
       // 홀더 예상 블록 당 보상 수량 계산 후 더하기
       // vQuicker balance * 0.00000000347
-      
+
       const rewardsAmountDecimal = new Decimal(rewardsAmount);
       const userVQuickerBalDecimal = new Decimal(userVQuickerBal);
       const rewardPerBlock = userVQuickerBalDecimal.times("0.00000000347");
       const result = rewardsAmountDecimal.plus(rewardPerBlock);
       setRewardsAmount(result.toString());
     }
-  }, [rewardsBlink])
+  }, [rewardsBlink]);
 
   return (
     <>
@@ -425,39 +423,31 @@ const StakingPage = () => {
             <div>
               <Sc3>
                 <HeadQuickerTx>
-                  Quicker                
+                  Quicker
                   <QuicPcTx>
-                  총 스테이킹률                    
-                  <PercentTx2>
-                      {" "} 
+                    총 스테이킹률
+                    <PercentTx2>
+                      {" "}
                       {stakingRate}
-                      <PercentTx3>
-                      {" "}%
-                      </PercentTx3>
+                      <PercentTx3> %</PercentTx3>
                     </PercentTx2>
                   </QuicPcTx>
                 </HeadQuickerTx>
                 <Div1>
                   <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
-                      <PercentTx2>
-                        {quickerTotalSuupply}
-                        <PercentTx3>
-                          {" "}
-                          Quicker
-                        </PercentTx3>
-                      </PercentTx2>
+                    <PercentTx2>
+                      {quickerTotalSuupply}
+                      <PercentTx3> Quicker</PercentTx3>
+                    </PercentTx2>
                   </PercentDiv>
                 </Div1>
                 <Div1>
-                <PercentDiv>
+                  <PercentDiv>
                     <PercentTx1>총 스테이킹량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalStaking}
-                      <PercentTx3>
-                        {" "}
-                        Quicker
-                      </PercentTx3>
+                      <PercentTx3> Quicker</PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                 </Div1>
@@ -480,11 +470,13 @@ const StakingPage = () => {
                 </Lot> */}
               </Sc01>
               <Sc02>
-                <QuickerTx>보상 수량</QuickerTx>
+                <QuickerTx>보상 수령</QuickerTx>
                 <StakingTx1>
-                  {rewardsBlink ? (<BlinkDiv>
-                    {rewardsAmount}
-                  </BlinkDiv>):(<div>{rewardsAmount}</div>)}
+                  {rewardsBlink ? (
+                    <BlinkDiv>{rewardsAmount}</BlinkDiv>
+                  ) : (
+                    <div>{rewardsAmount}</div>
+                  )}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
                   <Bt1 onClick={() => moveToClaimPage()}>
                     <BsCaretRightFill></BsCaretRightFill>{" "}
@@ -497,7 +489,7 @@ const StakingPage = () => {
                 </Sc4>
                 <Sc4
                   onClick={() => {
-                    setShowStaking(true)
+                    setShowStaking(true);
                   }}
                 >
                   <StakingTx3>스테이킹</StakingTx3>
@@ -548,7 +540,23 @@ const StakingToken = ({
   const [isClicked2, setIsClicked2] = useState(false);
   const [isClicked3, setIsClicked3] = useState(false);
 
+  const onClick1 = () => {
+    setIsClicked1(!isClicked1);
+    setIsClicked2(false);
+    setIsClicked3(false);
+  };
 
+  const onClick2 = () => {
+    setIsClicked2(!isClicked2);
+    setIsClicked1(false);
+    setIsClicked3(false);
+  };
+
+  const onClick3 = () => {
+    setIsClicked3(!isClicked3);
+    setIsClicked1(false);
+    setIsClicked2(false);
+  };
 
   const navigate = useNavigate();
 
@@ -622,22 +630,23 @@ const StakingToken = ({
         <IncreaseQAllowance />
       ) : (
         <>
-        <Margin>
-          <Ip
-            type="text"
-            value={inputAmount}
-            onChange={handleInputAmount}
-            placeholder="정수 단위로만 입력 가능합니다"
-          />
+          <Margin>
+            <Ip
+              type="text"
+              value={inputAmount}
+              onChange={handleInputAmount}
+              placeholder="정수 단위로만 입력 가능합니다"
+            />
           </Margin>
           <ContainerDiv>
-          <StakingTxSm1_1>
-          보유<StakingTxSm2>{quickerBalance}</StakingTxSm2>
-          <StakingBt>max</StakingBt>
-          </StakingTxSm1_1>
-          <StakingTxSm2_1>{alertMessage}</StakingTxSm2_1>
+            <StakingTxSm1_1>
+              보유<StakingTxSm2>{quickerBalance}</StakingTxSm2>
+              <StakingBt>max</StakingBt>
+            </StakingTxSm1_1>
+            <StakingTxSm2_1>{alertMessage}</StakingTxSm2_1>
           </ContainerDiv>
-          <br></br><br></br>
+          <br></br>
+          <br></br>
           <QuickerTx_1>스테이킹 기간 선택</QuickerTx_1>
           {/* <Div1_1>
             <Div1_2>픽업지까지</Div1_2>
@@ -645,45 +654,57 @@ const StakingToken = ({
             <Div1_2>배송지</Div1_2>
           </Div1_1> */}
           <Div0>
-      <Div1_3>
-        <Div3
-          onClick={() => setIsClicked1(!isClicked1)}
-          className={isClicked1 ? 'clicked' : ''}
-        >
-          <Sp0>1배</Sp0><br />3개월
-        </Div3>
-      </Div1_3>
-      <Div1_3>
-        <Div3
-          onClick={() => setIsClicked2(!isClicked2)}
-          className={isClicked2 ? 'clicked' : ''}
-        >
-          <Sp0>2배</Sp0><br />6개월
-        </Div3>
-      </Div1_3>
-      <Div1_3>
-        <Div3
-          onClick={() => setIsClicked3(!isClicked3)}
-          className={isClicked3 ? 'clicked' : ''}
-        >
-          <Sp0>4배</Sp0><br />9개월
-        </Div3>
-      </Div1_3>
-    </Div0>
+            <Div1_3>
+              <div onClick={() => setSelectedPeriod(3)}>
+                <Div3
+                  onClick={onClick1}
+                  className={isClicked1 ? "clicked" : ""}
+                >
+                  <Sp0>1배</Sp0>
+                  <br />
+                  3개월
+                </Div3>
+              </div>
+            </Div1_3>
+            <Div1_3>
+              <div onClick={() => setSelectedPeriod(6)}>
+                <Div3
+                  onClick={onClick2}
+                  className={isClicked2 ? "clicked" : ""}
+                >
+                  <Sp0>2배</Sp0>
+                  <br />
+                  6개월
+                </Div3>
+              </div>
+            </Div1_3>
+            <Div1_3>
+              <div onClick={() => setSelectedPeriod(9)}>
+                <Div3
+                  onClick={onClick3}
+                  className={isClicked3 ? "clicked" : ""}
+                >
+                  <Sp0>4배</Sp0>
+                  <br />
+                  9개월
+                </Div3>
+              </div>
+            </Div1_3>
+          </Div0>
           <Margin>
-          <StakingTxSm1>
-            스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
-          </StakingTxSm1>
-          <StakingTxSm1>
-            추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
-          </StakingTxSm1>
+            <StakingTxSm1>
+              스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
+            </StakingTxSm1>
+            <StakingTxSm1>
+              추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
+            </StakingTxSm1>
           </Margin>
 
           {showConfirm && (
             <>
               {!showSendTx ? (
                 <>
-                  <ConfirmBtn
+                  <BottomConfirmBtn
                     content="다음"
                     confirmLogic={checkInfo}
                     isDisabled={false}
@@ -702,7 +723,7 @@ const StakingToken = ({
               )}
             </>
           )}
-          </>
+        </>
       )}
     </>
   );
@@ -744,4 +765,4 @@ const blinkAnimation = keyframes`
 
 const BlinkDiv = styled.div`
   animation: ${blinkAnimation} 1s;
-`
+`;

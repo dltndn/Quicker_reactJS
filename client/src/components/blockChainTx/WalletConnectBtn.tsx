@@ -2,6 +2,72 @@ import { useState, useEffect } from "react";
 import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
 import { useVerificationStore } from "../../App";
+import styled from "styled-components";
+
+const Bt1 = styled.button`
+  width: 100%;
+  height: 40px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: #000;
+  background-color: transparent;
+  border: 1px solid #000;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #000;
+    border-color: #000;
+    color: #fff;
+  }
+`;
+
+const Bt2 = styled.button`
+  width: 70px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color:  #00eeff;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  margin: 0px 6px 0px 6px;
+
+  &:hover {
+    background-color: #ffffff;
+    border: 1px solid #00eeff;
+    color: #00eeff;
+  }
+`;
+
+const Bt3 = styled.button`
+  width: 70px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color:  #4873ff;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  margin: 0px 6px 0px 6px;
+
+  &:hover {
+    background-color: #ffffff;
+    border: 1px solid #4873ff;
+    color: #4873ff;
+  }
+`;
 
 var QRCode = require("qrcode");
 
@@ -68,8 +134,8 @@ const WalletConnectBtn = () => {
     <>
       {address === undefined ? (
         <>
-          <button onClick={mobileConnect}>앱연결</button>
-          <button onClick={qrConnect}>큐알연결</button>
+          <Bt2 onClick={mobileConnect}>앱연결</Bt2>
+          <Bt3 onClick={qrConnect}>큐알연결</Bt3>
           {showQr && (
             <img
               src={qrUrl}
@@ -79,7 +145,7 @@ const WalletConnectBtn = () => {
           )}
         </>
       ) : (
-        <button onClick={disConnect}>연결해제</button>
+        <Bt1 onClick={disConnect}>연결해제</Bt1>
       )}
     </>
   );
