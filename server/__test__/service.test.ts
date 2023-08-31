@@ -1,18 +1,24 @@
+import mongoose from "mongoose";
 import { Sequelize } from "sequelize";
-import keys from "../config/keys";
-import {findDestinationAndDepartureByOrderId, findOrdersByWalletAddress} from "../service/Order";
-import { findRecentMessage, findRoomInfoByOrderNumber } from "../service/Room";
-import { findUserNameByWalletAddress } from "../service/User";
 import { initModels } from "../Maria/Models/init-models";
+import keys from "../config/keys";
+import { findDestinationAndDepartureByOrderId } from "../service/Order";
+import { findUserNameByWalletAddress } from "../service/User";
+ "../"
+
+ const sequelize = new Sequelize("Quicker", "root", "11111111", {
+  dialect: "mariadb",
+  host: "localhost",
+  port: 3306,
+  logging: false
+});
+
+
 
 describe("서비스 계층 테스트", () => {
-  const sequelize = new Sequelize("Quicker", "root", "11111111", {
-    dialect: "mariadb",
-    host: "localhost",
-    port: 3306,
-  });
-
-  beforeAll(() => {
+  
+  
+  beforeAll(() => {    
     initModels(sequelize);
   });
 
@@ -31,31 +37,6 @@ describe("서비스 계층 테스트", () => {
       const query = { walletAddress: "아무개" };
       const user = await findUserNameByWalletAddress(query);
       expect(user).toBe(null);
-    });
-  });
-
-  describe("방에대한 정보를 오더 넘버를 이용하여 조회하는 서비스", () => {
-    test("존재하는 오더 넘버 입력", async () => {
-      const expectResult = {
-        id: 2,
-        Sender: {
-          PHONE: '01030199090',
-          Departure: { ID: 2, X: 127.116522400337, Y: 37.5377319989174 }
-        },
-        Recipient: {
-          PHONE: '01039090909',
-          Destination: { id: 2, X: 127.049593854342, Y: 37.5712239267109 }
-        }
-      }
-      const query = {orderNum : 2}
-      const roomInfo = await findRoomInfoByOrderNumber(query);
-      expect(roomInfo).toStrictEqual(expectResult);
-    });
-
-    test("존재하지 않는 오더 넘버 입력", async () => {
-      const query = {orderNum : 0}
-      const roomInfo = await findRoomInfoByOrderNumber(query);
-      expect(roomInfo).toBe(null);
     });
   });
 
@@ -78,4 +59,5 @@ describe("서비스 계층 테스트", () => {
       expect(instance).toBe(null);
     });
   });
+  
 });

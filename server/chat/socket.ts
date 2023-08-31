@@ -1,6 +1,6 @@
 const SocketIo = require("socket.io");
 import saveMessage from "../Mongo/Command/SaveMessage";
-import findMessage from "../Mongo/Command/FindMessages";
+import { findMessage } from "../Mongo/Command/FindMessages";
 
 import Caver from "caver-js";
 import {
