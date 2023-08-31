@@ -42,8 +42,7 @@ export default {
   },
   clientdomain: process.env.CLIENT_SERVER_DOMAIN,
   test: {
-    wallet: process.env.USER_WALLET,
-    room: process.env.USER_ROOM_INFO,
+    USER_WALLET: process.env.USER_WALLET
   },
   klaytn: {
     BAOBAB_PROVIDER: process.env.KLAYTN_BAOBAB_PROVIDER,
