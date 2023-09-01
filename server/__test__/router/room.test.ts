@@ -2,7 +2,7 @@ import { sequelize } from "../connectors/sequelizeConnector";
 import { initModels } from "../../Maria/Models/init-models";
 import { findRoomInfoByOrderNumber } from "../../service/Room";
 import { findRecentMessageByOrderNumber } from "../../Mongo/Command/FindMessages";
-import mongoose from "mongoose";
+import { mongoConnection } from "../connectors/mongoConnector";
 
 describe("/room", () => {
   describe("/ 라우터 테스트", () => {
@@ -46,8 +46,6 @@ describe("/room", () => {
     afterAll(() => {
       mongoConnection.destroy()
     });
-  
-    const mongoConnection = mongoose.createConnection('mongodb://127.0.0.1:27017/', { dbName: 'chat' });
   
     describe("최근 메세지 정보를 데이터베이스에서 가지고 오는 서비스", () => {
       // @TODO 값은 맞는데 테스트에서 다르다고 나온다.
