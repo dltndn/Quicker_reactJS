@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { create } from "zustand";
 import TopBarOthers from "../components/topBarOthers";
-import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
-import CompletedOrderConfirm from "../components/deliveryProgress/CompletedOrderConfirm";
-import FailedOrderConfirm from "../components/deliveryProgress/FailedOrderConfirm";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { LoadingDeliveryProgress } from "../components/LoadingAnimation";
 import { getDateFromTimestamp, formatedDateHM } from "../utils/ConvertTimestampToDate";
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface ClientConfirmState {
     title: string;
@@ -28,6 +26,10 @@ export default function ClientConfirmPage() {
   const navigate = useNavigate();
   const { title, showComponent, setShowComponent} = useClientConfirmState()
 
+  const DeliveryStatus = lazy(() => import("../components/deliveryProgress/DeliveryStatus"))
+  const CompletedOrderConfirm = lazy(() => import("../components/deliveryProgress/CompletedOrderConfirm"))
+  const FailedOrderConfirm = lazy(() => import("../components/deliveryProgress/FailedOrderConfirm"))
+
   const setComponentLogic = async () => {
     // order.deliveredTime !== null -> 배송완료
     // (deadline + 12h < currentTime && deliveredTime === null) -> 배송실패
@@ -40,16 +42,16 @@ export default function ClientConfirmPage() {
             if (Number(blockchainOrder.deliveredTime) === 0) {
                 if((Number(blockchainOrder.limitedTime) + twelveHoursToSec) >= currentTime) {
                     let deadlineHM = formatedDateHM(getDateFromTimestamp(Number(blockchainOrder.limitedTime)))
-                    setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline={deadlineHM}/>)
+                    setShowComponent(<SuspenseComponent component={<DeliveryStatus orderNum={orderNumber} deadline={deadlineHM}/>} />)
                 } else {
                   let isReceived: boolean = false
                   if(Number(blockchainOrder.securityDeposit) === 0) {
                     isReceived = true
                   }
-                  setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={isReceived}/>)
+                  setShowComponent(<SuspenseComponent component={<FailedOrderConfirm orderNum={orderNumber} isReceived={isReceived}/>} />)
                 }
             } else {
-                setShowComponent(<CompletedOrderConfirm orderNum={orderNumber} />)
+                setShowComponent(<SuspenseComponent component={<CompletedOrderConfirm orderNum={orderNumber} />} />)
             }
         } catch(e) {
             console.log(e)
@@ -58,7 +60,7 @@ export default function ClientConfirmPage() {
   }
 
   useEffect(() => {
-    setShowComponent(<LoadingDeliveryProgress />)    
+    setShowComponent(<SuspenseComponent component={<LoadingDeliveryProgress />} />)    
     setComponentLogic()
   }, [])
 
@@ -70,8 +72,5 @@ export default function ClientConfirmPage() {
         }}
       ></TopBarOthers>
       {showComponent}
-      {/* <button onClick={() => setShowComponent(<DeliveryStatus orderNum={orderNumber} deadline="20:00"/>)}>배송원 실시간 위치 조회 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<CompletedOrderConfirm orderNum={orderNumber}/>)}>배송성공 확인 컴포넌트 이동</button>
-      <button onClick={() => setShowComponent(<FailedOrderConfirm orderNum={orderNumber} isReceived={false}/>)}>배송실패 확인 컴포넌트 이동</button> */}
   </>;
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { BsCaretRightFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
@@ -11,16 +11,16 @@ import {
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import SendTxK from "../components/blockChainTx/SendTxK";
 import { useOrderStore } from "./commission";
-import IncreaseQAllowance from "../components/IncreaseQAllowance";
 import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import styled, { keyframes } from "styled-components";
 import BottomBar from "../components/BottomBar";
-import Stacking from "../Lottie/Stacking.json";
-import StackingGo from "../Lottie/Stackinggo.json";
+// import Stacking from "../Lottie/Stacking.json";
+// import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 import Decimal from "decimal.js";
+import SuspenseComponent from "../components/SuspenseComponent";
 
 const Sc3 = styled.section`
   margin: 8px 16px 16px 16px;
@@ -508,6 +508,8 @@ const StakingToken = ({
 
   const { showAllowance, setShowAllowance } = useOrderStore();
 
+  const IncreaseQAllowance = lazy(() => import("../components/IncreaseQAllowance"))
+
   const handleInputAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     // 입력값이 숫자인지 확인하는 정규식
     const numberRegex = /^[0-9]+$/;
@@ -573,7 +575,7 @@ const StakingToken = ({
     <>
       <TopBarOthers title="스테이킹" redirectLogic={onClickBackBtn} />
       {showAllowance ? (
-        <IncreaseQAllowance />
+        <SuspenseComponent component={<IncreaseQAllowance />} />
       ) : (
         <Margin>
           <Ip

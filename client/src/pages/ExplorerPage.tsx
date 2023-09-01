@@ -11,7 +11,6 @@ import {
 } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import ExplorerTableData from "../components/ExplorerTableData";
-import { useVerificationStore } from "../App";
 import Lottie from "lottie-react";
 import LoadingAni from "../Lottie/144488-transparet-loading-dots.json";
 
@@ -45,7 +44,6 @@ export default function ExplorerPage() {
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
 
   const { setBlinkOrderArrIndex } = useExplorerState()
-  const { isMember } = useVerificationStore();
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
