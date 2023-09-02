@@ -21,6 +21,7 @@ import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 import Decimal from "decimal.js";
 import SuspenseComponent from "../components/SuspenseComponent";
+import BottomConfirmBtn from "../components/bottomconfirmBtn";
 
 const Sc3 = styled.section`
   margin: 8px 16px 16px 16px;
@@ -82,11 +83,56 @@ const Sc0 = styled.section`
 const Div1 = styled.div`
   display: flex;
 `;
+const Div1_1 = styled.div`
+  display: flex;
+  margin: 10px 10px 0 10px;
+  border: 1px solid black;
+`;
+
+const Div1_2 = styled.div`
+  display: flex;
+  flex: 1 1 25%;
+  justify-content: center;
+  font-size: var(--font-md1);
+  font-weight: bold;
+`;
+const Div3 = styled.div`
+  text-align: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  color: initial;
+  &.clicked {
+    color: blue;
+  }
+  cursor: pointer;
+`;
+
+const Div1_3 = styled(Div1_2)`
+  font-size: 16px;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px 0 10px 0;
+`;
+
+const Sp0 = styled.span`
+  font-size: 12px;
+  font-weight: normal;
+`;
+
+const Div0 = styled.div`
+  display: flex;
+  background-color: var(--white-color);
+  padding: 10px;
+`;
+
 const QuickerTx = styled.div`
   display: flex;
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
+`;
+const QuickerTx_1 = styled(QuickerTx)`
+  margin: 10px;
 `;
 
 const HeadQuickerTx = styled.div`
@@ -136,7 +182,7 @@ const QuicPcTx = styled.div`
   font-size: 12px;
   font-weight: bold;
   color: #6c6c6c;
-`
+`;
 
 const StakingTx = styled.div`
   font-size: 22px;
@@ -149,27 +195,51 @@ const StakingTx1 = styled(StakingTx)`
 `;
 const Bt1 = styled.span`
   position: absolute;
-  margin-right: 40px;
+  margin-right: 30px;
   right: 0;
-  top: 515px;
+  top: 535px;
 `;
 
 const StakingTxQuicker = styled.span`
   font-size: 14px;
   font-weight: bold;
   color: #8ed6ff;
-  padding-left: 8px;
+  padding-left: 0px;
 `;
 const StakingTxSm1 = styled.div`
   font-size: 10px;
   font-weight: bold;
   color: #c6c6c6;
 `;
+const StakingTxSm1_1 = styled(StakingTxSm1)`
+  margin: 6px 10px 6px 10px;
+`;
 const StakingTxSm2 = styled.span`
   font-size: 10px;
   font-weight: bold;
   color: #757575;
   padding-left: 8px;
+`;
+const StakingTxSm2_1 = styled.span`
+  font-size: 10px;
+  font-weight: bold;
+  color: #ff0000;
+  margin: 0 10px 0 0;
+`;
+const StakingBt = styled.button`
+  margin: 0px 10px 0px 10px;
+  background-color: transparent;
+  border: 0.5px solid black; /* 테두리 색깔과 굵기 설정 */
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+`;
+const ContainerDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 const Lot = styled.div`
   position: absolute;
@@ -220,6 +290,7 @@ const Ip = styled.input`
     background-color: #ffffff;
   }
 `;
+
 type StakingComponentType = {
   onClickBackBtn: () => void;
   address: string | undefined;
@@ -252,7 +323,7 @@ const StakingPage = () => {
       pendingRewards,
       userStakedQuickerBal,
       userQuickerBal,
-      userVQuickerBal
+      userVQuickerBal,
     } = await getStakingInfo(address);
     setStakingRate(
       (
@@ -278,7 +349,7 @@ const StakingPage = () => {
     }
     setRewardsAmount(floorDecimals(pendingRewards, 7));
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));
-    setUserVQuickerBal(userVQuickerBal)
+    setUserVQuickerBal(userVQuickerBal);
   };
 
   const moveToClaimPage = () => {
@@ -295,7 +366,7 @@ const StakingPage = () => {
 
   useEffect(() => {
     const interval = setInterval(blinkRewardsAmount, 500);
-    console.log("staking")
+    console.log("staking");
     return () => {
       setShowStaking(null);
       setShowClaim(false);
@@ -313,14 +384,14 @@ const StakingPage = () => {
     if (rewardsBlink === false && rewardsAmount !== "0") {
       // 홀더 예상 블록 당 보상 수량 계산 후 더하기
       // vQuicker balance * 0.00000000347
-      
+
       const rewardsAmountDecimal = new Decimal(rewardsAmount);
       const userVQuickerBalDecimal = new Decimal(userVQuickerBal);
       const rewardPerBlock = userVQuickerBalDecimal.times("0.00000000347");
       const result = rewardsAmountDecimal.plus(rewardPerBlock);
       setRewardsAmount(result.toString());
     }
-  }, [rewardsBlink])
+  }, [rewardsBlink]);
 
   return (
     <>
@@ -352,72 +423,31 @@ const StakingPage = () => {
             <div>
               <Sc3>
                 <HeadQuickerTx>
-                  Quicker                
+                  Quicker
                   <QuicPcTx>
-                  총 스테이킹률                    
-                  <PercentTx2>
-                      {" "} 
+                    총 스테이킹률
+                    <PercentTx2>
+                      {" "}
                       {stakingRate}
-                      <PercentTx3>
-                      {" "}%
-                      </PercentTx3>
+                      <PercentTx3> %</PercentTx3>
                     </PercentTx2>
                   </QuicPcTx>
                 </HeadQuickerTx>
-
-                {/* <Quickertxsm>
-                  스테이킹에 참여하여 Quicker의 생태계에 기여해주세요.
-                </Quickertxsm> */}
                 <Div1>
-                  {/* <PercentDiv>
+                  <PercentDiv>
                     <PercentTx1>총 유통량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalSuupply}
-                      <PercentTx3>
-                        {" "}
-                        Quicker
-                      </PercentTx3>
+                      <PercentTx3> Quicker</PercentTx3>
                     </PercentTx2>
-                  </PercentDiv>
-                  <PercentDiv>
-                    <PercentTx1>총 스테이킹량</PercentTx1>
-                    <PercentTx2>
-                      {quickerTotalStaking}
-                      <PercentTx3>
-                        {" "}
-                        Quicker
-                      </PercentTx3>
-                    </PercentTx2>
-                  </PercentDiv>
-                  <PercentDiv>
-                    <PercentTx1>총 스테이킹률</PercentTx1>
-                    <PercentTx2>
-                      {stakingRate}
-                      <PercentTx3>
-                      {" "}%
-                      </PercentTx3>
-                    </PercentTx2>
-                  </PercentDiv> */}
-                  <PercentDiv>
-                    <PercentTx1>총 유통량</PercentTx1>
-                      <PercentTx2>
-                        {quickerTotalSuupply}
-                        <PercentTx3>
-                          {" "}
-                          Quicker
-                        </PercentTx3>
-                      </PercentTx2>
                   </PercentDiv>
                 </Div1>
                 <Div1>
-                <PercentDiv>
+                  <PercentDiv>
                     <PercentTx1>총 스테이킹량</PercentTx1>
                     <PercentTx2>
                       {quickerTotalStaking}
-                      <PercentTx3>
-                        {" "}
-                        Quicker
-                      </PercentTx3>
+                      <PercentTx3> Quicker</PercentTx3>
                     </PercentTx2>
                   </PercentDiv>
                 </Div1>
@@ -440,11 +470,13 @@ const StakingPage = () => {
                 </Lot> */}
               </Sc01>
               <Sc02>
-                <QuickerTx>보상 수량</QuickerTx>
+                <QuickerTx>보상 수령</QuickerTx>
                 <StakingTx1>
-                  {rewardsBlink ? (<BlinkDiv>
-                    {rewardsAmount}
-                  </BlinkDiv>):(<div>{rewardsAmount}</div>)}
+                  {rewardsBlink ? (
+                    <BlinkDiv>{rewardsAmount}</BlinkDiv>
+                  ) : (
+                    <div>{rewardsAmount}</div>
+                  )}
                   <StakingTxQuicker>Quicker</StakingTxQuicker>
                   <Bt1 onClick={() => moveToClaimPage()}>
                     <BsCaretRightFill></BsCaretRightFill>{" "}
@@ -457,7 +489,7 @@ const StakingPage = () => {
                 </Sc4>
                 <Sc4
                   onClick={() => {
-                    setShowStaking(true)
+                    setShowStaking(true);
                   }}
                 >
                   <StakingTx3>스테이킹</StakingTx3>
@@ -504,6 +536,31 @@ const StakingToken = ({
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("-");
   const [voteAmount, setVoteAmount] = useState<string>("0");
+  const [isClicked1, setIsClicked1] = useState(false);
+  const [isClicked2, setIsClicked2] = useState(false);
+  const [isClicked3, setIsClicked3] = useState(false);
+
+  const onClick1 = () => {
+    setIsClicked1(!isClicked1);
+    setIsClicked2(false);
+    setIsClicked3(false);
+    console.log(seletedPeriod)
+  };
+
+  const onClick2 = () => {
+    setIsClicked2(!isClicked2);
+    setIsClicked1(false);
+    setIsClicked3(false);
+    console.log(seletedPeriod)
+  };
+
+  const onClick3 = () => {
+    setIsClicked3(!isClicked3);
+    setIsClicked1(false);
+    setIsClicked2(false);
+    console.log(seletedPeriod)
+  };
+
   const navigate = useNavigate();
 
   const { showAllowance, setShowAllowance } = useOrderStore();
@@ -550,7 +607,7 @@ const StakingToken = ({
 
   useEffect(() => {
     if (inputAmount === "") {
-      setAlertMessage("수량을 입력해주세요");
+      setAlertMessage("수량을 입력하세요");
     } else if (Number(inputAmount) > Number(quickerBalance)) {
       setAlertMessage("보유한 수량이 부족합니다");
     } else {
@@ -577,37 +634,77 @@ const StakingToken = ({
       {showAllowance ? (
         <SuspenseComponent component={<IncreaseQAllowance />} />
       ) : (
-        <Margin>
-          <Ip
-            type="text"
-            value={inputAmount}
-            onChange={handleInputAmount}
-            placeholder="정수 단위로만 입력 가능합니다"
-          />
-          <div>
-            보유 {quickerBalance}
-            <button>max</button>
-            <div>{alertMessage}</div>
-          </div>
-
-          <div>스테이킹 기간 선택</div>
-          <div>
-            <div onClick={() => setSelectedPeriod(3)}>1배 - 3개월</div>
-            <div onClick={() => setSelectedPeriod(6)}>2배 - 6개월</div>
-            <div onClick={() => setSelectedPeriod(9)}>4배 - 9개월</div>
-          </div>
-          <StakingTxSm1>
-            스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
-          </StakingTxSm1>
-          <StakingTxSm1>
-            추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
-          </StakingTxSm1>
+        <>
+          <Margin>
+            <Ip
+              type="text"
+              value={inputAmount}
+              onChange={handleInputAmount}
+              placeholder="정수 단위로만 입력 가능합니다"
+            />
+          </Margin>
+          <ContainerDiv>
+            <StakingTxSm1_1>
+              보유<StakingTxSm2>{quickerBalance}</StakingTxSm2>
+              <StakingBt>max</StakingBt>
+            </StakingTxSm1_1>
+            <StakingTxSm2_1>{alertMessage}</StakingTxSm2_1>
+          </ContainerDiv>
+          <br></br>
+          <br></br>
+          <QuickerTx_1>스테이킹 기간 선택</QuickerTx_1>
+          {/* <Div1_1>
+            <Div1_2>픽업지까지</Div1_2>
+            <Div1_2>픽업지</Div1_2>
+            <Div1_2>배송지</Div1_2>
+          </Div1_1> */}
+          <Div0>
+            <Div1_3>
+                <Div3
+                  onClick={() => {setSelectedPeriod(3); onClick1()}}
+                  className={isClicked1 ? "clicked" : ""}
+                >
+                  <Sp0>1배</Sp0>
+                  <br />
+                  3개월
+                </Div3>
+            </Div1_3>
+            <Div1_3>
+                <Div3
+                  onClick={() => {setSelectedPeriod(6); onClick2()}}
+                  className={isClicked2 ? "clicked" : ""}
+                >
+                  <Sp0>2배</Sp0>
+                  <br />
+                  6개월
+                </Div3>
+            </Div1_3>
+            <Div1_3>
+                <Div3
+                  onClick={() => {setSelectedPeriod(9); onClick3()}}
+                  className={isClicked3 ? "clicked" : ""}
+                >
+                  <Sp0>4배</Sp0>
+                  <br />
+                  9개월
+                </Div3>
+              
+            </Div1_3>
+          </Div0>
+          <Margin>
+            <StakingTxSm1>
+              스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
+            </StakingTxSm1>
+            <StakingTxSm1>
+              추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
+            </StakingTxSm1>
+          </Margin>
 
           {showConfirm && (
             <>
               {!showSendTx ? (
                 <>
-                  <ConfirmBtn
+                  <BottomConfirmBtn
                     content="다음"
                     confirmLogic={checkInfo}
                     isDisabled={false}
@@ -626,7 +723,7 @@ const StakingToken = ({
               )}
             </>
           )}
-        </Margin>
+        </>
       )}
     </>
   );
@@ -668,4 +765,4 @@ const blinkAnimation = keyframes`
 
 const BlinkDiv = styled.div`
   animation: ${blinkAnimation} 1s;
-`
+`;
