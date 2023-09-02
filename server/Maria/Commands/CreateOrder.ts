@@ -2,7 +2,7 @@ import {Order,Transportation,Destination,Departure,Product,Sender,Recipient} fro
 
 export default {
   Order: (data: any) => {
-    return new Promise((resolve, reject) => {
+    return () => {
       Order.create(data.Order);
       Transportation.create(data.Transportation);
       Destination.create(data.Destination);
@@ -10,8 +10,6 @@ export default {
       Product.create(data.Product);
       Sender.create(data.Sender);
       Recipient.create(data.Recipient);
-      resolve("done");
-      reject("fail");
-    });
+    }
   },
 };
