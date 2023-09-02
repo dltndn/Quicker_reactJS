@@ -10,14 +10,13 @@ import { MulterRequest } from "../routes/OrderCompleteImage";
 initModels(sequelize);
 
 export default {
-  request: async (req: Request, res: Response) => {
+  request: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const body = req.body;
       await createOrder(body);
-      res.send({ msg: "fail" });
+      res.send({ msg: "done" });
     } catch (error) {
-      console.error(error)
-      res.send(error);
+      next(error)
     }
   },
 

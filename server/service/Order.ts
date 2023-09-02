@@ -49,10 +49,8 @@ export const createOrder = async (body : any) => {
     body.Order.ID_REQ = userId.id;
 
     await CreateOrder.Order(body);
-
-    return { msg: "done" }
   } else {
-    return new Error("회원이 아님")
+    throw new Error("회원이 아님")
   }
 }
 
