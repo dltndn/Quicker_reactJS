@@ -47,7 +47,6 @@ export const createOrder = async (body : any) => {
   const userId = await SelectUser.getUserId(walletAddress);
   if (userId) {
     body.Order.ID_REQ = userId.id;
-
     await CreateOrder.Order(body);
   } else {
     throw new Error("회원이 아님")
