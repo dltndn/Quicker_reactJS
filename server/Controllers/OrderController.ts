@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
-import SelectOrder from "../Maria/Commands/SelectOrder";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findImage, postCurrentLocation, saveImage, updateOrder } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findImage, findUserOrdersDetail, postCurrentLocation, saveImage, updateOrder } from "../service/Order";
 import { findRoomInfoByOrderNumber } from "../service/Room";
 import { MulterRequest } from "../routes/OrderCompleteImage";
 
@@ -22,14 +21,13 @@ export default {
     }
   },
 
-  orderlist: async (req: Request, res: Response) => {
+  orderlist: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = req.body.list;
-      const orders = await SelectOrder.getOrderlist(data);
+      const query = req.query;
+      const orders = await findUserOrdersDetail(query)
       res.send(orders)
     } catch (error){
-      console.log(error)
-      res.send("fail");
+      next(error)
     }
   },
   

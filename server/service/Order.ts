@@ -100,3 +100,11 @@ export const saveImage =async (body:any, documentFile : any) => {
   const bufferImage = documentFile.buffer
   await saveImageToBufferString(orderNum, bufferImage)
 }
+
+export const findUserOrdersDetail = async (query: any) => {
+  const orderIds : string = query.orderIds
+  const list = JSON.parse(`[${orderIds}]`)
+  
+  const orders = await SelectOrder.getOrderlist(list);
+  return orders
+}

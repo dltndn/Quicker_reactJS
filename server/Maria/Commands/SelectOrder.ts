@@ -81,15 +81,14 @@ export default {
     });
   },
 
-  //
-  getOrderlist: (id: number) => {
+  getOrderlist: (orderIds: number[]) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
     Order.hasOne(Product, { foreignKey: "id" });
     return Order.findAll({
-      where: { id: id },
+      where: { id: orderIds },
       attributes: ["id", "DETAIL"],
       include: [
         {
@@ -118,6 +117,8 @@ export default {
           required: false,
         },
       ],
+      raw: true,
+      nest: true,
     });
   },
 };

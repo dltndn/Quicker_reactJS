@@ -26,9 +26,9 @@ export default function MainOrderInformation() {
   const navigate = useNavigate();
 
   const getDestination = async (orderNum: number) => {
-    const orderDataFromDB = await Handler.post(
-      { list: orderNum },
-      process.env.REACT_APP_SERVER_URL + "orders"
+    const orderNumbers = [orderNum]
+    const orderDataFromDB = await Handler.get(
+      process.env.REACT_APP_SERVER_URL + "orders/detail?" + "orderIds=" + orderNumbers
     );
     return orderDataFromDB[0].Destination;
   };
