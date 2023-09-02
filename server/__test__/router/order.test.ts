@@ -67,7 +67,7 @@ describe("/order", () => {
           Sender: { ID: 10, NAME: '홍길동', PHONE: '01012345678' },
           Recipient: { id: 10, NAME: '김길동', PHONE: '01009876543' }
         }
-        return expect(CreateOrder.Order(body)).not.toThrowError()
+        return expect(async ()=>{await CreateOrder.Order(body)}).not.toThrowError()
       });
     });
   });

@@ -1,6 +1,7 @@
 import CreateUser from "../Maria/Commands/CreateUser"
 import SelectUser from "../Maria/Commands/SelectUser"
 import keys from "../config/keys";
+import { cryptoUserInfo } from "../util/cryptoUserInfo";
 
 export const findUserNameByWalletAddress = async (query : any) => {
   const walletAddress = query.walletAddress
@@ -14,8 +15,7 @@ export const findUserId = async (walletAddress : any) => {
 }
 
 export const registerUser = async (body : any) => {
+  const {userInstance, userBirthDate, hashed} = cryptoUserInfo(body)
   
-  
-  
-  // await CreateUser.registerUser(userInstance, userBirthDate, hashed);
+  await CreateUser.registerUser(userInstance, userBirthDate, hashed);
 }
