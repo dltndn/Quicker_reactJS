@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import TopBarOthers from "../components/topBarOthers";
 import { create } from "zustand";
 import ConfirmBtn from "../components/confirmBtn";
+import BottomConfirmBtn from "../components/bottomconfirmBtn";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import SendTxK from "../components/blockChainTx/SendTxK";
 import { useConnWalletInfo } from "../App";
@@ -15,6 +16,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from "apexcharts";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
+import choice from "../Lottie/Choice.json";
 
 interface UseFeeGovernorType {
   title: string;
@@ -40,6 +42,30 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
+const Quickertxsm = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin: 12px 0 12px 0;
+  color: #6c6c6c;
+`;
+
+const Receivetx = styled(Quickertxsm)`
+  font-size: 16px;
+`;
+const ReciDiv1 = styled.div`
+  text-align: center;
+`;
+const VotingSc = styled.section`
+  margin: 8px 16px 16px 16px;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 0px #bebebe;
+`;
 
 const Sc3 = styled.section`
   margin: 0px 16px 16px 16px;
@@ -49,6 +75,17 @@ const Sc3 = styled.section`
   border-width: 1px;
   border-color: #d9d9d9;
   background-color: #ffffff;
+`;
+
+const Box = styled.section`
+  margin: 8px 16px 16px 16px;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 0px #bebebe;
 `;
 
 const Sc3_1 = styled(Sc3)`
@@ -66,6 +103,14 @@ const Flex1 = styled.div`
   justify-content: space-between;
 `
 
+const Flex2 = styled.div`
+  margin: 40px 0 40px 0;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  align-items: center;
+
+`
 const Sc2 = styled.section`
   flex: 1 1 40;
   width: 45%;
@@ -114,6 +159,12 @@ const Tx3= styled.span`
   font-weight: bold;
   text-align: center;
 `
+const TxRadio= styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+`
+
 const Tx3color = styled(Tx3)`
 color: #FFF;
 `
@@ -140,6 +191,13 @@ const PercentTx4_1 = styled.div`
   color: #000;
   font-weight: bold;
   margin: 16px 16px 0px 0px;
+`;
+
+const VtTx = styled.span`
+  font-size: 16px;
+  color: #000;
+  font-weight: bold;
+  margin: 16px 0px 0px 0px;
 `;
 
 const PercentTx4_2 = styled.span`
@@ -230,6 +288,30 @@ const Hr = styled.hr`
   background: #e6e6e6;
 `;
 
+const QuickerTx = styled.div`
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+`;
+const QuickerTx_1 = styled(QuickerTx)`
+  margin: 10px;
+`;
+
+const Input = styled.input`
+  display: flex;
+  margin: 0px 0px 0px 0px;
+`;
+
+const Lb1 = styled.label`
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  flex-direction: column;
+`;
+
+
+
 const FeeGovernorPage = () => {
   const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } =
     useFeeGovernor();
@@ -256,7 +338,7 @@ const FeeGovernorPage = () => {
         setTitle("거래수수료 투표");
         break;
       case "previousResult":
-        setTitle("지난투표");
+        setTitle("투표기록");
         break;
       case "vote":
         setTitle("투표하기");
@@ -416,7 +498,7 @@ const Main = ({ roundInfo }: any) => {
           <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
           </Sc3>
           <ButtonWrapper>
-          <LoadButton onClick={() => setPageState("previousResult")}>지난투표</LoadButton>
+          <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
           <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
           </ButtonWrapper>
           <HideDiv></HideDiv>
@@ -433,7 +515,7 @@ interface RoundLogType {
   totalIncome: string;
 }
 
-// 지난투표 결과 목록 화면
+// 투표 결과 목록 화면
 const PreviousResult = () => {
   const [roundLogArr, setRoundLogArr] = useState<RoundLogType[]>([]);
   const [oldestRound, setOldestRound] = useState<number | null>(null);
@@ -567,78 +649,94 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
   return (
     <>
       {isInfoPage ? (
-        <div>
-          <>animation</>
-          <>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</>
-          <ConfirmBtn
-            content={"다음"}
-            confirmLogic={onClick}
-            isDisabled={false}
-          />
-        </div>
+        <>
+          <VotingSc>
+                  <div>
+                    <Lottie animationData={choice} />
+                  </div>
+                  <Receivetx>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</Receivetx>
+                </VotingSc>
+                <ReciDiv1>
+                </ReciDiv1>
+                <BottomConfirmBtn
+                            content={"다음"}
+                            confirmLogic={onClick}
+                            isDisabled={false}
+                          />
+                </>
       ) : (
+        <>
         <div>
+          <Box>
           <div>
-            <div>거래수수료</div>
-            <label>
-              <input
+          <QuickerTx_1>거래 수수료</QuickerTx_1>
+          <Flex2>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"0"}
                 onChange={setFeeIndexState}
               />
-              인상
-            </label>
-            <label>
-              <input
+              <VtTx>인상</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"1"}
                 onChange={setFeeIndexState}
                 defaultChecked
               />
-              동결
-            </label>
-            <label>
-              <input
+              <VtTx>동결</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"2"}
                 onChange={setFeeIndexState}
               />
-              인하
-            </label>
+              <VtTx>인하</VtTx>
+            </Lb1>
+          </Flex2>
           </div>
+          </Box>
+        </div>
           <div>
-            <div>배송원 보증금</div>
-            <label>
-              <input
+          <Box>
+          <VtTx>배송원 보증금</VtTx>
+          <Flex2>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"0"}
                 onChange={setSecuIndexState}
               />
-              인상
-            </label>
-            <label>
-              <input
+              <VtTx>인상</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"1"}
                 onChange={setSecuIndexState}
                 defaultChecked
               />
-              동결
-            </label>
-            <label>
-              <input
+              <VtTx>동결</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"2"}
                 onChange={setSecuIndexState}
               />
-              인하
-            </label>
+              <VtTx>인하</VtTx>
+            </Lb1>
+            </Flex2>
+            </Box>
           </div>
           <SendTxK
             param={GetContractParams.castVote(
@@ -648,7 +746,9 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
             )}
             successFunc={successFunc}
           />
-        </div>
+  
+
+        </>
       )}
     </>
   );
@@ -663,7 +763,7 @@ const ClaimRewards = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
     setRoundInfo(roundData);
-    navigate("/feeGovernor")
+    setPageState("main")
   };
 
   return (

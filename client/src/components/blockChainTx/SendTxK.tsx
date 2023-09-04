@@ -6,7 +6,14 @@ import { useConnWalletInfo } from "../../App";
 import styled from "styled-components";
 
 const LoadButton = styled.button`
-  width: 45%;
+  position: fixed;
+  bottom: 0.5rem;
+  width: 98%;
+  height: 3.125rem;
+  font-size: var(--font-md);
+  border-radius: 0.313rem;
+  border: 0;
+  outline: #efefef;
   background-color: #17a2b8;
   color: #ffffff;
   border: none;
@@ -20,6 +27,14 @@ const LoadButton = styled.button`
   }
 `;
 
+const Container = styled.section`
+  padding: calc(var(--padding) / 2) var(--padding);
+  display: flex;
+  justify-content: center;
+`;
+
+const Img = styled.img`
+`
 
 type SendTokenProps = {
   param: SendTxType | SendTxDelegationType;
@@ -81,16 +96,25 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
+            <Container>
             <LoadButton onClick={mobileConnect}>서명</LoadButton>
+            </Container>
           ) : (
             <>
-              <LoadButton onClick={qrConnect}>서명</LoadButton>
+            <Container>
+            <LoadButton onClick={qrConnect}>서명</LoadButton>
+            </Container>
               {showQr && (
-                <img
+                <Img
                   src={qrUrl}
                   onClick={() => setShowQr(false)}
                   alt="Qr_wallet_connect"
+                  margin-left="auto"
+                  margin-right="auto"
+                  margin-top="auto"
+                  margin-bottom="auto"
                 />
+                
               )}
             </>
           )}

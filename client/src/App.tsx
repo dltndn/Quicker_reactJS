@@ -49,14 +49,14 @@ export const useConnWalletInfo = create<UseConnWalletInfoType>((set) => ({
 }));
 
 interface UseVerifiaction {
-  isMember: boolean;
+  isMember: boolean | null;
   setIsMember: (newIsMember: boolean) => void;
   userName: string | null;
   setUserName: (newUserName: string | null) => void;
 }
 
 export const useVerificationStore = create<UseVerifiaction>((set) => ({
-  isMember: false,
+  isMember: null,
   setIsMember: (isMember: boolean) => set({ isMember }),
   userName: null,
   setUserName: (userName: string | null) => set({ userName }),
@@ -94,7 +94,7 @@ function App() {
     userOrderNumStateTrigger,
   } = UseUserOrderState();
 
-  const getUserInfo = async () => {
+  const getUserInfo = async (address: string | undefined) => {
     try {
       const result = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${address}`)
       if (result) {
@@ -106,7 +106,7 @@ function App() {
     }
   };
 
-  const getAndSetOrders = async () => {
+  const getAndSetOrders = async (address: string | undefined) => {
     const clientOrderNumsArr = await getOrderList(address, true);
     const quickerOrderNumsArr = await getOrderList(address, false);
     setClientOrderNums(clientOrderNumsArr);
@@ -171,6 +171,11 @@ function App() {
     } else if (storedAddress !== null) {
       setAddress(storedAddress);
       setIsConneted(true);
+      // 지갑주소 유저 여부 조회
+      console.log("changed user wallet");
+      console.log(storedAddress);
+      getUserInfo(storedAddress);
+      getAndSetOrders(storedAddress);
       if (storedIsMobile === "true") {
         setIsMobile(true);
       } else {
@@ -180,18 +185,21 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // 지갑주소 유저 여부 조회
-    console.log("changed user wallet");
-    console.log(address);
-    getUserInfo();
-    getAndSetOrders();
+    if (address) {
+      // 지갑주소 유저 여부 조회
+      console.log("changed user wallet");
+      console.log(address);
+      getUserInfo(address);
+      getAndSetOrders(address);
+    }
   }, [address]);
 
   useEffect(() => {
-    getAndSetOrders();
+    getAndSetOrders(address);
     console.log("userOrderNumStateTrigger 직동");
   }, [userOrderNumStateTrigger]);
 
+  console.log("app")
   return (
     <>
       <BrowserRouter>

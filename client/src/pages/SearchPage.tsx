@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,6 @@ import Map from "../lib/Tmap";
 import Geolocation from "../lib/Geolocation";
 import Handler from "../lib/Handler";
 import Search from "../components/Search";
-import Search_Detail from "../components/Search_Detail";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
 import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
@@ -16,8 +15,6 @@ import {
   calSecurityDeposit,
   extractNumber,
 } from "../utils/CalAny";
-import { useOrderStore } from "./commission";
-import IncreaseAllowance from "../components/IncreaseAllowance";
 import { useConnWalletInfo } from "../App";
 
 export interface OrderObj {
@@ -92,7 +89,6 @@ function SearchPage() {
   const { address } = useConnWalletInfo();
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } =
     useSearchState();
-  const { showAllowance } = useOrderStore();
   const requestListContainer = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [tmap, setTmap] = useState<any>();
@@ -101,6 +97,8 @@ function SearchPage() {
   const [requestListContents, setRequestListContents] = useState([]);
 
   const [mockData, setMockData] = useState<OrderObj[]>([]);
+
+  const SearchDetail = lazy(() => import("../components/Search_Detail"))
 
   const changeToData = (dataArray: Array<OrderObj>) => {
     requestListContents.forEach((element) => {
@@ -273,17 +271,15 @@ function SearchPage() {
           }}
         />
       </div>
-      {showAllowance ? (
-        <IncreaseAllowance />
-      ) : (
         <>
           {!isDetail ? (
             <Search clickOrder={(index) => clickOrder(index)} />
           ) : (
-            <Search_Detail />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchDetail />
+            </Suspense>
           )}
         </>
-      )}
       <BottomBar></BottomBar>
     </div>
   );
