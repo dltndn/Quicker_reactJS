@@ -6,15 +6,9 @@ import { mongoConnection } from "../connectors/mongoConnector";
 
 describe("/room", () => {
   describe("/ 라우터 테스트", () => {
-  
     beforeAll(() => {
-      initModels(sequelize);
-    });
-  
-    afterAll(() => {
-      sequelize.close();
-    })
-  
+      initModels(sequelize)
+  })
     describe("방에대한 정보를 오더 넘버를 이용하여 조회하는 서비스", () => {
       test("존재하는 오더 넘버 입력", async () => {
         const expectResult = {

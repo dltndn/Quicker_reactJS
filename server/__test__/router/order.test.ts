@@ -6,12 +6,8 @@ import { sequelize } from "../connectors/sequelizeConnector";
 
 describe("/order", () => {
   beforeAll(() => {
-    initModels(sequelize);
-  });
-
-  afterAll(() => {
-    sequelize.close();
-  });
+    initModels(sequelize)
+  })
 
   describe("/ (GET) 라우터 테스트", () => {
     describe("출발지와 도착지의 주소 좌표를 데이터베이스에서 가지고 오는 서비스", () => {
@@ -41,7 +37,6 @@ describe("/order", () => {
         await DeleteOrder.deleteOrder(10)
       })
       test("존재하는 오더 넘버 입력", async () => {
-        // body.Order.ID_REQ
         const body = {
           Order: {
             id: 10,
@@ -67,7 +62,7 @@ describe("/order", () => {
           Sender: { ID: 10, NAME: '홍길동', PHONE: '01012345678' },
           Recipient: { id: 10, NAME: '김길동', PHONE: '01009876543' }
         }
-        return expect(async ()=>{await CreateOrder.Order(body)}).not.toThrowError()
+        expect(async ()=>{await CreateOrder.Order(body)}).not.toThrowError()
       });
     });
   });

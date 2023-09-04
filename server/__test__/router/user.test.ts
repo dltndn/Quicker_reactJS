@@ -1,17 +1,14 @@
 import { sequelize } from "../connectors/sequelizeConnector";
-import { initModels } from "../../Maria/Models/init-models";
 import keys from "../../config/keys";
 import { findUserNameByWalletAddress } from "../../service/User";
+import { Sequelize } from "sequelize";
+import { initModels } from "../../Maria/Models/init-models";
 
 describe("/user", () => {
-
   beforeAll(() => {
-    initModels(sequelize);
-  });
+    initModels(sequelize)
+})
   
-  afterAll(() => {
-    sequelize.close();
-  });
 
   describe("/name 라우터", () => {
     describe("지갑주소를 이용하여 사용자의 이름을 가지고 오는 서비스", () => {

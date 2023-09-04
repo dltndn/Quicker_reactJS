@@ -5,13 +5,8 @@ import { findOrdersByWalletAddress, findUserOrdersDetail } from "../../service/O
 
 describe("/orders", () => {
   beforeAll(() => {
-    initModels(sequelize);
-  });
-
-  afterAll(() => {
-    sequelize.close();
-  });
-
+    initModels(sequelize)
+})
   describe("/ 라우터 테스트", () => {
     describe("의뢰수락이 가능한 의뢰목록을 조회하는 서비스", () => {
       test("사용자로 등록된 배송원 지갑주소 입력", async () => {
