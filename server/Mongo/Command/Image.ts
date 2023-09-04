@@ -14,3 +14,20 @@ export const saveImageToBufferString = async (connection : Connection, orderNum:
   await image.save();
   connection.destroy();
 };
+
+export const findFailImageByOrderId = async (connection : Connection, orderId: string) => {
+  const uploadImage = connection.model(orderId, ImageFileSchema);
+  const [ image ] = await uploadImage.find().sort("desc").limit(1);
+  connection.destroy();
+  return image;
+};
+
+export const saveFailImageToBufferString = async (connection : Connection, orderNum: string, bufferImage : any, reason : string) => {
+  const uploadImage = connection.model(orderNum, ImageFileSchema);
+  const image = new uploadImage({
+    image: bufferImage,
+    reason: reason,
+  });
+  await image.save();
+  connection.destroy();
+};

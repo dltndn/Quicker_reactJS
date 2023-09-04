@@ -1,14 +1,15 @@
+import { File } from "buffer";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import { findImageByOrderId, saveImageToBufferString } from "../Mongo/Command/Image";
+import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
 
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
 import connectMongo from "../Mongo/Connector";
+import { ImageFileSchema } from "../Mongo/Schemas/ImageFile";
 import { encrypt } from "../lib/cryto";
-import { MulterRequest } from "../routes/OrderCompleteImage";
 import sendMessage from "../sendMessage";
 
 export const findDestinationAndDepartureByOrderId = async (query: any) => {
@@ -106,4 +107,23 @@ export const findUserOrdersDetail = async (query: any) => {
   
   const orders = await SelectOrder.getOrderlist(list);
   return orders
+}
+
+export const findFailImage =async (query:any) => {
+  const orderId = query.orderNum;
+  const connection = await connectMongo("orderFail");
+  const image = await findFailImageByOrderId(connection, orderId)
+  return image
+}
+
+export const saveFailImage =async (body:any , documentFile : Express.Multer.File | undefined) => {
+  if (documentFile === undefined) {
+    return "picture not exist"
+  }
+  const bufferImage = documentFile.buffer;
+  const orderNum = body.orderNum;
+  const reason = body.reason;
+  const connection = await connectMongo("orderFail");
+  await saveFailImageToBufferString(connection, orderNum, bufferImage, reason)
+  return "done"
 }

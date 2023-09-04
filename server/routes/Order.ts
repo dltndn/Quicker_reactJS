@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const router = express.Router();
 
-router.use("/image/complete", OrderCompleteImage);
+
 router.use("/image/fail", OrderFailImage);
 
 // 테스트 완료
@@ -19,4 +19,5 @@ router.post("/", OrderController.request);
 // PATCH /order
 router.patch("/", OrderController.updateOrder);
 
+router.use("/image/complete", OrderCompleteImage);
 export default router;

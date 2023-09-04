@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findImage, findUserOrdersDetail, postCurrentLocation, saveImage, updateOrder } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findFailImage, findImage, findUserOrdersDetail, postCurrentLocation, saveFailImage, saveImage, updateOrder } from "../service/Order";
 import { findRoomInfoByOrderNumber } from "../service/Room";
 import { MulterRequest } from "../routes/OrderCompleteImage";
 
@@ -105,6 +105,32 @@ export default {
     } catch (error) {
       console.error(error);
       next(error);
+    }
+  },
+
+  getFailImage : async (req: Request, res: Response, next : NextFunction) => {
+    try {
+      const query = req.query
+      const image = await findFailImage(query)
+      if (image === null || undefined) {
+        res.send({message : "image not exist"})
+      }
+      else {
+        res.send({ imageBuffer: image.image, reason : image.reason});
+      }
+    } catch (error) {
+      next(error)
+    }
+  },
+
+  postFailImage : async (req: Request, res: Response, next : NextFunction) => {
+    try {
+      const body = req.body
+      const documentFile = req.file;
+      const message = await saveFailImage(body, documentFile)
+      res.send({ msg: message });
+    } catch (error) {
+      next(error)
     }
   }
 };
