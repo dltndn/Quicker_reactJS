@@ -254,7 +254,11 @@ export default {
       let userVoteEnable = String(Number(userVotePower))
       if (votedInfo.lastVoteRound !== "0") {
         if (votedInfo.lastVoteRound !== currentRound) {
-          const userRewardsS = await calRewards(votedInfo.lastVoteRound, votedBal)
+          let beforeVotedBal = 0
+          for (let i=0; i<votedInfo.treasuryFee.length; i++) {
+            beforeVotedBal += Number(votedInfo.treasuryFee[i])
+          }
+          const userRewardsS = await calRewards(votedInfo.lastVoteRound, beforeVotedBal)
           userRewards = Math.round(Number(userRewardsS)).toString()
           userVoteEnable = "0"
         } else {

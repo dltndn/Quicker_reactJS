@@ -354,6 +354,7 @@ const FeeGovernorPage = () => {
     if (address !== undefined) {
       try {
         const roundData = await getFeeGovernorInfo(address);
+        console.log(roundData)
         setRoundInfo(roundData);
         setPageState("main");
       } catch (e) {
