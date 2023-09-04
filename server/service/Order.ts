@@ -6,10 +6,10 @@ import UpdateOrder from "../Maria/Commands/UpdateOrder";
 import { findImageByOrderId, saveImageToBufferString } from "../Mongo/Command/Image";
 
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
+import connectMongo from "../Mongo/Connector";
 import { encrypt } from "../lib/cryto";
 import { MulterRequest } from "../routes/OrderCompleteImage";
 import sendMessage from "../sendMessage";
-
 
 export const findDestinationAndDepartureByOrderId = async (query: any) => {
   const orderId = query.orderid;
@@ -88,14 +88,16 @@ export const updateOrder = async (body:any) => {
 
 export const findImage =async (query: any) => {
   const orderId = query.orderNum;
-  const images = await findImageByOrderId(orderId)
+  const connection = await connectMongo("orderComplete");
+  const images = await findImageByOrderId(connection, orderId)
   return {imageBuffer : images[0].image}
 }
 
 export const saveImage =async (body:any, documentFile : any) => {
   const orderNum = body.orderNum
   const bufferImage = documentFile.buffer
-  await saveImageToBufferString(orderNum, bufferImage)
+  const connection = await connectMongo("orderComplete");
+  await saveImageToBufferString(connection, orderNum, bufferImage)
 }
 
 export const findUserOrdersDetail = async (query: any) => {
