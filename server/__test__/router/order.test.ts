@@ -2,13 +2,14 @@ import mongoose from "mongoose";
 import CreateOrder from "../../Maria/Commands/CreateOrder";
 import DeleteOrder from "../../Maria/Commands/DeleteOrder";
 import { initModels } from "../../Maria/Models/init-models";
-import { saveImageToBufferString } from "../../Mongo/Command/Image";
+import { findImageByOrderId, saveImageToBufferString } from "../../Mongo/Command/Image";
 import {
   createOrder,
   findDestinationAndDepartureByOrderId,
 } from "../../service/Order";
 import { sequelize } from "../connectors/sequelizeConnector";
 import { ImageFile } from "../../Mongo/Schemas/ImageFile";
+import { Binary } from "mongodb";
 
 describe("/order", () => {
   beforeAll(() => {
@@ -86,18 +87,30 @@ describe("/order", () => {
     });
   });
 
-  describe("/image/complete ", () => {
+  describe("/image/complete ",  () => { 
+    
     describe("(POST) 라우터 테스트", () => {
-      const connection = mongoose.createConnection("mongodb://127.0.0.1:27017", {dbName: "orderComplete"});
-      const orderNumber = "11111"
-      const bufferImage = "lekfjlksejfl"
+      const bufferImage = "lekfjlksejfl";
+      const connection = mongoose.createConnection("mongodb://127.0.0.1:27017",{ dbName: "orderComplete" });
+      const orderNumber = "11111";
+      test("이미지를 데이터베이스에 저장하는 서비스", async () => {
+        expect(async () => await saveImageToBufferString(connection, orderNumber, bufferImage)).not.toThrowError();
+      });
       afterAll(async () => {
-        await connection.db.dropCollection(orderNumber)
-        await connection.destroy()
-      })
-      test("이미지를 데이터베이스에 저장하는 서비스", () => {
-        expect(() => saveImageToBufferString(connection, orderNumber, bufferImage)).not.toThrowError()
+        await connection.db.dropCollection("11111");
       });
     });
+   
+    describe("(GET) 라우터 테스트", () => {
+      const bufferImage = "lekfjlksejfl";
+      const connection = mongoose.createConnection("mongodb://127.0.0.1:27017",{ dbName: "orderComplete" });
+      const orderNumber = "11112";
+      test("이미지를 데이터베이스에 저장하는 서비스", async() => {
+        const result = await findImageByOrderId(connection, orderNumber)
+        expect(result[0].image?.toString('utf-8')).toEqual(bufferImage)
+      });
+    });
+    
+    
   });
 });
