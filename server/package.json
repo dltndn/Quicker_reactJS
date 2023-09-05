@@ -61,6 +61,7 @@
       "tsx",
       "js",
       "json"
-    ]
+    ],
+    "testEnviroment" :"node"
   }
 }

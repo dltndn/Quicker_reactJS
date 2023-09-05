@@ -34,12 +34,14 @@ export const postCurrentLocation = async (body: any) => {
     X: body.X,
     Y: body.Y,
   }
-  await saveLocation(address, loaction)
+  const connection = await connectMongo("realTimeLocation");
+  await saveLocation(connection, address, loaction)
 };
 
 export const findCurrentLocation = async (query: any) => {
   const address = query.quicker;
-  const location = await findLocation(address)  
+  const connection = await connectMongo("realTimeLocation");
+  const location = await findLocation(connection, address)  
   return location;
 };
 
