@@ -1,6 +1,5 @@
 import Req from "./orderComponents/req";
 import { useEffect, useState } from "react";
-import CreateNewOrder from "./createNewOrder";
 import { useOrderDataStore, useOrderStore } from "../pages/commission";
 
 interface props {
@@ -16,12 +15,7 @@ function RequestPage({sendData} : props) {
   return (
     <>
       <div style={{ backgroundColor: "#efefef" }}>
-        <Req></Req>
-        <CreateNewOrder
-          data={sendData}
-          _orderPrice={cost.toString()}
-          _deadline={deadLine}
-          />
+        <Req data={sendData} />
       </div>
     </>
   );

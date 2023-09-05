@@ -6,6 +6,8 @@ import Caver from "caver-js";
 import {
   QUICKER_DLVR_ADDRESS_KLAYTN,
   QUICKER_DLVR_ABI_KLAYTN,
+  VQUICKER_TOKEN_ADDRESS_KLAYTN,
+  VQUICKER_TOKEN_ABI_KLAYTN
 } from "../klaytnApi/ContractInfo";
 
 const env = process.env;
@@ -15,6 +17,8 @@ const WS_URL = `wss://${env.KLAYTN_ACCESSKEY_ID}:${env.KLAYTN_SECRET_KEY}@node-a
 const caver = new Caver(WS_URL);
 // @ts-ignore
 const qkrw_token_contract = caver.contract.create(QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN);
+// @ts-ignore
+const vQuicker_token_contract = caver.contract.create(VQUICKER_TOKEN_ABI_KLAYTN, VQUICKER_TOKEN_ADDRESS_KLAYTN)
 
 const main = (server: any) => {
   const io = SocketIo(server, {
@@ -91,6 +95,16 @@ const main = (server: any) => {
       //     console.error("Event error:", error);
       //     // 에러 처리 로직을 작성합니다.
       //   });
+
+      // const subscriptionId = await vQuicker_token_contract.events
+      //   .allEvents()
+      //   .on("data", (event: any) => {
+      //     console.log("vQuicker_token_contract event")
+      //     console.log(event)
+      //   })
+      //   .on("error", (err: any) => {
+      //     console.log(err)
+      //   })
 
       // e
     });

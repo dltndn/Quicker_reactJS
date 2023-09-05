@@ -129,11 +129,11 @@ const allowanceTest = async () => {
 }
 
 // socket test
-// const [socketId, setSocketId] = useState<string>()
-// useEffect(() => {
-//   // socket.on("connect", () => setSocketId(socket.id))
-//   console.log("???")
-// }, [socket])
+const [socketId, setSocketId] = useState<string>()
+useEffect(() => {
+  socket.on("connect", () => setSocketId(socket.id))
+  console.log("???")
+}, [socket])
 
 // useEffect(() => {
 //   if(socketId !== undefined) {
