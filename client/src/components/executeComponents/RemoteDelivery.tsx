@@ -115,7 +115,9 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
           </Div5>
         )}
       </Div0>
-      {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
+      {orderNum && 
+      <Margin_1>
+      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/> </Margin_1>}
     </>
   );
 }
@@ -136,3 +138,10 @@ const Span01 = styled.div`
   font-weight: bold;
   color: #828282;
 `;
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`

@@ -73,11 +73,13 @@ const Sc0 = styled.section`
   border-radius: 0.313rem 0.313rem 0 0;
   border: 0rem;
   background-color: var(--white-color);
+  transition: all 0.3s ease;
 `;
 
 const Sc1 = styled(Sc0)`
   border-radius: 0px 0px 0.313rem 0.313rem;
   margin-bottom: 0.375rem;
+  transition: all 0.3s ease;
 `;
 
 const Sc2 = styled.section`
@@ -88,6 +90,7 @@ const Sc2 = styled.section`
   height: 3rem;
   border: 0;
   background-color: var(--white-color);
+  transition: all 0.3s ease;
 `;
 
 const Sc3 = styled.section`
@@ -100,7 +103,39 @@ const Sc3 = styled.section`
   border: 0;
   background-color: var(--white-color);
   margin-bottom: 0.375rem;
+  transition: all 0.3s ease;
 `;
+
+const Sc3_1 = styled(Sc3)`
+  &:hover {
+  background-color: #e2e2e2;
+  border-color: #e2e2e2;
+  color: #000000;
+}
+`
+const Sc2_1 = styled(Sc2)`
+  &:hover {
+  background-color: #e2e2e2;
+  border-color: #e2e2e2;
+  color: #000000;
+}
+`
+const Sc1_1 = styled(Sc1)`
+  &:hover {
+  background-color: #e2e2e2;
+  border-color: #e2e2e2;
+  color: #000000;
+}
+`
+const Sc0_1 = styled(Sc0)`
+  &:hover {
+  background-color: #e2e2e2;
+  border-color: #e2e2e2;
+  color: #000000;
+}
+`
+
+
 
 const Div0 = styled.div`
   display: flex;
@@ -151,6 +186,11 @@ const Bticonimg = styled.img`
   width: 1.875rem;
   height: 1.875rem;
 `;
+
+const Margin = styled.div`
+  height: 3.85rem;
+  width: 100%;
+`
 
 function Imfo() {
   const navigate = useNavigate();
@@ -214,25 +254,25 @@ function Imfo() {
           </Bticon>
         </Div0>
       </Sc3>
-      <Sc3>
+      <Sc3_1>
         <Div0 onClick={() => navigate("/explorer")}>
           <BsCoin></BsCoin>
           <Sp2>실시간 거래 현황</Sp2>
         </Div0>
-      </Sc3>
-      <Sc3>
+      </Sc3_1>
+      <Sc3_1>
         <Div0 onClick={() => navigate("/staking")}>
           <BsCoin></BsCoin>
           <Sp2>스테이킹</Sp2>
         </Div0>
-      </Sc3>
-      <Sc3>
+      </Sc3_1>
+      <Sc3_1>
         <Div0 onClick={() => navigate("/feeGovernor")}>
           <BsCoin></BsCoin>
           <Sp2>거래수수료 투표</Sp2>
         </Div0>
-      </Sc3>
-      <Sc0>
+      </Sc3_1>
+      <Sc0_1>
         <Div0 onClick={() => {
           setOrdersObj(null);
           navigate("/orderlist");
@@ -240,9 +280,9 @@ function Imfo() {
           <BsFileText></BsFileText>
           <Sp2>오더 내역</Sp2>
         </Div0>
-      </Sc0>
+      </Sc0_1>
       <Hr></Hr>
-      <Sc1>
+      <Sc1_1>
         <Div0 onClick={() => {
           setOrdersObj(null);
           navigate("/fulfillmentlist");
@@ -250,35 +290,35 @@ function Imfo() {
           <BsCheck2Circle></BsCheck2Circle>
           <Sp2>수행 내역</Sp2>
         </Div0>
-      </Sc1>
-      <Sc0>
+      </Sc1_1>
+      <Sc0_1>
         <Div0>
           <BsClipboardCheck></BsClipboardCheck>
           <Sp2>공지사항</Sp2>
         </Div0>
-      </Sc0>
+      </Sc0_1>
       <Hr></Hr>
-      <Sc2>
+      <Sc2_1>
         <Div0>
           <BsExclamationCircle></BsExclamationCircle>
           <Sp2>자주 묻는 질문</Sp2>
         </Div0>
-      </Sc2>
+      </Sc2_1>
       <Hr></Hr>
-      <Sc2>
+      <Sc2_1>
         <Div0>
           <BsUiChecksGrid></BsUiChecksGrid>
           <Sp2>이용약관</Sp2>
         </Div0>
-      </Sc2>
+      </Sc2_1>
       <Hr></Hr>
-      <Sc1>
+      <Sc1_1>
         <Div0>
           <BsGear></BsGear>
           <Sp2>설정</Sp2>
         </Div0>
-      </Sc1>
-      <Sc3>
+      </Sc1_1>
+      <Sc3_1>
         <Div0
           onClick={() => {
             disConnect();
@@ -287,13 +327,14 @@ function Imfo() {
           <AiOutlineLogout></AiOutlineLogout>
           <Sp2>로그아웃</Sp2>
         </Div0>
-      </Sc3>
-      <Sc3>
+      </Sc3_1>
+      <Sc3_1>
         <Div0>
           <AiOutlineCloseSquare></AiOutlineCloseSquare>
           <Sp2>탈퇴하기</Sp2>
         </Div0>
-      </Sc3>
+      </Sc3_1>
+      <Margin></Margin>
     </>
   );
 }

@@ -46,7 +46,7 @@ export default function CompletedDelivery({ orderNum, income, securityDeposit, i
         </Div3>
         {!isReceived && 
         // @ts-ignore
-        <SendTxK param={GetContractParams.WithdrawFromOrder(orderNum)} successFunc={() => navigate("/")}/>}
+        <Margin_1><SendTxK param={GetContractParams.WithdrawFromOrder(orderNum)} successFunc={() => navigate("/")}/></Margin_1>}
         </>
     )
 }
@@ -132,3 +132,11 @@ const Div5 = styled.div`
     padding: 10px 20px 20px 20px;
     border-radius: 0 0 10px 10px;
 `;
+
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
