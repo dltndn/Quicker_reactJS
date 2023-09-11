@@ -4,17 +4,22 @@ import findMessage from "../Mongo/Command/FindMessages";
 
 import Caver from "caver-js";
 import {
-  QUICKER_DLVR_ADDRESS_KLAYTN,
-  QUICKER_DLVR_ABI_KLAYTN,
+  QUICKER_DLVR_PROXY_ADDRESS,
+  QUICKER_DLVR_PROXY_ABI,
+  VQUICKER_TOKEN_ADDRESS_KLAYTN,
+  VQUICKER_TOKEN_ABI_KLAYTN
 } from "../klaytnApi/ContractInfo";
 
 const env = process.env;
 const chainId = 1001; // klaytn baobab network
 
 const WS_URL = `wss://${env.KLAYTN_ACCESSKEY_ID}:${env.KLAYTN_SECRET_KEY}@node-api.klaytnapi.com/v1/ws/open?chain-id=${chainId}`;
-const caver = new Caver(WS_URL);
+// const caver = new Caver.providers.WebsocketProvider(WS_URL, { reconnect: { auto: true } });
+const caver = new Caver(WS_URL)
 // @ts-ignore
-const qkrw_token_contract = caver.contract.create(QUICKER_DLVR_ABI_KLAYTN, QUICKER_DLVR_ADDRESS_KLAYTN);
+const quicker_dlvry_contract = caver.contract.create(QUICKER_DLVR_PROXY_ABI, QUICKER_DLVR_PROXY_ADDRESS);
+// @ts-ignore
+const vQuicker_token_contract = caver.contract.create(VQUICKER_TOKEN_ABI_KLAYTN, VQUICKER_TOKEN_ADDRESS_KLAYTN)
 
 const main = (server: any) => {
   const io = SocketIo(server, {
@@ -60,7 +65,7 @@ const main = (server: any) => {
 
       // Klaytn 블록체인 이벤트 리스너
 
-      // const subscriptionId = await qkrw_token_contract.events
+      // const subscriptionId = await quicker_dlvry_contract.events
       //   .allEvents()
       //   .on("data", function (event: any) {
       //     switch(event.event) {
@@ -91,6 +96,16 @@ const main = (server: any) => {
       //     console.error("Event error:", error);
       //     // 에러 처리 로직을 작성합니다.
       //   });
+
+      const subscriptionId2 = await vQuicker_token_contract.events
+        .allEvents()
+        .on("data", function(event: any) {
+          console.log("vQuicker_token_contract event")
+          console.log(event)
+        })
+        .on("error", (err: any) => {
+          console.log(err)
+        })
 
       // e
     });

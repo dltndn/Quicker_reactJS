@@ -2,12 +2,11 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
 import { useSearchState } from "../pages/SearchPage";
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { OrderObj } from "../pages/SearchPage";
 import { useOrderStore } from "../pages/commission";
 import Handler from "../lib/Handler";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
-import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
 import {
@@ -18,7 +17,6 @@ import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../App";
 import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
-import IncreaseAllowance from "./IncreaseAllowance";
 
 const money = require("../image/money.png");
 
@@ -33,6 +31,8 @@ function Search_Detail() {
   const { showAllowance, setShowAllowance } = useOrderStore();
   let order: OrderObj | undefined;
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
+
+  const IncreaseAllowance = lazy(() => import("./IncreaseAllowance"))
 
   const setMatchedOrderNum = async () => {
     const timeoutId = setTimeout(async () => {
@@ -84,7 +84,9 @@ function Search_Detail() {
   return (
     <>
       {showAllowance ? (
-        <IncreaseAllowance />
+        <Suspense fallback={<div>Loading...</div>}>
+          <IncreaseAllowance />
+        </Suspense>
       ) : (
         <>
           {order && (

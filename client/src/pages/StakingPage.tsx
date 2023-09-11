@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import { BsCaretRightFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
@@ -11,7 +11,6 @@ import {
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import SendTxK from "../components/blockChainTx/SendTxK";
 import { useOrderStore } from "./commission";
-import IncreaseQAllowance from "../components/IncreaseQAllowance";
 import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import styled, { keyframes } from "styled-components";
@@ -21,6 +20,7 @@ import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 import Decimal from "decimal.js";
+import SuspenseComponent from "../components/SuspenseComponent";
 import BottomConfirmBtn from "../components/bottomconfirmBtn";
 
 const Sc3 = styled.section`
@@ -492,10 +492,12 @@ const StakingPage = () => {
                     setShowStaking(true);
                   }}
                 >
-                  <StakingTx3>스테이킹</StakingTx3>
-                  {/* <CenteredDiv>
-                    <Lottie animationData={StackingGo} />
-                  </CenteredDiv> */}
+                  <StakingTx3>스테이킹
+                    {/* <CenteredDiv>
+                      <Lottie animationData={StackingGo} />
+                    </CenteredDiv> */}
+                  </StakingTx3>
+                  
                 </Sc4>
               </Sc0>
               <HideDiv></HideDiv>
@@ -544,23 +546,28 @@ const StakingToken = ({
     setIsClicked1(!isClicked1);
     setIsClicked2(false);
     setIsClicked3(false);
+    console.log(seletedPeriod)
   };
 
   const onClick2 = () => {
     setIsClicked2(!isClicked2);
     setIsClicked1(false);
     setIsClicked3(false);
+    console.log(seletedPeriod)
   };
 
   const onClick3 = () => {
     setIsClicked3(!isClicked3);
     setIsClicked1(false);
     setIsClicked2(false);
+    console.log(seletedPeriod)
   };
 
   const navigate = useNavigate();
 
   const { showAllowance, setShowAllowance } = useOrderStore();
+
+  const IncreaseQAllowance = lazy(() => import("../components/IncreaseQAllowance"))
 
   const handleInputAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     // 입력값이 숫자인지 확인하는 정규식
@@ -602,7 +609,7 @@ const StakingToken = ({
 
   useEffect(() => {
     if (inputAmount === "") {
-      setAlertMessage("");
+      setAlertMessage("수량을 입력하세요");
     } else if (Number(inputAmount) > Number(quickerBalance)) {
       setAlertMessage("보유한 수량이 부족합니다");
     } else {
@@ -627,7 +634,7 @@ const StakingToken = ({
     <>
       <TopBarOthers title="스테이킹" redirectLogic={onClickBackBtn} />
       {showAllowance ? (
-        <IncreaseQAllowance />
+        <SuspenseComponent component={<IncreaseQAllowance />} />
       ) : (
         <>
           <Margin>
@@ -655,40 +662,35 @@ const StakingToken = ({
           </Div1_1> */}
           <Div0>
             <Div1_3>
-              <div onClick={() => setSelectedPeriod(3)}>
                 <Div3
-                  onClick={onClick1}
+                  onClick={() => {setSelectedPeriod(3); onClick1()}}
                   className={isClicked1 ? "clicked" : ""}
                 >
                   <Sp0>1배</Sp0>
                   <br />
                   3개월
                 </Div3>
-              </div>
             </Div1_3>
             <Div1_3>
-              <div onClick={() => setSelectedPeriod(6)}>
                 <Div3
-                  onClick={onClick2}
+                  onClick={() => {setSelectedPeriod(6); onClick2()}}
                   className={isClicked2 ? "clicked" : ""}
                 >
                   <Sp0>2배</Sp0>
                   <br />
                   6개월
                 </Div3>
-              </div>
             </Div1_3>
             <Div1_3>
-              <div onClick={() => setSelectedPeriod(9)}>
                 <Div3
-                  onClick={onClick3}
+                  onClick={() => {setSelectedPeriod(9); onClick3()}}
                   className={isClicked3 ? "clicked" : ""}
                 >
                   <Sp0>4배</Sp0>
                   <br />
                   9개월
                 </Div3>
-              </div>
+              
             </Div1_3>
           </Div0>
           <Margin>

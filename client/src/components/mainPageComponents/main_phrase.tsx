@@ -1,18 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Suspense, lazy } from "react";
 import { useVerificationStore } from "../../App";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
-import { checkIsDelivering } from "../../utils/ExecuteOrderFromBlockchain";
-import MainOrderInformation from "./MainOrderInformation";
 import Lottie from "lottie-react";
-import mainLoaing from "../../Lottie/mainLoading.json";
-import mainDelivery from "../../Lottie/mainDelivery.json";
 import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
 import { TwoPointRoute } from "../searchComponents/interface/route";
 import { useConnWalletInfo } from "../../App";
-import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -67,6 +62,9 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   const { isMember } = useVerificationStore();
   const { address } = useConnWalletInfo();
 
+  const MainOrderInformation = lazy(() => import("./MainOrderInformation"))
+  const WalletConnectBtn = lazy(() => import("../blockChainTx/WalletConnectBtn"))
+
   const sdta = new SendDataToAndroid(address);
 
   // const testData = {"sX":127.04951606332,"sY":37.5701609651972,"name":"서울 서초구 우면동 1","x":127.024170188781,"y":37.4687523234136,"coordType":"wgs84"}
@@ -83,11 +81,15 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
   return (
     <>
       {isConnect ? (
-        isMember ? (
+        <>
+        {isMember === null ? (<><div>Loading...</div></>):(<>
+          {isMember ? (
           <>
             
             <section>
+            <Suspense fallback={<div>Loading...</div>}>
               <MainOrderInformation />
+            </Suspense>
             </section>
             {/* <button onClick={() => navigate("/execution/205")}>
                     임시배송페이지이동버튼
@@ -140,13 +142,17 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                   </Notice_div>
                 </Sc5> 
           </>
-        )
+        )}
+        </>)}
+      </>
       ) : (
         <>
                 <Div1_1>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
                 {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
-                <WalletConnectBtn />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <WalletConnectBtn />
+                </Suspense>
               </Sp2>
                 </Div1_1>
                 <Div1>

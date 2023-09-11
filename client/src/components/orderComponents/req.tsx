@@ -3,6 +3,7 @@ import {useEffect, useRef, useState } from "react";
 import { BsCalendar3, BsClock, BsFillCheckCircleFill} from "react-icons/bs";
 import { useOrderDataStore, useOrderStore } from '../../pages/commission';
 import GetQkrwBalance from '../getQkrwBalance';
+import CreateNewOrder from '../createNewOrder';
 import { useConnWalletInfo } from '../../App';
 
 const walk = require('../../image/walk.png')
@@ -203,7 +204,7 @@ const Bticonimg = styled.img`
 
 `;
 
-function Req() {
+function Req({data}: {data: object}) {
 
     const widthRef = useRef<HTMLInputElement>(null)
     const heightRef = useRef<HTMLInputElement>(null)
@@ -240,7 +241,7 @@ function Req() {
         setAMPM("오후")
       };
       
-    const { setCost, errorMessage } = useOrderStore()
+    const { cost, setCost, deadLine, errorMessage } = useOrderStore()
     const convertStrToNum = (data:string):number => {
         let result =  parseInt(data);
         if (Number.isNaN(result)) {
@@ -476,6 +477,13 @@ function Req() {
             <Imgdiv><Bticonimg src={money} alt="" /></Imgdiv></Sp2>
             </div>
         </Box>
+    </Container>
+    <Container>
+        <CreateNewOrder
+          data={data}
+          _orderPrice={cost.toString()}
+          _deadline={deadLine}
+          />
     </Container>
     </>
   );

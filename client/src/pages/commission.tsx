@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState, useRef } from "react";
+import React, { createElement, useEffect, useState, useRef, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
@@ -9,7 +9,6 @@ import { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
-import IncreaseAllowance from "../components/IncreaseAllowance";
 
 interface OrderState {
   cost: number;
@@ -247,6 +246,8 @@ export default function CommissionPage() {
 
   const [arrivePosition, setArrivePosition] = useState({});
   const [startPosition, setStartPosition] = useState({});
+  
+  const IncreaseAllowance = lazy(() => import("../components/IncreaseAllowance"))
 
   const setDeadlineToProp = () => {
     if (date !== null && AMPM !== null && hour !== null && minute !== null) {
@@ -358,7 +359,9 @@ export default function CommissionPage() {
       <GlobalStyle />
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       {showAllowance ? (
-        <IncreaseAllowance />
+        <Suspense fallback={<div>Loading...</div>}>
+          <IncreaseAllowance />
+        </Suspense>
       ) : (
         <>
           <div

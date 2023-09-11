@@ -7,7 +7,7 @@ import {
   QUICKER_DLVR_ADDRESS_KLAYTN,
   QUICKER_STAKING_ADDRESS_KLAYTN,
   QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
-  QUICKER_DLVR_PROXY_ADDRESS
+  QUICKER_DLVR_PROXY_ADDRESS,
 } from "../../contractInformation";
 
 export default {
@@ -392,27 +392,6 @@ export default {
       value: "0",
       to: QUICKER_DLVR_PROXY_ADDRESS,
       params: `["${QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN}"]`
-    };
-  },
-  // test
-  FinishRoundTest: (): SendTxType => {
-    return {
-      abi: `{
-        "inputs": [],
-        "name": "finishRound",
-        "outputs": [
-          {
-            "internalType": "bool",
-            "name": "",
-            "type": "bool"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      }`,
-      value: "0",
-      to: QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
-      params: `[]`
     };
   },
 };

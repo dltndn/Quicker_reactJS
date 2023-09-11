@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from "react";
+import React, { CSSProperties, Suspense, lazy, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useOrderState } from "../ShowOrders";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
@@ -10,7 +10,6 @@ import {
 import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useConnWalletInfo } from "../../App";
-import SendTxK from "../blockChainTx/SendTxK";
 import GetContractParams from "../blockChainTx/GetContractParams";
 
 interface OrderBoxProps {
@@ -448,6 +447,8 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
   const [showTxBtn, setShowTxBtn] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const SendTxK = lazy(() => import("../blockChainTx/SendTxK"))
+
   useEffect(() => {
     return () => {
       setShowTxBtn(false);
@@ -480,13 +481,15 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
           {!showTxBtn ? (
             <Button onClick={() => setShowTxBtn(true)}>주문취소</Button>
           ) : (
-            <SendTxK
+            <Suspense fallback={<div>Loading...</div>}>
+              <SendTxK
               param={GetContractParams.CancelOrder(order.orderNum)}
               successFunc={() => {
                 setReloadOrderNum(order.orderNum);
                 closeModal();
               }}
             />
+            </Suspense>
           )}
         </>
       );

@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import styled from "styled-components";
 import { useLocation, useParams } from "react-router-dom";
-import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
-import ReceipientConfirm from "../components/deliveryProgress/ReceipientConfirm";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import {
   getDateFromTimestamp,
@@ -13,6 +11,7 @@ import { queryStringParser } from "../lib/parseQueryString";
 import { create } from "zustand";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
+import SuspenseComponent from "../components/SuspenseComponent";
 
 export interface isLive {
   isLive : boolean,
@@ -31,6 +30,9 @@ export default function ReceipientPage() {
   const [isDelivered, setIsDelivered] = useState<boolean | undefined>(undefined);
   const [isLive, setIsLive] = useState<boolean>(true);
   const [deiverWalletAddress, setDeiverWalletAddress] = useState(null)
+
+  const DeliveryStatus = lazy(() => import("../components/deliveryProgress/DeliveryStatus"))
+  const ReceipientConfirm = lazy(() => import("../components/deliveryProgress/ReceipientConfirm"))
 
   const getDeadlineText = async (orderNum: string) => {
     try {
@@ -81,9 +83,13 @@ export default function ReceipientPage() {
       ) : (
         <>
           {isLive ? (
-            <DeliveryStatus orderNum={orderNum} deadline={deadline} />
+            <SuspenseComponent component={
+              <DeliveryStatus orderNum={orderNum} deadline={deadline} />
+            } />
           ) : (
-            <ReceipientConfirm orderNum={orderNum} validationInfo={deiverWalletAddress}/>
+            <SuspenseComponent component={
+              <ReceipientConfirm orderNum={orderNum} validationInfo={deiverWalletAddress}/>
+            } />
           )}
         </>
       )}

@@ -338,7 +338,7 @@ const FeeGovernorPage = () => {
         setTitle("거래수수료 투표");
         break;
       case "previousResult":
-        setTitle("지난투표");
+        setTitle("투표기록");
         break;
       case "vote":
         setTitle("투표하기");
@@ -354,6 +354,7 @@ const FeeGovernorPage = () => {
     if (address !== undefined) {
       try {
         const roundData = await getFeeGovernorInfo(address);
+        console.log(roundData)
         setRoundInfo(roundData);
         setPageState("main");
       } catch (e) {
@@ -498,7 +499,7 @@ const Main = ({ roundInfo }: any) => {
           <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
           </Sc3>
           <ButtonWrapper>
-          <LoadButton onClick={() => setPageState("previousResult")}>지난투표</LoadButton>
+          <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
           <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
           </ButtonWrapper>
           <HideDiv></HideDiv>
@@ -515,7 +516,7 @@ interface RoundLogType {
   totalIncome: string;
 }
 
-// 지난투표 결과 목록 화면
+// 투표 결과 목록 화면
 const PreviousResult = () => {
   const [roundLogArr, setRoundLogArr] = useState<RoundLogType[]>([]);
   const [oldestRound, setOldestRound] = useState<number | null>(null);
