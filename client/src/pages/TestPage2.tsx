@@ -145,7 +145,7 @@ useEffect(() => {
     <>
       {klaytnAddr}
       <TopDiv>
-        <SendTxK param={GetContractParams.FinishRoundTest()} successFunc={() => {console.log("success")}}/>
+        
         <KakaoMapDeepLinkButton />
         <div>
           <button onClick={() => getOrdersForStateTest(1)}>매칭 이후 오더들 불러오는 버튼</button>
@@ -154,7 +154,7 @@ useEffect(() => {
           <button onClick={async() => await getReqKey2()}>kaikas req key</button>
           <button onClick={async() => await getAddress()}>kaikas address</button>
           {/* <SendTxK recieverAddress={""} amm={10}/> */}
-          <SendTxK param={GetContractParams.IncreaseAllowanceQkrw()} successFunc={() => console.log("success func")}/>
+          {/* <SendTxK param={GetContractParams.IncreaseAllowanceQkrw()} successFunc={() => console.log("success func")}/> */}
           <button onClick={async() => await allowanceTest()}>get owner</button>
           <div>오더 생성하기(의뢰인)</div>
           <input

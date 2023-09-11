@@ -17,5 +17,8 @@ router.post("/getQtokenAllowance", KlaytnCaver.getQtokenAllowance)
 router.post("/getFeeGovernorRoundLogs", KlaytnCaver.getFeeGovernorRoundLogs)
 router.post("/getCurrentFeeGovernorInfo", KlaytnCaver.getCurrentFeeGovernorInfo)
 router.post("/getFeeDeligation", KlaytnCaver.getFeeDeligation)
+router.post("/hasNftIdList", KlaytnCaver.hasNftIdList)
+router.post("/sumOrderPrice", KlaytnCaver.sumOrderPrice)
+router.post("/mintNft", KlaytnCaver.mintNft)
 
 export default router;

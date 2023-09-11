@@ -13,9 +13,15 @@ import {
   QUICEKR_FEE_GOVERNOR_ABI_KLAYTN,
   QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN,
   QUICKER_DLVR_PROXY_ABI,
-  QUICKER_DLVR_PROXY_ADDRESS
+  QUICKER_DLVR_PROXY_ADDRESS,
+  QUICKER_NFT_PROXY_ABI,
+  QUICKER_NFT_PROXY_ADDRESS,
+  QUICKER_DLVR_IMPL_ABI,
+  QUICKER_DLVR_IMPL_ADDRESS,
+ 
 } from "./ContractInfo";
 import BigNumber from "bignumber.js";
+import NftId from "./NftId";
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 config();
 
@@ -28,6 +34,10 @@ const quicker_drvr_contract = caver.contract.create(QUICKER_DLVR_PROXY_ABI,
   QUICKER_DLVR_PROXY_ADDRESS
 );
 // @ts-ignore
+const quicker_drvr_impl_contract = caver.contract.create(QUICKER_DLVR_IMPL_ABI,
+  QUICKER_DLVR_IMPL_ADDRESS
+);
+// @ts-ignore
 const quicker_staking_contract = caver.contract.create(QUICKER_STAKING_ABI_KLAYTN,
   QUICKER_STAKING_ADDRESS_KLAYTN
 );
@@ -37,6 +47,9 @@ const quicker_fee_governor_contract = caver.contract.create(QUICEKR_FEE_GOVERNOR
 );
 const quicker_token = new caver.kct.kip7(QUICKER_TOKEN_ADDRESS_KLAYTN)
 const vQuicker_token = new caver.kct.kip7(VQUICKER_TOKEN_ADDRESS_KLAYTN)
+// @ts-ignore
+const nft_proxy_contract = new caver.contract.create(QUICKER_NFT_PROXY_ABI, QUICKER_NFT_PROXY_ADDRESS)
+const keyring = caver.wallet.newKeyring(`${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`, `${process.env.KLAYTN_DELIGATION_PRIVATE_KEY}`)
 
 export default {
   getAllowance: async (req: Request, res: Response, next : NextFunction) => {
@@ -323,6 +336,111 @@ export default {
     } catch (e) {
       next(e)
       res.send(e);
+    }
+  },
+  // 유저가 보유하고 있는 NFT ID 조회
+  hasNftIdList: async (req: Request, res: Response, next: NextFunction) => {
+    const { address } = req.body
+    let prePara: string[] = [] // address
+    let postPara: string[] = [] // id
+    for (const val of NftId.tokens) {
+      prePara.push(address)
+      postPara.push(val.id)
+    }
+    try {
+      const result = await nft_proxy_contract.call("balanceOfBatch", prePara, postPara)
+      let hasIdList: string[] = []
+      for (let i=0; i<result.length; ++i) {
+        if (result[i] !== "0") {
+          hasIdList.push(postPara[i])
+        }
+      }
+      res.send(hasIdList)
+    } catch (e) {
+      next(e)
+      res.send(e)
+    }
+  },
+  // 유저 의뢰금 총액, 배송 의뢰금 총액
+  sumOrderPrice: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { address } = req.body
+      const clientOrderList = await quicker_drvr_contract.call("getClientOrderList", address)
+      const quickerOrderList = await quicker_drvr_contract.call("getQuickerOrderList", address)
+      const clientResult = await quicker_drvr_impl_contract.call("sumOrderPrice", clientOrderList)
+      const quickerResult = await quicker_drvr_impl_contract.call("sumOrderPrice", quickerOrderList)
+      const result = {
+        clientResult,
+        quickerResult
+      }
+      res.send(result)
+    } catch (e) {
+      next(e)
+      res.send(e)
+    }
+  },
+  // NFT 민팅 
+  mintNft: async (req: Request, res: Response, next: NextFunction) => {
+    // mint자격 충족 확인
+    const isMintable = (tokenId: string, sumOrderPrice: string): boolean => {
+      for (const val of NftId.tokens) {
+        if (tokenId === val.id) {
+          if (Number(sumOrderPrice) < val.minSumPrice) {
+            return false
+          } else {
+            return true
+          }
+        }
+      }
+      return false
+    }
+    // 토큰 민팅
+    const mintToken = async (tokenId: string, address: string): Promise<boolean> => {
+      try {
+        const result = await nft_proxy_contract.send({
+          from: `${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`,
+          gas: 500000
+        }, 'mint', tokenId, address, "1")
+          return result.status
+        } catch (e) {
+          return false
+        }
+    }
+    try {
+      const { address, tokenId } = req.body
+      const folderNum = BigInt(tokenId) >> BigInt(128)
+      switch (folderNum.toString()) {
+        case "1": // 의뢰인 NFT
+          const clientOrderList = await quicker_drvr_contract.call("getClientOrderList", address)
+          const clientResult = await quicker_drvr_impl_contract.call("sumOrderPrice", clientOrderList)
+          // mint자격 충족 확인
+          if (isMintable(tokenId, clientResult)) {
+            // nft 민팅 코드
+            const mintStatus = mintToken(tokenId, address)
+            res.send(mintStatus)
+          } else {
+            res.send(false)
+          }
+          break
+        case "2": // 퀵커 NFT 
+          const quickerOrderList = await quicker_drvr_contract.call("getQuickerOrderList", address)
+          const quickerResult = await quicker_drvr_impl_contract.call("sumOrderPrice", quickerOrderList)
+          // mint자격 충족 확인
+          if (isMintable(tokenId, quickerResult)) {
+            // nft 민팅 코드
+            const mintStatus = mintToken(tokenId, address)
+            res.send(mintStatus)
+          } else {
+            res.send(false)
+          }
+          break
+        default :
+          res.send(false)
+          break
+      }
+    } catch (e) {
+      next(e)
+      res.send(e)
     }
   },
 };
