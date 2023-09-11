@@ -22,7 +22,8 @@ import { useConnWalletInfo } from "../../App";
 
 const money = require("../../image/money.png");
 
-const img1 = require("../../image/ex1.jpg");
+// const img1 = require("../../image/ex1.jpg");
+const img1 = "ipfs://bafybeidkcbye5ta6yvgiju6jzwacm4egov6vsvuui4f6h6p6zwxn3ayvla/"
 
 const Topdiv = styled.div`
   display: flex;
@@ -158,34 +159,6 @@ function Imfo() {
   const { isMember, userName } = useVerificationStore();
   const { setOrdersObj } = useOrderState();
 
-  const ClickOrderlist = () => {
-    setOrdersObj(null);
-    navigate("/orderlist");
-  };
-  const ClickFulfillmentlist = () => {
-    setOrdersObj(null);
-    navigate("/fulfillmentlist");
-  };
-  const ClickSettingPage = () => {
-    navigate("/profile/setting");
-  };
-
-  const ClicknoticePage = () => {
-    navigate("/profile/notice");
-  };
-
-  const ClickExplorerPage = () => {
-    navigate("/explorer");
-  };
-
-  const ClickStakingPage = () => {
-    navigate("/staking");
-  };
-
-  const ClickFeeGovernorPage = () => {
-    navigate("/feeGovernor")
-  }
-
   const disConnect = () => {
     setAddress(undefined);
     setIsMobile(null);
@@ -211,7 +184,7 @@ function Imfo() {
         <Topdiv>
           <Topimg src={img1} />
           <Toptx>{userName}</Toptx>
-          <Topbt onClick={ClickSettingPage}>
+          <Topbt onClick={() => navigate("/profile/setting")}>
             <BsPencilSquare></BsPencilSquare>
           </Topbt>
         </Topdiv>
@@ -242,32 +215,38 @@ function Imfo() {
         </Div0>
       </Sc3>
       <Sc3>
-        <Div0 onClick={ClickExplorerPage}>
+        <Div0 onClick={() => navigate("/explorer")}>
           <BsCoin></BsCoin>
           <Sp2>실시간 거래 현황</Sp2>
         </Div0>
       </Sc3>
       <Sc3>
-        <Div0 onClick={ClickStakingPage}>
+        <Div0 onClick={() => navigate("/staking")}>
           <BsCoin></BsCoin>
           <Sp2>스테이킹</Sp2>
         </Div0>
       </Sc3>
       <Sc3>
-        <Div0 onClick={ClickFeeGovernorPage}>
+        <Div0 onClick={() => navigate("/feeGovernor")}>
           <BsCoin></BsCoin>
           <Sp2>거래수수료 투표</Sp2>
         </Div0>
       </Sc3>
       <Sc0>
-        <Div0 onClick={ClickOrderlist}>
+        <Div0 onClick={() => {
+          setOrdersObj(null);
+          navigate("/orderlist");
+          }}>
           <BsFileText></BsFileText>
           <Sp2>오더 내역</Sp2>
         </Div0>
       </Sc0>
       <Hr></Hr>
       <Sc1>
-        <Div0 onClick={ClickFulfillmentlist}>
+        <Div0 onClick={() => {
+          setOrdersObj(null);
+          navigate("/fulfillmentlist");
+        }}>
           <BsCheck2Circle></BsCheck2Circle>
           <Sp2>수행 내역</Sp2>
         </Div0>

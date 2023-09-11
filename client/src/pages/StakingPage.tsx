@@ -15,8 +15,8 @@ import ConfirmBtn from "../components/confirmBtn";
 import { getQtokenAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import styled, { keyframes } from "styled-components";
 import BottomBar from "../components/BottomBar";
-// import Stacking from "../Lottie/Stacking.json";
-// import StackingGo from "../Lottie/Stackinggo.json";
+import Stacking from "../Lottie/Stacking.json";
+import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
 import Decimal from "decimal.js";
@@ -492,10 +492,12 @@ const StakingPage = () => {
                     setShowStaking(true);
                   }}
                 >
-                  <StakingTx3>스테이킹</StakingTx3>
-                  {/* <CenteredDiv>
-                    <Lottie animationData={StackingGo} />
-                  </CenteredDiv> */}
+                  <StakingTx3>스테이킹
+                    {/* <CenteredDiv>
+                      <Lottie animationData={StackingGo} />
+                    </CenteredDiv> */}
+                  </StakingTx3>
+                  
                 </Sc4>
               </Sc0>
               <HideDiv></HideDiv>
