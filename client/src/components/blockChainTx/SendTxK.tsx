@@ -4,10 +4,9 @@ import { generateQRCode } from "../../utils/GenerateQr";
 import { SendTxType, SendTxDelegationType } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
 import styled from "styled-components";
+import Modal from "./QrModal";
 
 const LoadButton = styled.button`
-  position: fixed;
-  bottom: 0.5rem;
   width: 98%;
   height: 3.125rem;
   font-size: var(--font-md);
@@ -27,11 +26,11 @@ const LoadButton = styled.button`
   }
 `;
 
-const Container = styled.section`
-  padding: calc(var(--padding) / 2) var(--padding);
-  display: flex;
-  justify-content: center;
-`;
+// const Container = styled.section`
+//   padding: calc(var(--padding) / 2) var(--padding);
+//   display: flex;
+//   justify-content: center;
+// `;
 
 const Img = styled.img`
 `
@@ -42,6 +41,7 @@ type SendTokenProps = {
 };
 
 const SendTxK = ({ param, successFunc }: SendTokenProps) => {
+
   const [showQr, setShowQr] = useState<boolean>(false);
   const [qrUrl, setQrUrl] = useState<string>("");
 
@@ -58,7 +58,7 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       } else {
         await kConn.getTxResult(reqKey, true);
       }
-      successFunc();
+
     } catch (e) {
       console.log(e);
     }
@@ -96,26 +96,17 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
-            <Container>
             <LoadButton onClick={mobileConnect}>서명</LoadButton>
-            </Container>
           ) : (
             <>
-            <Container>
             <LoadButton onClick={qrConnect}>서명</LoadButton>
-            </Container>
-              {showQr && (
-                <Img
-                  src={qrUrl}
-                  onClick={() => setShowQr(false)}
-                  alt="Qr_wallet_connect"
-                  margin-left="auto"
-                  margin-right="auto"
-                  margin-top="auto"
-                  margin-bottom="auto"
-                />
-                
-              )}
+
+            {showQr && (
+        
+            <Modal isOpen={showQr} onClose={() => setShowQr(false)} imageUrl={qrUrl} />
+          )}
+
+              
             </>
           )}
         </>

@@ -65,11 +65,17 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
+        {orderNum && <Margin_1><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/></Margin_1>}
     </>
   );
 };
-
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 // const Camera = () => {
 //     const videoRef = useRef<HTMLVideoElement>(null);
   

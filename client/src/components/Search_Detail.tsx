@@ -195,6 +195,7 @@ function Search_Detail() {
                   }}
                 />
               ) : (
+                <Margin_1>
                 <SendTxK
                   param={GetContractParams.AcceptOrder(
                     // @ts-ignore
@@ -204,6 +205,7 @@ function Search_Detail() {
                     await acceptOrder();
                   }}
                 />
+                </Margin_1>
               )}
             </>
           )}
@@ -335,3 +337,12 @@ const SelectInput = styled.select`
   font-size: 14px;
   margin-right: 20px;
 `;
+
+
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`

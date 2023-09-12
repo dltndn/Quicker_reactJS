@@ -107,11 +107,26 @@ const Div3 = styled.div`
   cursor: pointer;
 `;
 
-const Div1_3 = styled(Div1_2)`
+const Div1_3 = styled.div`
+  display: flex;
+  flex: 1 1 25%;
+  justify-content: center;
+  font-weight: bold;
   font-size: 16px;
   align-items: center;
   flex-direction: column;
   padding: 10px 0 10px 0;
+  text-align: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  color: initial;
+  &.clicked {
+    border: 2px solid;
+    color: blue;
+    border-radius: 20px;
+    border-color: blue;
+  }
+  cursor: pointer;
 `;
 
 const Sp0 = styled.span`
@@ -271,6 +286,14 @@ const HideDiv = styled.div`
 const Margin = styled.div`
   margin: 0px 10px 0px 10px;
 `;
+
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 
 const Ip = styled.input`
   width: 100%;
@@ -609,7 +632,7 @@ const StakingToken = ({
 
   useEffect(() => {
     if (inputAmount === "") {
-      setAlertMessage("수량을 입력하세요");
+      setAlertMessage("");
     } else if (Number(inputAmount) > Number(quickerBalance)) {
       setAlertMessage("보유한 수량이 부족합니다");
     } else {
@@ -661,36 +684,23 @@ const StakingToken = ({
             <Div1_2>배송지</Div1_2>
           </Div1_1> */}
           <Div0>
-            <Div1_3>
-                <Div3
-                  onClick={() => {setSelectedPeriod(3); onClick1()}}
-                  className={isClicked1 ? "clicked" : ""}
-                >
+            <Div1_3                   
+            onClick={() => {setSelectedPeriod(3); onClick1()}}
+                  className={isClicked1 ? "clicked" : ""}>
                   <Sp0>1배</Sp0>
-                  <br />
                   3개월
-                </Div3>
             </Div1_3>
-            <Div1_3>
-                <Div3
-                  onClick={() => {setSelectedPeriod(6); onClick2()}}
-                  className={isClicked2 ? "clicked" : ""}
-                >
+            <Div1_3                   
+            onClick={() => {setSelectedPeriod(6); onClick2()}}
+                  className={isClicked2 ? "clicked" : ""}>
                   <Sp0>2배</Sp0>
-                  <br />
                   6개월
-                </Div3>
             </Div1_3>
-            <Div1_3>
-                <Div3
-                  onClick={() => {setSelectedPeriod(9); onClick3()}}
-                  className={isClicked3 ? "clicked" : ""}
-                >
+            <Div1_3                   
+            onClick={() => {setSelectedPeriod(9); onClick3()}}
+                  className={isClicked3 ? "clicked" : ""}>
                   <Sp0>4배</Sp0>
-                  <br />
                   9개월
-                </Div3>
-              
             </Div1_3>
           </Div0>
           <Margin>
@@ -713,7 +723,7 @@ const StakingToken = ({
                   />
                 </>
               ) : (
-                <>
+                <><Margin_1>
                   <SendTxK
                     param={GetContractParams.stakeQuicker(
                       inputAmount,
@@ -721,6 +731,7 @@ const StakingToken = ({
                     )}
                     successFunc={() => navigate("/profile")}
                   />
+                  </Margin_1>
                 </>
               )}
             </>

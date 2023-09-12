@@ -310,7 +310,13 @@ const Lb1 = styled.label`
   flex-direction: column;
 `;
 
-
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
 
 const FeeGovernorPage = () => {
   const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } =
@@ -739,6 +745,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
             </Flex2>
             </Box>
           </div>
+          <Margin_1>
           <SendTxK
             param={GetContractParams.castVote(
               feeIndex,
@@ -747,6 +754,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
             )}
             successFunc={successFunc}
           />
+          </Margin_1>
   
 
         </>
@@ -814,7 +822,7 @@ const convertToLocale = (data: string) => {
 const StrokedGaugeExample: React.FC = () => {
   const options = {
     chart: {
-      type: 'radialBar',
+      type: 'donut',
       height: 50, // 그래프의 높이 설정
       width: 50, // 그래프의 너비 설정 (예: '300px')
     },

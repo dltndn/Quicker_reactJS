@@ -39,7 +39,7 @@ export default function CompletedOrderConfirm({
         </Div5>
         </Div3>
         
-        {orderNum && <SendTxK param={GetContractParams.CompleteOrder(orderNum)} successFunc={() => navigate("/")}/>}
+        {orderNum && <Margin_1><SendTxK param={GetContractParams.CompleteOrder(orderNum)} successFunc={() => navigate("/")}/> </Margin_1>}
     </>
   );
 }
@@ -111,3 +111,11 @@ const Div5 = styled.div`
     padding: 10px 20px 20px 20px;
     border-radius: 0 0 10px 10px;
 `;
+
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
