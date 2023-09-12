@@ -3,6 +3,7 @@ import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
 import { useVerificationStore } from "../../App";
 import styled from "styled-components";
+import Modal from "./QrModal";
 
 const Bt1 = styled.button`
   width: 100%;
@@ -13,8 +14,8 @@ const Bt1 = styled.button`
   letter-spacing: 1px;
   font-weight: 500;
   color: #000;
-  background-color: transparent;
-  border: 1px solid #000;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 10px;
   transition: all 0.3s ease;
 
@@ -137,11 +138,7 @@ const WalletConnectBtn = () => {
           <Bt2 onClick={mobileConnect}>앱연결</Bt2>
           <Bt3 onClick={qrConnect}>큐알연결</Bt3>
           {showQr && (
-            <img
-              src={qrUrl}
-              onClick={() => setShowQr(false)}
-              alt="Qr_wallet_connect"
-            />
+            <Modal isOpen={showQr} onClose={() => setShowQr(false)} imageUrl={qrUrl} />
           )}
         </>
       ) : (
