@@ -340,5 +340,9 @@ const SelectInput = styled.select`
 
 
 const Margin_1 = styled.section`
-
+  position: fixed;
+  bottom: 4rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `
