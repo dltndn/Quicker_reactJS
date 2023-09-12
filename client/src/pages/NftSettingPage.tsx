@@ -45,7 +45,9 @@ const NftSettingPage = () => {
   }, []);
 
   useEffect(() => {
-    setNftImgState("404")
+    if (!address) {
+      setNftImgState("404")
+    }
   }, [address])
 
   // NFT 불러오기

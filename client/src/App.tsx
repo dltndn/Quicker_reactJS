@@ -199,8 +199,7 @@ function App() {
     getAndSetOrders(address);
     console.log("userOrderNumStateTrigger 직동");
   }, [userOrderNumStateTrigger]);
-
-  console.log("app")
+  
   return (
     <>
       <BrowserRouter>

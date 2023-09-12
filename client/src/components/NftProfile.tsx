@@ -1,19 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useNftState } from "../pages/NftSettingPage";
+import { useEffect, useState } from "react";
 
 const NftProfile = () => {
   const navigate = useNavigate();
-  const { imgState } = useNftState();
+  const [currentImg, setCurrentImg] = useState<string>("404")
+  
+  useEffect(() => {
+    const localstorageImgId = localStorage.getItem("nftImgState")
+    if (localstorageImgId) {
+        setCurrentImg(() => {return localstorageImgId})
+    }
+  }, [])
 
   // 해당 이미지 id 경로 반환
   const getImgPath = (id: string) => {
     return `/NftImg/${id}.png`;
   };
+
   return (
     <>
       <NftImg
-        src={getImgPath(imgState)}
+        src={getImgPath(currentImg)}
         onClick={() => navigate("/nftSetting")}
       />
     </>
