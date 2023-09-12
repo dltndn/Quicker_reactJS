@@ -700,3 +700,4 @@ const Spsc1 = styled(Spsc0)`
 const Spsc2 = styled(Spprofit2)`
   margin-left: auto;
 `;
+

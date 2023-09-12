@@ -14,12 +14,17 @@ import { useConnWalletInfo } from "../App";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
 import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
+import styled from "styled-components";
 
 interface Props {
   data: object;
   _orderPrice: string;
   _deadline: string;
 }
+
+const Margin = styled.div`
+  height: 100px;
+`
 
 export default function CreateNewOrder({
   data,
@@ -168,11 +173,19 @@ export default function CreateNewOrder({
           confirmLogic={async () => await validateInput()}
         />
       ) : (
+        <>
+        <Margin_1></Margin_1>
         <SendTxK
           param={GetContractParams.CreateOrder(_orderPrice, _deadline)}
           successFunc={async () => {setIsSuccess(true); await getCreatedOrderNum()}}
         />
+        </>
       )}
     </>
   );
 }
+
+
+const Margin_1 = styled.section`
+  height: 90px;
+`

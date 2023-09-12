@@ -26,10 +26,12 @@ export default function IncreaseQAllowance() {
       {address === undefined ? (
         <>지갑 연결 해제됨</>
       ) : (
+        <Margin_1>
         <SendTxK
           param={GetContractParams.increaseAllowanceQuicker_staking()}
           successFunc={onSuccess}
         />
+        </Margin_1>
       )}
     </>
   );
@@ -47,3 +49,10 @@ const Div1 = styled.div`
   font-size: var(--font-micro);
   color: #828282;
 `;
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`

@@ -340,7 +340,7 @@ export default {
   },
   // 유저가 보유하고 있는 NFT ID 조회
   hasNftIdList: async (req: Request, res: Response, next: NextFunction) => {
-    const { address } = req.body
+    const { address } = req.body 
     let prePara: string[] = [] // address
     let postPara: string[] = [] // id
     for (const val of NftId.tokens) {

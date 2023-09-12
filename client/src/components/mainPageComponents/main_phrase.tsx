@@ -8,6 +8,7 @@ import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
 import { TwoPointRoute } from "../searchComponents/interface/route";
 import { useConnWalletInfo } from "../../App";
+import mainLoaing from "../../Lottie/mainLoading.json";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -15,6 +16,15 @@ const pin = require("../../image/redPin.png");
 const wallet = require("../../image/wallet.png");
 
 const walletWebsiteUrl = "https://kaikas.zendesk.com/hc/ko/articles/10915901333913-%EB%AA%A8%EB%B0%94%EC%9D%BC-Kaikas-%EC%84%A4%EC%B9%98%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%ED%95%98%EB%82%98%EC%9A%94-";
+
+
+const LotDiv = styled.div`
+  position: absolute;
+  width: 100px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const Div0 = styled.div`
   display: flex;
@@ -82,12 +92,16 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
     <>
       {isConnect ? (
         <>
-        {isMember === null ? (<><div>Loading...</div></>):(<>
+        {isMember === null ? (        <LotDiv>
+          <Lottie animationData={mainLoaing} />
+        </LotDiv>):(<>
           {isMember ? (
           <>
             
             <section>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={        <LotDiv>
+          <Lottie animationData={mainLoaing} />
+        </LotDiv>}>
               <MainOrderInformation />
             </Suspense>
             </section>
@@ -150,7 +164,9 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                 <Div1_1>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
                 {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={        <LotDiv>
+          <Lottie animationData={mainLoaing} />
+        </LotDiv>}>
                   <WalletConnectBtn />
                 </Suspense>
               </Sp2>

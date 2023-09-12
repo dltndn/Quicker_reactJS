@@ -83,7 +83,7 @@ export default function FailedOrderConfirm({ orderNum, isReceived }: FailedOrder
             isDisabled={false}
             content={isReceived? ("확인"):("환불받기")}
             confirmLogic={confirmLogic}
-          />):(<>{orderNum && (<SendTxK param={GetContractParams.FailedOrder(orderNum)} successFunc={() => navigate("/")}/>)}</>)}
+          />):(<>{orderNum && (<Margin_1><SendTxK param={GetContractParams.FailedOrder(orderNum)} successFunc={() => navigate("/")}/></Margin_1>)}</>)}
         
     </>
 }
@@ -137,3 +137,11 @@ const ReqFont = styled.span`
   font-weight: bold;
   margin-left: 0.313rem;
 `;
+
+const Margin_1 = styled.section`
+  position: fixed;
+  bottom: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
