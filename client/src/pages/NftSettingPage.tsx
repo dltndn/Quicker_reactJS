@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
@@ -89,14 +89,14 @@ const NftSettingPage = () => {
         }}
       />
       <div>현재 이미지</div>
-      <img src={getImgPath(imgState)} alt="current img" />
-      <div>보유 중인 이미지 목록</div>
+      <NftImg src={getImgPath(imgState)} alt="current img" />
+      <div>보유 중인 NFT 목록</div>
       <SuspenseComponent
         component={
           <>
             {imgList.map((val: string, index: number) => (
               <div key={index} onClick={() => {setNftImgState(val);}}>
-                <img src={getImgPath(val)} alt={`holding img ${index}`} />
+                <NftImg src={getImgPath(val)} alt={`holding img ${index}`} />
                 <div>{getNftDescription(val)}</div>
               </div>
             ))}
@@ -115,4 +115,11 @@ const GlobalStyle = createGlobalStyle`
     background-color: #efefef !important;
     height: 100%;
   }
+`;
+
+const NftImg = styled.img`
+  width: 5rem;
+  height: 5rem;
+  margin-left: 0.5rem;
+  border-radius: 100%;
 `;
