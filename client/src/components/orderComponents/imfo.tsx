@@ -19,11 +19,12 @@ import { useVerificationStore } from "../../App";
 import { useOrderState } from "../ShowOrders";
 import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 import { useConnWalletInfo } from "../../App";
+import NftProfile from "../NftProfile";
 
 const money = require("../../image/money.png");
 
-// const img1 = require("../../image/ex1.jpg");
-const img1 = "ipfs://bafybeidkcbye5ta6yvgiju6jzwacm4egov6vsvuui4f6h6p6zwxn3ayvla/"
+const img1 = require("../../image/ex1.jpg");
+// const img1 = "ipfs://bafybeidkcbye5ta6yvgiju6jzwacm4egov6vsvuui4f6h6p6zwxn3ayvla/"
 
 const Topdiv = styled.div`
   display: flex;
@@ -182,7 +183,7 @@ function Imfo() {
     <>
       <section>
         <Topdiv>
-          <Topimg src={img1} />
+          <NftProfile />
           <Toptx>{userName}</Toptx>
           <Topbt onClick={() => navigate("/profile/setting")}>
             <BsPencilSquare></BsPencilSquare>

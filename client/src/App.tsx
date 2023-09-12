@@ -20,6 +20,7 @@ import ReceipientPage from "./pages/ReceipientPage";
 import ChatcssPage from "./components/ChatcssPage";
 import StakingPage from "./pages/StakingPage";
 import FeeGovernorPage from "./pages/FeeGovernorPage";
+import NftSettingPage from "./pages/NftSettingPage";
 import QR from "./pages/QR";
 import { create } from "zustand";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
@@ -234,6 +235,7 @@ function App() {
           <Route path="/testQR" element={<QR />} />
           <Route path="/staking" element={<StakingPage />} />
           <Route path="/feeGovernor" element={<FeeGovernorPage />} />
+          <Route path="/nftSetting" element={<NftSettingPage />} />
         </Routes>
       </BrowserRouter>
     </>

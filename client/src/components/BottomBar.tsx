@@ -131,7 +131,7 @@ function BottomBar() {
               <Div0 onClick={() => handleButtonClick("/profile")}>
                 <Div1>
                   <Iconimg
-                    src={currentPage === "/profile" ? black4 : white4}
+                    src={currentPage === "/profile" || currentPage === "/nftSetting" ? black4 : white4}
                     alt="icon"
                   />
                 </Div1>

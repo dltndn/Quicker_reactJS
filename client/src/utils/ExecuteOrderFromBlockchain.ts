@@ -242,6 +242,20 @@ export const getRoundLogs = async (index: string, startRound: string | undefined
   }
 }
 
+// (ERC-1155 컨트랙)
+// 유저가 보유하고 있는 NFT ID 조회
+export const hasNftIdList = async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/hasNftIdList`, {
+      address,
+    });
+    return data.data; // type: string[]
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+}
+
 // export class WriteTransactionToBlockchain {
 //   private orderNum: string;
 //   private writeTransaction = async (funcName: string) => {
