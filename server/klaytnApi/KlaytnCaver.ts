@@ -366,11 +366,11 @@ export default {
       const { address } = req.body
       const clientOrderList = await quicker_drvr_contract.call("getClientOrderList", address)
       const quickerOrderList = await quicker_drvr_contract.call("getQuickerOrderList", address)
-      const clientResult = await quicker_drvr_impl_contract.call("sumOrderPrice", clientOrderList)
-      const quickerResult = await quicker_drvr_impl_contract.call("sumOrderPrice", quickerOrderList)
+      const clientPriceResult = await quicker_drvr_impl_contract.call("sumOrderPrice", clientOrderList)
+      const quickerPriceResult = await quicker_drvr_impl_contract.call("sumOrderPrice", quickerOrderList)
       const result = {
-        clientResult,
-        quickerResult
+        clientPriceResult,
+        quickerPriceResult
       }
       res.send(result)
     } catch (e) {
