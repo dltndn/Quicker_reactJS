@@ -20,7 +20,6 @@ import {
   QUICKER_DLVR_IMPL_ADDRESS,
  
 } from "./ContractInfo";
-import BigNumber from "bignumber.js";
 import NftId from "./NftId";
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 config();
