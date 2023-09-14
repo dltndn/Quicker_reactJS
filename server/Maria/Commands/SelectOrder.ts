@@ -38,61 +38,57 @@ export default {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Product, { foreignKey: "id" });
-    return new Promise((resolve, reject) => {
-      resolve(
-        Order.findAll({
-          attributes: ["id", "PAYMENT", "DETAIL"],
-          where: {
-            [Op.and]: [
-              {
-                ID_REQ: {
-                  [Op.ne]: userId,
-                },
-              },
-              {
-                ID_DVRY: {
-                  [Op.eq]: "",
-                },
-              },
-            ],
+    return Order.findAll({
+      attributes: ["id", "PAYMENT", "DETAIL"],
+      where: {
+        [Op.and]: [
+          {
+            ID_REQ: {
+              [Op.ne]: userId,
+            },
           },
-          include: [
-            {
-              model: Transportation,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
+          {
+            ID_DVRY: {
+              [Op.eq]: "",
             },
-            {
-              model: Destination,
-              attributes: { exclude: ["id"] },
-              required: true,
-            },
-            {
-              model: Departure,
-              attributes: { exclude: ["ID", "id"] },
-              required: true,
-            },
-            {
-              model: Product,
-              attributes: { exclude: ["ID", "id"] },
-              required: false,
-            },
-          ],
-        })
-      );
-      reject("fail");
+          },
+        ],
+      },
+      include: [
+        {
+          model: Transportation,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+        {
+          model: Destination,
+          attributes: { exclude: ["id"] },
+          required: true,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "id"] },
+          required: true,
+        },
+        {
+          model: Product,
+          attributes: { exclude: ["ID", "id"] },
+          required: false,
+        },
+      ],
+      raw: true,
+      nest: true,
     });
   },
 
-  //
-  getOrderlist: (id: number) => {
+  getOrderlist: (orderIds: number[]) => {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
     Order.hasOne(Sender, { foreignKey: "id" });
     Order.hasOne(Product, { foreignKey: "id" });
     return Order.findAll({
-      where: { id: id },
+      where: { id: orderIds },
       attributes: ["id", "DETAIL"],
       include: [
         {
@@ -121,6 +117,8 @@ export default {
           required: false,
         },
       ],
+      raw: true,
+      nest: true,
     });
   },
 };

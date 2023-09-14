@@ -1,15 +1,16 @@
+import { File } from "buffer";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import { findImageByOrderId, saveImageToBufferString } from "../Mongo/Command/Image";
+import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
 
 import { saveLocation, findLocation } from "../Mongo/Command/Location";
+import connectMongo from "../Mongo/Connector";
+import { ImageFileSchema } from "../Mongo/Schemas/ImageFile";
 import { encrypt } from "../lib/cryto";
-import { MulterRequest } from "../routes/OrderCompleteImage";
 import sendMessage from "../sendMessage";
-
 
 export const findDestinationAndDepartureByOrderId = async (query: any) => {
   const orderId = query.orderid;
@@ -33,12 +34,14 @@ export const postCurrentLocation = async (body: any) => {
     X: body.X,
     Y: body.Y,
   }
-  await saveLocation(address, loaction)
+  const connection = await connectMongo("realTimeLocation");
+  await saveLocation(connection, address, loaction)
 };
 
 export const findCurrentLocation = async (query: any) => {
   const address = query.quicker;
-  const location = await findLocation(address)  
+  const connection = await connectMongo("realTimeLocation");
+  const location = await findLocation(connection, address)  
   return location;
 };
 
@@ -47,12 +50,9 @@ export const createOrder = async (body : any) => {
   const userId = await SelectUser.getUserId(walletAddress);
   if (userId) {
     body.Order.ID_REQ = userId.id;
-
     await CreateOrder.Order(body);
-
-    return { msg: "done" }
   } else {
-    return new Error("회원이 아님")
+    throw new Error("회원이 아님")
   }
 }
 
@@ -91,12 +91,41 @@ export const updateOrder = async (body:any) => {
 
 export const findImage =async (query: any) => {
   const orderId = query.orderNum;
-  const images = await findImageByOrderId(orderId)
+  const connection = await connectMongo("orderComplete");
+  const images = await findImageByOrderId(connection, orderId)
   return {imageBuffer : images[0].image}
 }
 
 export const saveImage =async (body:any, documentFile : any) => {
   const orderNum = body.orderNum
   const bufferImage = documentFile.buffer
-  await saveImageToBufferString(orderNum, bufferImage)
+  const connection = await connectMongo("orderComplete");
+  await saveImageToBufferString(connection, orderNum, bufferImage)
+}
+
+export const findUserOrdersDetail = async (query: any) => {
+  const orderIds : string = query.orderIds
+  const list = JSON.parse(`[${orderIds}]`)
+  
+  const orders = await SelectOrder.getOrderlist(list);
+  return orders
+}
+
+export const findFailImage =async (query:any) => {
+  const orderId = query.orderNum;
+  const connection = await connectMongo("orderFail");
+  const image = await findFailImageByOrderId(connection, orderId)
+  return image
+}
+
+export const saveFailImage =async (body:any , documentFile : Express.Multer.File | undefined) => {
+  if (documentFile === undefined) {
+    return "picture not exist"
+  }
+  const bufferImage = documentFile.buffer;
+  const orderNum = body.orderNum;
+  const reason = body.reason;
+  const connection = await connectMongo("orderFail");
+  await saveFailImageToBufferString(connection, orderNum, bufferImage, reason)
+  return "done"
 }
