@@ -1,4 +1,3 @@
-import { File } from "buffer";
 import CreateChatRoom from "../Maria/Commands/CreateChatRoom";
 import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
@@ -6,9 +5,8 @@ import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
 import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
 
-import { saveLocation, findLocation } from "../Mongo/Command/Location";
+import { findLocation, saveLocation } from "../Mongo/Command/Location";
 import connectMongo from "../Mongo/Connector";
-import { ImageFileSchema } from "../Mongo/Schemas/ImageFile";
 import { encrypt } from "../lib/cryto";
 import sendMessage from "../sendMessage";
 
