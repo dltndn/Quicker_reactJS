@@ -162,6 +162,8 @@ function App() {
   //     }
   //   },
   // });
+  
+  // test commit
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("kaikas_address");
