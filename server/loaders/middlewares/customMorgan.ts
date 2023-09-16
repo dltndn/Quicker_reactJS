@@ -2,6 +2,7 @@ import { Response, Request } from "express"
 
 import chalk from "chalk"
 import morgan from "morgan"
+
 import { formatDate } from "../../util/dateFormat"
 
 import { CustomDataFormat } from "./types/customDataFormat"
@@ -9,9 +10,9 @@ import { CustomDataFormat } from "./types/customDataFormat"
 const colorizeLog = (res : Response ,date : string, status : string) => {
   date = chalk.green(date)
   if (res.statusCode < 400) {
-    status = chalk.blue(status) 
+    status = chalk.cyan.bold(status)
   } else {
-    status = chalk.red(status)
+    status = chalk.red.bold(status)
   }
   return {date : date, status : status}
 }
@@ -42,14 +43,9 @@ const showLog = (res :Response, {ip, date, status, method, httpVersion, url, use
   process.stdout.write(result+"\n")
 }
 
-// customFormating
 export const customMorgan = morgan.token("custom", function(req: Request, res: Response) {
-  // 데이터 처리하고
   const filterdInfo = filterConnectionInfoForLog(req, res)
-  // 로그 문자열화 하고
   const formatedData = customFormating(filterdInfo)
-  // 로그 띄우고
   showLog(res, filterdInfo)
-  // 로그 리턴하고  
   return formatedData
 });

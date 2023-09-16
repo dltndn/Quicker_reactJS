@@ -65,7 +65,8 @@ export const updateOrder = async (body:any) => {
   }
 
   await UpdateOrder.updateOrder(deliver.id, orderId)
-  
+  UpdateOrder.cacheOrder(orderId)
+
   const requesterId = await SelectUser.getRequesterId(orderId);
 
   if (requesterId === null) {
@@ -84,7 +85,7 @@ export const updateOrder = async (body:any) => {
   const url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key=" + encryptedUrl
   
   await sendMessage(receiverPhoneNumber.PHONE, url)  
-  
+
 }
 
 export const findImage =async (query: any) => {
