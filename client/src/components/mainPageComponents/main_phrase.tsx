@@ -8,7 +8,7 @@ import BottomWallet from "../../Lottie/BottomBarAni.json";
 import joinmember from "../../Lottie/laptobman.json";
 import { TwoPointRoute } from "../searchComponents/interface/route";
 import { useConnWalletInfo } from "../../App";
-import mainLoaing from "../../Lottie/mainLoading.json";
+import mainLoading from "../../Lottie/mainLoading.json";
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -93,14 +93,14 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
       {isConnect ? (
         <>
         {isMember === null ? (        <LotDiv>
-          <Lottie animationData={mainLoaing} />
+          <Lottie animationData={mainLoading} />
         </LotDiv>):(<>
           {isMember ? (
           <>
             
             <section>
             <Suspense fallback={        <LotDiv>
-          <Lottie animationData={mainLoaing} />
+          <Lottie animationData={mainLoading} />
         </LotDiv>}>
               <MainOrderInformation />
             </Suspense>
@@ -165,7 +165,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
                 {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
                 <Suspense fallback={        <LotDiv>
-          <Lottie animationData={mainLoaing} />
+          <Lottie animationData={mainLoading} />
         </LotDiv>}>
                   <WalletConnectBtn />
                 </Suspense>

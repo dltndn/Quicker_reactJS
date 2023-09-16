@@ -771,6 +771,7 @@ const ClaimRewards = () => {
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
+    roundData.userVoteEnable = roundData.userVotePower;
     setRoundInfo(roundData);
     setPageState("main")
   };
