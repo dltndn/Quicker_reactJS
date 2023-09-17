@@ -5,11 +5,11 @@ import path from "node:path";
 
 import { formatDateToYYYYMMDD } from "../util/dateFormat";
 import { customMorgan } from "./middlewares/customMorgan";
-
-
+import {calculateCostAverageInEveryMonth} from "./middlewares/cronJob";
 const loader = {
   init : (app: Application) => {
-    
+
+    calculateCostAverageInEveryMonth
     const cors = require("cors");
     const bodyParser = require("body-parser");
     const writeStream = fs.createWriteStream(path.join(__dirname, `../logs/${formatDateToYYYYMMDD(new Date())}.log`), {flags : "a"});
