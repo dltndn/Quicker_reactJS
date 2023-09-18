@@ -23,7 +23,7 @@ export default {
         },
         {
           model: Departure,
-          attributes: { exclude: ["ID", "DETAIL"] },
+          attributes: { exclude: ["ID", "id", "DETAIL"] },
           required: true,
         },
       ],
