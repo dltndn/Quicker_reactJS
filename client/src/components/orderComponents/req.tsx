@@ -216,8 +216,11 @@ function Req({data}: {data: object}) {
     const minuteRef = useRef<HTMLInputElement>(null)
     const dateRef = useRef<HTMLInputElement>(null)
 
+    const [isAMSelected, setIsAMSelected] = useState(true);
+
     const { address, isConnected } = useConnWalletInfo();
-    const {isChecked, setIsChecked, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, weight,  setWeight } = useOrderDataStore();
+    const { cost, setCost, deadLine, errorMessage, recommendCost } = useOrderStore()
+    const {isChecked, setIsChecked, startAddress, arriveAddress, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, weight,  setWeight } = useOrderDataStore();
 
       const handleImgClick = (transport: Transport) => {
         let changeIsChecked = () => {
@@ -230,7 +233,7 @@ function Req({data}: {data: object}) {
         setIsChecked(result)
       };
     
-      const [isAMSelected, setIsAMSelected] = useState(true);
+      
       const handleClickAM = () => {
         setIsAMSelected(true);
         setAMPM("오전")
@@ -241,7 +244,7 @@ function Req({data}: {data: object}) {
         setAMPM("오후")
       };
       
-    const { cost, setCost, deadLine, errorMessage } = useOrderStore()
+    
     const convertStrToNum = (data:string):number => {
         let result =  parseInt(data);
         if (Number.isNaN(result)) {
@@ -395,7 +398,7 @@ function Req({data}: {data: object}) {
             </div>
             <InputDiv>
             {/* ERROR : 타입이 String 타입임 */}
-            <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value)); console.log(weight)}} name="weight">
+            <SelectInput ref={weightRef} onChange={() => {setWeight(parseInt(weightRef.current!.value))}} name="weight">
                 <option value={5} selected>5kg 이상</option>
                 <option value={10}>10kg 이상</option>
                 <option value={15}>15kg 이상</option>
@@ -457,7 +460,7 @@ function Req({data}: {data: object}) {
     <Container>
         <Box>
             <div>
-                <ReqFont>의뢰 비용 <span style={{color: "red"}}>{errorMessage}</span></ReqFont>
+                <ReqFont>의뢰 비용 <span style={{color: "red"}}>{errorMessage ? (errorMessage):(`추천 비용: ${recommendCost}`)}</span></ReqFont>
             </div>
             <div>
                 {/* ERROR : 타입이 String 타입임 */}

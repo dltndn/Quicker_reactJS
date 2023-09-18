@@ -25,6 +25,8 @@ interface OrderState {
   setCreatedOrderNum: (newOrder: string | undefined) => void;
   errorMessage: string | undefined;
   setErrorMessage: (newData: string) => void;
+  recommendCost: string;
+  setRecommendCost: (newData: string) => void;
 }
 
 export const useOrderStore = create<OrderState>((set) => ({
@@ -43,6 +45,8 @@ export const useOrderStore = create<OrderState>((set) => ({
     set({ createdOrderNum }),
   errorMessage: undefined,
   setErrorMessage: (errorMessage: string) => set({ errorMessage }),
+  recommendCost: "",
+  setRecommendCost: (recommendCost: string) => set({ recommendCost }),
 }));
 
 interface useDivHandler {
@@ -221,7 +225,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const { showCommissionPage, setShowCommissionPage } = useDivHandler();
 
-  const { title, setTitle, setDeadLine, showAllowance, setCost } = useOrderStore();
+  const { title, setTitle, setDeadLine, showAllowance, setCost, setRecommendCost } = useOrderStore();
   const {
     orderId,
     startAddress,
@@ -354,6 +358,15 @@ export default function CommissionPage() {
   useEffect(() => {
     setDeadlineToProp();
   }, [date, AMPM, hour, minute]);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (startPosition.latitude && arrivePosition.latitude) {
+      // 추천 비용 불러오기
+      
+      setRecommendCost("")
+    }
+  }, [startPosition, arrivePosition])
   return (
     <>
       <GlobalStyle />
