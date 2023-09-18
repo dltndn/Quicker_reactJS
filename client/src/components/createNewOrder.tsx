@@ -187,5 +187,5 @@ export default function CreateNewOrder({
 
 
 const Margin_1 = styled.section`
-  height: 90px;
+  height: 98px;
 `

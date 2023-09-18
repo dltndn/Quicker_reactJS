@@ -58,7 +58,7 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       } else {
         await kConn.getTxResult(reqKey, true);
       }
-
+      successFunc();
     } catch (e) {
       console.log(e);
     }

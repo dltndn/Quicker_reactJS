@@ -13,10 +13,13 @@ import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import ExplorerTableData from "../components/ExplorerTableData";
 import Lottie from "lottie-react";
 import LoadingAni from "../Lottie/144488-transparet-loading-dots.json";
+import { ExplorerPageStyle } from "../StyleCollection";
 
 const PLATFORM_ADDRESS = QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN;
 const INSUARANCE_ADDRESS = "0xD033A17214bFab58D27c411e102dF4aAE86A8Af3";
 const CONTRACT_ADDRESS = QUICKER_DLVR_PROXY_ADDRESS;
+
+const { Div1, Dvi1_1, Dvi1_3, Div1_2, Box, Container, ReqFont, Div0, Sp0, Sp1, Divnum } = new ExplorerPageStyle()
 
 interface ExplorerState {
   blinkOrderArrIndex: number[];
@@ -86,7 +89,6 @@ export default function ExplorerPage() {
         const result: any = await getOrdersForLatest(amount.toString());
         // 바뀐 부분 확인
         const newOrderArr = result.slice()
-        newOrderArr.reverse()
         let changedIndex:number[] = []
         for (const [index, element] of newOrderArr.entries()) {
           if (orderArr[index] !== undefined) {
@@ -298,75 +300,3 @@ const formatCommissionRate = (rate: number): string => {
   return result;
 };
 
-const Div1 = styled.div`
-  display: flex;
-  background-color: var(--white-color);
-  padding: 10px;
-  border-radius: 0.313rem;
-`;
-
-const Dvi1_1 = styled.div`
-  display: flex;
-  flex: 1 1 20%;
-  justify-content: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
-
-const Dvi1_3 = styled.div`
-  display: flex;
-  flex: 1 1 20%;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-const Div1_2 = styled(Dvi1_1)`
-  font-size: 16px;
-  align-items: center;
-`;
-
-const Box = styled.div`
-  margin-top: 0.5rem;
-  width: 97%;
-  background-color: #ffffff;
-  margin: 0.313rem;
-  border-radius: 0.313rem !important;
-`;
-
-const Container = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ReqFont = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  margin: 10px 0px 5px 16px;
-`;
-const Div0 = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-  margin: 10px 16px 10px 16px;
-`;
-const Sp0 = styled.div`
-  margin-left: auto;
-  margin-right: 0.625rem;
-`;
-
-const Sp1 = styled(Sp0)`
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
-
-const Divnum = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-  margin: 10px 16px 10px 16px;
-`;
