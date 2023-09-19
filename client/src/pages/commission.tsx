@@ -9,6 +9,7 @@ import { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
+import TmapApi from "../lib/Tmap"
 
 interface OrderState {
   cost: number;
@@ -359,14 +360,6 @@ export default function CommissionPage() {
     setDeadlineToProp();
   }, [date, AMPM, hour, minute]);
 
-  useEffect(() => {
-    // @ts-ignore
-    if (startPosition.latitude && arrivePosition.latitude) {
-      // 추천 비용 불러오기
-      
-      setRecommendCost("")
-    }
-  }, [startPosition, arrivePosition])
   return (
     <>
       <GlobalStyle />
