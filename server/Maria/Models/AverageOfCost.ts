@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface AverageOfCostAttributes {
-  YYYYMM: number;
+  date: string;
   '5KM': number;
   '10KM': number;
   '15KM': number;
@@ -15,12 +15,12 @@ export interface AverageOfCostAttributes {
   '70+KM': number;
 }
 
-export type AverageOfCostPk = "YYYYMM";
+export type AverageOfCostPk = "date";
 export type AverageOfCostId = AverageOfCost[AverageOfCostPk];
 export type AverageOfCostCreationAttributes = AverageOfCostAttributes;
 
 export class AverageOfCost extends Model<AverageOfCostAttributes, AverageOfCostCreationAttributes> implements AverageOfCostAttributes {
-  YYYYMM!: number;
+  date!: string;
   '5KM'!: number;
   '10KM'!: number;
   '15KM'!: number;
@@ -35,8 +35,8 @@ export class AverageOfCost extends Model<AverageOfCostAttributes, AverageOfCostC
 
   static initModel(sequelize: Sequelize.Sequelize): typeof AverageOfCost {
     return AverageOfCost.init({
-    YYYYMM: {
-      type: DataTypes.INTEGER,
+    date: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
       primaryKey: true
     },
@@ -90,7 +90,7 @@ export class AverageOfCost extends Model<AverageOfCostAttributes, AverageOfCostC
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "YYYYMM" },
+          { name: "date" },
         ]
       },
     ]
