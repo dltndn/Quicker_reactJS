@@ -1,18 +1,22 @@
 import compression from "compression";
-import express, { Application } from "express";
+import express, { Application, NextFunction } from "express";
 import * as fs from "node:fs";
 import path from "node:path";
 
 import { formatDateToYYYYMMDD } from "../util/dateFormat";
 import { customMorgan } from "./middlewares/customMorgan";
-import {calculateCostAverageInEveryMonth} from "./middlewares/cronJob";
+import { calculateCostAverageInEveryMonth } from "./middlewares/cronJob";
 const loader = {
   init : (app: Application) => {
 
     calculateCostAverageInEveryMonth
     const cors = require("cors");
     const bodyParser = require("body-parser");
-    const writeStream = fs.createWriteStream(path.join(__dirname, `../logs/${formatDateToYYYYMMDD(new Date())}.log`), {flags : "a"});
+    let writeStream : any;
+    app.use((req, res,next : NextFunction) => {
+      writeStream = fs.createWriteStream(path.join(__dirname, `../logs/${formatDateToYYYYMMDD(new Date())}.log`), {flags : "a"});
+      next()
+    })
     const logWriter = {write : (log : string) => writeStream.write(log)}
 
     app.use(customMorgan(':custom', {stream : logWriter}))
