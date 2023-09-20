@@ -4,6 +4,7 @@ import { CacheMatchedOrder } from "../Models/CacheMatchedOrder";
 
 export const findAllCachedOrderIdByOrderId = (where? : WhereOptions) => {
   return CacheMatchedOrder.findAll({
+    attributes : ['id'],
     where : where,
     raw: true,
     nest: true,
