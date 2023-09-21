@@ -11,6 +11,7 @@ import Register from "../routes/Register";
 import Room from "../routes/Room";
 import User from "../routes/User";
 import Caver from "../routes/Caver"
+import averageCost from "../routes/average-cost"
 
 const router = {
   handle: async (app: Application) => {
@@ -25,6 +26,7 @@ const router = {
     app.use("/orders", Orders);
     app.use("/register", Register);
     app.use("/current-deliver-location", CurrentLocation);
+    app.use("/average", averageCost)
 
     app.use("/caver", Caver);
     

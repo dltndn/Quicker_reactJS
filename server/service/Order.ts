@@ -3,6 +3,7 @@ import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
+import { findLastAverageCostByDistance } from "../Maria/Commands/select-average-cost";
 import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
 
 import { findLocation, saveLocation } from "../Mongo/Command/Location";
@@ -127,4 +128,11 @@ export const saveFailImage =async (body:any , documentFile : Express.Multer.File
   const connection = await connectMongo("orderFail");
   await saveFailImageToBufferString(connection, orderNum, bufferImage, reason)
   return "done"
+}
+
+export const findAverageCost = async (query:any) => {
+  const distance = query.distance
+  // @TODO : 검증로직, 검색 속성 선택 필요
+  const averageCost = await findLastAverageCostByDistance("60KM");
+  return averageCost
 }
