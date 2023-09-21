@@ -4,14 +4,14 @@ import cors from "cors";
 import express, { Application } from "express";
 
 import { insertAverageCostPerMonth } from "./middlewares/cron-job";
-import { logger } from "./middlewares/morgan-config";
+import { customMorgan } from "./middlewares/custom-morgan";
 
 const loader = {
   init : (app: Application) => {
 
     insertAverageCostPerMonth
     
-    app.use(logger())
+    app.use(customMorgan())
     app.use(compression());
     app.use(cors());
     app.use(express.urlencoded({ extended: true }));
@@ -19,7 +19,6 @@ const loader = {
   
     return app;
   }
-
 } 
 
 export default loader
