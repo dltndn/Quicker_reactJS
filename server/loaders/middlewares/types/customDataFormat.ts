@@ -1,7 +1,7 @@
-export type CustomDataFormat = {
+export type CustomFormat = {
   ip: string;
   date: string;
-  status: string;
+  status: number | string;
   method: string;
   httpVersion: string;
   url: string;

@@ -7,7 +7,7 @@ import path from "node:path";
 
 import { formatDate, formatDateToYYYYMMDD } from "../../util/dateFormat";
 
-import { CustomDataFormat } from "./types/customDataFormat";
+import { CustomFormat } from "./types/customDataFormat";
 
 const colorizeLog = (date: string, status: number) => {
   date = chalk.green(date);
@@ -40,11 +40,11 @@ const customFormating = ({
   httpVersion,
   url,
   userAgent,
-}: CustomDataFormat) => {
+}: CustomFormat) => {
   return `${date} | ${ip} | ${status} | HTTP/${httpVersion} [${method}] ${url} | ${userAgent}`;
 };
 
-const showLog = ({ ip, date, status, method, httpVersion, url, userAgent }: CustomDataFormat ) => {
+const showLog = ({ ip, date, status, method, httpVersion, url, userAgent }: CustomFormat ) => {
   if (typeof status === "number") {
     const { date: updatedDate, status: updatedStatus } = colorizeLog(date, status);
   
