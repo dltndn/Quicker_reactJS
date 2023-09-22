@@ -12,7 +12,7 @@ export interface AverageOfCostAttributes {
   '40KM': number;
   '50KM': number;
   '60KM': number;
-  '70+KM': number;
+  '60+KM': number;
 }
 
 export type AverageOfCostPk = "date";
@@ -30,7 +30,7 @@ export class AverageOfCost extends Model<AverageOfCostAttributes, AverageOfCostC
   '40KM'!: number;
   '50KM'!: number;
   '60KM'!: number;
-  '70+KM'!: number;
+  '60+KM'!: number;
 
 
   static initModel(sequelize: Sequelize.Sequelize): typeof AverageOfCost {
@@ -76,7 +76,7 @@ export class AverageOfCost extends Model<AverageOfCostAttributes, AverageOfCostC
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    '70+KM': {
+    '60+KM': {
       type: DataTypes.INTEGER,
       allowNull: false
     }
