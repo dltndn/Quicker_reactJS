@@ -11,6 +11,7 @@ import {
 import Room from "../components/chatComponents/Room";
 import Chat from "../components/chatComponents/Chat";
 import { useConnWalletInfo } from "../App";
+import { ChattingPageStyle } from "../StyleCollection";
 
 const nochat = require("../image/nochat.png");
 
@@ -20,43 +21,8 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
-const Div0_1 = styled.div`
-  display: flex;
-  padding: 1rem 0.75rem 1rem 1.875rem;
-`;
 
-const StateDiv = styled(Div0_1)`
-  border-radius: 1.25rem;
-  width: 3.75rem;
-  height: 1.438rem;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: #5843f5;
-  font-weight: bold;
-`;
-const Div0 = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Div3 = styled.div`
-  justify-content: center;
-  text-align: center;
-`
-
-const Img = styled.img`
-  margin-top: 30%;
-  margin-left: 10%;
-  height: 140px;
-  width: 140px;
-`;
-
-const Div1 = styled.div`
-  margin-top: 20px;
-  font-size: var(--font-micro);
-  color: #828282;
-`;
+const { Div0, Div3, Img, Div1} = new ChattingPageStyle()
 
 const isMyOrder = (element: any, address: string) => {
   const clientWalletAddress = element.client.toLowerCase();

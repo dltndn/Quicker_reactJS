@@ -11,16 +11,11 @@ import { useConnWalletInfo } from "../../App";
 import SendTxK from "../blockChainTx/SendTxK";
 import GetContractParams from "../blockChainTx/GetContractParams";
 
-const Div0 = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import { RemoteDeliveryStyle } from "../../StyleCollection";
 
-const Sp0 = styled.span`
-  margin: 10px 0 10px 0;
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
+const {Div0, Div2, Mg0, Sp0} = new RemoteDeliveryStyle()
+
+
 
 export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState();
@@ -104,44 +99,21 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
             />
           </div>
         ) : (
-          <Div5>
+          <Div2>
             {" "}
-            <Span01>
+            <Sp0>
               <BsPlusCircle />
               <br />
               <br />
               사진을 업로드해주세요.
-            </Span01>
-          </Div5>
+            </Sp0>
+          </Div2>
         )}
       </Div0>
       {orderNum && 
-      <Margin_1>
-      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/> </Margin_1>}
+      <Mg0>
+      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/> </Mg0>}
     </>
   );
 }
 
-const Div5 = styled.div`
-  display: flex;
-  height: 500px;
-  justify-content: center;
-  padding-top: 200px;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const Span01 = styled.div`
-  margin: 20px 0 20px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #828282;
-`;
-const Margin_1 = styled.section`
-  position: fixed;
-  bottom: 0.5rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`

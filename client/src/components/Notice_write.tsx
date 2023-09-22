@@ -7,75 +7,10 @@ import { EditorState, ContentState, convertToRaw, convertFromRaw } from 'draft-j
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-const EditorWrapper = styled.div`
-  background-color: #ffffff; /* Add white background color */
-  border-radius: 5px;
-  box-shadow: 0px 4px 2px #bebebe;
-  padding: 10px;
-`;
+import { Notice_writeStyle } from "../StyleCollection";
 
-const Div1 = styled.div`
-  margin: 10px;
-`;
+const {EditorWrapper, Div1, Ip, ButtonWrapper, LoadButton, SaveButton} = new Notice_writeStyle()
 
-const Ip = styled.input`
-width: 100%;
-height: 40px;
-font-size: 16px;
-border-radius: 0.313rem;
-border: 1px solid #efefef; 
-outline: none; 
-background-color: #ffffff;
-padding-left: 0.625rem;
-padding-right: 0.625rem;
-margin-bottom: 10px;
-text-align: left;
-color: #000000;
-&:focus {
-    border-color: #efefef; 
-    background-color: #ffffff;
-}
-`;
-const ButtonWrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  padding: 16px 0;
-  background-color: #ffffff;
-`;
-
-const SaveButton = styled.button`
-  width: 45%;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const LoadButton = styled.button`
-  width: 45%;
-  background-color: #17a2b8;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #117a8b;
-  }
-`;
 
 const GlobalStyle = createGlobalStyle`
   body {

@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { useEffect, useState } from "react";
+
+import { NftProfileStyle } from "../StyleCollection";
+
+const {NftImg} = new NftProfileStyle()
 
 const NftProfile = () => {
   const navigate = useNavigate();
@@ -30,9 +33,3 @@ const NftProfile = () => {
 
 export default NftProfile;
 
-const NftImg = styled.img`
-  width: 5rem;
-  height: 5rem;
-  margin-left: 0.5rem;
-  border-radius: 100%;
-`;

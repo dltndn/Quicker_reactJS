@@ -7,55 +7,11 @@ import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useEffect } from "react";
 import Lottie from 'lottie-react';
 import LotteData1 from '../../Lottie/8G0Py794pT.json';
+import { ReceivingitemStyle } from "../../StyleCollection";
+
+const {Div0, Div1, Btwal, Ft1, Con} = new ReceivingitemStyle()
 
 
-
-const Div0 = styled.div`
-    display: flex;
-    height: 3.875rem;
-`;
-
-const Div1 = styled.div`
-    flex: 1 1 100%;
-`;
-
-const Div3 = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-const Btwal = styled.button`
-    width: 100%;
-    height: 3.25rem;
-    font-size: var(--font-md);
-    font-weight: bold;
-    border: 0rem;
-    outline: #efefef;
-    background-color: #ffffff;
-    padding-left: 0.625rem;
-    text-align: center;
-    color: #000000;
-`;
-
-const Ready = styled.img`
-    width: 40%;
-`;
-
-const Con = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40vh;
-    
-`;
-const Ft1 = styled.div`
-  display:flex;
-  justify-content: center;
-  flex-direction:column;
-  text-align:center;
-  font-size: var(--font-md1);
-  color: #000000;
-`;
 
 export default function ReceivingItem({ orderNum }: ExecutionComponentProps) {
     const { setTitle, setShowComponent } = useExecutionState()

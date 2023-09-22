@@ -11,6 +11,12 @@ import { BsFillCircleFill, BsStickies, BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useConnWalletInfo } from "../../App";
 import GetContractParams from "../blockChainTx/GetContractParams";
+import { OrderBoxStyle } from "../../StyleCollection";
+
+const {Div0, Div1, DivBs, Order_Div, Order_Div_detail, Order_Hr, Order_Span_mc_ab, Order_Span_mc_detail,
+Order_Span_mc_left, Order_Span_md1, Order_Span_md1_blue, Order_Span_md1_blue_left, Order_Span_md1_grey,
+Order_Span_md1_left, Order_Span_md_bold, Sp0, Sp1, Sp2, Sp3, Spprofit0, Spprofit2, Spsc0, Spsc1,
+Spsc2, StateDiv} = new OrderBoxStyle()
 
 interface OrderBoxProps {
   orderObj: any;
@@ -437,6 +443,20 @@ const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
   }
 };
 
+const  Button = styled.button`
+width: 100%;
+height: 4.313rem;
+font-size: 30px;
+border-radius: 0.313rem;
+border-color: var(--black-color);
+border-width: thin;
+background-color: var(--white-color);
+color: var(--black-color);
+font-weight: bold;
+font-size: var(--font-md);
+margin-top: 1rem;
+`;
+
 interface BottomBtnProps {
   order: any;
   address: string | undefined;
@@ -533,171 +553,4 @@ const QuickerBottomBtn = ({ order }: any) => {
       return <Button onClick={() => acceptLogic()}>수행 현황</Button>;
   }
 };
-
-const Order_Div = styled.div`
-  //div0
-  display: flex;
-  padding: 1.75rem 0 1.25rem 0;
-`;
-
-const Order_Div_detail = styled(Order_Div)`
-  //div1
-  padding: 0.625rem 0px 0.625rem 0px;
-`;
-
-const Order_Span_md_bold = styled.span`
-  //sp0
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Order_Span_md1 = styled.span`
-  font-size: var(--font-md1);
-`;
-
-const Order_Span_md1_blue = styled(Order_Span_md1)`
-  color: #0d6efd;
-  font-weight: bold;
-`;
-const Order_Span_md1_blue_left = styled(Order_Span_md1)`
-  //sp5
-  font-size: var(--font-md1);
-  color: #0d6efd;
-  margin-left: auto;
-  font-weight: bold;
-`;
-const Order_Span_md1_left = styled(Order_Span_md1)`
-  //sp1
-  margin-left: auto;
-  position: relative;
-  font-weight: bold;
-`;
-const Order_Span_md1_grey = styled(Order_Span_md1)`
-  //sp2
-  color: #646464;
-`;
-
-const Order_Span_mc_ab = styled.span`
-  //sp3
-  font-size: var(--font-micro);
-  position: absolute;
-  top: 1rem;
-  right: 0;
-  font-weight: lighter;
-`;
-
-const Order_Span_mc_detail = styled.div`
-  //sp3
-  font-size: var(--font-micro);
-  top: 1rem;
-  right: 0;
-  font-weight: lighter;
-`;
-
-const Order_Span_mc_left = styled.span`
-  font-size: var(--font-micro);
-  margin-left: 0.188rem;
-`;
-
-const Order_Hr = styled.hr`
-  //hr
-  margin: 0.75rem auto 0.75rem auto;
-  width: 100%;
-  border: 0;
-  height: 0;
-  border-top: 0.063rem solid #dfdfdf;
-  padding: 0 0 0 0;
-`;
-
-const Div0 = styled.div`
-  display: flex;
-  padding: 1rem 0.75rem 1rem 1.875rem;
-`;
-
-const StateDiv = styled(Div0)`
-  margin-left: auto;
-  background-color: ${(props) => props.color};
-  border-radius: 1.25rem;
-  width: 3.75rem;
-  height: 1.438rem;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: var(--white-color);
-  font-weight: bold;
-`;
-
-const Div1 = styled.div`
-  display: flex;
-  padding: 0px 0px 0px 1.875rem;
-`;
-
-const Sp0 = styled.span`
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Sp1 = styled.span`
-  font-size: var(--font-md1);
-  padding-left: 1rem;
-`;
-
-const Sp2 = styled.span`
-  font-size: var(--font-md1);
-  color: #646464;
-`;
-
-const Sp3 = styled(Sp1)`
-  font-weight: bold;
-  padding-left: 1.625rem;
-  margin-bottom: 1rem;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  height: 4.313rem;
-  font-size: 30px;
-  border-radius: 0.313rem;
-  border-color: var(--black-color);
-  border-width: thin;
-  background-color: var(--white-color);
-  color: var(--black-color);
-  font-weight: bold;
-  font-size: var(--font-md);
-  margin-top: 1rem;
-`;
-
-const DivBs = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 1.813rem;
-  font-size: 0.25rem;
-  color: #cecece;
-  padding: 0.313rem 0 0.313rem 2.5rem;
-`;
-
-const Spprofit0 = styled.span`
-  padding: 1rem 1.25rem 0.625rem 0;
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const Spprofit2 = styled(Spprofit0)`
-  padding-top: 0px;
-  font-size: var(--font-small);
-  color: #979797;
-`;
-
-const Spsc0 = styled(Spprofit0)`
-  color: #0d6efd;
-`;
-
-const Spsc1 = styled(Spsc0)`
-  margin-left: auto;
-`;
-
-const Spsc2 = styled(Spprofit2)`
-  margin-left: auto;
-`;
 

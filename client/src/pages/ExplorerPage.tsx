@@ -19,7 +19,7 @@ const PLATFORM_ADDRESS = QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN;
 const INSUARANCE_ADDRESS = "0xD033A17214bFab58D27c411e102dF4aAE86A8Af3";
 const CONTRACT_ADDRESS = QUICKER_DLVR_PROXY_ADDRESS;
 
-const { Div1, Dvi1_1, Dvi1_3, Div1_2, Box, Container, ReqFont, Div0, Sp0, Sp1, Divnum } = new ExplorerPageStyle()
+const { Div_Base, Div_1, Div_2, Box, Container, ReqFont, Div0, Sp1} = new ExplorerPageStyle()
 
 interface ExplorerState {
   blinkOrderArrIndex: number[];
@@ -200,16 +200,16 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>수수료 현황</ReqFont>
           </div>
-          <Div1>
-            <Dvi1_1>플랫폼</Dvi1_1>
-            <Dvi1_1>보험</Dvi1_1>
-            <Dvi1_1>보증금</Dvi1_1>
-          </Div1>
-          <Div1>
-            <Dvi1_3>{feeArr[0]}%</Dvi1_3>
-            <Dvi1_3>{feeArr[1]}%</Dvi1_3>
-            <Dvi1_3>{feeArr[2]}%</Dvi1_3>
-          </Div1>
+          <Div_Base>
+            <Div_1>플랫폼</Div_1>
+            <Div_1>보험</Div_1>
+            <Div_1>보증금</Div_1>
+          </Div_Base>
+          <Div_Base>
+            <Div_2>{feeArr[0]}%</Div_2>
+            <Div_2>{feeArr[1]}%</Div_2>
+            <Div_2>{feeArr[2]}%</Div_2>
+          </Div_Base>
         </Box>
       </Container>
 
@@ -242,13 +242,13 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>거래 현황</ReqFont>
           </div>
-              <Div1>
-            <Dvi1_1>오더번호</Dvi1_1>
-            <Dvi1_1>의뢰인</Dvi1_1>
-            <Dvi1_1>배송원</Dvi1_1>
-            <Dvi1_1>의뢰금</Dvi1_1>
-            <Dvi1_1>상태</Dvi1_1>
-          </Div1>
+              <Div_Base>
+            <Div_1>오더번호</Div_1>
+            <Div_1>의뢰인</Div_1>
+            <Div_1>배송원</Div_1>
+            <Div_1>의뢰금</Div_1>
+            <Div_1>상태</Div_1>
+          </Div_Base>
           {showOrders.length !== 0 ? (
             <>
               {showOrders.map((element: any, index: number) => (

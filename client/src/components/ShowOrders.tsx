@@ -13,8 +13,12 @@ import { OrderBox, OrderModal } from "./orderComponents/OrderBox";
 import Loading from "./animation/ready.gif";
 import { UseUserOrderState } from "../App";
 import { useConnWalletInfo } from "../App";
-
+import { ShowOrdersStyle } from "../StyleCollection";
 import money from "../image/money.png";
+
+const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg } = new ShowOrdersStyle()
+
+
 
 interface OrderState {
   order: object | null;
@@ -335,83 +339,3 @@ const SelectionTags = () => {
     </>
   );
 };
-
-const SelectInput = styled.select`
-  width: 6rem;
-  height: 1.625rem;
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
-  border: 0;
-  outline: #efefef;
-  background-color: #d9d9d9;
-  text-align: center;
-  color: #000000;
-  margin: 0.625rem 0.625rem 0 0.625rem;
-  font-weight: bold;
-  font-size: var(--font-small);
-`;
-
-const Div0 = styled.div`
-  display: flex;
-  padding: 1rem 0.75rem 1rem 1.875rem;
-`;
-
-const Sc0 = styled.section`
-  display: flex;
-  flex-direction: column;
-  margin: 0.563rem 0.563rem 0.563rem 0.563rem;
-  border-radius: 0.313rem;
-  border: 0rem;
-  background-color: var(--white-color);
-`;
-
-const Divhid = styled(Div0)`
-  height: 3.875rem;
-`;
-
-const Sc1 = styled(Sc0)`
-  margin: 0.563rem 0.563rem 0.563rem 0.563rem;
-  justify-content: center;
-  height: 3rem;
-`;
-
-const Divwallet = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-small);
-  font-weight: bold;
-  margin-left: 0.75rem;
-`;
-
-const Sp0 = styled.span`
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Spwallet = styled.div`
-  margin-left: auto;
-  margin-right: 0.625rem;
-  font-size: var(--font-md);
-`;
-
-const Bticon = styled.button`
-  border: none;
-  background-color: var(--white-color);
-  margin-right: 0.625rem;
-`;
-
-const Bticonimg = styled.img`
-  width: 1.875rem;
-`;
-
-const Divimg = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const LoadingImg = styled.img`
-  width: 300px;
-
-  margin-top: 200px;
-`;
