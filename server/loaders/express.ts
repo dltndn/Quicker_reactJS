@@ -1,4 +1,4 @@
-import { Application,Request, Response, NextFunction } from "express";
+import { Application} from "express";
 
 import { ErrorHander } from "../Controllers/Error";
 
@@ -12,6 +12,7 @@ import Room from "../routes/Room";
 import User from "../routes/User";
 import Caver from "../routes/Caver"
 import averageCost from "../routes/average-cost"
+import NotFound from "../routes/NotFound"
 
 const router = {
   handle: async (app: Application) => {
@@ -29,6 +30,8 @@ const router = {
     app.use("/average", averageCost)
 
     app.use("/caver", Caver);
+
+    app.use("*", NotFound);
     
     app.use(ErrorHander);
     return app;
