@@ -150,26 +150,15 @@ const combine = (kms : Kms , blockChainData : BlockChainData) => {
   return result;
 };
 
-type unit =
-    | "5KM"
-    | "10KM"
-    | "15KM"
-    | "20KM"
-    | "25KM"
-    | "30KM"
-    | "40KM"
-    | "50KM"
-    | "60KM"
-    | "70+KM";
+type Distance = "5KM" | "10KM" | "15KM" | "20KM" | "25KM" | "30KM" | "40KM" | "50KM" | "60KM" | "60+KM"
 
 const calculateAverage = (counter : AverageOfCostAttributes, calculated : AverageOfCostAttributes) => {
   for (const key in counter) {
     if (key !== "date") {
-      const unitKey = key as unit;
+      const unitKey = key as Distance;
       if (counter[unitKey] > 0) {
-        calculated[unitKey] = Math.round(
-          calculated[unitKey] / counter[unitKey],
-        );
+        // @TODO 수정해야함
+        calculated[unitKey] = Math.round(calculated[unitKey] / counter[unitKey]);
       }
     }
   }
@@ -192,44 +181,34 @@ const generate = (combinedData : {
     "40KM": 0,
     "50KM": 0,
     "60KM": 0,
-    "70+KM": 0,
+    "60+KM": 0,
   };
 
   const counter: AverageOfCostAttributes = Object.assign({}, calculated);
 
-  for (const distance of combinedData) {
-    const km = distance.km as number;
-    if (km <= 5) {
-      calculated["5KM"] += km;
-      counter["5KM"] += 1;
-    } else if (km <= 10) {
-      calculated["10KM"] += km;
-      counter["10KM"] += 1;
-    } else if (km <= 15) {
-      calculated["15KM"] += km;
-      counter["15KM"] += 1;
-    } else if (km <= 20) {
-      calculated["20KM"] += km;
-      counter["20KM"] += 1;
-    } else if (km <= 25) {
-      calculated["25KM"] += km;
-      counter["25KM"] += 1;
-    } else if (km <= 30) {
-      calculated["30KM"] += km;
-      counter["30KM"] += 1;
-    } else if (km <= 40) {
-      calculated["40KM"] += km;
-      counter["40KM"] += 1;
-    } else if (km <= 50) {
-      calculated["50KM"] += km;
-      counter["50KM"] += 1;
-    } else if (km <= 60) {
-      calculated["60KM"] += km;
-      counter["60KM"] += 1;
-    } else {
-      calculated["70+KM"] += km;
-      counter["70+KM"] += 1;
+  // @TODO 중복제거, 문제 있다
+  const classifyDistance = (km : number, price : number) => {
+    const listDistance = [5, 10, 15, 20, 25, 30, 40, 50, 60]
+    for (const distance of listDistance) {
+      if (km > 60) {
+        const unit = "60+KM"
+        calculated[unit] += price;
+        counter[unit] += 1;
+        break;
+      }
+      else if (km <= distance) {
+        const unit = (distance + "KM") as Distance
+        calculated[unit] += price;
+        counter[unit] += 1;
+        break;
+      }
     }
+  }
+
+  for (const element of combinedData) {
+    const km = element.km as number;
+    const price = element.price as number
+    classifyDistance(km, price)
   }
   return {counter, calculated}
 }
@@ -239,7 +218,7 @@ export const main = async () => {
   const locations = await SelectOrder.allLocation(orderIds);
   const distances = await requestTmapAPIRouteDistances(locations)
   const prices = await getOrderPrices(locations)
-  
+
   const combinedData = combine(distances, prices);
   const {counter, calculated} = generate(combinedData)
 
