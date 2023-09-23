@@ -39,19 +39,19 @@
 - 프로필 NFT 적용
 
 ## 프로세스
-<img width="799" alt="스크린샷 2023-06-02 오후 3 56 02" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/ba37075e-ff43-4919-a7c8-26c3f892935f">
+<img width="799" alt="프로세스" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/ba37075e-ff43-4919-a7c8-26c3f892935f">
 
 ## 아키텍처
-<img width="1078" alt="스크린샷 2023-07-30 오[Quicker_아키텍처_진짜최종.pdf]()
-후 6 19 28" src="https://github.com/dltndn/Quicker_web_part/files/12705209/Quicker_._.pdf">
+<img width="1078" alt="아키텍처" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/03bcc715-089e-4d10-be1c-334500ec8cb6">
 
 ## 스마트컨트랙 구조
-<img width="1078" alt="스크린샷 2023-07-30 오후 6 19 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/099843a3-9b11-4de2-a792-6dbfcd9999ec">
+
+<img width="1078" alt="스마트컨트랙 구조" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/099843a3-9b11-4de2-a792-6dbfcd9999ec">
 
 
 ## 데이터베이스 ERD
-<img width="472" alt="스크린샷 2023-06-02 오후 4 00 45" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/b6547008-08f8-4d72-8420-061ced8eaf6c">
-<img width="468" alt="스크린샷 2023-06-02 오후 4 00 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/20f9a65e-9c76-4e1c-a97c-63acf6503c3c">
+<img width="472" alt="DB ERD" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/b6547008-08f8-4d72-8420-061ced8eaf6c">
+<img width="468" alt="DB ERD2" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/20f9a65e-9c76-4e1c-a97c-63acf6503c3c">
 
 
 ## 시연 화면
