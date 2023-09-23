@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState, useRef, lazy, Suspense } from "react";
+import React, { createElement, useEffect, useState, useRef, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
@@ -10,6 +10,7 @@ import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
 import TmapApi from "../lib/Tmap"
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface OrderState {
   cost: number;
@@ -365,9 +366,7 @@ export default function CommissionPage() {
       <GlobalStyle />
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       {showAllowance ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <IncreaseAllowance />
-        </Suspense>
+        <SuspenseComponent component={<IncreaseAllowance />} />
       ) : (
         <>
           <div
