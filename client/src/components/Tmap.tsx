@@ -2,6 +2,7 @@ import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
 import Map from "../lib/Tmap"
 import { useOrderStore } from '../pages/commission';
+import Handler from '../lib/Handler';
 
 const Tmap = ({states, containerId }: props) => {
     const [tMap, setTmap] = useState<any>()
@@ -11,13 +12,20 @@ const Tmap = ({states, containerId }: props) => {
     const { setRecommendCost } = useOrderStore()
 
     const setRecommendCostFunc = async (startPosition: position, arrivePosition: position) => {
-        const distance = await tMap.getDistance({X: startPosition.longitude, Y: startPosition.latitude},
-            {X: arrivePosition.longitude, Y: arrivePosition.latitude})
-        console.log(distance.distanceInfo.distance) // ex) 13163, type: number
+        try {
+            let distance = await tMap.getDistance({X: startPosition.longitude, Y: startPosition.latitude},
+                {X: arrivePosition.longitude, Y: arrivePosition.latitude})
+            // console.log(distance.distanceInfo.distance) // ex) 13163, type: number
+            distance = distance.distanceInfo.distance / 1000
+                
+            const data = await Handler.get(`${process.env.REACT_APP_SERVER_URL}average/cost/?distance=${distance}`)
+            // DB에서 불러온 추천 비용 string 타입으로 세팅
+            setRecommendCost(`${data}`)
+        } catch (e) {
+            console.log(e)
+            setRecommendCost("")
+        }
         
-
-        // DB에서 불러온 추천 비용 string 타입으로 세팅
-        setRecommendCost("")
     }
 
     useEffect(() => {
