@@ -11,25 +11,10 @@ import { useDeliveredComponent } from "./DeliveredItem";
 import SendTxK from "../blockChainTx/SendTxK";
 import GetContractParams from "../blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../../App";
+import { FaceToFaceDeliveryStyle } from "../../StyleCollection";
 
-const CameraContainer = styled.div`
-  width: 95%;
-  height: 600px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  margin-bottom: 10px;
-`;
+const {Div0, Sp0, Mg0} = new FaceToFaceDeliveryStyle()
 
-const Div0 = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-const Sp0 = styled.span`
-margin: 10px 0 10px 0%;
-font-size: var(--font-md1);
-font-weight: bold;
-`;
 
 
 export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
@@ -65,17 +50,12 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        {orderNum && <Margin_1><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/></Margin_1>}
+        {orderNum && <Mg0><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/></Mg0>}
     </>
   );
 };
-const Margin_1 = styled.section`
-  position: fixed;
-  bottom: 0.5rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
+
+
 // const Camera = () => {
 //     const videoRef = useRef<HTMLVideoElement>(null);
   
@@ -100,4 +80,3 @@ const Margin_1 = styled.section`
 //       return null;
 //     }
 //   };
-  

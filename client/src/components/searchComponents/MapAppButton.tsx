@@ -1,7 +1,9 @@
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid"
 import { OrderObj } from "../../pages/SearchPage";
 import styled from "styled-components";
+import { MapAppButtonSytle } from "../../StyleCollection";
 
+const {AppIcon} = new MapAppButtonSytle()
 const naverMapIcon = require('../../image/naverMap_icon.webp')
 const kakaoMapIcon = require('../../image/kakaoMap_icon.webp')
 
@@ -35,9 +37,3 @@ export const KakaoMapDeepLinkButton = ({ address, order, isUsingCurrent }: MapBt
     return <AppIcon src={kakaoMapIcon} alt="카카오맵 Deeplink 버튼" onClick={() => executeMap(isUsingCurrent)} />
 }
 
-const AppIcon = styled.img`
-    width: 2em;
-    height: 2em;
-    padding: 0.2em;
-    border-radius: 30%;
-`

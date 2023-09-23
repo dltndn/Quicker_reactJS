@@ -1,42 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { QrModalStyle } from "../../StyleCollection";
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
-
-const ModalContent = styled.div`
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  max-width: 80%;
-  text-align: center;
-`;
-
-const ModalCloseButton = styled.button`
-  position: absolute;
-    margin-top: -10px;
-    margin-left: 160px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-`;
-
-const ModalImg = styled.img`
-  max-width: 100%;
-  max-height: 80vh;
-  object-fit: contain;
-`;
+const {ModalCloseButton, ModalContent, ModalImg, ModalOverlay} = new QrModalStyle()
 
 interface ModalProps {
   isOpen: boolean;

@@ -4,6 +4,10 @@ import Lottie from 'lottie-react';
 import LotteData1 from '../../Lottie/93061-check-list-manual.json';
 import styled from "styled-components";
 
+import { WaitClientConfirmStyle } from "../../StyleCollection";
+
+const {Con} = new WaitClientConfirmStyle()
+
 export default function WaitClientConfirm() {
     const { setTitle } = useExecutionState()
 
@@ -17,10 +21,3 @@ export default function WaitClientConfirm() {
     </>)
 }
 
-const Con = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-    
-`;

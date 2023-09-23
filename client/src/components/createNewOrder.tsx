@@ -14,7 +14,9 @@ import { useConnWalletInfo } from "../App";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
 import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
-import styled from "styled-components";
+import { CreateNewOrderStyle } from "../StyleCollection";
+
+const {Margin_1} = new CreateNewOrderStyle()
 
 interface Props {
   data: object;
@@ -22,9 +24,6 @@ interface Props {
   _deadline: string;
 }
 
-const Margin = styled.div`
-  height: 100px;
-`
 
 export default function CreateNewOrder({
   data,
@@ -185,7 +184,3 @@ export default function CreateNewOrder({
   );
 }
 
-
-const Margin_1 = styled.section`
-  height: 98px;
-`

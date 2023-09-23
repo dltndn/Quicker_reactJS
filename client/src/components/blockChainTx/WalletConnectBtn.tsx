@@ -4,71 +4,9 @@ import { useConnWalletInfo } from "../../App";
 import { useVerificationStore } from "../../App";
 import styled from "styled-components";
 import Modal from "./QrModal";
+import { WalletConnectBtnStyle } from "../../StyleCollection";
 
-const Bt1 = styled.button`
-  width: 100%;
-  height: 40px;
-  font-weight: bold;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 500;
-  color: #000;
-  background-color: #ffffff;
-  border: 1px solid #ffffff;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #000;
-    border-color: #000;
-    color: #fff;
-  }
-`;
-
-const Bt2 = styled.button`
-  width: 70px;
-  height: 30px;
-  font-weight: bold;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 500;
-  color: #ffffff;
-  background-color:  #00eeff;
-  border: none;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  margin: 0px 6px 0px 6px;
-
-  &:hover {
-    background-color: #ffffff;
-    border: 1px solid #00eeff;
-    color: #00eeff;
-  }
-`;
-
-const Bt3 = styled.button`
-  width: 70px;
-  height: 30px;
-  font-weight: bold;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 500;
-  color: #ffffff;
-  background-color:  #4873ff;
-  border: none;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  margin: 0px 6px 0px 6px;
-
-  &:hover {
-    background-color: #ffffff;
-    border: 1px solid #4873ff;
-    color: #4873ff;
-  }
-`;
+const {Bt1, Bt2, Bt3} = new WalletConnectBtnStyle()
 
 var QRCode = require("qrcode");
 

@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
 import Done from "../Lottie/Done.json";
-import { HiPaperAirplane } from "react-icons/hi2";
 import Lottie from 'lottie-react';
 import Modal from 'react-modal';
+import { NotificationStyle } from "../StyleCollection";
+
+const {Div0, Div1, Div1_1, Div1_2, Div1_3, Se0 ,SelectInput} = new NotificationStyle()
+
 
 const Chatdot = require('../image/Chatdot.png')
 const Chatman = require('../image/Chatman.png')
@@ -16,58 +19,6 @@ const GlobalStyle = createGlobalStyle`
     background-color: #efefef !important;
     height: 100%;
   }
-`;
-
-const SelectInput = styled.select`
-  width: 6rem;
-  height: 1.625rem;
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
-  border: 0;
-  outline: #efefef;
-  background-color: #d9d9d9;
-  text-align: center;
-  color: #000000;
-  margin: 0.625rem 0.625rem 0 0.625rem;
-  font-weight: bold;
-  font-size: var(--font-small);
-`;
-
-const Se0 = styled.div`
-  display: flex;
-  background-color: #FFFFFF;
-  margin: 0.625rem;
-  border-radius: 5px;
-  align-items: center;
-`;
-
-const Div0 = styled.div`
-  flex: 1 1 15%;
-  text-align: center;
-  font-size: 25px;
-`;
-
-const Div1 = styled.div`
-  flex: 1 1 80%;
-  justify-content: center;
-`;
-
-const Div1_1 = styled.div`
-  font-size: 18px;
-  padding: 12px 6px 6px 0px;
-  font-weight: thin;
-`;
-
-const Div1_2 = styled.div`
-  font-size: 12px;
-  padding: 4px 6px 4px 0px;
-  font-weight: bold;
-`;
-
-const Div1_3 = styled.div`
-  font-size: 10px;
-  padding: 4px 0px 4px 0px;
-  font-weight: thin;
 `;
 
 
