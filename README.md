@@ -46,7 +46,7 @@
 
 ## 스마트컨트랙 구조
 
-<img width="1078" alt="스마트컨트랙 구조" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/099843a3-9b11-4de2-a792-6dbfcd9999ec">
+<img width="1078" alt="스마트컨트랙 구조" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/e80376df-200c-40fe-991f-2e86b051d0b9">
 
 
 ## 데이터베이스 ERD
