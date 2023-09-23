@@ -12,7 +12,7 @@
 - NodeJS
 - Typescript
 - Kotlin(Android)
-- Klaytn
+- Polygon -> Klaytn
 - MariaDB
 - MongoDB
 - Figma
@@ -28,7 +28,6 @@
 - 배송 완료 후 의뢰인, 수취인에게 완료 사진 전송
 - 배송물품 대면 전달 시 QR코드 인증
 - 의뢰인과 배송원 사이 채팅 기능
-- 유저간 토큰 전송기능(예정)
 
 ## 추가 기능 및 변경 사항(v2)
 - 블록체인 네트워크 변경(Polygon -> Klaytn)
@@ -37,9 +36,14 @@
 - 배송컨트랙 프록시 구조 적용
 - 토큰 스테이킹
 - 거래 수수료 투표
+- 프로필 NFT 적용
 
 ## 프로세스
 <img width="799" alt="스크린샷 2023-06-02 오후 3 56 02" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/ba37075e-ff43-4919-a7c8-26c3f892935f">
+
+## 아키텍처
+<img width="1078" alt="스크린샷 2023-07-30 오[Quicker_아키텍처_진짜최종.pdf]()
+후 6 19 28" src="https://github.com/dltndn/Quicker_web_part/files/12705209/Quicker_._.pdf">
 
 ## 스마트컨트랙 구조
 <img width="1078" alt="스크린샷 2023-07-30 오후 6 19 28" src="https://github.com/dltndn/Quicker_web_part/assets/70008866/099843a3-9b11-4de2-a792-6dbfcd9999ec">
