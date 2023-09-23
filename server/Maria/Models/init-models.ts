@@ -1,8 +1,12 @@
 import type { Sequelize } from "sequelize";
+import { AverageOfCost as _AverageOfCost } from "./AverageOfCost";
+import type { AverageOfCostAttributes, AverageOfCostCreationAttributes } from "./AverageOfCost";
 import { Banner as _Banner } from "./Banner";
 import type { BannerAttributes, BannerCreationAttributes } from "./Banner";
 import { Birth_date as _Birth_date } from "./Birth_date";
 import type { Birth_dateAttributes, Birth_dateCreationAttributes } from "./Birth_date";
+import { CacheMatchedOrder as _CacheMatchedOrder } from "./CacheMatchedOrder";
+import type { CacheMatchedOrderAttributes, CacheMatchedOrderCreationAttributes } from "./CacheMatchedOrder";
 import { Chat_data as _Chat_data } from "./Chat_data";
 import type { Chat_dataAttributes, Chat_dataCreationAttributes } from "./Chat_data";
 import { Chat_messages as _Chat_messages } from "./Chat_messages";
@@ -57,8 +61,10 @@ import { User as _User } from "./User";
 import type { UserAttributes, UserCreationAttributes } from "./User";
 
 export {
+  _AverageOfCost as AverageOfCost,
   _Banner as Banner,
   _Birth_date as Birth_date,
+  _CacheMatchedOrder as CacheMatchedOrder,
   _Chat_data as Chat_data,
   _Chat_messages as Chat_messages,
   _Chat_room as Chat_room,
@@ -88,10 +94,14 @@ export {
 };
 
 export type {
+  AverageOfCostAttributes,
+  AverageOfCostCreationAttributes,
   BannerAttributes,
   BannerCreationAttributes,
   Birth_dateAttributes,
   Birth_dateCreationAttributes,
+  CacheMatchedOrderAttributes,
+  CacheMatchedOrderCreationAttributes,
   Chat_dataAttributes,
   Chat_dataCreationAttributes,
   Chat_messagesAttributes,
@@ -147,8 +157,10 @@ export type {
 };
 
 export function initModels(sequelize: Sequelize) {
+  const AverageOfCost = _AverageOfCost.initModel(sequelize);
   const Banner = _Banner.initModel(sequelize);
   const Birth_date = _Birth_date.initModel(sequelize);
+  const CacheMatchedOrder = _CacheMatchedOrder.initModel(sequelize);
   const Chat_data = _Chat_data.initModel(sequelize);
   const Chat_messages = _Chat_messages.initModel(sequelize);
   const Chat_room = _Chat_room.initModel(sequelize);
@@ -194,6 +206,8 @@ export function initModels(sequelize: Sequelize) {
   Notification_info.hasOne(Notification_time, { as: "Notification_time", foreignKey: "id"});
   Sending_type.belongsTo(Notification_info, { as: "id_Notification_info", foreignKey: "id"});
   Notification_info.hasOne(Sending_type, { as: "Sending_type", foreignKey: "id"});
+  CacheMatchedOrder.belongsTo(Order, { as: "id_Order", foreignKey: "id"});
+  Order.hasOne(CacheMatchedOrder, { as: "CacheMatchedOrder", foreignKey: "id"});
   Chat_room.belongsTo(Order, { as: "chat_order", foreignKey: "chat_order_id"});
   Order.hasOne(Chat_room, { as: "Chat_room", foreignKey: "chat_order_id"});
   Departure.belongsTo(Order, { as: "ID_Order", foreignKey: "ID"});
@@ -218,8 +232,10 @@ export function initModels(sequelize: Sequelize) {
   User.hasOne(Join_date, { as: "Join_date", foreignKey: "id"});
 
   return {
+    AverageOfCost: AverageOfCost,
     Banner: Banner,
     Birth_date: Birth_date,
+    CacheMatchedOrder: CacheMatchedOrder,
     Chat_data: Chat_data,
     Chat_messages: Chat_messages,
     Chat_room: Chat_room,

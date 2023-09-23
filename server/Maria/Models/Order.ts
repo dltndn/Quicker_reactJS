@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
+import type { CacheMatchedOrder, CacheMatchedOrderCreationAttributes, CacheMatchedOrderId } from './CacheMatchedOrder';
 import type { Chat_room, Chat_roomCreationAttributes, Chat_roomId } from './Chat_room';
 import type { Departure, DepartureCreationAttributes, DepartureId } from './Departure';
 import type { Destination, DestinationCreationAttributes, DestinationId } from './Destination';
@@ -32,6 +33,11 @@ export class Order extends Model<OrderAttributes, OrderCreationAttributes> imple
   CHECK_RES!: number;
   PICTURE?: string;
 
+  // Order hasOne CacheMatchedOrder via id
+  CacheMatchedOrder!: CacheMatchedOrder;
+  getCacheMatchedOrder!: Sequelize.HasOneGetAssociationMixin<CacheMatchedOrder>;
+  setCacheMatchedOrder!: Sequelize.HasOneSetAssociationMixin<CacheMatchedOrder, CacheMatchedOrderId>;
+  createCacheMatchedOrder!: Sequelize.HasOneCreateAssociationMixin<CacheMatchedOrder>;
   // Order hasOne Chat_room via chat_order_id
   Chat_room!: Chat_room;
   getChat_room!: Sequelize.HasOneGetAssociationMixin<Chat_room>;
