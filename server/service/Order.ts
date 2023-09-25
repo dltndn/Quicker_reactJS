@@ -93,7 +93,11 @@ export const findImage =async (query: any) => {
   const orderId = query.orderNum;
   const connection = await connectMongo("orderComplete");
   const images = await findImageByOrderId(connection, orderId)
-  return {imageBuffer : images[0].image}
+  if (images.length === 0) {
+    return null
+  } else {
+    return {imageBuffer : images[0].image}
+  }
 }
 
 export const saveImage =async (body:any, documentFile : any) => {
