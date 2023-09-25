@@ -7,11 +7,12 @@ import { insertAverageCostPerMonth } from "./middlewares/cron-job";
 import { customMorgan } from "./middlewares/custom-morgan";
 import { createLogFolder } from "./middlewares/createLogFolder";
 
-const loader = {
-  init : async (app: Application) => {
+insertAverageCostPerMonth
+createLogFolder()
 
-    insertAverageCostPerMonth
-    await createLogFolder()
+const loader = {
+  
+  init : async (app: Application) => {
 
     app.use(customMorgan())
     app.use(compression());
