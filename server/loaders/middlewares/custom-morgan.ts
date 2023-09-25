@@ -27,7 +27,7 @@ const filterConnectionInfoForLog = (req: Request, res: Response) => {
     status: res.statusCode,
     method: req.method,
     httpVersion: req.httpVersion,
-    url: req.url,
+    url: req.originalUrl,
     userAgent: req.headers["user-agent"],
   };
 };
