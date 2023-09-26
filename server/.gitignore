@@ -9,3 +9,6 @@
 
 # 인증서
 /config
+
+#logs
+/logs/*
