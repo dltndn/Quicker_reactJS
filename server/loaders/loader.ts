@@ -5,12 +5,15 @@ import express, { Application } from "express";
 
 import { insertAverageCostPerMonth } from "./middlewares/cron-job";
 import { customMorgan } from "./middlewares/custom-morgan";
+import { createLogFolder } from "./middlewares/createLogFolder";
+
+insertAverageCostPerMonth
+createLogFolder()
 
 const loader = {
-  init : (app: Application) => {
+  
+  init : async (app: Application) => {
 
-    insertAverageCostPerMonth
-    
     app.use(customMorgan())
     app.use(compression());
     app.use(cors());

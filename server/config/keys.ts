@@ -57,5 +57,10 @@ export default {
   },
   tmap : {
     apiKey : process.env.TMAP_API_KEY
+  },
+  nhn : {
+    accessKey : process.env.ACCESSKEY,
+    secretKey : process.env.SECRETKEY,
+    serviceId : process.env.SERVICEID,
   }
 };
