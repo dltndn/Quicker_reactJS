@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 import { findOrdersByWalletAddress } from "../service/Order";
-import { findUserNameByWalletAddress, registerUser } from "../service/User";
+import { findUserImageId, findUserNameByWalletAddress, registerUser, updateUserImageId } from "../service/User";
 
 require("dotenv").config();
 initModels(sequelize);
@@ -42,4 +42,24 @@ export default {
       next(error)
     }
   },
+
+  putUserImageId :async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const body = req.body
+      await updateUserImageId(body)
+      res.send({message : "done"})  
+    } catch (error) {
+      next(error)
+    }
+  },
+
+  getUserImageId :async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const query = req.query
+      const imageId = await findUserImageId(query)
+      res.send(imageId)
+    } catch (error) {
+      next(error)
+    }
+  }
 };
