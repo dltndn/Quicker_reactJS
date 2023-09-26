@@ -1,4 +1,4 @@
-import { User, Order } from "../Models/init-models";
+import { User, Order, Image } from "../Models/init-models";
 
 export default {
   getUserId: (userWalletAddress: string) => {
@@ -21,6 +21,17 @@ export default {
     return User.findOne({
       attributes: ["name"],
       where: { wallet_address: walletAddress },
+      raw: true,
+    });
+  },
+
+  findImageByUserId: (userId: string) => {
+    return Image.findOne({
+      attributes : ['imageId'],
+      where: {
+        id: userId,
+      },
+      nest: true,
       raw: true,
     });
   },
