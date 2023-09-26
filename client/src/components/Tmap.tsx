@@ -20,7 +20,7 @@ const Tmap = ({states, containerId }: props) => {
                 
             const data = await Handler.get(`${process.env.REACT_APP_SERVER_URL}average/cost/?distance=${distance}`)
             // DB에서 불러온 추천 비용 string 타입으로 세팅
-            setRecommendCost(`${data}`)
+            setRecommendCost(`${data.distance}`)
         } catch (e) {
             console.log(e)
             setRecommendCost("")

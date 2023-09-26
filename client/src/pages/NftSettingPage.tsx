@@ -79,7 +79,8 @@ const NftSettingPage = () => {
   // NFT 민팅
   const mintGradeNft = async (tokenId: string) => {
     if (address) {
-      if (await mintNft(address, tokenId)) {
+      const result = await mintNft(address, tokenId)
+      if (!result) {
         alert("발급 조건을 확인해주세요");
       } else {
         alert("NFT발급이 완료됐습니다!");
