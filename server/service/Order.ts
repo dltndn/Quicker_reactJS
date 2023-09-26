@@ -152,5 +152,8 @@ export const findAverageCost = async (query:any) => {
   }
   classifiedDistance = classifyDistance(distance) as Distance
   const averageCost = await findLastAverageCostByDistance(classifiedDistance);
+  if (averageCost !== null) {
+    return averageCost[classifiedDistance]
+  }
   return averageCost
 }

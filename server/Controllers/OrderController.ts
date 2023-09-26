@@ -139,7 +139,7 @@ export default {
     try {
       const query = req.query
       const averageCost = await findAverageCost(query)
-      res.send(averageCost)
+      res.send({distance : averageCost})
     } catch (error) {
       next(error)
     }
