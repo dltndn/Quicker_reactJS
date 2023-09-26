@@ -168,11 +168,23 @@ Div1_1 = styled(this.Div1)`
   margin: 16px 16px 16px 8px;
   background-color: #54E1FF;
 `
-
-Tx1 = styled.span`
+Tx2 = styled.div`
   color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 30px;
+`
+Tx3= styled.span`
+  color: #747474;
   font-size: 14px;
   font-weight: bold;
+  text-align: center;
+ `
+Tx1 = styled.span`
+color: #000;
+font-size: 14px;
+font-weight: bold;
 `
 
  Tx1color = styled(this.Tx1)`
@@ -187,16 +199,6 @@ Tx1_2 = styled(this.Tx1)`
   padding-top: 16px;
 `
 
-Tx2 = styled(this.Tx1)`
-  font-size: 20px;
-  text-align: center;
-  padding-top: 30px;
-`
-
-Tx3= styled(this.Tx1)`
-  color: #747474;
-  text-align: center;
-`
 
 Tx3color = styled(this.Tx3)`
   color: #FFF;
@@ -2218,7 +2220,23 @@ export class ReqStyle {
   font-size: 1rem;
   font-weight: bold;
   margin-left: 0.313rem;
+  text-align: left;
 `;
+
+ReqFont1 = styled.div`
+display: flex;
+justify-content: space-between;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 0.313rem;
+  text-align: left;
+`;
+
+Sp4 = styled.div`
+display: flex;
+justify-content: flex-end;
+color: red;
+`
 
  InputDiv = styled.div`
   margin-top: 0.625rem;

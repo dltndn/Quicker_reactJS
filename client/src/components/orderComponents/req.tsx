@@ -9,7 +9,7 @@ import { ReqStyle } from "../../StyleCollection";
 
 const {Div0, Div1, Div2, Img, ImgWrapper, Imgdiv, InputDiv, Ip, CheckIcon, Checkbox
 , Container, SelectInput, Sp0, Sp1, Sp2, Box, Boxlimit, Boxtrans, Btam, Btdiv, Bticonimg
-, Btul, ReqFont, Leftli } = new ReqStyle()
+, Btul, ReqFont, Leftli, Sp4, ReqFont1 } = new ReqStyle()
 
 
 const Ipval = styled.input`
@@ -309,7 +309,7 @@ function Req({data}: {data: object}) {
     <Container>
         <Box>
             <div>
-                <ReqFont>의뢰 비용 <span style={{color: "red"}}>{errorMessage ? (errorMessage):(`추천 비용: ${recommendCost}`)}</span></ReqFont>
+                <ReqFont1>의뢰 비용 <Sp4>{errorMessage ? (errorMessage):(`추천 비용: ${recommendCost}`)}</Sp4></ReqFont1>
             </div>
             <div>
                 {/* ERROR : 타입이 String 타입임 */}
