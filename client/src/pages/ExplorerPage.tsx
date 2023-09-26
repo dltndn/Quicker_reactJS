@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
-import { QUICKER_DLVR_ADDRESS_KLAYTN } from "../contractInformation";
+import { QUICKER_DLVR_ADDRESS_KLAYTN, QUICKER_DLVR_PROXY_ADDRESS, QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN } from "../contractInformation";
 import { create } from "zustand";
 import { useState, useEffect } from "react";
 import {
@@ -11,13 +11,15 @@ import {
 } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import ExplorerTableData from "../components/ExplorerTableData";
-import { useVerificationStore } from "../App";
 import Lottie from "lottie-react";
 import LoadingAni from "../Lottie/144488-transparet-loading-dots.json";
+import { ExplorerPageStyle } from "../StyleCollection";
 
-const PLATFORM_ADDRESS = "0x007db722AFb72463328821DA8e0F41AC2f15C5Ef";
+const PLATFORM_ADDRESS = QUICKER_FEE_GOVERNOR_ADDRESS_KLAYTN;
 const INSUARANCE_ADDRESS = "0xD033A17214bFab58D27c411e102dF4aAE86A8Af3";
-const CONTRACT_ADDRESS = QUICKER_DLVR_ADDRESS_KLAYTN;
+const CONTRACT_ADDRESS = QUICKER_DLVR_PROXY_ADDRESS;
+
+const { Div_Base, Div_1, Div_2, Box, Container, ReqFont, Div0, Sp1} = new ExplorerPageStyle()
 
 interface ExplorerState {
   blinkOrderArrIndex: number[];
@@ -45,7 +47,6 @@ export default function ExplorerPage() {
   const [isBlinkCo, setIsBlinkCo] = useState<boolean>(false)
 
   const { setBlinkOrderArrIndex } = useExplorerState()
-  const { isMember } = useVerificationStore();
 
   const getQkrwBalanceFunc = async (address: string) => {
     try {
@@ -88,10 +89,6 @@ export default function ExplorerPage() {
         const result: any = await getOrdersForLatest(amount.toString());
         // 바뀐 부분 확인
         const newOrderArr = result.slice()
-        console.log(newOrderArr.length)
-        if (newOrderArr.length < 20) {
-          newOrderArr.reverse()
-        }
         let changedIndex:number[] = []
         for (const [index, element] of newOrderArr.entries()) {
           if (orderArr[index] !== undefined) {
@@ -203,16 +200,16 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>수수료 현황</ReqFont>
           </div>
-          <Div1>
-            <Dvi1_1>플랫폼</Dvi1_1>
-            <Dvi1_1>보험</Dvi1_1>
-            <Dvi1_1>보증금</Dvi1_1>
-          </Div1>
-          <Div1>
-            <Dvi1_3>{feeArr[0]}%</Dvi1_3>
-            <Dvi1_3>{feeArr[1]}%</Dvi1_3>
-            <Dvi1_3>{feeArr[2]}%</Dvi1_3>
-          </Div1>
+          <Div_Base>
+            <Div_1>플랫폼</Div_1>
+            <Div_1>보험</Div_1>
+            <Div_1>보증금</Div_1>
+          </Div_Base>
+          <Div_Base>
+            <Div_2>{feeArr[0]}%</Div_2>
+            <Div_2>{feeArr[1]}%</Div_2>
+            <Div_2>{feeArr[2]}%</Div_2>
+          </Div_Base>
         </Box>
       </Container>
 
@@ -245,13 +242,13 @@ export default function ExplorerPage() {
           <div>
             <ReqFont>거래 현황</ReqFont>
           </div>
-              <Div1>
-            <Dvi1_1>오더번호</Dvi1_1>
-            <Dvi1_1>의뢰인</Dvi1_1>
-            <Dvi1_1>배송원</Dvi1_1>
-            <Dvi1_1>의뢰금</Dvi1_1>
-            <Dvi1_1>상태</Dvi1_1>
-          </Div1>
+              <Div_Base>
+            <Div_1>오더번호</Div_1>
+            <Div_1>의뢰인</Div_1>
+            <Div_1>배송원</Div_1>
+            <Div_1>의뢰금</Div_1>
+            <Div_1>상태</Div_1>
+          </Div_Base>
           {showOrders.length !== 0 ? (
             <>
               {showOrders.map((element: any, index: number) => (
@@ -303,75 +300,3 @@ const formatCommissionRate = (rate: number): string => {
   return result;
 };
 
-const Div1 = styled.div`
-  display: flex;
-  background-color: var(--white-color);
-  padding: 10px;
-  border-radius: 0.313rem;
-`;
-
-const Dvi1_1 = styled.div`
-  display: flex;
-  flex: 1 1 20%;
-  justify-content: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
-
-const Dvi1_3 = styled.div`
-  display: flex;
-  flex: 1 1 20%;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-const Div1_2 = styled(Dvi1_1)`
-  font-size: 16px;
-  align-items: center;
-`;
-
-const Box = styled.div`
-  margin-top: 0.5rem;
-  width: 97%;
-  background-color: #ffffff;
-  margin: 0.313rem;
-  border-radius: 0.313rem !important;
-`;
-
-const Container = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ReqFont = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  margin: 10px 0px 5px 16px;
-`;
-const Div0 = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-  margin: 10px 16px 10px 16px;
-`;
-const Sp0 = styled.div`
-  margin-left: auto;
-  margin-right: 0.625rem;
-`;
-
-const Sp1 = styled(Sp0)`
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
-
-const Divnum = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-  margin: 10px 16px 10px 16px;
-`;

@@ -1,7 +1,9 @@
 import Lottie from 'lottie-react';
 import LotteData1 from '../Lottie/dQ47pAFMck.json';
 import LotteData2 from '../Lottie/28181-falling-parcel.json';
-import styled from 'styled-components';
+import { LoadingAniStyle } from "../StyleCollection";
+
+const {Con} = new LoadingAniStyle()
 
 
 export function LoadingExecution() {
@@ -20,10 +22,3 @@ export function LoadingDeliveryProgress() {
     </>)
 }
 
-const Con = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-    
-`;

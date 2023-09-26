@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { useExecutionState } from "../../pages/ExecutionPage";
@@ -10,16 +11,11 @@ import { useConnWalletInfo } from "../../App";
 import SendTxK from "../blockChainTx/SendTxK";
 import GetContractParams from "../blockChainTx/GetContractParams";
 
-const Div0 = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+import { RemoteDeliveryStyle } from "../../StyleCollection";
 
-const Sp0 = styled.span`
-  margin: 10px 0 10px 0;
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
+const {Div0, Div2, Mg0, Sp0} = new RemoteDeliveryStyle()
+
+
 
 export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   const { setShowComponent } = useExecutionState();
@@ -27,6 +23,8 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   const [file, setFile] = useState<File | null | undefined>(undefined);
 
   const fileInput = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate()
 
   const handleDivClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -73,7 +71,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
         }
         // 배송원 사진 업로드 로직 작성
         await postImage();
-        setShowComponent(<WaitClientConfirm />);
+        navigate("/")
       } catch (e) {
         console.log(e);
       }
@@ -101,35 +99,21 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
             />
           </div>
         ) : (
-          <Div5>
+          <Div2>
             {" "}
-            <Span01>
+            <Sp0>
               <BsPlusCircle />
               <br />
               <br />
               사진을 업로드해주세요.
-            </Span01>
-          </Div5>
+            </Sp0>
+          </Div2>
         )}
       </Div0>
-      {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
+      {orderNum && 
+      <Mg0>
+      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/> </Mg0>}
     </>
   );
 }
 
-const Div5 = styled.div`
-  display: flex;
-  height: 500px;
-  justify-content: center;
-  padding-top: 200px;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const Span01 = styled.div`
-  margin: 20px 0 20px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #828282;
-`;

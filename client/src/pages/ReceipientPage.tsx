@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 import styled from "styled-components";
 import { useLocation, useParams } from "react-router-dom";
-import DeliveryStatus from "../components/deliveryProgress/DeliveryStatus";
-import ReceipientConfirm from "../components/deliveryProgress/ReceipientConfirm";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import {
   getDateFromTimestamp,
@@ -13,6 +11,10 @@ import { queryStringParser } from "../lib/parseQueryString";
 import { create } from "zustand";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
+import SuspenseComponent from "../components/SuspenseComponent";
+import { ReceipientPageStyle } from "../StyleCollection";
+
+const { Div0, Div1, LotDiv, Btwal} = new ReceipientPageStyle()
 
 export interface isLive {
   isLive : boolean,
@@ -32,12 +34,15 @@ export default function ReceipientPage() {
   const [isLive, setIsLive] = useState<boolean>(true);
   const [deiverWalletAddress, setDeiverWalletAddress] = useState(null)
 
+  const DeliveryStatus = lazy(() => import("../components/deliveryProgress/DeliveryStatus"))
+  const ReceipientConfirm = lazy(() => import("../components/deliveryProgress/ReceipientConfirm"))
+
   const getDeadlineText = async (orderNum: string) => {
     try {
       const blockchainOrder: any = await getOrderRawData(orderNum);
-      if (blockchainOrder.deliveredTime.toNumber() === 0) {
+      if (parseInt(blockchainOrder.deliveredTime) === 0) {
         const deadlineHM = formatedDateHM(
-          getDateFromTimestamp(blockchainOrder.limitedTime.toNumber())
+          getDateFromTimestamp(parseInt(blockchainOrder.limitedTime))
         );
         setDeadline(deadlineHM);
         setIsDelivered(false)
@@ -81,46 +86,16 @@ export default function ReceipientPage() {
       ) : (
         <>
           {isLive ? (
-            <DeliveryStatus orderNum={orderNum} deadline={deadline} />
+            <SuspenseComponent component={
+              <DeliveryStatus orderNum={orderNum} deadline={deadline} />
+            } />
           ) : (
-            <ReceipientConfirm orderNum={orderNum} validationInfo={deiverWalletAddress}/>
+            <SuspenseComponent component={
+              <ReceipientConfirm orderNum={orderNum} validationInfo={deiverWalletAddress}/>
+            } />
           )}
         </>
       )}
     </>
   );
 }
-
-const Div0 = styled.div`
-    display: flex;
-    height: 3.875rem;
-`;
-
-const Div1 = styled.div`
-    flex: 1 1 50%;
-`;
-
-const LotDiv = styled.div`
-  position: absolute;
-  width: 100px;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const Btwal = styled.button`
-width: 100%;
-height: 2.25rem;
-font-size: var(--font-md1);
-font-weight: bold;
-border: 0rem;
-outline: #efefef;
-background-color: #ffffff;
-padding-left: 0.625rem;
-text-align: center;
-
-&:focus {
-    border-bottom: 0.125rem solid #0070f3;
-  }
-
-`;

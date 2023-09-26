@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import TopBarOthers from "../components/topBarOthers";
 import { create } from "zustand";
 import ConfirmBtn from "../components/confirmBtn";
+import BottomConfirmBtn from "../components/bottomconfirmBtn";
 import GetContractParams from "../components/blockChainTx/GetContractParams";
 import SendTxK from "../components/blockChainTx/SendTxK";
 import { useConnWalletInfo } from "../App";
@@ -10,6 +11,18 @@ import {
   getFeeGovernorInfo,
   getRoundLogs,
 } from "../utils/ExecuteOrderFromBlockchain";
+import styled, { createGlobalStyle } from "styled-components";
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from "apexcharts";
+import Lottie from "lottie-react";
+import mainLoaing from "../Lottie/mainLoading.json";
+import choice from "../Lottie/Choice.json";
+import { FeeGovenorPageStyle } from "../StyleCollection";
+
+const { Receivetx, ReciDiv1, Div0, Sc0, Sc1, Sc1_1, Div1, Div1_1, Flex1, Flex2, Tx1, Tx1_1, 
+  Tx1_2, Tx2, Tx3, Tx3color, Tx1color, PercDiv1, PercSp1, PercSp2, PercDiv2, PercentTx4_2,
+PercentTx4_3, PercentTx4_4, VtTx, ButtonWrapper, BtWp_1, SaveButton, SaveButton_1, LoadButton, HideDiv,
+HideDiv_1, LotDiv, Hr, QuickerTx_1, Input, Lb1, Margin_1} = new FeeGovenorPageStyle()
 
 interface UseFeeGovernorType {
   title: string;
@@ -28,6 +41,13 @@ const useFeeGovernor = create<UseFeeGovernorType>((set) => ({
   roundInfo: {},
   setRoundInfo: (roundInfo: any) => set({ roundInfo }),
 }));
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #efefef !important;
+    height: 100%;
+  }
+`;
 
 const FeeGovernorPage = () => {
   const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } =
@@ -55,7 +75,7 @@ const FeeGovernorPage = () => {
         setTitle("거래수수료 투표");
         break;
       case "previousResult":
-        setTitle("지난투표");
+        setTitle("투표기록");
         break;
       case "vote":
         setTitle("투표하기");
@@ -71,6 +91,7 @@ const FeeGovernorPage = () => {
     if (address !== undefined) {
       try {
         const roundData = await getFeeGovernorInfo(address);
+        console.log(roundData)
         setRoundInfo(roundData);
         setPageState("main");
       } catch (e) {
@@ -102,7 +123,10 @@ const FeeGovernorPage = () => {
       <TopBarOthers title={title} redirectLogic={redirectLogic} />
       {
         {
-          loading: <div>로딩 애니메이션</div>,
+          loading:         
+          <LotDiv>
+          <Lottie animationData={mainLoaing} />
+          </LotDiv>,
           main: <Main roundInfo={roundInfo} />,
           previousResult: <PreviousResult />,
           vote: (
@@ -117,6 +141,7 @@ const FeeGovernorPage = () => {
     </>
   );
 };
+
 
 interface SharesType {
   increase: number;
@@ -157,7 +182,7 @@ const Main = ({ roundInfo }: any) => {
   }, []);
 
   return (
-    <>
+    <><GlobalStyle/>
       {roundInfo && (
         <div>
           {roundInfo.userRewards !== "0" && (
@@ -170,31 +195,51 @@ const Main = ({ roundInfo }: any) => {
               </button>
             </div>
           )}
-          <div>
-            보유 투표권 {convertToLocale(roundInfo.userVotePower)} vQuicker
-          </div>
-          <div>
-            가용 투표권 {convertToLocale(roundInfo.userVoteEnable)} vQuicker
-          </div>
-          <div>이번주 투표현황</div>
-          <div>누적 수수료 | {convertToLocale(roundInfo.totalIncome)} KRW</div>
-          <div>
-            현재 투표량 | {convertToLocale(roundInfo.totalVotePower)} vQuicker
-          </div>
-          <br></br>
-          <div>거래수수료 - {roundInfo.currentFee}%</div>
-          <div>인상 | 원형그래프 | {feeShares.increase}%</div>
-          <div>동결 | 원형그래프 | {feeShares.freeze}%</div>
-          <div>인하 | 원형그래프 | {feeShares.decrease}%</div>
-          <br></br>
-          <div>배송원 보증금 - {roundInfo.currentSecuDepo}%</div>
-          <div>인상 | 원형그래프 | {secuDepoShares.increase}%</div>
-          <div>동결 | 원형그래프 | {secuDepoShares.freeze}%</div>
-          <div>인하 | 원형그래프 | {secuDepoShares.decrease}%</div>
-          <button onClick={() => setPageState("previousResult")}>
-            지난투표
-          </button>
-          <button onClick={() => setPageState("vote")}>투표하기</button>
+          <></>
+          <Flex1>
+          <Sc1>
+            <Tx1>보유 투표권</Tx1>
+            <Tx2>
+            {convertToLocale(roundInfo.userVotePower)} <Tx3>vQuicker</Tx3>
+            </Tx2>
+          </Sc1>
+          <Sc1_1>
+          <Tx1color>가용 투표권</Tx1color>
+          <Tx2>
+          {convertToLocale(roundInfo.userVoteEnable)} <Tx3color>vQuicker</Tx3color>
+          </Tx2>
+          </Sc1_1>
+          </Flex1>
+          <Div1>
+            <Tx1_1>금주 투표 현황</Tx1_1>
+            <PercDiv1>누적 수수료<br></br>
+              <PercSp1>{convertToLocale(roundInfo.totalIncome)}</PercSp1>
+              <PercSp2> KRW</PercSp2>
+            </PercDiv1>
+            <PercDiv1>현재 투표량<br></br>
+              <PercSp1>{convertToLocale(roundInfo.totalVotePower)}</PercSp1>
+              <PercSp2> vQuicker</PercSp2>
+            </PercDiv1>
+          </Div1>
+          <Div1>
+            <Tx1_1>거래수수료 - {roundInfo.currentFee}%</Tx1_1>
+            <StrokedGaugeExample></StrokedGaugeExample>
+            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
+          </Div1>
+          <Div1>
+          <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
+          <StrokedGaugeExample></StrokedGaugeExample>
+          <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
+          <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
+          <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+          </Div1>
+          <ButtonWrapper>
+          <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
+          <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
+          </ButtonWrapper>
+          <HideDiv></HideDiv>
         </div>
       )}
     </>
@@ -208,7 +253,7 @@ interface RoundLogType {
   totalIncome: string;
 }
 
-// 지난투표 결과 목록 화면
+// 투표 결과 목록 화면
 const PreviousResult = () => {
   const [roundLogArr, setRoundLogArr] = useState<RoundLogType[]>([]);
   const [oldestRound, setOldestRound] = useState<number | null>(null);
@@ -247,15 +292,20 @@ const PreviousResult = () => {
 
   return (
     <>
-      <div>라운드</div><div>정보</div>
+      {/* <div>라운드</div><div>정보</div> */}
       {roundLogArr.length === 0 ? (
-        <div>로딩 애니메이션</div>
+                  <LotDiv>
+                  <Lottie animationData={mainLoaing} />
+                  </LotDiv>
       ) : (
         <div>
           {roundLogArr.map((ele: RoundLogType, index: number) => (
             <RoundDataElement ele={ele} key={index} />
           ))}
-          <button onClick={async () => await addRoundLogData()}>더보기</button>
+          <HideDiv_1></HideDiv_1>
+          <BtWp_1>
+          <SaveButton_1 onClick={async () => await addRoundLogData()}>더보기</SaveButton_1>
+          </BtWp_1>
         </div>
       )}
     </>
@@ -280,22 +330,22 @@ const RoundDataElement = ({ ele }: RoundDataElementType) => {
   const secuDepoShares = calculateShares(ele.securityDepositFee[0], ele.securityDepositFee[1], ele.securityDepositFee[2]);
 
   return (
-    <>
-      <div>{ele.round}</div>
-      <div>투표량: {totalVotePower} vQuicker</div>
-      <div>수수료 수익: {convertToLocale(ele.totalIncome)} krw</div>
-      <div>
-        거래 수수료
-        <div>인상 | {feeShares.increase}%</div>
-        <div>동결 | {feeShares.freeze}%</div>
-        <div>인하 | {feeShares.decrease}%</div>
-      </div>
-      <div>
-        배송원 보증금
-        <div>인상 | {secuDepoShares.increase}%</div>
-        <div>동결 | {secuDepoShares.freeze}%</div>
-        <div>인하 | {secuDepoShares.decrease}%</div>
-      </div>
+    <><GlobalStyle/>
+      <Div1_1>
+            <Tx1_1>투표 - {ele.round}회차</Tx1_1>
+            <PercDiv2>투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3></PercDiv2>
+            <PercDiv2>수수료 수익 <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4></PercDiv2>
+            <Hr></Hr>
+            <Tx1_2>거래수수료</Tx1_2>
+            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
+            <Hr></Hr>
+            <Tx1_2>배송원 보증금</Tx1_2>
+            <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+      </Div1_1>
     </>
   );
 };
@@ -320,7 +370,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 
   const onClick = () => {
     if (userVoteEnable === "0") {
-      alert("가용 투표권이 없습니다");
+      alert("가용 투표권이 없습니다.\n 분배받을 수수료 수익이 있다면 정산받으세요.");
     } else {
       setIsInfoPage(false);
     }
@@ -337,79 +387,96 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
   return (
     <>
       {isInfoPage ? (
-        <div>
-          <>animation</>
-          <>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</>
-          <ConfirmBtn
-            content={"다음"}
-            confirmLogic={onClick}
-            isDisabled={false}
-          />
-        </div>
+        <>
+          <Sc0>
+                  <div>
+                    <Lottie animationData={choice} />
+                  </div>
+                  <Receivetx>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</Receivetx>
+                </Sc0>
+                <ReciDiv1>
+                </ReciDiv1>
+                <BottomConfirmBtn
+                            content={"다음"}
+                            confirmLogic={onClick}
+                            isDisabled={false}
+                          />
+                </>
       ) : (
+        <>
         <div>
+          <Div0>
           <div>
-            <div>거래수수료</div>
-            <label>
-              <input
+          <QuickerTx_1>거래 수수료</QuickerTx_1>
+          <Flex2>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"0"}
                 onChange={setFeeIndexState}
               />
-              인상
-            </label>
-            <label>
-              <input
+              <VtTx>인상</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"1"}
                 onChange={setFeeIndexState}
                 defaultChecked
               />
-              동결
-            </label>
-            <label>
-              <input
+              <VtTx>동결</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="feeType"
                 value={"2"}
                 onChange={setFeeIndexState}
               />
-              인하
-            </label>
+              <VtTx>인하</VtTx>
+            </Lb1>
+          </Flex2>
           </div>
+          </Div0>
+        </div>
           <div>
-            <div>배송원 보증금</div>
-            <label>
-              <input
+          <Div0>
+          <VtTx>배송원 보증금</VtTx>
+          <Flex2>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"0"}
                 onChange={setSecuIndexState}
               />
-              인상
-            </label>
-            <label>
-              <input
+              <VtTx>인상</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"1"}
                 onChange={setSecuIndexState}
                 defaultChecked
               />
-              동결
-            </label>
-            <label>
-              <input
+              <VtTx>동결</VtTx>
+            </Lb1>
+            <Lb1>
+              <Input
                 type="radio"
                 name="secuType"
                 value={"2"}
                 onChange={setSecuIndexState}
               />
-              인하
-            </label>
+              <VtTx>인하</VtTx>
+            </Lb1>
+            </Flex2>
+            </Div0>
           </div>
+          <Margin_1>
           <SendTxK
             param={GetContractParams.castVote(
               feeIndex,
@@ -418,7 +485,10 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
             )}
             successFunc={successFunc}
           />
-        </div>
+          </Margin_1>
+  
+
+        </>
       )}
     </>
   );
@@ -427,12 +497,14 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 // 수수료 수익 정산 화면
 const ClaimRewards = () => {
   const { setPageState, roundInfo, setRoundInfo } = useFeeGovernor();
+  const navigate = useNavigate()
 
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
+    roundData.userVoteEnable = roundData.userVotePower;
     setRoundInfo(roundData);
-    setPageState("main");
+    setPageState("main")
   };
 
   return (
@@ -477,6 +549,44 @@ const calculateShares = (
 
 const convertToLocale = (data: string) => {
   return Number(data).toLocaleString();
+};
+
+const StrokedGaugeExample: React.FC = () => {
+  const options = {
+    chart: {
+      type: 'donut',
+      height: 50, // 그래프의 높이 설정
+      width: 50, // 그래프의 너비 설정 (예: '300px')
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 15,
+          size: "60%"
+        },
+        dataLabels: {
+          showOn: "always",
+          name: {
+            offsetY: -10,
+            show: true,
+            color: "#888",
+            fontSize: "12px"
+          },
+          value: {
+            color: "#111",
+            fontSize: "20px",
+            show: true
+          }
+        },
+      },
+    },
+    series: [100], // 데이터 값 (0부터 100 사이의 값)
+    labels: ['Stroked Gauge'],
+  } as ApexOptions;
+
+  return (
+      <ReactApexChart options={options} series={options.series} type="radialBar" />
+  );
 };
 
 export default FeeGovernorPage;

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import WaitClientConfirm from "./WaitClientConfirm";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
@@ -10,25 +11,10 @@ import { useDeliveredComponent } from "./DeliveredItem";
 import SendTxK from "../blockChainTx/SendTxK";
 import GetContractParams from "../blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../../App";
+import { FaceToFaceDeliveryStyle } from "../../StyleCollection";
 
-const CameraContainer = styled.div`
-  width: 95%;
-  height: 600px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  margin-bottom: 10px;
-`;
+const {Div0, Sp0, Mg0} = new FaceToFaceDeliveryStyle()
 
-const Div0 = styled.div`
-    display: flex;
-    justify-content: center;
-`;
-
-const Sp0 = styled.span`
-margin: 10px 0 10px 0%;
-font-size: var(--font-md1);
-font-weight: bold;
-`;
 
 
 export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps) {
@@ -36,6 +22,8 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
   const { hasScanResult } = useDeliveredComponent()
   const { address } = useConnWalletInfo()
     // const videoRef = useRef<HTMLVideoElement>(null);
+
+  const navigate = useNavigate()
 
     const deliveredRogic = async () => {
       if (orderNum !== undefined) {
@@ -45,7 +33,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
               if (!(await checkIsDelivering(address))) {
                   sdta.sendIsDelivering(false)
               }
-              setShowComponent(<WaitClientConfirm />)
+              navigate("/")
           } catch(e) {
               console.log(e)
           }
@@ -62,10 +50,11 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        {orderNum && <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/>}
+        {orderNum && <Mg0><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/></Mg0>}
     </>
   );
 };
+
 
 // const Camera = () => {
 //     const videoRef = useRef<HTMLVideoElement>(null);
@@ -91,4 +80,3 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
 //       return null;
 //     }
 //   };
-  

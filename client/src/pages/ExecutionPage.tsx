@@ -1,17 +1,12 @@
 import { create } from "zustand";
 import { createGlobalStyle } from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TopBarOthers from "../components/topBarOthers";
-import ReceivingItem from "../components/executeComponents/ReceivingItem";
-import DeliveredItem from "../components/executeComponents/DeliveredItem";
-import CompletedDelivery from "../components/executeComponents/CompletedDelivery";
-import FailedDelivery from "../components/executeComponents/FailedDelivery";
-import WaitClientConfirm from "../components/executeComponents/WaitClientConfirm";
 import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
-import { formatedDateHM, getDateFromTimestamp } from "../utils/ConvertTimestampToDate";
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface ExecutionState {
   title: string;
@@ -37,6 +32,12 @@ export default function ExecutionPage() {
   const { orderNumber } = useParams()
   const navigate = useNavigate()
   const { title, showComponent, setShowComponent} = useExecutionState()
+
+  const ReceivingItem = lazy(() => import("../components/executeComponents/ReceivingItem"))
+  const DeliveredItem = lazy(() => import("../components/executeComponents/DeliveredItem"))
+  const CompletedDelivery = lazy(() => import("../components/executeComponents/CompletedDelivery"))
+  const FailedDelivery = lazy(() => import("../components/executeComponents/FailedDelivery"))
+  const WaitClientConfirm = lazy(() => import("../components/executeComponents/WaitClientConfirm"))
 
   const currentTime = Math.floor(Date.now() / 1000)
   const twelveHoursToSec = 12 * 60 * 60
@@ -95,13 +96,13 @@ export default function ExecutionPage() {
           if(Number(blockchainOrder.securityDeposit) === 0) {
             isReceived = true
           }
-          setShowComponent(<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit} isReceived={isReceived}/>)
+          setShowComponent(<SuspenseComponent component={<CompletedDelivery orderNum={orderNumber} income={income} securityDeposit={securityDeposit} isReceived={isReceived}/>}/>)
           return
         } else if (isDeliveryFailed(blockchainOrder)) {
-          setShowComponent(<FailedDelivery orderNum={orderNumber}/>)
+          setShowComponent(<SuspenseComponent component={<FailedDelivery orderNum={orderNumber}/>} />)
           return
         } else if (isClientConfirmBefore(blockchainOrder)) {
-          setShowComponent(<WaitClientConfirm />)
+          setShowComponent(<SuspenseComponent component={<WaitClientConfirm />} />)
           return
         }
       } catch(e) {
@@ -109,10 +110,10 @@ export default function ExecutionPage() {
       }
       // isDeliveryItemReceived() 테스트 할 때 try, catch 블록 주석처리
       if (await isDeliveryItemReceived()) {
-        setShowComponent(<DeliveredItem orderNum={orderNumber}/>)
+        setShowComponent(<SuspenseComponent component={<DeliveredItem orderNum={orderNumber}/>} />)
         return
       } else {
-        setShowComponent(<ReceivingItem orderNum={orderNumber}/>)
+        setShowComponent(<SuspenseComponent component={<ReceivingItem orderNum={orderNumber}/>} />)
         return
       }
     }
@@ -149,3 +150,4 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
+

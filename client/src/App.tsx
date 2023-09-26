@@ -1,34 +1,35 @@
 import { Buffer } from "buffer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CommissionPage from "./pages/commission";
-import MainPage from "./pages/mainPage";
-import SignUpPage from "./pages/SignUpPage";
-import SearchPage from "./pages/SearchPage";
-import ChattingPage from "./pages/ChattingPage";
-import ProfilePage from "./pages/ProfilePage";
-import TestPage2 from "./pages/TestPage2";
-import OrderLogPage from "./pages/OrderLogPage";
-import Profile_settingPage from "./pages/Profile_settingPage";
-import React, { useEffect } from "react";
-import Notification from "./components/Notification";
-import ExecutionPage from "./pages/ExecutionPage";
-import ClientConfirmPage from "./pages/ClientConfirmPage";
-import Profile_noticePage from "./pages/Profile_noticePage";
-import Profile_notice_writePage from "./pages/Profile_notice_writePage";
-import ExplorerPage from "./pages/ExplorerPage";
-import ReceipientPage from "./pages/ReceipientPage";
-import ChatcssPage from "./components/ChatcssPage";
-import StakingPage from "./pages/StakingPage";
-import FeeGovernorPage from "./pages/FeeGovernorPage";
-import QR from "./pages/QR";
+import React, { lazy, Suspense, useEffect } from "react";
 import { create } from "zustand";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
-import QRCode from "./pages/QRCode";
-
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
+
+const MainPage = lazy(() => import('./pages/mainPage'));
+const SignUpPage = lazy(() => import('./pages/SignUpPage'));
+const SearchPage = lazy(() => import('./pages/SearchPage'));
+const ChattingPage = lazy(() => import('./pages/ChattingPage'));
+const CommissionPage = lazy(() => import('./pages/commission'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const TestPage2 = lazy(() => import('./pages/TestPage2'));
+const ProfileSettingPage = lazy(() => import('./pages/Profile_settingPage'));
+const ProfileNoticePage = lazy(() => import('./pages/Profile_noticePage'));
+const ProfileNoticeWritePage = lazy(() => import('./pages/Profile_notice_writePage'));
+const OrderLogPage = lazy(() => import('./pages/OrderLogPage'));
+const Notification = lazy(() => import('./components/Notification'));
+const ExecutionPage = lazy(() => import('./pages/ExecutionPage'));
+const ClientConfirmPage = lazy(() => import('./pages/ClientConfirmPage'));
+const ExplorerPage = lazy(() => import('./pages/ExplorerPage'));
+const ReceipientPage = lazy(() => import('./pages/ReceipientPage'));
+const ChatcssPage = lazy(() => import('./components/ChatcssPage'));
+const StakingPage = lazy(() => import('./pages/StakingPage'));
+const FeeGovernorPage = lazy(() => import('./pages/FeeGovernorPage'));
+const QR = lazy(() => import('./pages/QR'));
+const NftSettingPage = lazy(() => import('./pages/NftSettingPage'));
+const QRCode = lazy(() => import('./pages/QRCode'));
 
 interface UseConnWalletInfoType {
   address: string | undefined;
@@ -49,14 +50,14 @@ export const useConnWalletInfo = create<UseConnWalletInfoType>((set) => ({
 }));
 
 interface UseVerifiaction {
-  isMember: boolean;
+  isMember: boolean | null;
   setIsMember: (newIsMember: boolean) => void;
   userName: string | null;
   setUserName: (newUserName: string | null) => void;
 }
 
 export const useVerificationStore = create<UseVerifiaction>((set) => ({
-  isMember: false,
+  isMember: null,
   setIsMember: (isMember: boolean) => set({ isMember }),
   userName: null,
   setUserName: (userName: string | null) => set({ userName }),
@@ -94,7 +95,7 @@ function App() {
     userOrderNumStateTrigger,
   } = UseUserOrderState();
 
-  const getUserInfo = async () => {
+  const getUserInfo = async (address: string | undefined) => {
     try {
       const result = await Handler.get(process.env.REACT_APP_SERVER_URL + `user/name/?walletAddress=${address}`)
       if (result) {
@@ -106,7 +107,7 @@ function App() {
     }
   };
 
-  const getAndSetOrders = async () => {
+  const getAndSetOrders = async (address: string | undefined) => {
     const clientOrderNumsArr = await getOrderList(address, true);
     const quickerOrderNumsArr = await getOrderList(address, false);
     setClientOrderNums(clientOrderNumsArr);
@@ -161,6 +162,8 @@ function App() {
   //     }
   //   },
   // });
+  
+  // test commit
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("kaikas_address");
@@ -171,6 +174,11 @@ function App() {
     } else if (storedAddress !== null) {
       setAddress(storedAddress);
       setIsConneted(true);
+      // 지갑주소 유저 여부 조회
+      console.log("changed user wallet");
+      console.log(storedAddress);
+      getUserInfo(storedAddress);
+      getAndSetOrders(storedAddress);
       if (storedIsMobile === "true") {
         setIsMobile(true);
       } else {
@@ -180,53 +188,58 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // 지갑주소 유저 여부 조회
-    console.log("changed user wallet");
-    console.log(address);
-    getUserInfo();
-    getAndSetOrders();
+    if (address) {
+      // 지갑주소 유저 여부 조회
+      console.log("changed user wallet");
+      console.log(address);
+      getUserInfo(address);
+      getAndSetOrders(address);
+    }
   }, [address]);
 
   useEffect(() => {
-    getAndSetOrders();
+    getAndSetOrders(address);
     console.log("userOrderNumStateTrigger 직동");
   }, [userOrderNumStateTrigger]);
 
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/signUp" element={<SignUpPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/chatting" element={<ChattingPage />} />
-          <Route path="/commission" element={<CommissionPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/test2" element={<TestPage2 />} />
-          <Route path="/profile/setting" element={<Profile_settingPage />} />
-          <Route path="/profile/notice" element={<Profile_noticePage />} />
-          <Route
-            path="/profile/notice/write"
-            element={<Profile_notice_writePage />}
-          />
-          <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
-          <Route
-            path="/fulfillmentlist"
-            element={<OrderLogPage isClient={false} />}
-          />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
-          <Route
-            path="/client_confirm/:orderNumber"
-            element={<ClientConfirmPage />}
-          />
-          <Route path="/explorer" element={<ExplorerPage />} />
-          <Route path="/receipient" element={<ReceipientPage />} />
-          <Route path="/chatcss" element={<ChatcssPage />} />
-          <Route path="/testQR" element={<QR />} />
-          <Route path="/staking" element={<StakingPage />} />
-          <Route path="/feeGovernor" element={<FeeGovernorPage />} />
-        </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/chatting" element={<ChattingPage />} />
+            <Route path="/commission" element={<CommissionPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/test2" element={<TestPage2 />} />
+            <Route path="/profile/setting" element={<ProfileSettingPage />} />
+            <Route path="/profile/notice" element={<ProfileNoticePage />} />
+            <Route
+              path="/profile/notice/write"
+              element={<ProfileNoticeWritePage />}
+            />
+            <Route path="/orderlist" element={<OrderLogPage isClient={true} />} />
+            <Route
+              path="/fulfillmentlist"
+              element={<OrderLogPage isClient={false} />}
+            />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/execution/:orderNumber" element={<ExecutionPage />} />
+            <Route
+              path="/client_confirm/:orderNumber"
+              element={<ClientConfirmPage />}
+            />
+            <Route path="/explorer" element={<ExplorerPage />} />
+            <Route path="/receipient" element={<ReceipientPage />} />
+            <Route path="/chatcss" element={<ChatcssPage />} />
+            <Route path="/testQR" element={<QR />} />
+            <Route path="/staking" element={<StakingPage />} />
+            <Route path="/feeGovernor" element={<FeeGovernorPage />} />
+            <Route path="/nftSetting" element={<NftSettingPage />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </>
   );

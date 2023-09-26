@@ -1,12 +1,32 @@
 import React, { createElement, useEffect, useState } from 'react';
 import ReactDOM from "react-dom";
 import Map from "../lib/Tmap"
-import { useOrderDataStore } from '../pages/commission';
+import { useOrderStore } from '../pages/commission';
+import Handler from '../lib/Handler';
 
 const Tmap = ({states, containerId }: props) => {
     const [tMap, setTmap] = useState<any>()
     const [startMarker, setStartMarker] = useState({})
     const [arriveMarker, setArriveMarker] = useState({})
+
+    const { setRecommendCost } = useOrderStore()
+
+    const setRecommendCostFunc = async (startPosition: position, arrivePosition: position) => {
+        try {
+            let distance = await tMap.getDistance({X: startPosition.longitude, Y: startPosition.latitude},
+                {X: arrivePosition.longitude, Y: arrivePosition.latitude})
+            // console.log(distance.distanceInfo.distance) // ex) 13163, type: number
+            distance = distance.distanceInfo.distance / 1000
+                
+            const data = await Handler.get(`${process.env.REACT_APP_SERVER_URL}average/cost/?distance=${distance}`)
+            // DB에서 불러온 추천 비용 string 타입으로 세팅
+            setRecommendCost(`${data.distance}`)
+        } catch (e) {
+            console.log(e)
+            setRecommendCost("")
+        }
+        
+    }
 
     useEffect(() => {
         setTmap(new Map("TMapApp", "30em"))
@@ -27,6 +47,10 @@ const Tmap = ({states, containerId }: props) => {
             if (isPosition(states.arrivePosition)) {
                 setArriveMarker(tMap.createMarker(states.arrivePosition.latitude, states.arrivePosition.longitude, 2))
             }
+        }
+        if (isPosition(states.startPosition) && isPosition(states.arrivePosition)) {
+            // 추천 비용 세팅하기
+            setRecommendCostFunc(states.startPosition, states.arrivePosition)
         }
     }, [states.startPosition, states.arrivePosition])
 

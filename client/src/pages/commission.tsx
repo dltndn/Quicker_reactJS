@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState, useRef } from "react";
+import React, { createElement, useEffect, useState, useRef, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
@@ -9,7 +9,8 @@ import { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
-import IncreaseAllowance from "../components/IncreaseAllowance";
+import TmapApi from "../lib/Tmap"
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface OrderState {
   cost: number;
@@ -26,6 +27,8 @@ interface OrderState {
   setCreatedOrderNum: (newOrder: string | undefined) => void;
   errorMessage: string | undefined;
   setErrorMessage: (newData: string) => void;
+  recommendCost: string;
+  setRecommendCost: (newData: string) => void;
 }
 
 export const useOrderStore = create<OrderState>((set) => ({
@@ -44,6 +47,8 @@ export const useOrderStore = create<OrderState>((set) => ({
     set({ createdOrderNum }),
   errorMessage: undefined,
   setErrorMessage: (errorMessage: string) => set({ errorMessage }),
+  recommendCost: "",
+  setRecommendCost: (recommendCost: string) => set({ recommendCost }),
 }));
 
 interface useDivHandler {
@@ -222,7 +227,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const { showCommissionPage, setShowCommissionPage } = useDivHandler();
 
-  const { title, setTitle, setDeadLine, showAllowance } = useOrderStore();
+  const { title, setTitle, setDeadLine, showAllowance, setCost, setRecommendCost } = useOrderStore();
   const {
     orderId,
     startAddress,
@@ -247,6 +252,8 @@ export default function CommissionPage() {
 
   const [arrivePosition, setArrivePosition] = useState({});
   const [startPosition, setStartPosition] = useState({});
+  
+  const IncreaseAllowance = lazy(() => import("../components/IncreaseAllowance"))
 
   const setDeadlineToProp = () => {
     if (date !== null && AMPM !== null && hour !== null && minute !== null) {
@@ -346,18 +353,20 @@ export default function CommissionPage() {
       reset();
       setShowCommissionPage(true);
       setTitle("출발지 입력");
+      setCost(0)
     };
   }, []);
 
   useEffect(() => {
     setDeadlineToProp();
   }, [date, AMPM, hour, minute]);
+
   return (
     <>
       <GlobalStyle />
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       {showAllowance ? (
-        <IncreaseAllowance />
+        <SuspenseComponent component={<IncreaseAllowance />} />
       ) : (
         <>
           <div

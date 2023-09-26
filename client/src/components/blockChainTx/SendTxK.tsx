@@ -3,23 +3,10 @@ import { useState, useEffect } from "react";
 import { generateQRCode } from "../../utils/GenerateQr";
 import { SendTxType, SendTxDelegationType } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
-import styled from "styled-components";
+import Modal from "./QrModal";
+import { SendTxKStyle } from "../../StyleCollection";
 
-const LoadButton = styled.button`
-  width: 45%;
-  background-color: #17a2b8;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #117a8b;
-  }
-`;
-
+const {LoadButton} = new SendTxKStyle()
 
 type SendTokenProps = {
   param: SendTxType | SendTxDelegationType;
@@ -27,6 +14,7 @@ type SendTokenProps = {
 };
 
 const SendTxK = ({ param, successFunc }: SendTokenProps) => {
+
   const [showQr, setShowQr] = useState<boolean>(false);
   const [qrUrl, setQrUrl] = useState<string>("");
 
@@ -81,17 +69,17 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
-            <LoadButton onClick={mobileConnect}>모바일에서 실행</LoadButton>
+            <LoadButton onClick={mobileConnect}>서명</LoadButton>
           ) : (
             <>
-              <LoadButton onClick={qrConnect}>데탑에서 실행</LoadButton>
-              {showQr && (
-                <img
-                  src={qrUrl}
-                  onClick={() => setShowQr(false)}
-                  alt="Qr_wallet_connect"
-                />
-              )}
+            <LoadButton onClick={qrConnect}>서명</LoadButton>
+
+            {showQr && (
+        
+            <Modal isOpen={showQr} onClose={() => setShowQr(false)} imageUrl={qrUrl} />
+          )}
+
+              
             </>
           )}
         </>

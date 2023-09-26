@@ -22,7 +22,7 @@ export const getOrdersForLatest = async (amount: string) => {
 export const getCommissionRate = async () => {
   try {
     const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
-    return data.data; // type: string[]
+    return data.data; // type: number[]
   } catch (e) {
     return null;
   }
@@ -236,6 +236,49 @@ export const getRoundLogs = async (index: string, startRound: string | undefined
       });
     }
     return data.data; // type: json
+  } catch (e) {
+    console.log(e)
+    return null
+  }
+}
+
+// (ERC-1155 컨트랙)
+// 유저가 보유하고 있는 NFT ID 조회
+export const hasNftIdList = async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/hasNftIdList`, {
+      address,
+    });
+    return data.data; // type: string[]
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+}
+
+// (ERC-1155 컨트랙)
+// NFT 민팅
+export const mintNft = async (address: string, tokenId: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/mintNft`, {
+      address,
+      tokenId
+    });
+    return data.data; // type: boolean
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+
+// (delivery 컨트랙)
+// 유저 의뢰금, 배송금 총액
+export const sumOrderPrice = async (address: string) => {
+  try {
+    const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/sumOrderPrice`, {
+      address,
+    });
+    return data.data; // type: object
   } catch (e) {
     console.log(e)
     return null

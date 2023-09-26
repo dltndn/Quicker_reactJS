@@ -1,18 +1,33 @@
-import connectMongo from "../Connector";
+import { Connection } from "mongoose";
 import { ImageFileSchema, ImageFile } from "../Schemas/ImageFile";
 
-export const findImageByOrderId = async (orderId: string) => {
-  const conn = await connectMongo("orderComplete");
-  const imageModel = conn.model(orderId, ImageFileSchema);
+export const findImageByOrderId = async (connection : Connection, orderId: string) => {
+  const imageModel = connection.model(orderId, ImageFileSchema);
   const images = await imageModel.find();
-  conn.destroy();
+  connection.destroy();
   return images;
 };
 
-export const saveImageToBufferString = async (orderNum: string, bufferImage : any) => {
-  const conn = await connectMongo("orderComplete");
-  const imageModel = conn.model(orderNum, ImageFile);
-  const image = new imageModel(ImageFile);
+export const saveImageToBufferString = async (connection : Connection, orderNum: string, bufferImage : any) => {
+  const imageModel = connection.model(orderNum, ImageFile);
+  const image = new imageModel({image:bufferImage});
   await image.save();
-  conn.destroy();
+  connection.destroy();
+};
+
+export const findFailImageByOrderId = async (connection : Connection, orderId: string) => {
+  const uploadImage = connection.model(orderId, ImageFileSchema);
+  const [ image ] = await uploadImage.find().sort("desc").limit(1);
+  connection.destroy();
+  return image;
+};
+
+export const saveFailImageToBufferString = async (connection : Connection, orderNum: string, bufferImage : any, reason : string) => {
+  const uploadImage = connection.model(orderNum, ImageFileSchema);
+  const image = new uploadImage({
+    image: bufferImage,
+    reason: reason,
+  });
+  await image.save();
+  connection.destroy();
 };

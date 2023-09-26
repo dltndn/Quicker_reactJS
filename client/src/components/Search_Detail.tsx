@@ -2,12 +2,11 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
 import { useSearchState } from "../pages/SearchPage";
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { OrderObj } from "../pages/SearchPage";
 import { useOrderStore } from "../pages/commission";
 import Handler from "../lib/Handler";
 import { SendDataToAndroid } from "../utils/SendDataToAndroid";
-import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
 import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
 import {
@@ -18,7 +17,11 @@ import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../App";
 import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
-import IncreaseAllowance from "./IncreaseAllowance";
+import { Search_DetailStyle } from "../StyleCollection";
+import SuspenseComponent from "./SuspenseComponent";
+
+const {Div0, Div0_1, Div1, Div1_1, Div1_2, Div2, Div3, Div3_1, Div3_1_1, Div3_2, Div3_2_1, Div4, 
+Div4_1, Div5, Div5_1, Divpo, Se0, SelectInput, Margin_1, Circle } = new Search_DetailStyle()
 
 const money = require("../image/money.png");
 
@@ -33,6 +36,8 @@ function Search_Detail() {
   const { showAllowance, setShowAllowance } = useOrderStore();
   let order: OrderObj | undefined;
   order = orders && showOrder !== undefined ? orders[showOrder] : undefined;
+
+  const IncreaseAllowance = lazy(() => import("./IncreaseAllowance"))
 
   const setMatchedOrderNum = async () => {
     const timeoutId = setTimeout(async () => {
@@ -84,7 +89,7 @@ function Search_Detail() {
   return (
     <>
       {showAllowance ? (
-        <IncreaseAllowance />
+        <SuspenseComponent component={<IncreaseAllowance />}/>
       ) : (
         <>
           {order && (
@@ -193,6 +198,7 @@ function Search_Detail() {
                   }}
                 />
               ) : (
+                <Margin_1>
                 <SendTxK
                   param={GetContractParams.AcceptOrder(
                     // @ts-ignore
@@ -202,6 +208,7 @@ function Search_Detail() {
                     await acceptOrder();
                   }}
                 />
+                </Margin_1>
               )}
             </>
           )}
@@ -225,111 +232,3 @@ const scaleBounce = keyframes`
   }
 `;
 
-const Circle = styled.div`
-  display: inline-block;
-  margin: 0 3px;
-  width: 10px;
-  height: 10px;
-  background: #0047ff;
-  border-radius: 50em;
-  margin-bottom: 10px;
-`;
-
-const Div0 = styled.div`
-  position: fixed;
-  top: 80px;
-  left: 20px;
-`;
-
-const Div0_1 = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 14px;
-`;
-
-const Div1 = styled.div`
-  margin: 20px 10px 10px 40px;
-`;
-
-const Div1_1 = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const Div1_2 = styled(Div1_1)`
-  font-size: 16px;
-  font-weight: normal;
-  margin-top: 10px;
-  color: #9c9c9c;
-`;
-
-const Div2 = styled.div`
-  margin: 0px 10px 30px 40px;
-`;
-
-const Se0 = styled.section`
-  padding: 0 24px 0 24px;
-`;
-
-const Div3 = styled.div`
-  display: flex;
-  background-color: #efefef;
-  border-radius: 5px;
-`;
-
-const Div4 = styled(Div3)`
-  margin-top: 5px;
-`;
-
-const Div4_1 = styled(Div4)`
-  justify-content: space-between;
-`;
-
-const Div5 = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 80px 10px 0px 10px;
-  font-size: 20px;
-  color: #0d6efd;
-  font-weight: bold;
-  text-align: center;
-`;
-
-const Divpo = styled.div`
-  position: relative;
-`;
-
-const Div3_1 = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  color: #909090;
-`;
-
-const Div3_2 = styled.div`
-  padding: 16px;
-`;
-
-const Div3_1_1 = styled(Div3_1)`
-  color: #000000;
-`;
-
-const Div3_2_1 = styled(Div3_2)`
-  padding: 16px 0 16px 0;
-`;
-
-const Div5_1 = styled.div`
-  font-size: 12px;
-  color: #929292;
-  font-weight: bold;
-  padding-top: 10px;
-`;
-
-const SelectInput = styled.select`
-  border: none;
-  background-color: #efefef;
-  text-align: center;
-  color: #000000;
-  font-weight: bold;
-  font-size: 14px;
-  margin-right: 20px;
-`;

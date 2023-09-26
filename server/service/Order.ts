@@ -3,13 +3,13 @@ import CreateOrder from "../Maria/Commands/CreateOrder";
 import SelectOrder from "../Maria/Commands/SelectOrder";
 import SelectUser from "../Maria/Commands/SelectUser";
 import UpdateOrder from "../Maria/Commands/UpdateOrder";
-import { findImageByOrderId, saveImageToBufferString } from "../Mongo/Command/Image";
+import { findLastAverageCostByDistance } from "../Maria/Commands/select-average-cost";
+import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
 
-import { saveLocation, findLocation } from "../Mongo/Command/Location";
+import { findLocation, saveLocation } from "../Mongo/Command/Location";
+import connectMongo from "../Mongo/Connector";
 import { encrypt } from "../lib/cryto";
-import { MulterRequest } from "../routes/OrderCompleteImage";
 import sendMessage from "../sendMessage";
-
 
 export const findDestinationAndDepartureByOrderId = async (query: any) => {
   const orderId = query.orderid;
@@ -33,12 +33,14 @@ export const postCurrentLocation = async (body: any) => {
     X: body.X,
     Y: body.Y,
   }
-  await saveLocation(address, loaction)
+  const connection = await connectMongo("realTimeLocation");
+  await saveLocation(connection, address, loaction)
 };
 
 export const findCurrentLocation = async (query: any) => {
   const address = query.quicker;
-  const location = await findLocation(address)  
+  const connection = await connectMongo("realTimeLocation");
+  const location = await findLocation(connection, address)  
   return location;
 };
 
@@ -47,12 +49,9 @@ export const createOrder = async (body : any) => {
   const userId = await SelectUser.getUserId(walletAddress);
   if (userId) {
     body.Order.ID_REQ = userId.id;
-
     await CreateOrder.Order(body);
-
-    return { msg: "done" }
   } else {
-    return new Error("회원이 아님")
+    throw new Error("회원이 아님")
   }
 }
 
@@ -67,7 +66,8 @@ export const updateOrder = async (body:any) => {
   }
 
   await UpdateOrder.updateOrder(deliver.id, orderId)
-  
+  UpdateOrder.cacheOrder(orderId)
+
   const requesterId = await SelectUser.getRequesterId(orderId);
 
   if (requesterId === null) {
@@ -86,17 +86,74 @@ export const updateOrder = async (body:any) => {
   const url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key=" + encryptedUrl
   
   await sendMessage(receiverPhoneNumber.PHONE, url)  
-  
+
 }
 
 export const findImage =async (query: any) => {
   const orderId = query.orderNum;
-  const images = await findImageByOrderId(orderId)
-  return {imageBuffer : images[0].image}
+  const connection = await connectMongo("orderComplete");
+  const images = await findImageByOrderId(connection, orderId)
+  if (images.length === 0) {
+    return null
+  } else {
+    return {imageBuffer : images[0].image}
+  }
 }
 
 export const saveImage =async (body:any, documentFile : any) => {
   const orderNum = body.orderNum
   const bufferImage = documentFile.buffer
-  await saveImageToBufferString(orderNum, bufferImage)
+  const connection = await connectMongo("orderComplete");
+  await saveImageToBufferString(connection, orderNum, bufferImage)
+}
+
+export const findUserOrdersDetail = async (query: any) => {
+  const orderIds : string = query.orderIds
+  const list = JSON.parse(`[${orderIds}]`)
+  
+  const orders = await SelectOrder.getOrderlist(list);
+  return orders
+}
+
+export const findFailImage =async (query:any) => {
+  const orderId = query.orderNum;
+  const connection = await connectMongo("orderFail");
+  const image = await findFailImageByOrderId(connection, orderId)
+  return image
+}
+
+export const saveFailImage =async (body:any , documentFile : Express.Multer.File | undefined) => {
+  if (documentFile === undefined) {
+    return "picture not exist"
+  }
+  const bufferImage = documentFile.buffer;
+  const orderNum = body.orderNum;
+  const reason = body.reason;
+  const connection = await connectMongo("orderFail");
+  await saveFailImageToBufferString(connection, orderNum, bufferImage, reason)
+  return "done"
+}
+
+export const findAverageCost = async (query:any) => {
+  type Distance = "5KM" | "10KM" | "15KM" | "20KM" | "25KM" | "30KM" | "40KM" | "50KM" | "60KM" | "60+KM"
+  let classifiedDistance : Distance = "5KM"
+  const distance : number = query.distance
+  // @TODO : 중복제거
+  const classifyDistance = (distance : number) => {
+    const listDistance = [5, 10, 15, 20, 25, 30, 40, 50, 60]
+    for (const distanceUnit of listDistance) {
+      if (distance <= distanceUnit) {
+        return (distanceUnit + "KM") as Distance
+      }
+      else if (60 < distance) {
+        return "60+KM" as Distance
+      }
+    }
+  }
+  classifiedDistance = classifyDistance(distance) as Distance
+  const averageCost = await findLastAverageCostByDistance(classifiedDistance);
+  if (averageCost !== null) {
+    return averageCost[classifiedDistance]
+  }
+  return averageCost
 }

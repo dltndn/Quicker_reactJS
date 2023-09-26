@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { KaikasConnect } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
 import { useVerificationStore } from "../../App";
+import styled from "styled-components";
+import Modal from "./QrModal";
+import { WalletConnectBtnStyle } from "../../StyleCollection";
+
+const {Bt1, Bt2, Bt3} = new WalletConnectBtnStyle()
 
 var QRCode = require("qrcode");
 
@@ -68,18 +73,14 @@ const WalletConnectBtn = () => {
     <>
       {address === undefined ? (
         <>
-          <button onClick={mobileConnect}>모바일 연결</button>
-          <button onClick={qrConnect}>큐알 연결</button>
+          <Bt2 onClick={mobileConnect}>앱연결</Bt2>
+          <Bt3 onClick={qrConnect}>큐알연결</Bt3>
           {showQr && (
-            <img
-              src={qrUrl}
-              onClick={() => setShowQr(false)}
-              alt="Qr_wallet_connect"
-            />
+            <Modal isOpen={showQr} onClose={() => setShowQr(false)} imageUrl={qrUrl} />
           )}
         </>
       ) : (
-        <button onClick={disConnect}>지갑 연결 해제</button>
+        <Bt1 onClick={disConnect}>연결해제</Bt1>
       )}
     </>
   );

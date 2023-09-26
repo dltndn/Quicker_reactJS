@@ -1,4 +1,419 @@
 // SPDX-License-Identifier: MIT
+// File: @openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol
+
+
+// OpenZeppelin Contracts (last updated v4.9.0) (utils/Address.sol)
+
+pragma solidity ^0.8.1;
+
+/**
+ * @dev Collection of functions related to the address type
+ */
+library AddressUpgradeable {
+    /**
+     * @dev Returns true if `account` is a contract.
+     *
+     * [IMPORTANT]
+     * ====
+     * It is unsafe to assume that an address for which this function returns
+     * false is an externally-owned account (EOA) and not a contract.
+     *
+     * Among others, `isContract` will return false for the following
+     * types of addresses:
+     *
+     *  - an externally-owned account
+     *  - a contract in construction
+     *  - an address where a contract will be created
+     *  - an address where a contract lived, but was destroyed
+     *
+     * Furthermore, `isContract` will also return true if the target contract within
+     * the same transaction is already scheduled for destruction by `SELFDESTRUCT`,
+     * which only has an effect at the end of a transaction.
+     * ====
+     *
+     * [IMPORTANT]
+     * ====
+     * You shouldn't rely on `isContract` to protect against flash loan attacks!
+     *
+     * Preventing calls from contracts is highly discouraged. It breaks composability, breaks support for smart wallets
+     * like Gnosis Safe, and does not provide security since it can be circumvented by calling from a contract
+     * constructor.
+     * ====
+     */
+    function isContract(address account) internal view returns (bool) {
+        // This method relies on extcodesize/address.code.length, which returns 0
+        // for contracts in construction, since the code is only stored at the end
+        // of the constructor execution.
+
+        return account.code.length > 0;
+    }
+
+    /**
+     * @dev Replacement for Solidity's `transfer`: sends `amount` wei to
+     * `recipient`, forwarding all available gas and reverting on errors.
+     *
+     * https://eips.ethereum.org/EIPS/eip-1884[EIP1884] increases the gas cost
+     * of certain opcodes, possibly making contracts go over the 2300 gas limit
+     * imposed by `transfer`, making them unable to receive funds via
+     * `transfer`. {sendValue} removes this limitation.
+     *
+     * https://consensys.net/diligence/blog/2019/09/stop-using-soliditys-transfer-now/[Learn more].
+     *
+     * IMPORTANT: because control is transferred to `recipient`, care must be
+     * taken to not create reentrancy vulnerabilities. Consider using
+     * {ReentrancyGuard} or the
+     * https://solidity.readthedocs.io/en/v0.8.0/security-considerations.html#use-the-checks-effects-interactions-pattern[checks-effects-interactions pattern].
+     */
+    function sendValue(address payable recipient, uint256 amount) internal {
+        require(address(this).balance >= amount, "Address: insufficient balance");
+
+        (bool success, ) = recipient.call{value: amount}("");
+        require(success, "Address: unable to send value, recipient may have reverted");
+    }
+
+    /**
+     * @dev Performs a Solidity function call using a low level `call`. A
+     * plain `call` is an unsafe replacement for a function call: use this
+     * function instead.
+     *
+     * If `target` reverts with a revert reason, it is bubbled up by this
+     * function (like regular Solidity function calls).
+     *
+     * Returns the raw returned data. To convert to the expected return value,
+     * use https://solidity.readthedocs.io/en/latest/units-and-global-variables.html?highlight=abi.decode#abi-encoding-and-decoding-functions[`abi.decode`].
+     *
+     * Requirements:
+     *
+     * - `target` must be a contract.
+     * - calling `target` with `data` must not revert.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, "Address: low-level call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`], but with
+     * `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, 0, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but also transferring `value` wei to `target`.
+     *
+     * Requirements:
+     *
+     * - the calling contract must have an ETH balance of at least `value`.
+     * - the called Solidity function must be `payable`.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCallWithValue-address-bytes-uint256-}[`functionCallWithValue`], but
+     * with `errorMessage` as a fallback revert reason when `target` reverts.
+     *
+     * _Available since v3.1._
+     */
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        require(address(this).balance >= value, "Address: insufficient balance for call");
+        (bool success, bytes memory returndata) = target.call{value: value}(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+        return functionStaticCall(target, data, "Address: low-level static call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a static call.
+     *
+     * _Available since v3.3._
+     */
+    function functionStaticCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal view returns (bytes memory) {
+        (bool success, bytes memory returndata) = target.staticcall(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionDelegateCall(target, data, "Address: low-level delegate call failed");
+    }
+
+    /**
+     * @dev Same as {xref-Address-functionCall-address-bytes-string-}[`functionCall`],
+     * but performing a delegate call.
+     *
+     * _Available since v3.4._
+     */
+    function functionDelegateCall(
+        address target,
+        bytes memory data,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
+        (bool success, bytes memory returndata) = target.delegatecall(data);
+        return verifyCallResultFromTarget(target, success, returndata, errorMessage);
+    }
+
+    /**
+     * @dev Tool to verify that a low level call to smart-contract was successful, and revert (either by bubbling
+     * the revert reason or using the provided one) in case of unsuccessful call or if target was not a contract.
+     *
+     * _Available since v4.8._
+     */
+    function verifyCallResultFromTarget(
+        address target,
+        bool success,
+        bytes memory returndata,
+        string memory errorMessage
+    ) internal view returns (bytes memory) {
+        if (success) {
+            if (returndata.length == 0) {
+                // only check isContract if the call was successful and the return data is empty
+                // otherwise we already know that it was a contract
+                require(isContract(target), "Address: call to non-contract");
+            }
+            return returndata;
+        } else {
+            _revert(returndata, errorMessage);
+        }
+    }
+
+    /**
+     * @dev Tool to verify that a low level call was successful, and revert if it wasn't, either by bubbling the
+     * revert reason or using the provided one.
+     *
+     * _Available since v4.3._
+     */
+    function verifyCallResult(
+        bool success,
+        bytes memory returndata,
+        string memory errorMessage
+    ) internal pure returns (bytes memory) {
+        if (success) {
+            return returndata;
+        } else {
+            _revert(returndata, errorMessage);
+        }
+    }
+
+    function _revert(bytes memory returndata, string memory errorMessage) private pure {
+        // Look for revert reason and bubble it up if present
+        if (returndata.length > 0) {
+            // The easiest way to bubble the revert reason is using memory via assembly
+            /// @solidity memory-safe-assembly
+            assembly {
+                let returndata_size := mload(returndata)
+                revert(add(32, returndata), returndata_size)
+            }
+        } else {
+            revert(errorMessage);
+        }
+    }
+}
+
+// File: @openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol
+
+
+// OpenZeppelin Contracts (last updated v4.9.0) (proxy/utils/Initializable.sol)
+
+pragma solidity ^0.8.2;
+
+
+/**
+ * @dev This is a base contract to aid in writing upgradeable contracts, or any kind of contract that will be deployed
+ * behind a proxy. Since proxied contracts do not make use of a constructor, it's common to move constructor logic to an
+ * external initializer function, usually called `initialize`. It then becomes necessary to protect this initializer
+ * function so it can only be called once. The {initializer} modifier provided by this contract will have this effect.
+ *
+ * The initialization functions use a version number. Once a version number is used, it is consumed and cannot be
+ * reused. This mechanism prevents re-execution of each "step" but allows the creation of new initialization steps in
+ * case an upgrade adds a module that needs to be initialized.
+ *
+ * For example:
+ *
+ * [.hljs-theme-light.nopadding]
+ * ```solidity
+ * contract MyToken is ERC20Upgradeable {
+ *     function initialize() initializer public {
+ *         __ERC20_init("MyToken", "MTK");
+ *     }
+ * }
+ *
+ * contract MyTokenV2 is MyToken, ERC20PermitUpgradeable {
+ *     function initializeV2() reinitializer(2) public {
+ *         __ERC20Permit_init("MyToken");
+ *     }
+ * }
+ * ```
+ *
+ * TIP: To avoid leaving the proxy in an uninitialized state, the initializer function should be called as early as
+ * possible by providing the encoded function call as the `_data` argument to {ERC1967Proxy-constructor}.
+ *
+ * CAUTION: When used with inheritance, manual care must be taken to not invoke a parent initializer twice, or to ensure
+ * that all initializers are idempotent. This is not verified automatically as constructors are by Solidity.
+ *
+ * [CAUTION]
+ * ====
+ * Avoid leaving a contract uninitialized.
+ *
+ * An uninitialized contract can be taken over by an attacker. This applies to both a proxy and its implementation
+ * contract, which may impact the proxy. To prevent the implementation contract from being used, you should invoke
+ * the {_disableInitializers} function in the constructor to automatically lock it when it is deployed:
+ *
+ * [.hljs-theme-light.nopadding]
+ * ```
+ * /// @custom:oz-upgrades-unsafe-allow constructor
+ * constructor() {
+ *     _disableInitializers();
+ * }
+ * ```
+ * ====
+ */
+abstract contract Initializable {
+    /**
+     * @dev Indicates that the contract has been initialized.
+     * @custom:oz-retyped-from bool
+     */
+    uint8 private _initialized;
+
+    /**
+     * @dev Indicates that the contract is in the process of being initialized.
+     */
+    bool private _initializing;
+
+    /**
+     * @dev Triggered when the contract has been initialized or reinitialized.
+     */
+    event Initialized(uint8 version);
+
+    /**
+     * @dev A modifier that defines a protected initializer function that can be invoked at most once. In its scope,
+     * `onlyInitializing` functions can be used to initialize parent contracts.
+     *
+     * Similar to `reinitializer(1)`, except that functions marked with `initializer` can be nested in the context of a
+     * constructor.
+     *
+     * Emits an {Initialized} event.
+     */
+    modifier initializer() {
+        bool isTopLevelCall = !_initializing;
+        require(
+            (isTopLevelCall && _initialized < 1) || (!AddressUpgradeable.isContract(address(this)) && _initialized == 1),
+            "Initializable: contract is already initialized"
+        );
+        _initialized = 1;
+        if (isTopLevelCall) {
+            _initializing = true;
+        }
+        _;
+        if (isTopLevelCall) {
+            _initializing = false;
+            emit Initialized(1);
+        }
+    }
+
+    /**
+     * @dev A modifier that defines a protected reinitializer function that can be invoked at most once, and only if the
+     * contract hasn't been initialized to a greater version before. In its scope, `onlyInitializing` functions can be
+     * used to initialize parent contracts.
+     *
+     * A reinitializer may be used after the original initialization step. This is essential to configure modules that
+     * are added through upgrades and that require initialization.
+     *
+     * When `version` is 1, this modifier is similar to `initializer`, except that functions marked with `reinitializer`
+     * cannot be nested. If one is invoked in the context of another, execution will revert.
+     *
+     * Note that versions can jump in increments greater than 1; this implies that if multiple reinitializers coexist in
+     * a contract, executing them in the right order is up to the developer or operator.
+     *
+     * WARNING: setting the version to 255 will prevent any future reinitialization.
+     *
+     * Emits an {Initialized} event.
+     */
+    modifier reinitializer(uint8 version) {
+        require(!_initializing && _initialized < version, "Initializable: contract is already initialized");
+        _initialized = version;
+        _initializing = true;
+        _;
+        _initializing = false;
+        emit Initialized(version);
+    }
+
+    /**
+     * @dev Modifier to protect an initialization function so that it can only be invoked by functions with the
+     * {initializer} and {reinitializer} modifiers, directly or indirectly.
+     */
+    modifier onlyInitializing() {
+        require(_initializing, "Initializable: contract is not initializing");
+        _;
+    }
+
+    /**
+     * @dev Locks the contract, preventing any future reinitialization. This cannot be part of an initializer call.
+     * Calling this in the constructor of a contract will prevent that contract from being initialized or reinitialized
+     * to any version. It is recommended to use this to lock implementation contracts that are designed to be called
+     * through proxies.
+     *
+     * Emits an {Initialized} event the first time it is successfully executed.
+     */
+    function _disableInitializers() internal virtual {
+        require(!_initializing, "Initializable: contract is initializing");
+        if (_initialized != type(uint8).max) {
+            _initialized = type(uint8).max;
+            emit Initialized(type(uint8).max);
+        }
+    }
+
+    /**
+     * @dev Returns the highest version that has been initialized. See {reinitializer}.
+     */
+    function _getInitializedVersion() internal view returns (uint8) {
+        return _initialized;
+    }
+
+    /**
+     * @dev Returns `true` if the contract is currently initializing. See {onlyInitializing}.
+     */
+    function _isInitializing() internal view returns (bool) {
+        return _initializing;
+    }
+}
+
 // File: @openzeppelin/contracts/utils/introspection/IERC165.sol
 
 
@@ -1662,10 +2077,11 @@ library SafeERC20 {
     }
 }
 
-// File: contracts/Quicker.sol
+// File: contracts/QuickerDlvry_proxy.sol
 
 
 pragma solidity ^0.8.9;
+
 
 
 
@@ -1680,11 +2096,14 @@ pragma solidity ^0.8.9;
  * @dev declare Qkrw(ERC20) contract
  */
 
-contract QuickerDelivery is Ownable, AccessControl {
+contract QuickerDlvry_proxy is Ownable, AccessControl, Initializable {
     bytes32 public constant CHANGE_FEE_ROLE = keccak256("Only the quicker CA can change the fee.");
     bytes32 public constant SET_ROLE = keccak256("SET_ROLE");
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
+
+    address private implementation; // implementation contract
+
     // unit is % / 10 ex) 10 = 1%, 15 = 1.5%
     /**
      * @dev indicating the commission from order price
@@ -1765,10 +2184,11 @@ contract QuickerDelivery is Ownable, AccessControl {
     mapping(uint256 => uint16) internal changeLogSecurityDepositRate;
     uint256[] internal securityDepositRateLogKeys;
 
+    // constructor
     /**
      * @dev Initializes the contract setting the commission rate
      */
-    constructor(
+    function initialize(
         uint16 _platFormFee,
         uint16 _insuranceFee,
         uint16 _securityDeposit,
@@ -1777,7 +2197,7 @@ contract QuickerDelivery is Ownable, AccessControl {
         address _Platform,
         address _Insurance,
         uint256 _claimQuickerAmount
-    ) Ownable() {
+    ) public initializer {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(CHANGE_FEE_ROLE, msg.sender);
         setCommissionRate(0, _platFormFee);
@@ -1790,52 +2210,19 @@ contract QuickerDelivery is Ownable, AccessControl {
         claimQuickerTokenAmount = _claimQuickerAmount;
     }
 
-    modifier isClientOfOrder(uint256 _orderNum, address _client) {
-        require(
-            clientOfOrder[_orderNum] == _client,
-            "not client of this order"
-        );
-        _;
-    }
-
-    modifier isQuickerOfOrder(uint256 _orderNum, address _quicker) {
-        require(
-            quickerOfOrder[_orderNum] == _quicker,
-            "not quicker of this order"
-        );
-        _;
-    }
-
-    function setFeeCollectionAddress(address _newAddress) external onlyOwner {
-        feeGovernor = _newAddress;
-    }
-
-    function setInsuranceFeeCollection(address _newAddress) external onlyOwner {
-        insuranceFeeCollector = _newAddress;
-    }
-
-    function getCurrentTime() internal view returns (uint256) {
-        return block.timestamp;
-    }
-
-    function calculateFee(uint256 _orderPrice, uint16 _feeRate)
-        internal
-        pure
-        returns (uint256)
-    {
-        return (_orderPrice * uint256(_feeRate)) / 1000;
-    }
-
-    function getMulTokenAmount(uint256 _amount)
-        internal
-        pure
-        returns (uint256)
-    {
-        return _amount.mul(1e18);
-    }
-
-    function getOrder(uint256 _orderNum) external view returns (Order memory) {
-        return orderList[_orderNum];
+    fallback() external {
+        address impl = implementation;
+        require(impl != address(0));
+        assembly {
+            let ptr := mload(0x40)
+            calldatacopy(ptr, 0, calldatasize())
+            let result := delegatecall(gas(), impl, ptr, calldatasize(), 0, 0)
+            let size := returndatasize()
+            returndatacopy(ptr, 0, size)
+            switch result
+            case 0 { revert(ptr, size) }
+            default { return(ptr, size) }
+        }
     }
 
     /**
@@ -1882,6 +2269,30 @@ contract QuickerDelivery is Ownable, AccessControl {
         return getterOrders;
     }
 
+    // _num == 0, platform fee
+    // _num == 1, insurance fee
+    // _num == 2, security deposit fee
+    function setCommissionRate(uint8 _num, uint16 _changedRate) internal {
+        require((_num == 0)||(_num == 1) || (_num == 2), "Invalid number");
+        if (_num == 0) {
+            commissionRate.platformFeeRate = _changedRate;
+            platformFeeRateLogKeys.push(block.timestamp);
+            changeLogPlatformFeeRate[block.timestamp] = _changedRate;
+        } else if (_num == 1) {
+            commissionRate.insuranceFeeRate = _changedRate;
+            insuranceFeeRateLogKeys.push(block.timestamp);
+            changeLogInsuranceFeeRate[block.timestamp] = _changedRate;
+        } else {
+            commissionRate.securityDepositRate = _changedRate;
+            securityDepositRateLogKeys.push(block.timestamp);
+            changeLogSecurityDepositRate[block.timestamp] = _changedRate;
+        }
+    }
+
+    function getOrder(uint256 _orderNum) external view returns (Order memory) {
+        return orderList[_orderNum];
+    }
+
     function getClientOrderList(address _client)
         external
         view
@@ -1896,68 +2307,6 @@ contract QuickerDelivery is Ownable, AccessControl {
         returns (uint256[] memory)
     {
         return quickerOrderList[_quicker];
-    }
-
-    // _num == 0, platform fee
-    // _num == 1, insurance fee
-    // _num == 2, security deposit fee
-    function setCommissionRate(uint8 _num, uint16 _changedRate) internal {
-        require((_num == 0)||(_num == 1) || (_num == 2), "Invalid number");
-        if (_num == 0) {
-            commissionRate.platformFeeRate = _changedRate;
-            platformFeeRateLogKeys.push(getCurrentTime());
-            changeLogPlatformFeeRate[getCurrentTime()] = _changedRate;
-        } else if (_num == 1) {
-            commissionRate.insuranceFeeRate = _changedRate;
-            insuranceFeeRateLogKeys.push(getCurrentTime());
-            changeLogInsuranceFeeRate[getCurrentTime()] = _changedRate;
-        } else {
-            commissionRate.securityDepositRate = _changedRate;
-            securityDepositRateLogKeys.push(getCurrentTime());
-            changeLogSecurityDepositRate[getCurrentTime()] = _changedRate;
-        }
-    }
-
-    // _num == 0, platform fee
-    // _num == 1, insurance fee
-    // _num == 2, security deposit fee
-    function changeCommissionRate(uint8 _num, uint16 _changedRate) external onlyRole(CHANGE_FEE_ROLE) {
-        setCommissionRate(_num, _changedRate);
-    }
-
-    function setClaimQuickerAmount(uint256 _amount) external onlyRole(SET_ROLE) {
-        claimQuickerTokenAmount = _amount;
-    }
-
-    function getCommissionRate() view external returns(Commission memory){
-        return commissionRate;
-    }
-
-    function transferTokensToOtherAddress(address _to, uint256 _amount)
-        internal
-    {
-        (bool success, ) = address(qkrwToken).call(
-            abi.encodeWithSignature(
-                "transfer(address,uint256)",
-                _to,
-                _amount
-            )
-        );
-        require(success);
-    }
-
-    function recieveTokensFromOtherAddress(address _from, uint256 _amount)
-        internal
-    {
-        (bool success, ) = address(qkrwToken).call(
-            abi.encodeWithSignature(
-                "transferFrom(address,address,uint256)",
-                _from,
-                address(this),
-                _amount
-            )
-        );
-        require(success);
     }
 
     /**
@@ -1990,271 +2339,16 @@ contract QuickerDelivery is Ownable, AccessControl {
         return getterOrders;
     }
 
-    /**
-    @dev Creates a new Order by the client and deposits QKRW tokens to the contract
-    @param _orderPrice The payment amount of the client
-    @param _limitedTime Timestamp value (in seconds) for the delivery deadline
-    @notice This function is used by the client to create a new Order and deposit QKRW tokens.
-    @notice _orderPrice must be greater than or equal to 0, and _limitedTime must be later than the current time.
-    @notice After the Order object is created and a new order number is issued, it is added to the list associated with the client account and the overall order list.
-    @notice Finally, QKRW tokens are transferred from the client address to this contract account.
-     */
-    function createOrder(uint256 _orderPrice, uint256 _limitedTime) external {
-        require(
-            _limitedTime >= getCurrentTime(),
-            "The deadline must later than the current time!"
-        );
-        require(_orderPrice > 0, "Order price must bigger than 0!");
-        uint256 orderNum = orderList.length;
-        uint256 amount = getMulTokenAmount(_orderPrice);
-        clientOfOrder[orderNum] = msg.sender;
-        Order memory newOrder = Order(
-            orderNum,
-            msg.sender,
-            address(0),
-            State.created,
-            _orderPrice,
-            0,
-            _limitedTime,
-            getCurrentTime(),
-            0,
-            0,
-            0
-        );
-        recieveTokensFromOtherAddress(msg.sender, amount);
-        orderList.push(newOrder);
-        clientOrderList[msg.sender].push(orderNum);
-        emit OrderCreated(orderNum);
-        emit ChangedBalance(true);
-        emit OrderResult(true);
+    // _num == 0, platform fee
+    // _num == 1, insurance fee
+    // _num == 2, security deposit fee
+    function changeCommissionRate(uint8 _num, uint16 _changedRate) external onlyRole(CHANGE_FEE_ROLE) {
+        setCommissionRate(_num, _changedRate);
     }
 
-    /**
-    @dev Function for a client to cancel an Order
-    Cannot be canceled once matched with a delivery person
-    @param _orderNum Order number
-    @notice This function allows clients to cancel their Orders.
-    Orders that have been matched with a delivery person cannot be canceled.
-    @notice If the order is canceled successfully, the corresponding QKRW tokens will be refunded to the client's wallet.
-    */
-    function cancelOrder(uint256 _orderNum)
-        external
-        isClientOfOrder(_orderNum, msg.sender)
-    {
-        require(
-            orderList[_orderNum].state == State.created,
-            "Matched with another quicker..."
-        );
-        orderList[_orderNum].state = State.canceled;
-        uint256 refundAmount = getMulTokenAmount(
-            orderList[_orderNum].orderPrice
-        );
-        transferTokensToOtherAddress(msg.sender, refundAmount);
-        emit ChangedBalance(true);
-        emit OrderResult(true);
-    }
-
-    /**
-    @dev Function executed when a delivery person accepts an order created by a client
-    @param _orderNum Order number
-    @notice This function is used when a delivery person accepts an order created by a client.
-    @notice It cannot be executed if the order is already matched with another delivery person or canceled.
-    @notice It cannot be executed if the delivery deadline for the order has already passed.
-    @notice The security deposit fee is calculated based on the price of the order and transferred from the delivery person's account to the contract account.
-    @notice When the delivery person accepts the order, the information for the order is updated and the order is changed to a matched state with the current delivery person.
-    @notice The security deposit is entrusted to the delivery person's account and will be returned when the order is completed and settled.
-    */
-    function acceptOrder(uint256 _orderNum) external {
-        Order storage order = orderList[_orderNum];
-        require(
-            order.state == State.created,
-            "Already matched with another quicker..."
-        );
-        require(order.limitedTime > getCurrentTime(), "Already canceled");
-        uint256 _securityDeposit = calculateFee(
-            order.orderPrice,
-            commissionRate.securityDepositRate
-        );
-        order.quicker = msg.sender;
-        order.securityDeposit = _securityDeposit;
-        order.state = State.matched;
-        order.matchedTime = getCurrentTime();
-        quickerOfOrder[_orderNum] = msg.sender;
-        quickerOrderList[msg.sender].push(_orderNum);
-        uint256 formatedDeposit = getMulTokenAmount(_securityDeposit);
-        recieveTokensFromOtherAddress(msg.sender, formatedDeposit);
-        emit OrderResult(true);
-        emit ChangedBalance(true);
-        emit AcceptedOrderNumber(_orderNum);
-    }
-
-    // 배송원 배달완료 시간 기입 함수
-    function deliveredOrder(uint256 _orderNum)
-        external
-        isQuickerOfOrder(_orderNum, msg.sender)
-    {
-        Order storage order = orderList[_orderNum];
-        require(
-            order.state == State.matched,
-            "State is not matched"
-        );
-        require(order.deliveredTime == 0, "Already delivered");
-        require(order.limitedTime + 12 hours >= getCurrentTime(), "Please contact customer service center");
-        order.deliveredTime = getCurrentTime();
-        emit OrderResult(true);
-        emit deliveredOrderNumber(_orderNum);
-    }
-
-    // client 계약 완료 함수
-    function completeOrder(uint256 _orderNum)
-        external
-        isClientOfOrder(_orderNum, msg.sender)
-    {
-        require(
-            orderList[_orderNum].state == State.matched,
-            "You can not complete before matched"
-        );
-        orderList[_orderNum].state = State.completed;
-        orderList[_orderNum].completedTime = getCurrentTime();
-        (bool mintSuccess, ) = address(QuickerToken).call(
-            abi.encodeWithSignature(
-                "mint(address,uint256)",
-                msg.sender,
-                claimQuickerTokenAmount
-            )
-        );
-        require(mintSuccess);
-        emit OrderResult(true);
-        emit completedOrderNumber(_orderNum);
-    }
-
-    /**
-    @dev Function for the settlement of quicker.
-    @param _orderNum : The order number
-    @notice This function is used when the quicker requests to withdraw the security deposit after the order is completed.
-    @notice Quicker can withdraw the security deposit only after the order is completed or when the limited time for the order has passed.
-    @notice If the delivery is made after the limited time, the security deposit is returned to the client, and the order price minus platform fee and insurance fee is transferred to the quicker.
-    @notice If the delivery is made before the limited time, the security deposit and the order price minus platform fee and insurance fee is transferred to the quicker.
-    @notice The information related to function execution can be confirmed through events.
-    */
-    function withdrawFromOrder(uint256 _orderNum)
-        external
-        isQuickerOfOrder(_orderNum, msg.sender)
-    {
-        Order storage order = orderList[_orderNum];
-        require(order.securityDeposit != 0, "already withdraw!");
-        require(
-            order.state == State.completed ||
-                (order.limitedTime + 12 hours < getCurrentTime() &&
-                    order.state == State.matched),
-            "You can't withdraw deposit now"
-        );
-        uint256 platformFee = calculateFee(
-            order.orderPrice,
-            commissionRate.platformFeeRate
-        );
-        uint256 insuranceFee = calculateFee(
-            order.orderPrice,
-            commissionRate.insuranceFeeRate
-        );
-        uint256 toQuickerAmount;
-        // deadline 넘김
-        if (order.deliveredTime > order.limitedTime) {
-            toQuickerAmount = order.orderPrice - platformFee - insuranceFee;
-            transferTokensToOtherAddress(
-            order.client,
-            getMulTokenAmount(order.securityDeposit)
-            );
-        } else {
-            toQuickerAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
-        }
-        transferTokensToOtherAddress(
-            feeGovernor,
-            getMulTokenAmount(platformFee)
-        ); 
-        (bool success, ) = address(feeGovernor).call(
-            abi.encodeWithSignature(
-                "addTotalIncome(uint256)",
-                getMulTokenAmount(platformFee)
-            )
-        );
-        require(success);
-        transferTokensToOtherAddress(
-            insuranceFeeCollector,
-            getMulTokenAmount(insuranceFee)
-        );
-        transferTokensToOtherAddress(
-            msg.sender,
-            getMulTokenAmount(toQuickerAmount)
-        );
-        order.state = State.completed;
-        order.securityDeposit = 0;
-        (bool mintSuccess, ) = address(QuickerToken).call(
-            abi.encodeWithSignature(
-                "mint(address,uint256)",
-                msg.sender,
-                claimQuickerTokenAmount
-            )
-        );
-        require(mintSuccess);
-        emit DepositedFee(true);
-        emit ChangedBalance(true);
-    }
-
-    /**
-    @dev failedOrder function
-    @param _orderNum order number
-    @notice This function is executed when the delivery person fails to deliver the package and the client executes the function.
-    @notice If the deadline + 12 hours is less than the current time and deliveredTime is 0, the function can be executed.
-    @notice The security deposit and order price (excluding commission) are returned to the client.
-    */
-    function failedOrder(uint256 _orderNum) external isClientOfOrder(_orderNum, msg.sender) {
-        Order storage order = orderList[_orderNum];
-        require(order.state == State.matched, "State is not matched");
-        require((order.limitedTime + 12 hours < getCurrentTime()) && (order.deliveredTime == 0), "You can't process order to failed");
-        // todo: 보증금 + 의뢰금 반환(수수료 제외)
-        uint256 platformFee = calculateFee(
-            order.orderPrice,
-            commissionRate.platformFeeRate
-        );
-        uint256 insuranceFee = calculateFee(
-            order.orderPrice,
-            commissionRate.insuranceFeeRate
-        );
-        transferTokensToOtherAddress(
-            feeGovernor,
-            getMulTokenAmount(platformFee)
-        );
-        (bool success, ) = address(feeGovernor).call(
-            abi.encodeWithSignature(
-                "addTotalIncome(uint256)",
-                getMulTokenAmount(platformFee)
-            )
-        );
-        require(success);
-        transferTokensToOtherAddress(
-            insuranceFeeCollector,
-            getMulTokenAmount(insuranceFee)
-        );
-        // 수수료를 제외한 반환금 전송 (의뢰 가격 + 배송원 보증금)
-        uint256 toClientAmount = order.securityDeposit + order.orderPrice - platformFee - insuranceFee;
-        transferTokensToOtherAddress(
-            msg.sender,
-            getMulTokenAmount(toClientAmount)
-        );
-        order.state = State.failed;
-        order.securityDeposit = 0;
-        (bool mintSuccess, ) = address(QuickerToken).call(
-            abi.encodeWithSignature(
-                "mint(address,uint256)",
-                msg.sender,
-                claimQuickerTokenAmount
-            )
-        );
-        require(mintSuccess);
-        emit OrderResult(true);
-        emit DepositedFee(true);
-        emit ChangedBalance(true);
+    function setImplementation(address _newImple) external onlyOwner {
+        require(_newImple != address(0));
+        implementation = _newImple;
     }
 }
 
@@ -2464,9 +2558,9 @@ contract QuickerFeeGovernor is Ownable, AccessControl {
 
     // QuickerDelivery 컨트랙의 플랫폼 수수료 호출 함수
     function getCommissionRate() internal view returns (uint16 platformFeeRate, uint16 securityDepositRate) {
-        QuickerDelivery quickerDrvy = QuickerDelivery(quickerDelivery);
-        QuickerDelivery.Commission memory commission = quickerDrvy.getCommissionRate();
-        return (commission.platformFeeRate, commission.securityDepositRate);
+        QuickerDlvry_proxy quickerDrvy = QuickerDlvry_proxy(quickerDelivery);
+        (uint16 platformFeeRateIndex, , uint16 securityDepositRateIndex) = quickerDrvy.commissionRate();
+        return (platformFeeRateIndex, securityDepositRateIndex);
     }
 
     // 주제별 최다 득표 반환 함수, 1 -> 인상, 2 -> 동결, 3 -> 인하

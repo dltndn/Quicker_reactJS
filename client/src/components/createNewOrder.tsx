@@ -12,15 +12,18 @@ import { useOrderState } from "./ShowOrders";
 import { UseUserOrderState } from "../App";
 import { useConnWalletInfo } from "../App";
 import { getQkrwBalance } from "../utils/ExecuteOrderFromBlockchain";
-import { changeBalanceToForm } from "../utils/CalAny";
 import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
+import { CreateNewOrderStyle } from "../StyleCollection";
+
+const {Margin_1} = new CreateNewOrderStyle()
 
 interface Props {
   data: object;
   _orderPrice: string;
   _deadline: string;
 }
+
 
 export default function CreateNewOrder({
   data,
@@ -169,11 +172,15 @@ export default function CreateNewOrder({
           confirmLogic={async () => await validateInput()}
         />
       ) : (
+        <>
+        <Margin_1></Margin_1>
         <SendTxK
           param={GetContractParams.CreateOrder(_orderPrice, _deadline)}
           successFunc={async () => {setIsSuccess(true); await getCreatedOrderNum()}}
         />
+        </>
       )}
     </>
   );
 }
+

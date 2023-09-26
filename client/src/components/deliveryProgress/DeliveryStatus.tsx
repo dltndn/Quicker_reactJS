@@ -8,6 +8,9 @@ import Lottie from "lottie-react";
 import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
 import finduser from "../../Lottie/81378-find-user-location.json";
+import { DeliveryStatusStyle } from "../../StyleCollection";
+
+const {Div0, Div1, Div2, Pin1, Posst} = new DeliveryStatusStyle()
 
 const whitePin = require('../../image/dep-icon-gif-unscreen.gif');
 const redPin = require('../../image/des-icon-gif-unscreen.gif');
@@ -52,11 +55,11 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
         const response = await fetch(process.env.REACT_APP_SERVER_URL+`current-deliver-location/?quicker=${deliverWalletAddress}`)
         const json = await response.json()
         console.log(json)
-        if (json.data === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
+        if (json.X && json.Y === null) throw new Error("해당 배송원의 현재 위치정보를 불러올 수 없습니다.")
         
         // 해당 X,Y좌표를 수정
-        setCoordiX(json.data.Y);
-        setCoordiY(json.data.X);
+        setCoordiX(json.Y);
+        setCoordiY(json.X);
       }
     } catch (error) {
       console.error(error)
@@ -84,11 +87,11 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
     <Div0>
       <Div1>
       <Pin1 src={whitePin}/>
-      <DivSp>픽업예정</DivSp>
+      <Div2>픽업예정</Div2>
       </Div1>
       <Div1>
       <Pin1 src={redPin}/>
-      <DivSp>{deadline}까지</DivSp>
+      <Div2>{deadline}까지</Div2>
       </Div1>
     </Div0>
       <Lottie animationData={lodingAni} />
@@ -100,32 +103,3 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
   );
 }
 
-const Posst = styled.div`
-  position: fixed;
-  width: 50px;
-  bottom: 4%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`
-
-const Pin1 = styled.img`
-  width: 35px;
-`
-const Div0 = styled.div`
-    display: flex;
-    justify-content: space-between;
-
-`
-const Div1 = styled.div`
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 16px;
-    margin: 0 20px 0 20px;
-`
-const DivSp = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  padding-top: 10px;
-`

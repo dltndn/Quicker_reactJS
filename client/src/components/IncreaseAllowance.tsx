@@ -5,6 +5,9 @@ import Done from "../Lottie/Done.json";
 import SendTxK from "./blockChainTx/SendTxK";
 import GetContractParams from "./blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../App";
+import { InceraseAllowanceStyle } from "../StyleCollection";
+
+const {Div0, Div1, Margin_1} = new InceraseAllowanceStyle()
 
 export default function IncreaseAllowance() {
   const { setShowAllowance } = useOrderStore();
@@ -24,24 +27,14 @@ export default function IncreaseAllowance() {
       {address === undefined ? (
         <>지갑 연결 해제됨</>
       ) : (
+        <Margin_1>
         <SendTxK
           param={GetContractParams.IncreaseAllowanceQkrw()}
           successFunc={onSuccess}
         />
+        </Margin_1>
       )}
     </>
   );
 }
 
-const Div0 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-`;
-
-const Div1 = styled.div`
-  margin-top: 20px;
-  font-size: var(--font-micro);
-  color: #828282;
-`;

@@ -13,6 +13,10 @@ import Lottie from "lottie-react";
 import mainLoaing from "../../Lottie/mainLoading.json";
 import mainDelivery from "../../Lottie/mainDelivery.json";
 import { useConnWalletInfo } from "../../App";
+import { MainOrderInformationStyle } from "../../StyleCollection";
+
+const {DelPo, Div0, Div1, Divmain, Divmain1, Sc0, Sc3, Sc4, Sc5, Sp0, Sp1, LotDiv, Notice_div
+, Notice_divfont_1, Notice_divfont_2, Img } = new MainOrderInformationStyle()
 
 const note = require("../../image/note.png");
 const transaction = require("../../image/transactionstatus.png");
@@ -26,9 +30,9 @@ export default function MainOrderInformation() {
   const navigate = useNavigate();
 
   const getDestination = async (orderNum: number) => {
-    const orderDataFromDB = await Handler.post(
-      { list: orderNum },
-      process.env.REACT_APP_SERVER_URL + "orders"
+    const orderNumbers = [orderNum]
+    const orderDataFromDB = await Handler.get(
+      process.env.REACT_APP_SERVER_URL + "orders/detail?" + "orderIds=" + orderNumbers
     );
     return orderDataFromDB[0].Destination;
   };
@@ -189,14 +193,14 @@ export default function MainOrderInformation() {
                     </Divmain>
                   </Sc3>
                   <Sc0>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/orderlist")}>
+                    <Sc4 onClick={() => navigate("/orderlist")}>
+                      <Divmain1>
                         의뢰 목록<br></br>확인하기
                         <Img src={pin} />
                       </Divmain1>
                     </Sc4>
-                    <Sc4>
-                      <Divmain1 onClick={() => navigate("/explorer")}>
+                    <Sc4 onClick={() => navigate("/explorer")}>
+                      <Divmain1>
                         실시간 거래 현황
                         <Img src={transaction} />
                       </Divmain1>
@@ -238,123 +242,3 @@ const UserName = () => {
   );
 };
 
-const Img = styled.img`
-  position: absolute;
-  width: 70px;
-  top: 70%;
-  left: 70%;
-  transform: translate(-50%, -50%);
-`;
-
-const LotDiv = styled.div`
-  position: absolute;
-  width: 100px;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const DelPo = styled.div`
-  position: absolute;
-  width: 250px;
-  top: 75%;
-  left: 65%;
-  transform: translate(-50%, -50%);
-`;
-
-const Div0 = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const Div1 = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Sp0 = styled.div`
-  padding: var(--padding) var(--padding) 0 var(--padding);
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Sp1 = styled.span`
-  padding-top: 8px;
-  padding-left: var(--padding);
-  padding-bottom: 8px;
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Sp1_1 = styled.span`
-  padding-left: var(--padding);
-  padding-bottom: var(--padding);
-  font-size: var(--font-md);
-  font-weight: bold;
-`;
-
-const Divmain = styled.div`
-  font-size: 18px;
-`;
-
-const Divmain1 = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-`;
-
-const Sc3 = styled.section`
-  display: flex;
-  height: 400px;
-  margin: 8px 16px 16px 16px;
-  padding: 16px;
-  border-radius: 15px;
-  border: solid;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-  filter: drop-shadow(0px 4px 2px #bebebe);
-`;
-
-const Sc0 = styled.section`
-  display: flex;
-  padding: 0 8px 16px 8px;
-`;
-
-const Sc4 = styled.section`
-  flex: 1 1 50%;
-  height: 160px;
-  margin: 8px 8px 0 8px;
-  padding: 16px;
-  border-radius: 15px;
-  border: solid;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-  filter: drop-shadow(0px 4px 2px #bebebe);
-`;
-
-const Sc5 = styled.section`
-  display: flex;
-  margin: 8px 16px 16px 16px;
-  padding: 8px;
-  border-radius: 15px;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #e9e9e9;
-  filter: drop-shadow(0px 4px 2px #bebebe);
-`;
-
-const Notice_div = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-small);
-`;
-const Notice_divfont_1 = styled.div`
-  font-weight: bold;
-  margin-left: 1.25rem;
-`;
-const Notice_divfont_2 = styled.div`
-  font-weight: lighter;
-  margin-left: 0.625rem;
-`;
