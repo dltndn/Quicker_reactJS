@@ -74,7 +74,12 @@ function Imfo() {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    isPendingReward()
+    return () => {
+      setIsReward(false)
+    }
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
