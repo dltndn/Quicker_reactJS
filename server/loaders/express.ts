@@ -1,6 +1,6 @@
 import { Application} from "express";
 
-import { ErrorHander } from "../Controllers/Error";
+import ErrorController from "../Controllers/Error";
 
 import AssociateOrder from "../routes/AssociateOrder";
 import CurrentLocation from "../routes/CurrentLocation";
@@ -15,7 +15,7 @@ import averageCost from "../routes/average-cost"
 import NotFound from "../routes/NotFound"
 
 const router = {
-  handle: async (app: Application) => {
+  handle: (app: Application) => {
     // 개발용 라우터
     app.use("/", Home);
     app.use("/AssociateOrder", AssociateOrder);
@@ -33,7 +33,7 @@ const router = {
 
     app.use("*", NotFound);
     
-    app.use(ErrorHander);
+    app.use(ErrorController.handler);
     return app;
   },
 };
