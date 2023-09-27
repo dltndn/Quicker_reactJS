@@ -21,6 +21,8 @@ import { Departure as _Departure } from "./Departure";
 import type { DepartureAttributes, DepartureCreationAttributes } from "./Departure";
 import { Destination as _Destination } from "./Destination";
 import type { DestinationAttributes, DestinationCreationAttributes } from "./Destination";
+import { Image as _Image } from "./Image";
+import type { ImageAttributes, ImageCreationAttributes } from "./Image";
 import { Join_date as _Join_date } from "./Join_date";
 import type { Join_dateAttributes, Join_dateCreationAttributes } from "./Join_date";
 import { Notice as _Notice } from "./Notice";
@@ -72,6 +74,7 @@ export {
   _CopyOfBanner2 as CopyOfBanner2,
   _Departure as Departure,
   _Destination as Destination,
+  _Image as Image,
   _Join_date as Join_date,
   _Notice as Notice,
   _Noticed_time as Noticed_time,
@@ -116,6 +119,8 @@ export type {
   DepartureCreationAttributes,
   DestinationAttributes,
   DestinationCreationAttributes,
+  ImageAttributes,
+  ImageCreationAttributes,
   Join_dateAttributes,
   Join_dateCreationAttributes,
   NoticeAttributes,
@@ -168,6 +173,7 @@ export function initModels(sequelize: Sequelize) {
   const CopyOfBanner2 = _CopyOfBanner2.initModel(sequelize);
   const Departure = _Departure.initModel(sequelize);
   const Destination = _Destination.initModel(sequelize);
+  const Image = _Image.initModel(sequelize);
   const Join_date = _Join_date.initModel(sequelize);
   const Notice = _Notice.initModel(sequelize);
   const Noticed_time = _Noticed_time.initModel(sequelize);
@@ -228,6 +234,8 @@ export function initModels(sequelize: Sequelize) {
   QnA_Answer.hasOne(QnA_Answer_time, { as: "QnA_Answer_time", foreignKey: "ans_key"});
   Birth_date.belongsTo(User, { as: "id_User", foreignKey: "id"});
   User.hasOne(Birth_date, { as: "Birth_date", foreignKey: "id"});
+  Image.belongsTo(User, { as: "id_User", foreignKey: "id"});
+  User.hasOne(Image, { as: "Image", foreignKey: "id"});
   Join_date.belongsTo(User, { as: "id_User", foreignKey: "id"});
   User.hasOne(Join_date, { as: "Join_date", foreignKey: "id"});
 
@@ -243,6 +251,7 @@ export function initModels(sequelize: Sequelize) {
     CopyOfBanner2: CopyOfBanner2,
     Departure: Departure,
     Destination: Destination,
+    Image: Image,
     Join_date: Join_date,
     Notice: Notice,
     Noticed_time: Noticed_time,

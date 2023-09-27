@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize';
 import { DataTypes, Model, Optional } from 'sequelize';
 import type { Birth_date, Birth_dateCreationAttributes, Birth_dateId } from './Birth_date';
+import type { Image, ImageCreationAttributes, ImageId } from './Image';
 import type { Join_date, Join_dateCreationAttributes, Join_dateId } from './Join_date';
 
 export interface UserAttributes {
@@ -29,6 +30,11 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   getBirth_date!: Sequelize.HasOneGetAssociationMixin<Birth_date>;
   setBirth_date!: Sequelize.HasOneSetAssociationMixin<Birth_date, Birth_dateId>;
   createBirth_date!: Sequelize.HasOneCreateAssociationMixin<Birth_date>;
+  // User hasOne Image via id
+  Image!: Image;
+  getImage!: Sequelize.HasOneGetAssociationMixin<Image>;
+  setImage!: Sequelize.HasOneSetAssociationMixin<Image, ImageId>;
+  createImage!: Sequelize.HasOneCreateAssociationMixin<Image>;
   // User hasOne Join_date via id
   Join_date!: Join_date;
   getJoin_date!: Sequelize.HasOneGetAssociationMixin<Join_date>;
