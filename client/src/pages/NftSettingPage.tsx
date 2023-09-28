@@ -82,7 +82,7 @@ const NftSettingPage = () => {
     if (address) {
       try {
         const obj = { "walletAddress" : address , "imageId" : tokenId }
-        await Handler.patch(obj, `${process.env.REACT_APP_SERVER_URL}user/image/id/`)
+        await Handler.put(obj, `${process.env.REACT_APP_SERVER_URL}user/image/id/`)
         setImgState(tokenId);
       } catch (e) {
         console.log(e)
