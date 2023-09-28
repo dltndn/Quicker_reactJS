@@ -1,27 +1,26 @@
-import { User, Image } from "../Models/init-models";
-import { Birth_date, Join_date } from "../Models/init-models";
+import { Birth_date, Image, Join_date, User } from "../Models/init-models";
 
-class UserModel {
-  async register(userInstance: User,userBirthDate: Birth_date,hashed: string) {
-    await User.create(userInstance);
+export default class UserModel {
+  async register(user: User,userBirthDate: Birth_date,hashed: string) {
+    await User.create(user);
     Birth_date.create(userBirthDate);
     Join_date.create({
       id: hashed,
       timeStamp: Math.floor(Date.now() / 100),
     });
-    Image.create({ id: userInstance.id, imageId: "404" });
+    Image.create({ id: user.id, imageId: "404" });
   }
 
-  async getId(userWalletAddress: string) {
+  async findId(alletAddress: string) {
     return User.findOne({
       attributes: ["id"],
-      where: { wallet_address: userWalletAddress },
+      where: { wallet_address: alletAddress },
       raw: true,
       nest: true,
     });
   }
 
-  getName(walletAddress: string) {
+  findName(walletAddress: string) {
     return User.findOne({
       attributes: ["name"],
       where: { wallet_address: walletAddress },
@@ -29,7 +28,7 @@ class UserModel {
     });
   }
 
-  getImageId(userId: string) {
+  findImageId(userId: string) {
     return Image.findOne({
       attributes: ["imageId"],
       where: {
@@ -47,5 +46,3 @@ class UserModel {
     );
   }
 }
-
-export default new UserModel()

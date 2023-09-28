@@ -1,18 +1,18 @@
 import { Op } from "sequelize";
 import { CacheMatchedOrder, Chat_room, Departure, Destination, Order, Product, Recipient, Sender, Transportation } from "../Models/init-models";
 
-class OrderModel {
-  create(data: any) {
-    Order.create(data.Order);
-    Transportation.create(data.Transportation);
-    Destination.create(data.Destination);
-    Departure.create(data.Departure);
-    Product.create(data.Product);
-    Sender.create(data.Sender);
-    Recipient.create(data.Recipient);
+export default class OrderModel {
+  create(order: any) {
+    Order.create(order.Order);
+    Transportation.create(order.Transportation);
+    Destination.create(order.Destination);
+    Departure.create(order.Departure);
+    Product.create(order.Product);
+    Sender.create(order.Sender);
+    Recipient.create(order.Recipient);
   }
 
-  getOrdersForSearch(userId: string) {
+  findForSearch(userId: string) {
     Order.hasOne(Transportation, { foreignKey: "id" });
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
@@ -60,7 +60,7 @@ class OrderModel {
     });
   }
 
-  getOrdersForDetail(orderIds: number[]) {
+  findForDetail(orderIds: number[]) {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
     Order.hasOne(Recipient, { foreignKey: "id" });
@@ -101,14 +101,14 @@ class OrderModel {
     });
   }
 
-  getRequesterId(orderId: number) {
+  findRequesterId(orderId: number) {
     return Order.findOne({
       attributes: ["id", "ID_REQ", "ID_DVRY"],
       where: { id: orderId },
     });
   }
 
-  getReceiverPhoneNumber(orderId: number) {
+  findReceiverPhoneNumber(orderId: number) {
     return Recipient.findOne({
       attributes: ["id", "PHONE"],
       where: { id: orderId },
@@ -138,5 +138,3 @@ class OrderModel {
     await Order.destroy({ where: { id: OrderId } });
   }
 }
-
-export default new OrderModel()

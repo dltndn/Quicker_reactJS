@@ -1,23 +1,21 @@
 import { Op } from "sequelize";
 import { AverageOfCost, AverageOfCostAttributes } from "../Models/init-models";
 
-class AverageModel {
-  async findLastAverageCostByDistance(distance: string) {
-    const recent = (await AverageOfCost.max("date")) as string;
+export default class AverageModel {
+  async findLastMonthCost(distanceUnit: string) {
+    const recentDate = (await AverageOfCost.max("date")) as string;
     return AverageOfCost.findOne({
-      attributes: [distance],
+      attributes: [distanceUnit],
       where: {
         date: {
-          [Op.eq]: recent,
+          [Op.eq]: recentDate,
         },
       },
       raw: true,
       nest: true,
     });
   }
-  insertAverageCost(data: AverageOfCostAttributes) {
-    AverageOfCost.create(data);
+  create(average: AverageOfCostAttributes) {
+    AverageOfCost.create(average);
   }
 }
-
-export default new AverageModel()

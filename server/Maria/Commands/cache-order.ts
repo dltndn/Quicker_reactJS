@@ -1,14 +1,14 @@
 import { WhereOptions } from "sequelize/types/model";
 import { CacheMatchedOrder } from "../Models/init-models";
 
-class CacheOrderModel {
+export default class CacheOrderModel {
   async create(orderId: number) {
     return CacheMatchedOrder.create({
       id: orderId,
       date: new Date().toISOString(),
     });
   }
-  find(where?: WhereOptions) {
+  findAll(where?: WhereOptions) {
     return CacheMatchedOrder.findAll({
       attributes: ["id"],
       where: where,
@@ -17,5 +17,3 @@ class CacheOrderModel {
     });
   }
 }
-
-export default new CacheOrderModel()

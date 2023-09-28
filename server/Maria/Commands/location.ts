@@ -1,6 +1,6 @@
 import { Departure, Destination, Order } from "../Models/init-models";
 
-class LocationModel {
+export default class LocationModel {
   find(orderId: number) {
     Order.hasOne(Destination, { foreignKey: "id" });
     Order.hasOne(Departure, { foreignKey: "id" });
@@ -47,5 +47,3 @@ class LocationModel {
     });
   }
 }
-
-export default new LocationModel()
