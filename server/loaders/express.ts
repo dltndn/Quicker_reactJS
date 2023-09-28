@@ -1,6 +1,6 @@
 import { Application} from "express";
 
-import ErrorController from "../Controllers/Error";
+import errorController from "../Controllers/Error";
 
 import AssociateOrder from "../routes/AssociateOrder";
 import CurrentLocation from "../routes/CurrentLocation";
@@ -33,7 +33,7 @@ const router = {
 
     app.use("*", NotFound);
     
-    app.use(ErrorController.handler);
+    app.use(errorController.handler);
     return app;
   },
 };
