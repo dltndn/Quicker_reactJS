@@ -1,31 +1,35 @@
 import { Request, Response } from "express";
-import DeleteOrder from "../Maria/Commands/DeleteOrder";
+import OrderModel from "../Maria/Commands/order";
 
-export default {
-  deleteAssociateOrderProcess: async (req: Request, res: Response) => {
+const orderInstance = new OrderModel()
+class AdminController {
+  async deleteAssociateOrder (req: Request, res: Response) {
     try {
       let deleteTargetId = parseInt(req.body.id);
-      DeleteOrder.deleteOrder(deleteTargetId);
+      orderInstance.delete(deleteTargetId);
       res.redirect("/");
     } catch (error) {
       console.log(error)
       res.send(error);
     }
-  },
+  }
 
-  deleteAssociateOrdersProcess: async (req: Request, res: Response) => {
+  async deleteAssociateOrders (req: Request, res: Response) {
     try {
       let startNumber = parseInt(req.body.startNumber);
       let endNumber = parseInt(req.body.endNumber);
       console.log(startNumber, endNumber)
       let index = startNumber;
       for (index; index <= endNumber; index++) {
-        DeleteOrder.deleteOrder(index)
+        orderInstance.delete(index)
       }
       res.redirect("/");
     } catch (error) {
       console.log(error)
       res.send(error);
     }
-  },
+  }
 };
+const adminController = new AdminController()
+
+export default adminController

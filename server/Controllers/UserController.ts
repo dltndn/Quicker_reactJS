@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import OrderModel from "../Maria/Commands/order";
+import UserModel from "../Maria/Commands/user";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
-import { findOrdersByWalletAddress } from "../service/Order";
-import { findUserImageId, findUserNameByWalletAddress, registerUser, updateUserImageId } from "../service/User";
+import { cryptoUserInfo } from "../util/cryptoUserInfo";
+
+const userInstance = new UserModel()
+const orderInstance = new OrderModel();
 
 require("dotenv").config();
 initModels(sequelize);
@@ -13,7 +17,16 @@ export default {
   getRequests: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const query = req.query
-      const orders = await findOrdersByWalletAddress(query)
+      const walletAddress = query.userWalletAdress;
+      if (typeof walletAddress !== 'string') {
+        throw new Error('TypeError : walletAddress be string')
+      }
+      
+      const userId = await userInstance.findId(walletAddress);
+      if (userId === null) {
+        throw new Error("Not exist name");
+      }
+      const orders = await orderInstance.findForSearch(userId.id);
       res.send(orders)
     } catch (error) {
       console.error(error)
@@ -24,7 +37,8 @@ export default {
   register: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const body = req.body
-      await registerUser(body)
+      const {user , userBirthDate, hashed} = cryptoUserInfo(body) 
+      await userInstance.register(user, userBirthDate, hashed);
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error)
@@ -35,8 +49,12 @@ export default {
   findUserNameByWalletAddress: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query = req.query;
-      const userName = await findUserNameByWalletAddress(query);
-      res.json(userName);
+      const walletAddress = query.walletAddress
+      if (typeof walletAddress !== "string") {
+        throw new Error('TypeError : walletAddress be string')
+      }
+      const user = await userInstance.findName(walletAddress)
+      res.json(user);
     } catch (error) {
       console.error(error)
       next(error)
@@ -46,8 +64,16 @@ export default {
   putUserImageId :async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body
-      await updateUserImageId(body)
-      res.send({message : "done"})  
+      const {walletAddress, imageId} = body
+      const user = await userInstance.findId(walletAddress)
+      if (user !== null) {
+        console.log(user.id, imageId)
+         await userInstance.updateImageId(user.id, imageId)
+         res.send({message : "done"})  
+      }
+      else {
+        throw new Error('Can not find user id')
+      }
     } catch (error) {
       next(error)
     }
@@ -56,7 +82,16 @@ export default {
   getUserImageId :async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query = req.query
-      const imageId = await findUserImageId(query)
+      const walletAddress = query.walletAddress
+      if (typeof walletAddress !== "string") {
+        throw new Error('TypeError : walletAddress be string')
+      }
+      const user = await userInstance.findId(walletAddress)
+      if (user === null) {
+        throw new Error('userid not exist')  
+      }
+      const imageId = await userInstance.findImageId(user.id)
+      console.log(imageId)
       res.send(imageId)
     } catch (error) {
       next(error)

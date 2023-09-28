@@ -3,18 +3,38 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findFailImage, findImage, findUserOrdersDetail, postCurrentLocation, saveFailImage, saveImage, updateOrder, findAverageCost } from "../service/Order";
-import { findRoomInfoByOrderNumber } from "../service/Room";
 import { MulterRequest } from "../routes/OrderCompleteImage";
+import { classifyDistance, updateOrder } from "../service/Order";
 
+import AverageModel from "../Maria/Commands/average";
+import LocationModel from "../Maria/Commands/location";
+import OrderModel from "../Maria/Commands/order";
+import RoomModel from "../Maria/Commands/room";
+import UserModel from "../Maria/Commands/user";
+import { findFailImageByOrderId, findImageByOrderId, saveFailImageToBufferString, saveImageToBufferString } from "../Mongo/Command/Image";
+import { findLocation, saveLocation } from "../Mongo/Command/Location";
+import connectMongo from "../Mongo/Connector";
 
 initModels(sequelize);
+
+const orderInstance = new OrderModel()
+const roomInstance = new RoomModel()
+const userInstance = new UserModel()
+const locationInstance = new LocationModel()
+const averageInstance = new AverageModel()
 
 export default {
   request: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const body = req.body;
-      await createOrder(body);
+      const body = req.body
+      const walletAddress = body.userWalletAddress
+      const user = await userInstance.findId(walletAddress);
+      if (user) {
+        body.Order.ID_REQ = user.id;
+        await orderInstance.create(body);
+      } else {
+        throw new Error("회원이 아님")
+      }
       res.send({ msg: "done" });
     } catch (error) {
       next(error)
@@ -23,8 +43,9 @@ export default {
 
   orderlist: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const query = req.query;
-      const orders = await findUserOrdersDetail(query)
+      const orderIds = req.query.orderIds
+      const idList = JSON.parse(`[${orderIds}]`)
+      const orders = await orderInstance.findForDetail(idList);
       res.send(orders)
     } catch (error){
       next(error)
@@ -33,9 +54,11 @@ export default {
   
   order: async (req: Request, res: Response, next : NextFunction) => {
     try {
-      const query = req.query;
-      const instance = await findDestinationAndDepartureByOrderId(query);
-      res.send(instance)
+      const orderId = req.query.orderid;
+      if (typeof orderId === "string") {
+        const location = await locationInstance.find(parseInt(orderId));  
+        res.send(location)
+      }
     } catch (error){
       console.error(error)
       next(error)
@@ -45,6 +68,7 @@ export default {
   updateOrder: async (req: Request, res: Response, next : NextFunction) => {
     try {
       const body = req.body
+      // @TODO : 리팩토링 보류
       await updateOrder(body)
       res.send({msg : "done"})
     } catch (error){
@@ -56,8 +80,15 @@ export default {
   getRoomInfo : async (req: Request, res: Response, next : NextFunction) => {
     try {
       const query = req.query;
-      const room = await findRoomInfoByOrderNumber(query)
-      res.json(room)
+      const orderNum = query.orderNum
+      let room = null
+      if (typeof orderNum === "string") {
+        room = await roomInstance.find(parseInt(orderNum))
+      }
+      else if (typeof orderNum === "number") {
+        room = await roomInstance.find(orderNum)
+      }
+      res.send(room)
     } catch (error) {
       console.error(error)
       next(error)
@@ -67,7 +98,13 @@ export default {
   postLocation :  async (req: Request, res: Response, next : NextFunction) => {
     try {
       const body = req.body
-      await postCurrentLocation(body)
+      const address = body.address;
+      const loaction = { 
+        X: body.X,
+        Y: body.Y,
+      }
+      const connection = await connectMongo("realTimeLocation");
+      await saveLocation(connection, address, loaction)
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
@@ -78,8 +115,10 @@ export default {
   getLocation : async (req: Request, res: Response,  next : NextFunction) => {
     try {
       const query = req.query
-      const loaction = await findCurrentLocation(query);
-      res.json(loaction)
+      const address = query.quicker;
+      const connection = await connectMongo("realTimeLocation");
+      const location = await findLocation(connection, address)  
+      res.json(location)
     } catch (error) {
       console.error(error);
       next(error)
@@ -89,7 +128,18 @@ export default {
   getImage : async (req: Request, res: Response, next: NextFunction) => {
     try {
       const query = req.query;
-      const image = findImage(query);
+      const orderId = query.orderNum;
+      const connection = await connectMongo("orderComplete");
+      if (typeof orderId !== "string") {
+        throw new Error('TypeError : orderId be string')
+      }
+      const images = await findImageByOrderId(connection, orderId)
+      let image
+      if (images.length === 0) {
+        image = null
+      } else {
+        image = {imageBuffer : images[0].image}
+      }
       res.send(image);
     } catch (error) {
       console.error(error);
@@ -100,8 +150,11 @@ export default {
   postImage : async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body;
-      const documentFile = (req as MulterRequest).file;
-      await saveImage(body, documentFile);
+      const documentFile = (req as MulterRequest).file;    
+      const orderNum = body.orderNum
+      const bufferImage = documentFile.buffer
+      const connection = await connectMongo("orderComplete");
+      await saveImageToBufferString(connection, orderNum, bufferImage)
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
@@ -112,9 +165,14 @@ export default {
   getFailImage : async (req: Request, res: Response, next : NextFunction) => {
     try {
       const query = req.query
-      const image = await findFailImage(query)
+      const orderId = query.orderNum;
+      if (typeof orderId !== "string") {
+        throw new Error('TypeError : orderId be string')
+      }
+      const connection = await connectMongo("orderFail");
+      const image = await findFailImageByOrderId(connection, orderId)
       if (image === null || undefined) {
-        res.send({message : "image not exist"})
+        res.send(null)
       }
       else {
         res.send({ imageBuffer: image.image, reason : image.reason});
@@ -128,8 +186,15 @@ export default {
     try {
       const body = req.body
       const documentFile = req.file;
-      const message = await saveFailImage(body, documentFile)
-      res.send({ msg: message });
+      if (documentFile === undefined) {
+        throw new Error('File not exist')
+      }
+      const bufferImage = documentFile.buffer;
+      const orderNum = body.orderNum;
+      const reason = body.reason;
+      const connection = await connectMongo("orderFail");
+      await saveFailImageToBufferString(connection, orderNum, bufferImage, reason)
+      res.send({ msg: "done" });
     } catch (error) {
       next(error)
     }
@@ -138,13 +203,11 @@ export default {
   getAverageCost : async (req: Request, res: Response, next : NextFunction) => {
     try {
       const query = req.query
-      const averageCost = await findAverageCost(query)
+      const classifiedDistance = await classifyDistance(query)
+      const averageCost = await averageInstance.findLastMonthCost(classifiedDistance);
       res.send({distance : averageCost})
     } catch (error) {
       next(error)
     }
   }
 };
-
-
-
