@@ -19,12 +19,13 @@ interface ConnectionInfo {
 
 class Colorize {
   public color (validtor : Validator, connectionInfo : ConnectionInfo) : ConnectionInfo {
-    const status = validtor.checkStatusType(connectionInfo.status)
+    const copyConnectionInfo = Object.assign({}, connectionInfo)
+    const status = validtor.checkStatusType(copyConnectionInfo.status)
 
-    connectionInfo.date = chalk.green(connectionInfo.date);
-    connectionInfo.status = this.colorizeStatus(status)
+    copyConnectionInfo.date = chalk.green(copyConnectionInfo.date);
+    copyConnectionInfo.status = this.colorizeStatus(status)
     
-    return connectionInfo;
+    return copyConnectionInfo;
   }
 
   private colorizeStatus (status : number) {
