@@ -107,13 +107,16 @@ function ChattingPage() {
         ) : combinedBlockChainData !== undefined ? (
           combinedBlockChainData.map((blockchainElement: any) => {
             let role = ""
+            let oponentAddress = ""
             console.log(blockchainElement)
             if (address === blockchainElement.client) {
               // 계정 주인이 의뢰인 즉 상대방은 배송원
               role = "배송원"
+              oponentAddress = blockchainElement.quicker
             } else {
               // 계정 주인이 배송원 즉 상대방은 의뢰인
               role = "의뢰인"
+              oponentAddress = blockchainElement.client
             }
             let orderNum = parseInt(blockchainElement.orderNum);
             return (
@@ -126,6 +129,7 @@ function ChattingPage() {
                 orderNum={orderNum}
                 role={role}
                 blockchainElement={blockchainElement}
+                oponentAddress={oponentAddress}
               ></Room>
             );
           })

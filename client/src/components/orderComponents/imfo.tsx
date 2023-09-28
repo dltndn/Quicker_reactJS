@@ -22,6 +22,7 @@ import { useConnWalletInfo } from "../../App";
 import NftProfile from "../NftProfile";
 import { ImfoStyle } from "../../StyleCollection";
 import { getFeeGovernorInfo } from "../../utils/ExecuteOrderFromBlockchain";
+import { create } from "zustand";
 
 const {
   Div0,
@@ -47,6 +48,20 @@ const {
 const money = require("../../image/money.png");
 
 const img1 = require("../../image/ex1.jpg");
+
+interface UseNftStateType {
+  imgState: string;
+  setImgState: (data: string) => void;
+  imgList: string[];
+  setImgList: (data: string[]) => void;
+}
+
+export const useNftState = create<UseNftStateType>((set) => ({
+  imgState: "404",
+  setImgState: (imgState: string) => set({ imgState }),
+  imgList: ["404"],
+  setImgList: (imgList: string[]) => set({ imgList }),
+}));
 
 function Imfo() {
   const navigate = useNavigate();

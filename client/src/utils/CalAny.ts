@@ -72,3 +72,8 @@ export const to18decimals = (amm: number): string => {
     const res = amm * 10 ** 18
     return res.toString()
 }
+
+// 해당 이미지 id 경로 반환
+export const getNftImgPath = (id: string) => {
+  return `/NftImg/${id}.png`;
+};
