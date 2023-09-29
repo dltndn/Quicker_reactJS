@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import OrderModel from "../Maria/Commands/order";
-
-const orderInstance = new OrderModel()
-class AdminController {
+import { orderInstance } from "../Maria/Commands";
+export class AdminController {
   async deleteAssociateOrder (req: Request, res: Response) {
     try {
       let deleteTargetId = parseInt(req.body.id);
@@ -30,6 +28,3 @@ class AdminController {
     }
   }
 };
-const adminController = new AdminController()
-
-export default adminController

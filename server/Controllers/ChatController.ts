@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { findRecentMessage } from "../service/Room";
 
-class ChatController {
+export class ChatController {
   async getRecentMessage (req: Request, res: Response, next: NextFunction) {
     try {
       const query = req.query;
@@ -13,5 +13,3 @@ class ChatController {
     }
   }
 }
-
-export default new ChatController()

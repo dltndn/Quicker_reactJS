@@ -3,7 +3,7 @@ import { SlackBot } from "../slackbot";
 import keys from "../config/keys";
 import { HTTPError } from "../types/http-error";
 
-class ErrorController {
+export class ErrorController {
   handler(err: HTTPError, req: Request, res: Response, next: NextFunction) {
     if (err.status === 404) {
       res.send({ error_message: err.message });
@@ -19,5 +19,3 @@ class ErrorController {
     }
   }
 }
-
-export default new ErrorController()
