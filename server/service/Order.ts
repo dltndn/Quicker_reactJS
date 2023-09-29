@@ -1,15 +1,6 @@
-import CacheOrderModel from "../Maria/Commands/cache-order";
-import OrderModel from "../Maria/Commands/order";
-import RoomModel from "../Maria/Commands/room";
-import UserModel from "../Maria/Commands/user";
-
+import { cacheOrderInstance, orderInstance, roomInstance, userInstance } from "../Maria/Commands";
 import { encrypt } from "../lib/cryto";
 import sendMessage from "../sendMessage";
-
-const roomInstance = new RoomModel()
-const cachedOrderInstance = new CacheOrderModel()
-const userInstance = new UserModel()
-const orderModel = new OrderModel()
 
 export const updateOrder = async (body: any) => {
   const userWalletAddress = body.userWalletAddress;
@@ -21,10 +12,10 @@ export const updateOrder = async (body: any) => {
     throw new Error("회원이 아님");
   }
 
-  await orderModel.update(deliver.id, orderId);
-  cachedOrderInstance.create(orderId);
+  await orderInstance.update(deliver.id, orderId);
+  cacheOrderInstance.create(orderId);
 
-  const requesterId = await orderModel.findRequesterId(orderId);
+  const requesterId = await orderInstance.findRequesterId(orderId);
 
   if (requesterId === null) {
     throw new Error("의뢰인 아이디를 찾을 수 없습니다.");
@@ -32,7 +23,7 @@ export const updateOrder = async (body: any) => {
 
   await roomInstance.create(orderId, deliver.id, requesterId.ID_REQ);
 
-  const receiverPhoneNumber = await orderModel.findReceiverPhoneNumber(orderId);
+  const receiverPhoneNumber = await orderInstance.findReceiverPhoneNumber(orderId);
 
   if (receiverPhoneNumber === null) {
     throw new Error("수취인의 전화번호에 대한 정보가 없습니다.");
