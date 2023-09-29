@@ -3,18 +3,11 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { MulterRequest } from "../routes/order-complete-image";
 import { classifyDistance, updateOrder } from "../service/Order";
 
-import {
-  findFailImageByOrderId,
-  findImageByOrderId,
-  saveFailImageToBufferString,
-  saveImageToBufferString,
-} from "../Mongo/Command/Image";
-import { findLocation, saveLocation } from "../Mongo/Command/Location";
 import connectMongo from "../Mongo/Connector";
 import { averageInstance, locationInstance, orderInstance, roomInstance, userInstance } from "../Maria/Commands";
+import { currentLocationInstance, imageInstance } from "../Mongo/Command";
 
 initModels(sequelize);
 export class OrderController {
@@ -23,12 +16,11 @@ export class OrderController {
       const body = req.body;
       const walletAddress = body.userWalletAddress;
       const user = await userInstance.findId(walletAddress);
-      if (user) {
-        body.Order.ID_REQ = user.id;
-        await orderInstance.create(body);
-      } else {
-        throw new Error("회원이 아님");
-      }
+
+      if (!user) throw new Error("회원이 아님");
+      body.Order.ID_REQ = user.id;
+      await orderInstance.create(body);
+      
       res.send({ msg: "done" });
     } catch (error) {
       next(error);
@@ -97,7 +89,7 @@ export class OrderController {
         Y: body.Y,
       };
       const connection = await connectMongo("realTimeLocation");
-      await saveLocation(connection, address, loaction);
+      await currentLocationInstance.create(connection, address, loaction);
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
@@ -110,7 +102,7 @@ export class OrderController {
       const query = req.query;
       const address = query.quicker;
       const connection = await connectMongo("realTimeLocation");
-      const location = await findLocation(connection, address);
+      const location = await currentLocationInstance.find(connection, address);
       res.json(location);
     } catch (error) {
       console.error(error);
@@ -126,7 +118,7 @@ export class OrderController {
       if (typeof orderId !== "string") {
         throw new Error("TypeError : orderId be string");
       }
-      const images = await findImageByOrderId(connection, orderId);
+      const images = await imageInstance.find(connection, orderId);
       let image;
       if (images.length === 0) {
         image = null;
@@ -143,11 +135,12 @@ export class OrderController {
   async postImage(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-      const documentFile = (req as MulterRequest).file;
+      if (!req.file) throw new Error('image file not exist')
+      const documentFile = req.file;
       const orderNum = body.orderNum;
       const bufferImage = documentFile.buffer;
       const connection = await connectMongo("orderComplete");
-      await saveImageToBufferString(connection, orderNum, bufferImage);
+      await imageInstance.create(connection, orderNum, bufferImage);
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
@@ -163,7 +156,7 @@ export class OrderController {
         throw new Error("TypeError : orderId be string");
       }
       const connection = await connectMongo("orderFail");
-      const image = await findFailImageByOrderId(connection, orderId);
+      const image = await imageInstance.findFailImage(connection, orderId);
       if (image === null || undefined) {
         res.send(null);
       } else {
@@ -185,7 +178,7 @@ export class OrderController {
       const orderNum = body.orderNum;
       const reason = body.reason;
       const connection = await connectMongo("orderFail");
-      await saveFailImageToBufferString(
+      await imageInstance.createFailImage(
         connection,
         orderNum,
         bufferImage,
