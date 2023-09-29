@@ -1,7 +1,7 @@
 import { WhereOptions } from "sequelize/types/model";
 import { CacheMatchedOrder } from "../Models/init-models";
 
-export default class CacheOrderModel {
+export class CacheOrderModel {
   async create(orderId: number) {
     return CacheMatchedOrder.create({
       id: orderId,

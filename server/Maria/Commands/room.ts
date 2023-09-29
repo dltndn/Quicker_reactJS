@@ -1,6 +1,6 @@
 import { Chat_room, Departure, Destination, Order, Recipient, Sender } from "../Models/init-models";
 
-export default class RoomModel {
+export class RoomModel {
   create(orderId: number, deliverId: string, requesterId: string) {
     return Chat_room.create({
       chat_order_id: orderId,

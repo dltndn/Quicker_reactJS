@@ -1,6 +1,6 @@
 import { Birth_date, Image, Join_date, User } from "../Models/init-models";
 
-export default class UserModel {
+export class UserModel {
   async register(user: User,userBirthDate: Birth_date,hashed: string) {
     await User.create(user);
     Birth_date.create(userBirthDate);

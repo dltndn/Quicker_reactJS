@@ -1,7 +1,7 @@
 import { Op } from "sequelize";
 import { CacheMatchedOrder, Chat_room, Departure, Destination, Order, Product, Recipient, Sender, Transportation } from "../Models/init-models";
 
-export default class OrderModel {
+export class OrderModel {
   create(order: any) {
     Order.create(order.Order);
     Transportation.create(order.Transportation);
