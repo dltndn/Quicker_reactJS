@@ -1,6 +1,6 @@
 import { sequelize } from "../connectors/sequelizeConnector";
 import { initModels } from "../../Maria/Models/init-models";
-import keys from "../../config/keys";
+import config from "../../config";
 import { findOrdersByWalletAddress, findUserOrdersDetail } from "../../service/Order";
 
 describe("/orders", () => {
@@ -37,7 +37,7 @@ describe("/orders", () => {
           },
         ];
         const result = await findOrdersByWalletAddress({
-          userWalletAdress: keys.test.USER_WALLET,
+          userWalletAdress: config.test.USER_WALLET,
         });
         expect(result).toEqual(expectResult);
       });
@@ -47,7 +47,7 @@ describe("/orders", () => {
       });
 
       test("해당 의뢰의 의뢰인 지갑주소 입력", async () => {
-        const result = await findOrdersByWalletAddress({userWalletAdress: keys.test.REQUESTER_WALLET})
+        const result = await findOrdersByWalletAddress({userWalletAdress: config.test.REQUESTER_WALLET})
         expect(result).toEqual([])
       });
     });

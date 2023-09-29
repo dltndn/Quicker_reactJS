@@ -1,5 +1,5 @@
 import { sequelize } from "../connectors/sequelizeConnector";
-import keys from "../../config/keys";
+import config from "../../config";
 import { findUserNameByWalletAddress } from "../../service/User";
 import { Sequelize } from "sequelize";
 import { initModels } from "../../Maria/Models/init-models";

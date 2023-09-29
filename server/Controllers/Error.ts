@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { SlackBot } from "../slackbot";
-import keys from "../config/keys";
+import config from "../config";
 import { HTTPError } from "../types/http-error";
 
 export class ErrorController {
@@ -10,8 +10,8 @@ export class ErrorController {
       next();
     } else {
       console.error(err);
-      const token = keys.slackBot.token;
-      const channelId = keys.slackBot.channelId;
+      const token = config.slackBot.token;
+      const channelId = config.slackBot.channelId;
       const slackbot = new SlackBot(token, channelId);
       slackbot.sendMessage(err);
       res.json({ errorMessage: err.message });
