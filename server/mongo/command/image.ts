@@ -1,5 +1,5 @@
 import { Connection } from "mongoose";
-import { ImageFileSchema, ImageFile } from "../Schemas/ImageFile";
+import { ImageFile, ImageFileSchema } from "../schemas/image-file";
 
 // export const findImageByOrderId = async (connection : Connection, orderId: string) => {
 //   const imageModel = connection.model(orderId, ImageFileSchema);

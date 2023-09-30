@@ -1,8 +1,8 @@
-import { AdminController } from "./AdminController";
-import { ChatController } from "./ChatController";
-import { ErrorController } from "./Error";
-import { OrderController } from "./OrderController";
-import { UserController } from "./UserController";
+import { AdminController } from "./admin";
+import { ChatController } from "./chat";
+import { ErrorController } from "./error";
+import { OrderController } from "./order";
+import { UserController } from "./user";
 
 const adminController = new AdminController();
 const chatController = new ChatController();

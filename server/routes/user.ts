@@ -1,5 +1,5 @@
 import express from "express";
-import { userController } from "../Controllers";
+import { userController } from "../controllers";
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.get('/image/id', userController.getUserImageId)
 // POST /user/image/id
 router.put('/image/id', userController.putUserImageId)
 
-export = router
+export default router

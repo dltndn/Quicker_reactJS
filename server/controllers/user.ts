@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import sequelize from "../Maria/Connectors/SequelizeConnector";
-import { initModels } from "../Maria/Models/init-models";
 import { cryptoUserInfo } from "../util/cryptoUserInfo";
-import { orderInstance, userInstance } from "../Maria/Commands";
+import { initModels } from "../maria/models/init-models";
+import sequelizeConnector from "../maria/connector/sequelize-connector";
+import { orderInstance, userInstance } from "../maria/commands";
 
 require("dotenv").config();
-initModels(sequelize);
+initModels(sequelizeConnector);
 
 export class UserController {
   // NOTE : 이름 변경 필

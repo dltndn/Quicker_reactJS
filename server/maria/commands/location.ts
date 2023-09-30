@@ -1,4 +1,4 @@
-import { Departure, Destination, Order } from "../Models/init-models";
+import { Departure, Destination, Order } from "../models/init-models";
 
 export class LocationModel {
   find(orderId: number) {

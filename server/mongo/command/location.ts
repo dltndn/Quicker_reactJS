@@ -1,5 +1,5 @@
 import { Connection } from "mongoose";
-import RealLocationSchema from "../Schemas/realLocation";
+import RealLocationSchema from "../schemas/real-location";
 
 export class CurrentLocationModel {
   async create (connection: Connection,address : any, location : any) {

@@ -1,4 +1,4 @@
-import { Chat_room, Departure, Destination, Order, Recipient, Sender } from "../Models/init-models";
+import { Chat_room, Departure, Destination, Order, Recipient, Sender } from "../models/init-models";
 
 export class RoomModel {
   create(orderId: number, deliverId: string, requesterId: string) {

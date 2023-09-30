@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { orderInstance } from "../Maria/Commands";
+import { orderInstance } from "../maria/commands";
 export class AdminController {
   async deleteAssociateOrder (req: Request, res: Response) {
     try {

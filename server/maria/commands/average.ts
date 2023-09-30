@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { AverageOfCost, AverageOfCostAttributes } from "../Models/init-models";
+import { AverageOfCost, AverageOfCostAttributes } from "../models/init-models";
 
 export class AverageModel {
   async findLastMonthCost(distanceUnit: string) {

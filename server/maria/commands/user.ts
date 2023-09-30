@@ -1,4 +1,4 @@
-import { Birth_date, Image, Join_date, User } from "../Models/init-models";
+import { Birth_date, Image, Join_date, User } from "../models/init-models";
 
 export class UserModel {
   async register(user: User,userBirthDate: Birth_date,hashed: string) {

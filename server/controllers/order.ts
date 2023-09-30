@@ -1,15 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 
-import sequelize from "../Maria/Connectors/SequelizeConnector";
-import { initModels } from "../Maria/Models/init-models";
 
-import { classifyDistance, updateOrder } from "../service/Order";
+import { classifyDistance, updateOrder } from "../service/order";
 
-import connectMongo from "../Mongo/Connector";
-import { averageInstance, locationInstance, orderInstance, roomInstance, userInstance } from "../Maria/Commands";
-import { currentLocationInstance, imageInstance } from "../Mongo/Command";
+import { averageInstance, locationInstance, orderInstance, roomInstance, userInstance } from "../maria/commands";
+import { initModels } from "../maria/models/init-models";
+import sequelizeConnector from "../maria/connector/sequelize-connector";
+import connectMongo from "../mongo/connector";
+import { currentLocationInstance, imageInstance } from "../mongo/command";
 
-initModels(sequelize);
+initModels(sequelizeConnector);
 export class OrderController {
   async request(req: Request, res: Response, next: NextFunction) {
     try {

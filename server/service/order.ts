@@ -1,6 +1,6 @@
-import { cacheOrderInstance, orderInstance, roomInstance, userInstance } from "../Maria/Commands";
 import { encrypt } from "../lib/cryto";
-import sendMessage from "../sendMessage";
+import { cacheOrderInstance, orderInstance, roomInstance, userInstance } from "../maria/commands";
+import sendMessage from "../twilio-api"
 
 export const updateOrder = async (body: any) => {
   const userWalletAddress = body.userWalletAddress;

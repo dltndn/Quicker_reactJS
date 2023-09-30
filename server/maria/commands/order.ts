@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { CacheMatchedOrder, Chat_room, Departure, Destination, Order, Product, Recipient, Sender, Transportation } from "../Models/init-models";
+import { CacheMatchedOrder, Chat_room, Departure, Destination, Order, Product, Recipient, Sender, Transportation } from "../models/init-models";
 
 export class OrderModel {
   create(order: any) {

@@ -1,7 +1,7 @@
 import { sequelize } from "../connectors/sequelizeConnector";
 import { initModels } from "../../Maria/Models/init-models";
 import config from "../../config";
-import { findOrdersByWalletAddress, findUserOrdersDetail } from "../../service/Order";
+
 
 describe("/orders", () => {
   beforeAll(() => {

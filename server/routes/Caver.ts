@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import KlaytnCaver from "../klaytnApi/KlaytnCaver";
 
 const router = express.Router();
@@ -21,4 +21,4 @@ router.post("/hasNftIdList", KlaytnCaver.hasNftIdList)
 router.post("/sumOrderPrice", KlaytnCaver.sumOrderPrice)
 router.post("/mintNft", KlaytnCaver.mintNft)
 
-export = router;
+export default router;

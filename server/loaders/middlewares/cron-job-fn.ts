@@ -2,14 +2,6 @@
 import Caver from "caver-js";
 import { Op } from "sequelize";
 
-import SequelizeConnector from "../../Maria/Connectors/SequelizeConnector";
-import {
-  AverageOfCostAttributes,
-  CacheMatchedOrder,
-  Order,
-  initModels,
-} from "../../Maria/Models/init-models";
-
 import {
   QUICKER_DLVR_PROXY_ABI,
   QUICKER_DLVR_PROXY_ADDRESS,
@@ -17,10 +9,12 @@ import {
 
 import index from "../../config";
 import { requestTmapAPIRouteInfo } from "../../util/tmap";
-import { averageInstance, cacheOrderInstance, locationInstance } from "../../Maria/Commands";
+import { averageInstance, cacheOrderInstance, locationInstance } from "../../maria/commands";
+import { AverageOfCostAttributes, CacheMatchedOrder, Order, initModels } from "../../maria/models/init-models";
+import sequelizeConnector from "../../maria/connector/sequelize-connector";
 
 // 설정
-initModels(SequelizeConnector);
+initModels(sequelizeConnector);
 
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 

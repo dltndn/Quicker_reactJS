@@ -1,6 +1,6 @@
-import MessageSchema from "../Schemas/Message";
-import connectMongo from "../Connector";
 import { Connection } from "mongoose";
+import connectMongo from "../connector";
+import MessageSchema from "../schemas/message";
 
 require("dotenv").config();
 

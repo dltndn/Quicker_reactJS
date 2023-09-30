@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { findRecentMessage } from "../service/Room";
+import { findRecentMessage } from "../service/room";
 
 export class ChatController {
   async getRecentMessage (req: Request, res: Response, next: NextFunction) {
