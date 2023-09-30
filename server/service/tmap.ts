@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { Location } from "../maria/commands/location";
 
 interface Body {
   startX: string;
@@ -27,4 +28,22 @@ export class TmapApi {
     const data = await response.json() as ExpectType; 
     return data.features[0].properties.totalDistance / 1000;
   };
+
+  async requestRouteDistances (locations: Location [], appKey: string) {
+    return await Promise.allSettled(
+      locations.map(async(location) => {
+        const body = {
+          startX: location.Departure.X.toString(),
+          startY: location.Departure.Y.toString(),
+          endX: location.Destination.X.toString(),
+          endY: location.Destination.Y.toString(),
+        };
+        const distance = await this.requestRouteDistance(body, appKey);
+        return {
+          orderId: location.id,
+          km: distance,
+        };
+      })
+    )
+  }
 }
