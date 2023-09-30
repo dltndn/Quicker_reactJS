@@ -8,10 +8,11 @@ import {
 } from "../../klaytnApi/ContractInfo";
 
 import index from "../../config";
-import { requestTmapAPIRouteInfo } from "../../util/tmap";
+
 import { averageInstance, cacheOrderInstance, locationInstance } from "../../maria/commands";
 import { AverageOfCostAttributes, CacheMatchedOrder, Order, initModels } from "../../maria/models/init-models";
 import sequelizeConnector from "../../maria/connector/sequelize-connector";
+import { tmapApi } from "../../service";
 
 // 설정
 initModels(sequelizeConnector);
@@ -82,7 +83,7 @@ const requestTmapAPIRouteDistances = async (locations : Order[]) => {
         endX: element.Destination.X.toString(),
         endY: element.Destination.Y.toString(),
       };
-      const result = await requestTmapAPIRouteInfo(body, appKey);
+      const result = await tmapApi.requestRouteDistance(body, appKey);
       return {
         orderId: element.id,
         km: result,

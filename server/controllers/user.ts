@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { cryptoUserInfo } from "../util/cryptoUserInfo";
-import { initModels } from "../maria/models/init-models";
-import sequelizeConnector from "../maria/connector/sequelize-connector";
+import config from "../config";
 import { orderInstance, userInstance } from "../maria/commands";
+import sequelizeConnector from "../maria/connector/sequelize-connector";
+import { initModels } from "../maria/models/init-models";
+import { cryptoInstance } from "../service";
 
 require("dotenv").config();
 initModels(sequelizeConnector);
@@ -32,7 +33,7 @@ export class UserController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-      const { user, userBirthDate, hashed } = cryptoUserInfo(body);
+      const { user, userBirthDate, hashed } = cryptoInstance.encryptForUserInfo(body, config.crypto.key as string);
       await userInstance.register(user, userBirthDate, hashed);
       res.send({ msg: "done" });
     } catch (error) {

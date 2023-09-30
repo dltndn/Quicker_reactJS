@@ -1,8 +1,8 @@
-import { encrypt } from "../lib/cryto";
+import { Crypto } from "./cryto";
 import { cacheOrderInstance, orderInstance, roomInstance, userInstance } from "../maria/commands";
-import sendMessage from "../twilio-api"
+import { TwilioApi } from "./twilio-api";
 
-export const updateOrder = async (body: any) => {
+export const updateOrder = async (body: any, twilioApi : TwilioApi, cryptoInstance : Crypto, cryptoKey : string) => {
   const userWalletAddress = body.userWalletAddress;
   const orderId = body.orderId;
 
@@ -28,12 +28,11 @@ export const updateOrder = async (body: any) => {
   if (receiverPhoneNumber === null) {
     throw new Error("수취인의 전화번호에 대한 정보가 없습니다.");
   }
-  const encryptedUrl = encrypt(body);
+  const encryptedUrl = cryptoInstance.encrypt(body, cryptoKey);
 
-  const url =
-    process.env.CLIENT_SERVER_DOMAIN + "receipient/?key=" + encryptedUrl;
+  const url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key=" + encryptedUrl;
 
-  await sendMessage(receiverPhoneNumber.PHONE, url);
+  await twilioApi.sendURLToReceiver(receiverPhoneNumber.PHONE, url);
 };
 
 export const classifyDistance = async (query: any) => {
