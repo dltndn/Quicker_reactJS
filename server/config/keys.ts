@@ -54,5 +54,13 @@ export default {
   slackBot : {
     token : process.env.TOKEN,
     channelId : process.env.CHANNEL_ID
+  },
+  tmap : {
+    apiKey : process.env.TMAP_API_KEY
+  },
+  nhn : {
+    accessKey : process.env.ACCESSKEY,
+    secretKey : process.env.SECRETKEY,
+    serviceId : process.env.SERVICEID,
   }
 };

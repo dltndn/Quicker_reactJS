@@ -1,4 +1,4 @@
-import React, { CSSProperties, Suspense, lazy, useEffect, useState } from "react";
+import React, { CSSProperties, lazy, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useOrderState } from "../ShowOrders";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useConnWalletInfo } from "../../App";
 import GetContractParams from "../blockChainTx/GetContractParams";
 import { OrderBoxStyle } from "../../StyleCollection";
+import SuspenseComponent from "../SuspenseComponent";
 
 const {Div0, Div1, DivBs, Order_Div, Order_Div_detail, Order_Hr, Order_Span_mc_ab, Order_Span_mc_detail,
 Order_Span_mc_left, Order_Span_md1, Order_Span_md1_blue, Order_Span_md1_blue_left, Order_Span_md1_grey,
@@ -501,15 +502,13 @@ const BottomBtn = ({ order, address }: BottomBtnProps) => {
           {!showTxBtn ? (
             <Button onClick={() => setShowTxBtn(true)}>주문취소</Button>
           ) : (
-            <Suspense fallback={<div>Loading...</div>}>
-              <SendTxK
+            <SuspenseComponent component={<SendTxK
               param={GetContractParams.CancelOrder(order.orderNum)}
               successFunc={() => {
                 setReloadOrderNum(order.orderNum);
                 closeModal();
               }}
-            />
-            </Suspense>
+            />}/>
           )}
         </>
       );

@@ -23,7 +23,30 @@ export default {
         },
         {
           model: Departure,
-          attributes: { exclude: ["ID", "DETAIL"] },
+          attributes: { exclude: ["ID", "id", "DETAIL"] },
+          required: true,
+        },
+      ],
+      raw: true,
+      nest: true,
+    });
+  },
+
+  allLocation: (orderIds: number []) => {
+    Order.hasOne(Destination, { foreignKey: "id" });
+    Order.hasOne(Departure, { foreignKey: "id" });
+    return Order.findAll({
+      attributes: ["id"],
+      where: { id: orderIds },
+      include: [
+        {
+          model: Destination,
+          attributes: { exclude: ["id", "DETAIL"] },
+          required: true,
+        },
+        {
+          model: Departure,
+          attributes: { exclude: ["ID", "id", "DETAIL"] },
           required: true,
         },
       ],

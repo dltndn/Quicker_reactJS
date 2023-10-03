@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ConfirmBtn from "./confirmBtn";
 import { useSearchState } from "../pages/SearchPage";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { OrderObj } from "../pages/SearchPage";
 import { useOrderStore } from "../pages/commission";
 import Handler from "../lib/Handler";
@@ -18,6 +18,7 @@ import GetContractParams from "./blockChainTx/GetContractParams";
 import { useConnWalletInfo } from "../App";
 import { getAllowance } from "../utils/ExecuteOrderFromBlockchain";
 import { Search_DetailStyle } from "../StyleCollection";
+import SuspenseComponent from "./SuspenseComponent";
 
 const {Div0, Div0_1, Div1, Div1_1, Div1_2, Div2, Div3, Div3_1, Div3_1_1, Div3_2, Div3_2_1, Div4, 
 Div4_1, Div5, Div5_1, Divpo, Se0, SelectInput, Margin_1, Circle } = new Search_DetailStyle()
@@ -88,9 +89,7 @@ function Search_Detail() {
   return (
     <>
       {showAllowance ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <IncreaseAllowance />
-        </Suspense>
+        <SuspenseComponent component={<IncreaseAllowance />}/>
       ) : (
         <>
           {order && (

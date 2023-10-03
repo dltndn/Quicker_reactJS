@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { lazy } from "react";
 import { useVerificationStore } from "../../App";
 import { SendDataToAndroid } from "../../utils/SendDataToAndroid";
 import Lottie from "lottie-react";
@@ -10,6 +10,7 @@ import { TwoPointRoute } from "../searchComponents/interface/route";
 import { useConnWalletInfo } from "../../App";
 import mainLoading from "../../Lottie/mainLoading.json";
 import { Main_phraseStyle } from "../../StyleCollection";
+import SuspenseComponent from "../SuspenseComponent";
 
 const {DelPo, DelPo1, Div0, Divmain, Divmain1, Sc0, Sc3, Sc4, Sc5, Sp1, Sp1_1, Sp2
 , Img, Notice_div, Notice_divfont_1, Notice_divfont_2, LotDiv} = new Main_phraseStyle()
@@ -59,11 +60,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
           <>
             
             <section>
-            <Suspense fallback={        <LotDiv>
-          <Lottie animationData={mainLoading} />
-        </LotDiv>}>
-              <MainOrderInformation />
-            </Suspense>
+            <SuspenseComponent component={<MainOrderInformation />}/>
             </section>
             {/* <button onClick={() => navigate("/execution/205")}>
                     임시배송페이지이동버튼
@@ -123,12 +120,7 @@ function Main_phrase({ isConnect }: isConnectToWallet) {
         <>
                 <Div0>
                   <Sp1_1>안녕하세요!</Sp1_1>              <Sp2>
-                {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
-                <Suspense fallback={        <LotDiv>
-          <Lottie animationData={mainLoading} />
-        </LotDiv>}>
-                  <WalletConnectBtn />
-                </Suspense>
+                <SuspenseComponent component={<WalletConnectBtn />}/>
               </Sp2>
                 </Div0>
                 <Div0>

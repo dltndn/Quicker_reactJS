@@ -40,9 +40,9 @@ export default function ReceipientPage() {
   const getDeadlineText = async (orderNum: string) => {
     try {
       const blockchainOrder: any = await getOrderRawData(orderNum);
-      if (blockchainOrder.deliveredTime.toNumber() === 0) {
+      if (parseInt(blockchainOrder.deliveredTime) === 0) {
         const deadlineHM = formatedDateHM(
-          getDateFromTimestamp(blockchainOrder.limitedTime.toNumber())
+          getDateFromTimestamp(parseInt(blockchainOrder.limitedTime))
         );
         setDeadline(deadlineHM);
         setIsDelivered(false)

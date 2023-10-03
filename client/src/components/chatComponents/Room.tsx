@@ -1,24 +1,23 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import type { RoomInterface } from "./interface/RoomInterface"
 import Handler from "../../lib/Handler"
 import getName from "./getName"
-import styled from "styled-components"
 import BottomBar from "../BottomBar"
 import Time from "../../lib/Time"
 import { useConnWalletInfo } from "../../App"
 import { RoomStyle } from "../../StyleCollection";
+import { getNftImgPath } from "../../utils/CalAny"
 
 const {Div0, Div1, Div2, StateDiv, Sp0, Sp1, Sp2, Img0} = new RoomStyle()
 
-const Chatman = require('../../image/Chatman.png')
-const operator = require('../../image/operator.png')
-
-export default function ({ setStates, orderNum, blockchainElement, role }: RoomInterface) {
+export default function ({ setStates, orderNum, blockchainElement, role, oponentAddress }: RoomInterface) {
     const { address } = useConnWalletInfo();
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
     const [opponentName, setOponentName] = useState("");
     const [time ,setTime] = useState("");
+    const [nftImgPath, setNftImgPath] = useState(getNftImgPath("404"))
 
     const getRecentMessage = async () => {
       
@@ -33,6 +32,12 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
         }
     }
 
+    const getNftImagePath = async () => {
+      const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${oponentAddress}`)
+      const path = getNftImgPath(imageId)
+      setNftImgPath(path)
+    }
+
     useEffect(() => {
         (async () => {
             if (address !== undefined) {
@@ -40,6 +45,10 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
                 getRecentMessage()
             }
         })()
+        getNftImagePath()
+        return () => {
+          setNftImgPath(getNftImgPath("404"))
+        }
     }, [])
 
     return (
@@ -54,7 +63,7 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
         >
         <Div0>
           <Div1>
-            <Img0 src={Chatman}></Img0>
+            <Img0 src={nftImgPath}></Img0>
           </Div1>
           <Div2>
             <Sp0>

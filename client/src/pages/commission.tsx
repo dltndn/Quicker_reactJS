@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState, useRef, lazy, Suspense } from "react";
+import React, { createElement, useEffect, useState, useRef, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
@@ -9,6 +9,8 @@ import { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
+import TmapApi from "../lib/Tmap"
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface OrderState {
   cost: number;
@@ -359,22 +361,12 @@ export default function CommissionPage() {
     setDeadlineToProp();
   }, [date, AMPM, hour, minute]);
 
-  useEffect(() => {
-    // @ts-ignore
-    if (startPosition.latitude && arrivePosition.latitude) {
-      // 추천 비용 불러오기
-      
-      setRecommendCost("")
-    }
-  }, [startPosition, arrivePosition])
   return (
     <>
       <GlobalStyle />
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       {showAllowance ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <IncreaseAllowance />
-        </Suspense>
+        <SuspenseComponent component={<IncreaseAllowance />} />
       ) : (
         <>
           <div

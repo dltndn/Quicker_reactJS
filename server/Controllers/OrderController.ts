@@ -3,9 +3,10 @@ import { NextFunction, Request, Response } from "express";
 import sequelize from "../Maria/Connectors/SequelizeConnector";
 import { initModels } from "../Maria/Models/init-models";
 
-import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findFailImage, findImage, findUserOrdersDetail, postCurrentLocation, saveFailImage, saveImage, updateOrder } from "../service/Order";
+import { createOrder, findCurrentLocation, findDestinationAndDepartureByOrderId, findFailImage, findImage, findUserOrdersDetail, postCurrentLocation, saveFailImage, saveImage, updateOrder, findAverageCost } from "../service/Order";
 import { findRoomInfoByOrderNumber } from "../service/Room";
 import { MulterRequest } from "../routes/OrderCompleteImage";
+
 
 initModels(sequelize);
 
@@ -129,6 +130,16 @@ export default {
       const documentFile = req.file;
       const message = await saveFailImage(body, documentFile)
       res.send({ msg: message });
+    } catch (error) {
+      next(error)
+    }
+  },
+
+  getAverageCost : async (req: Request, res: Response, next : NextFunction) => {
+    try {
+      const query = req.query
+      const averageCost = await findAverageCost(query)
+      res.send({distance : averageCost})
     } catch (error) {
       next(error)
     }

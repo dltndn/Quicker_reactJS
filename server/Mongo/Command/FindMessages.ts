@@ -19,7 +19,7 @@ export async function findMessage(roomName: string) {
 
 export const findRecentMessageByOrderNumber = async (connector : Connection, orderNum : number ) => {
   const messageModel = connector.model(String(orderNum), MessageModel);
-  const recentMessage = await messageModel.findOne().select(["-_id", "-__v", "-roomName", "-date"]).sort({ $natural: -1 });
+  const recentMessage = await messageModel.findOne().select(["-_id", "-__v", "-roomName"]).sort({ $natural: -1 });
   return recentMessage
 }
 

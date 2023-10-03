@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, lazy, Suspense } from "react";
+import React, { useEffect, useState, useRef, lazy } from "react";
 import BottomBar from "../components/BottomBar";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,7 @@ import {
   extractNumber,
 } from "../utils/CalAny";
 import { useConnWalletInfo } from "../App";
+import SuspenseComponent from "../components/SuspenseComponent";
 
 export interface OrderObj {
   orderNum: string;
@@ -275,9 +276,7 @@ function SearchPage() {
           {!isDetail ? (
             <Search clickOrder={(index) => clickOrder(index)} />
           ) : (
-            <Suspense fallback={<div>Loading...</div>}>
-              <SearchDetail />
-            </Suspense>
+            <SuspenseComponent component={<SearchDetail />}/>
           )}
         </>
       <BottomBar></BottomBar>

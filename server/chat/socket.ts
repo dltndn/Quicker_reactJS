@@ -40,7 +40,7 @@ const main = (server: any) => {
         console.log("접속 방 이름 : ", receiveRoomName);
         socket.join(roomName);
         // db 내용 불러옴
-        const messages = await findMessage(roomName);
+        const messages = await findMessage(roomName.toString());
         if (messages !== undefined) {
           socket.emit("loadMessage", messages);
         }

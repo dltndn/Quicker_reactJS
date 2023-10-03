@@ -1,20 +1,27 @@
+import bodyParser from "body-parser";
 import compression from "compression";
+import cors from "cors";
 import express, { Application } from "express";
-import morgan from "morgan";
+
+import { insertAverageCostPerMonth } from "./middlewares/cron-job";
+import { customMorgan } from "./middlewares/custom-morgan";
+import { createLogFolder } from "./middlewares/createLogFolder";
+
+insertAverageCostPerMonth
+createLogFolder()
 
 const loader = {
-    init : (app : Application) => {        
-        const cors = require("cors");
-        const bodyParser = require("body-parser");
-    
-        app.use(morgan('combined'))
-        app.use(compression())
-        app.use(cors());
-        app.use(express.urlencoded({extended: true}))
-        app.use(bodyParser.json());
-    
-        return app;
-    },
+  
+  init : async (app: Application) => {
+
+    app.use(customMorgan())
+    app.use(compression());
+    app.use(cors());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+  
+    return app;
+  }
 } 
 
 export default loader
