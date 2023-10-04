@@ -16,7 +16,8 @@ import { useConnWalletInfo } from "../App";
 import { ShowOrdersStyle } from "../StyleCollection";
 import money from "../image/money.png";
 
-const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg } = new ShowOrdersStyle()
+const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg,
+Div1, Div3, Img} = new ShowOrdersStyle()
 
 
 
@@ -279,7 +280,11 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
       )}
       {ordersObj === null ? (
         isEmptyOrder ? (
-          <Div0>오더 내역이 없습니다</Div0>
+          <Div3>
+          <Div1>
+            현재 진행 중인 오더 내역이 없습니다.
+          </Div1>
+        </Div3>
         ) : (
           <Div0>
             <Divimg>

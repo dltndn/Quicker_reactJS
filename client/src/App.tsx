@@ -2,6 +2,8 @@ import { Buffer } from "buffer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { lazy, Suspense, useEffect } from "react";
 import { create } from "zustand";
+import Lottie from "lottie-react";
+import LoadingAni from "./Lottie/lodingAni.json";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 
@@ -205,7 +207,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Lottie animationData={LoadingAni}/>}>
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />

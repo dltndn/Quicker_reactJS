@@ -12,6 +12,8 @@ import Handler from "../lib/Handler";
 import { getNftImgPath } from "../utils/CalAny";
 import { useNftState } from "../components/orderComponents/imfo";
 
+
+
 const NftSettingPage = () => {
   const navigate = useNavigate();
   const [isMain, setIsMain] = useState<boolean>(true);
@@ -133,18 +135,20 @@ const NftSettingPage = () => {
       />
       {isMain ? (
         <>
-          <div>
-            <span>NFT 종류 보러가기</span>
-            <button onClick={() => setIsMain(false)}>이동</button>
-          </div>
-          <div>현재 이미지</div>
-          <NftImg src={getNftImgPath(imgState)} alt="current img" />
-          <div>보유 중인 NFT 목록</div>
+          <Set_div_top>
+            <span onClick={() => setIsMain(false)}>NFT 종류 보러가기</span>
+          </Set_div_top>
+          <Topdiv>
+          <Topimg src={getNftImgPath(imgState)} alt="current img" />
+          </Topdiv>
+          <Set_div>보유 중인 NFT 목록</Set_div>
           <SuspenseComponent
             component={
               <>
+                <Fx1>
                 {imgList.map((val: string, index: number) => (
-                  <div
+                  <>
+                  <Set_div_mid
                     key={index}
                     onClick={async () => {
                       await setNftImgState(val);
@@ -155,45 +159,47 @@ const NftSettingPage = () => {
                       alt={`holding img ${index}`}
                     />
                     <div>{getNftDescription(val)}</div>
-                  </div>
+                  </Set_div_mid>
+                  </>
                 ))}
+                </Fx1>
               </>
             }
           />
         </>
       ) : (
         <>
-          <div>
-            <span>나의 NFT 목록 보러가기</span>
-            <button onClick={() => setIsMain(true)}>이동</button>
-          </div>
-          <div>나의 총 의뢰금액: {Number(sumPrice.clientPriceResult).toLocaleString()}원</div>
-          <div>나의 총 배달금액: {Number(sumPrice.quickerPriceResult).toLocaleString()}원</div>
+          <Set_div_top>
+            <span onClick={() => setIsMain(true)}>나의 NFT 목록 보러가기</span>
+          </Set_div_top>
+          <PercentTx1>나의 총 의뢰금액: <PercentTx2>{Number(sumPrice.clientPriceResult).toLocaleString()}원</PercentTx2></PercentTx1>
+          <PercentTx1>나의 총 배달금액: <PercentTx2>{Number(sumPrice.quickerPriceResult).toLocaleString()}원</PercentTx2></PercentTx1>
           {NftId.tokens.map((val, index: number) => (
-            <div key={index}>
+            <Set_div_mid1 key={index}>
               <NftImg src={getNftImgPath(val.id)} alt={`img ${index}`} />
               <div>{getNftDescription(val.description)}</div>
               {(BigInt(val.id) >> BigInt(128)).toString() === "1" && (
                 <>
-                  <div>
+                  <PercentTx1>
                     총 의뢰금액 {val.minSumPrice.toLocaleString()}원 이상
-                  </div>
+                  </PercentTx1>
                 </>
               )}
               {(BigInt(val.id) >> BigInt(128)).toString() === "2" && (
                 <>
-                  <div>
+                  <PercentTx1>
                     총 배달금액 {val.minSumPrice.toLocaleString()}원 이상
-                  </div>
+                  </PercentTx1>
                 </>
               )}
-              <button onClick={async () => await mintGradeNft(val.id)}>
+              <Bt1 onClick={async () => await mintGradeNft(val.id)}>
                 발급받기
-              </button>
-            </div>
+              </Bt1>
+            </Set_div_mid1>
           ))}
         </>
       )}
+      <Margin></Margin>
       <BottomBar />
     </>
   );
@@ -203,7 +209,7 @@ export default NftSettingPage;
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #efefef !important;
+    background-color: #ffffff !important;
     height: 100%;
   }
 `;
@@ -211,6 +217,116 @@ const GlobalStyle = createGlobalStyle`
 const NftImg = styled.img`
   width: 5rem;
   height: 5rem;
-  margin-left: 0.5rem;
   border-radius: 100%;
 `;
+
+const Topdiv = styled.div`
+display: flex;
+padding: var(--padding);
+color: var(--black-color);
+justify-content: center;
+`;
+
+const Topimg = styled.img`
+width: 8rem;
+height: 8rem;
+border-radius: 100%;
+background-color: #ffffff;
+`;
+
+const  Set_div_top = styled.div`
+display: flex;
+justify-content: center;
+font-size: 16px;
+font-weight: bold;
+padding: 10px;
+border-radius: 0.313rem;
+border: 0rem;
+background-color: var(--white-color);
+`;
+
+const  Set_div = styled.div`
+display: flex;
+font-size: 14px;
+font-weight: bold;
+padding: 14px;
+border-radius: 0.313rem;
+border: 0rem;
+background-color: var(--white-color);
+`;
+
+
+const Fx1 = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`
+const  Set_div_mid = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 이미지를 수직으로 중앙에 정렬 */
+  justify-content: center;
+  flex: 0 0 calc(33.33% - 20px); /* 33.33%로 설정, 여백을 고려해야 함 */
+  margin: 10px;
+  padding: 10px 6px 10px 6px;
+  border-radius: 15px;
+  border: 1px solid;
+  border-color: #d9d9d9;
+background-color: #ffffff;
+  filter: drop-shadow(0px 4px 2px #bebebe);
+`;
+
+const  Set_div_mid1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 이미지를 수직으로 중앙에 정렬 */
+  justify-content: center;
+  flex: 0 0 calc(33.33% - 20px); /* 33.33%로 설정, 여백을 고려해야 함 */
+  margin: 20px;
+  padding: 10px;
+  border-radius: 15px;
+  border: 1px solid;
+  border-color: #d9d9d9;
+background-color: #ffffff;
+  filter: drop-shadow(0px 4px 2px #bebebe);
+`;
+
+const PercentTx1 = styled.div`
+margin: 10px;
+font-size: 12px;
+font-weight: bold;
+color: #6c6c6c;
+`;
+
+const PercentTx2 = styled.span`
+font-size: 16px;
+font-weight: bold;
+margin-bottom: 0px;
+color: #000000;
+`;
+
+const Bt1 = styled.button`
+width: 100%;
+height: 40px;
+font-weight: bold;
+font-size: 14px;
+text-transform: uppercase;
+letter-spacing: 1px;
+font-weight: 500;
+color: #000;
+background-color: #ffffff;
+border: 1px solid #535353;
+border-radius: 10px;
+transition: all 0.3s ease;
+
+&:hover {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+`;
+
+const  Margin = styled.div`
+height: 3.85rem;
+width: 100%;
+`

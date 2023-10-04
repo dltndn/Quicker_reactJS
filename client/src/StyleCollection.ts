@@ -1058,7 +1058,6 @@ Div2 = styled.div`
 `
 }
 
-
 export class FailedOrderConfirmStyle {
 
    Div0 = styled.div`
@@ -3341,6 +3340,24 @@ export class ShowOrdersStyle {
   font-size: var(--font-small);
   font-weight: bold;
   margin-left: 0.75rem;
+`;
+
+Div3 = styled.div`
+  justify-content: center;
+  text-align: center;
+`
+
+Img = styled.img`
+  margin-top: 30%;
+  margin-left: 10%;
+  height: 140px;
+  width: 140px;
+`;
+
+Div1 = styled.div`
+  margin-top: 20px;
+  font-size: var(--font-micro);
+  color: #828282;
 `;
 
  Sp0 = styled.span`
