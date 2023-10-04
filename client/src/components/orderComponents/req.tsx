@@ -309,11 +309,7 @@ function Req({data}: {data: object}) {
     <Container>
         <Box>
             <div>
-<<<<<<< HEAD
                 <ReqFont1>의뢰 비용 <Sp4>{errorMessage ? (errorMessage):(`추천 비용: ${recommendCost}`)}</Sp4></ReqFont1>
-=======
-                <ReqFont>의뢰 비용 <span style={{color: "red"}}>{errorMessage ? (errorMessage):(`추천 비용: ${recommendCost.toLocaleString()}`)}</span></ReqFont>
->>>>>>> upstream/develop
             </div>
             <div>
                 {/* ERROR : 타입이 String 타입임 */}
