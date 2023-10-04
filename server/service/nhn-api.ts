@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+import fetch from "node-fetch";
 
 interface Body {
   type: "SMS" | "MMS" | "LMS";

@@ -1,20 +1,11 @@
-import { WebClient } from "@slack/web-api";
-
 export class SlackBot {
   private client: any;
   private channelId: string | undefined;
-
+  private token : string | undefined;
+  
   constructor(token: string | undefined, channelId: string | undefined) {
-    this.checkParameter(token, channelId)
-  }
-
-  private checkParameter(token: string | undefined, channelId: string | undefined) {
-    if (typeof token && typeof channelId === "string") {
-      this.client = new WebClient(token);
-      this.channelId = channelId;    
-    } else {
-      console.error(".env, config 폴더 확인 필요")
-    }
+    this.token = token;
+    this.channelId = channelId;
   }
 
   private messageTemplate(e: any) {

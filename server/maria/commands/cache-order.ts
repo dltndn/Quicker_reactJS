@@ -1,4 +1,4 @@
-import { WhereOptions } from "sequelize/types/model";
+import { Op } from "sequelize";
 import { CacheMatchedOrder } from "../models/init-models";
 
 export class CacheOrderModel {
@@ -8,10 +8,16 @@ export class CacheOrderModel {
       date: new Date().toISOString(),
     });
   }
-  findAll(where?: WhereOptions) {
+  
+  findAllId(startDate : Date, endDate : Date) {
     return CacheMatchedOrder.findAll({
       attributes: ["id"],
-      where: where,
+      where: { 
+        date: {
+          [Op.gte]: startDate,
+          [Op.lte]: endDate,
+        }
+      },
       raw: true,
       nest: true,
     });

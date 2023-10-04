@@ -33,8 +33,9 @@ export class MessageModel {
     }
   }
 
-  async findRecent(connector: Connection, orderNum: number) {
-    const messageModel = connector.model(String(orderNum), MessageSchema);
+  async findRecent(orderNum: number) {
+    const connection = await connectMongo("chat");
+    const messageModel = connection.model(String(orderNum), MessageSchema);
     const recentMessage = await messageModel
       .findOne()
       .select(["-_id", "-__v", "-roomName"])

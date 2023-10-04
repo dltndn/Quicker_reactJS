@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
-
 import { classifyDistance, updateOrder } from "../service/order";
 
+import config from "../config";
 import { averageInstance, locationInstance, orderInstance, roomInstance, userInstance } from "../maria/commands";
-import { initModels } from "../maria/models/init-models";
 import sequelizeConnector from "../maria/connector/sequelize-connector";
-import connectMongo from "../mongo/connector";
+import { initModels } from "../maria/models/init-models";
 import { currentLocationInstance, imageInstance } from "../mongo/command";
+import connectMongo from "../mongo/connector";
+import { cryptoInstance, twilioApi } from "../service";
 
 initModels(sequelizeConnector);
 export class OrderController {
@@ -55,7 +56,7 @@ export class OrderController {
     try {
       const body = req.body;
       // @TODO : 리팩토링 보류
-      await updateOrder(body);
+      await updateOrder(body, twilioApi, cryptoInstance, config.crypto.url as string);
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
