@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-
 import chalk from "chalk";
 import morgan from "morgan";
 import * as fs from "node:fs";
 import path from "node:path";
 
-import { formatDate, formatDateToYYYYMMDD } from "../../util/dateFormat";
+import { dateFormater } from "../../service";
 
 interface ConnectionInfo {
   ip: string;
@@ -56,7 +55,7 @@ class Parser {
   parseConnection(req: Request, res: Response) {
     return {
       ip: req.ip,
-      date: formatDate(new Date()),
+      date: dateFormater.toLogFormat(new Date()),
       status: res.statusCode,
       method: req.method,
       httpVersion: req.httpVersion,
@@ -85,7 +84,7 @@ morgan.token("custom", function (req: Request, res: Response) {
   return formater.toString(connectionInfo)
 });
 
-const writeStream = fs.createWriteStream(path.join(__dirname, `../../logs/${formatDateToYYYYMMDD(new Date())}.log`), { flags: "a" });
+const writeStream = fs.createWriteStream(path.join(__dirname, `../../logs/${dateFormater.toYYYYMMDD(new Date())}.log`), { flags: "a" });
 
 const option = { stream: { write: (log: string) => writeStream.write(log) } };
 

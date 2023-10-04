@@ -3,12 +3,11 @@ import compression from "compression";
 import cors from "cors";
 import express, { Application } from "express";
 
-import { insertAverageCostPerMonth } from "./middlewares/cron-job";
 import { customMorgan } from "./middlewares/custom-morgan";
-import { createLogFolder } from "./middlewares/createLogFolder";
+import { cronJob, folder } from "./middlewares";
 
-insertAverageCostPerMonth
-createLogFolder()
+folder.createLogFolder()
+cronJob
 
 const loader = {
   

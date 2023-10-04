@@ -1,6 +1,6 @@
 import { Application} from "express";
 
-import { errorController } from "../Controllers";
+import { errorController } from "../controllers";
 import { Caver, associateOrder, averageCost, currentLocation, home, notFound, order, orders, register, room, user } from "../routes";
 
 const router = {
