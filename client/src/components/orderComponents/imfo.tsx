@@ -13,7 +13,7 @@ import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import GetQkrwBalance from "../getQkrwBalance";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import Profile_settingPage from "../../pages/Profile_settingPage";
 import { useVerificationStore } from "../../App";
 import { useOrderState } from "../ShowOrders";
@@ -21,20 +21,54 @@ import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 import { useConnWalletInfo } from "../../App";
 import NftProfile from "../NftProfile";
 import { ImfoStyle } from "../../StyleCollection";
+import { getFeeGovernorInfo } from "../../utils/ExecuteOrderFromBlockchain";
+import { create } from "zustand";
 
-const {Div0, Sc0_1,  Sc1_1, Sc2_1, Sc3, Sc3_1, Scwal, Sp0, Sp1, Sp2, Bteye, Bticon, Bticonimg
-, Hr, Margin, Topbt, Topdiv, Toptx} = new ImfoStyle()
+const {
+  Div0,
+  Sc0_1,
+  Sc1_1,
+  Sc2_1,
+  Sc3,
+  Sc3_1,
+  Scwal,
+  Sp0,
+  Sp1,
+  Sp2,
+  Bteye,
+  Bticon,
+  Bticonimg,
+  Hr,
+  Margin,
+  Topbt,
+  Topdiv,
+  Toptx,
+} = new ImfoStyle();
 
 const money = require("../../image/money.png");
 
 const img1 = require("../../image/ex1.jpg");
-// const img1 = "ipfs://bafybeidkcbye5ta6yvgiju6jzwacm4egov6vsvuui4f6h6p6zwxn3ayvla/"
 
+interface UseNftStateType {
+  imgState: string;
+  setImgState: (data: string) => void;
+  imgList: string[];
+  setImgList: (data: string[]) => void;
+}
 
+export const useNftState = create<UseNftStateType>((set) => ({
+  imgState: "404",
+  setImgState: (imgState: string) => set({ imgState }),
+  imgList: ["404"],
+  setImgList: (imgList: string[]) => set({ imgList }),
+}));
 
 function Imfo() {
   const navigate = useNavigate();
-  const { address, isConnected, setAddress, setIsMobile, setIsConneted } = useConnWalletInfo();
+  const [isReward, setIsReward] = useState<boolean>(false);
+
+  const { address, isConnected, setAddress, setIsMobile, setIsConneted } =
+    useConnWalletInfo();
 
   const { isMember, userName } = useVerificationStore();
   const { setOrdersObj } = useOrderState();
@@ -45,6 +79,22 @@ function Imfo() {
     setIsConneted(false);
     localStorage.setItem("kaikas_address", JSON.stringify(undefined));
   };
+
+  const isPendingReward = async () => {
+    if (address) {
+      const roundData = await getFeeGovernorInfo(address);
+      if (roundData.userRewards !== "0") {
+        setIsReward(true)
+      }
+    }
+  };
+
+  useEffect(() => {
+    isPendingReward()
+    return () => {
+      setIsReward(false)
+    }
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
@@ -70,7 +120,6 @@ function Imfo() {
         </Topdiv>
       </section>
       <Scwal>
-        {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
         <WalletConnectBtn />
       </Scwal>
       <Hr></Hr>
@@ -110,23 +159,28 @@ function Imfo() {
         <Div0 onClick={() => navigate("/feeGovernor")}>
           <BsCoin></BsCoin>
           <Sp2>거래수수료 투표</Sp2>
+          {isReward && (<> 알림표시</>)}
         </Div0>
       </Sc3_1>
       <Sc0_1>
-        <Div0 onClick={() => {
-          setOrdersObj(null);
-          navigate("/orderlist");
-          }}>
+        <Div0
+          onClick={() => {
+            setOrdersObj(null);
+            navigate("/orderlist");
+          }}
+        >
           <BsFileText></BsFileText>
           <Sp2>오더 내역</Sp2>
         </Div0>
       </Sc0_1>
       <Hr></Hr>
       <Sc1_1>
-        <Div0 onClick={() => {
-          setOrdersObj(null);
-          navigate("/fulfillmentlist");
-        }}>
+        <Div0
+          onClick={() => {
+            setOrdersObj(null);
+            navigate("/fulfillmentlist");
+          }}
+        >
           <BsCheck2Circle></BsCheck2Circle>
           <Sp2>수행 내역</Sp2>
         </Div0>

@@ -1,8 +1,7 @@
 // 필요한 import
-import { Op } from "sequelize";
 import Caver from "caver-js";
+import { Op } from "sequelize";
 
-import SelectOrder from "../../Maria/Commands/SelectOrder";
 import SequelizeConnector from "../../Maria/Connectors/SequelizeConnector";
 import {
   AverageOfCostAttributes,
@@ -10,16 +9,15 @@ import {
   Order,
   initModels,
 } from "../../Maria/Models/init-models";
-import { findAllCachedOrderIdByOrderId } from "../../Maria/Commands/SelectCachedOrder";
-import { insertAverageCost } from "../../Maria/Commands/CreateAverageCost";
 
 import {
   QUICKER_DLVR_PROXY_ABI,
   QUICKER_DLVR_PROXY_ADDRESS,
 } from "../../klaytnApi/ContractInfo";
 
-import { requestTmapAPIRouteInfo } from "../../util/tmap";
 import keys from "../../config/keys";
+import { requestTmapAPIRouteInfo } from "../../util/tmap";
+import { averageInstance, cacheOrderInstance, locationInstance } from "../../Maria/Commands";
 
 // 설정
 initModels(SequelizeConnector);
@@ -69,7 +67,8 @@ const filteringOrderId = async () => {
     }
   }
 
-  const coveredOrderIds = await findAllCachedOrderIdByOrderId(option)
+  const coveredOrderIds = await cacheOrderInstance.findAll(option)
+  console.log(coveredOrderIds)
   return unCoverOrderIds(coveredOrderIds)
 }
 
@@ -215,7 +214,7 @@ const generate = (combinedData : {
 
 export const main = async () => {
   const orderIds = await filteringOrderId()
-  const locations = await SelectOrder.allLocation(orderIds);
+  const locations = await locationInstance.findAll(orderIds);
   const distances = await requestTmapAPIRouteDistances(locations)
   const prices = await getOrderPrices(locations)
 
@@ -224,5 +223,5 @@ export const main = async () => {
 
   const result = calculateAverage(counter, calculated)
 
-  insertAverageCost(result);
+  averageInstance.create(result);
 };

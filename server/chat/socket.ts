@@ -1,6 +1,4 @@
 const SocketIo = require("socket.io");
-import saveMessage from "../Mongo/Command/SaveMessage";
-import { findMessage } from "../Mongo/Command/FindMessages";
 
 import Caver from "caver-js";
 import {
@@ -9,6 +7,7 @@ import {
   VQUICKER_TOKEN_ADDRESS_KLAYTN,
   VQUICKER_TOKEN_ABI_KLAYTN
 } from "../klaytnApi/ContractInfo";
+import { messageInstance } from "../Mongo/Command";
 
 const env = process.env;
 const chainId = 1001; // klaytn baobab network
@@ -40,7 +39,7 @@ const main = (server: any) => {
         console.log("접속 방 이름 : ", receiveRoomName);
         socket.join(roomName);
         // db 내용 불러옴
-        const messages = await findMessage(roomName.toString());
+        const messages = await messageInstance.find(roomName.toString());
         if (messages !== undefined) {
           socket.emit("loadMessage", messages);
         }
@@ -55,7 +54,7 @@ const main = (server: any) => {
         });
         console.log("현재 접속 방 정보 : ", roomName);
         console.log("수신 메세지 : ", receiveMessage.data);
-        saveMessage({
+        messageInstance.create({
           id: receiveMessage.sender,
           roomName: roomName,
           receiveMessage: receiveMessage.data,

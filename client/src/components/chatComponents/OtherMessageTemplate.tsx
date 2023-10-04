@@ -5,13 +5,17 @@ import { OtherMessageStyle } from "../../StyleCollection";
 
 const {Div, DivChat, Divclock, Img} = new OtherMessageStyle()
 
-export default function OtherMessageTemplate ({message , date} : MessageInfoForComponent) {
+interface OtherMessageInfoForComponent extends MessageInfoForComponent {
+  nftImgPath : string;
+}
+
+export default function OtherMessageTemplate ({message , date, nftImgPath} : OtherMessageInfoForComponent) {
 
   const time = TimeParser(date)
 
     return (
     <Div>
-      <Img src={Chatman}></Img>{" "}
+      <Img src={nftImgPath}></Img>{" "}
       <DivChat>
         <span>{message}</span>
       </DivChat>{" "}

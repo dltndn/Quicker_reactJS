@@ -8,20 +8,9 @@ import { useConnWalletInfo } from "../App";
 import SuspenseComponent from "../components/SuspenseComponent";
 import NftId from "../lib/NftId";
 import { hasNftIdList, mintNft, sumOrderPrice } from "../utils/ExecuteOrderFromBlockchain";
-
-interface UseNftStateType {
-  imgState: string;
-  setImgState: (data: string) => void;
-  imgList: string[];
-  setImgList: (data: string[]) => void;
-}
-
-export const useNftState = create<UseNftStateType>((set) => ({
-  imgState: "404",
-  setImgState: (imgState: string) => set({ imgState }),
-  imgList: ["404"],
-  setImgList: (imgList: string[]) => set({ imgList }),
-}));
+import Handler from "../lib/Handler";
+import { getNftImgPath } from "../utils/CalAny";
+import { useNftState } from "../components/orderComponents/imfo";
 
 const NftSettingPage = () => {
   const navigate = useNavigate();
@@ -35,13 +24,8 @@ const NftSettingPage = () => {
   const { imgState, setImgState, imgList, setImgList } = useNftState();
 
   useEffect(() => {
-    // localsotrage에서 가져오기
-    const localstorageImgId = localStorage.getItem("nftImgState");
-    if (localstorageImgId) {
-      setNftImgState(localstorageImgId);
-    } else {
-      setNftImgState("404");
-    }
+    // server에서 착용 중인 nft id 값 가져오기
+    getNftId()
     // img list 갖고오기
     getUserNft();
     getSumOrderPrice()
@@ -54,6 +38,10 @@ const NftSettingPage = () => {
       })
     };
   }, []);
+
+  useEffect(() => {
+    console.log("imgState: ", imgState)
+  }, [imgState])
 
   useEffect(() => {
     if (!address) {
@@ -79,7 +67,8 @@ const NftSettingPage = () => {
   // NFT 민팅
   const mintGradeNft = async (tokenId: string) => {
     if (address) {
-      if (await mintNft(address, tokenId)) {
+      const result = await mintNft(address, tokenId)
+      if (!result) {
         alert("발급 조건을 확인해주세요");
       } else {
         alert("NFT발급이 완료됐습니다!");
@@ -88,10 +77,18 @@ const NftSettingPage = () => {
     }
   };
 
-  // NFT 불러오기
-  const setNftImgState = (tokenId: string) => {
-    localStorage.setItem("nftImgState", tokenId);
-    setImgState(tokenId);
+  // NFT id값 서버에 저장
+  const setNftImgState = async (tokenId: string) => {    
+    if (address) {
+      try {
+        const obj = { "walletAddress" : address , "imageId" : tokenId }
+        await Handler.patch(obj, `${process.env.REACT_APP_SERVER_URL}user/image/id/`)
+        setImgState(tokenId);
+      } catch (e) {
+        console.log(e)
+        alert("적용에 실패했습니다...")
+      }
+    }
   };
 
   // 보유 NFT 목록 불러오기
@@ -104,17 +101,25 @@ const NftSettingPage = () => {
     }
   };
 
+  // 서버에서 착용 중인 NFT ID 불러오기
+  const getNftId = async () => {
+    if (address) {
+      try {
+        const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${address}`)
+        setImgState(imageId)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    
+  }
+
   // NFT description 가져오기
   const getNftDescription = (id: string) => {
     for (const val of NftId.tokens) {
       if (val.id === id) return val.description;
     }
     return "";
-  };
-
-  // 해당 이미지 id 경로 반환
-  const getImgPath = (id: string) => {
-    return `/NftImg/${id}.png`;
   };
 
   return (
@@ -133,7 +138,7 @@ const NftSettingPage = () => {
             <button onClick={() => setIsMain(false)}>이동</button>
           </div>
           <div>현재 이미지</div>
-          <NftImg src={getImgPath(imgState)} alt="current img" />
+          <NftImg src={getNftImgPath(imgState)} alt="current img" />
           <div>보유 중인 NFT 목록</div>
           <SuspenseComponent
             component={
@@ -141,12 +146,12 @@ const NftSettingPage = () => {
                 {imgList.map((val: string, index: number) => (
                   <div
                     key={index}
-                    onClick={() => {
-                      setNftImgState(val);
+                    onClick={async () => {
+                      await setNftImgState(val);
                     }}
                   >
                     <NftImg
-                      src={getImgPath(val)}
+                      src={getNftImgPath(val)}
                       alt={`holding img ${index}`}
                     />
                     <div>{getNftDescription(val)}</div>
@@ -166,7 +171,7 @@ const NftSettingPage = () => {
           <div>나의 총 배달금액: {Number(sumPrice.quickerPriceResult).toLocaleString()}원</div>
           {NftId.tokens.map((val, index: number) => (
             <div key={index}>
-              <NftImg src={getImgPath(val.id)} alt={`img ${index}`} />
+              <NftImg src={getNftImgPath(val.id)} alt={`img ${index}`} />
               <div>{getNftDescription(val.description)}</div>
               {(BigInt(val.id) >> BigInt(128)).toString() === "1" && (
                 <>
