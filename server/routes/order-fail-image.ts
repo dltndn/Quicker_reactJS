@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { orderController } from "../Controllers";
+import { orderController } from "../controllers";
 
 require("dotenv").config();
 

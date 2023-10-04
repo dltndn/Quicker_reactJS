@@ -1,8 +1,8 @@
 import crypto from "crypto";
-import keys from "../config/keys";
+import config from "../config";
 
 export const cryptoUserInfo = (body: any) => {
-  const secret = keys.crypto.key;
+  const secret = config.crypto.key;
   if (secret === undefined) {
     throw new Error("crypto secreat key not exist");
   }

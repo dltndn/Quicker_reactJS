@@ -18,4 +18,4 @@ router.get("/", (req: Request, res: Response) => {
     </form>
   `);
 });
-export = router;
+export default router;

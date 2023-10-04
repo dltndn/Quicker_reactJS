@@ -26,14 +26,6 @@ export default {
       https: process.env.HTTPS_LOCAL_SERVER_PORT,
     },
   },
-  mailer: {
-    id: process.env.MAIL_ID,
-    password: process.env.MAIL_PW,
-  },
-  shorturl: {
-    id: process.env.NAVER_CLIENT_ID,
-    secret: process.env.NAVER_CLIENT_SECRET,
-  },
   twilio: {
     sid: process.env.TWILIO_ACCOUNT_SID,
     token: process.env.TWILIO_AUTH_TOKEN,
@@ -50,7 +42,6 @@ export default {
     ACCESSKEY_ID: process.env.KLAYTN_ACCESSKEY_ID,
     SECRET_KEY: process.env.KLAYTN_SECRET_KEY,
   },
-  tinytoken: process.env.TINYURL_TOKEN,
   slackBot : {
     token : process.env.TOKEN,
     channelId : process.env.CHANNEL_ID

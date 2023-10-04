@@ -1,5 +1,5 @@
 import express from "express";
-import { orderController } from "../Controllers";
+import { orderController } from "../controllers";
 
 const router = express.Router();
 
@@ -8,4 +8,4 @@ router.get("/",  orderController.getLocation)
 // POST /current-deliver-location
 router.post("/", orderController.postLocation);
 
-export = router;
+export default router;

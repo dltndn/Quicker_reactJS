@@ -2,25 +2,19 @@
 import Caver from "caver-js";
 import { Op } from "sequelize";
 
-import SequelizeConnector from "../../Maria/Connectors/SequelizeConnector";
-import {
-  AverageOfCostAttributes,
-  CacheMatchedOrder,
-  Order,
-  initModels,
-} from "../../Maria/Models/init-models";
-
 import {
   QUICKER_DLVR_PROXY_ABI,
   QUICKER_DLVR_PROXY_ADDRESS,
 } from "../../klaytnApi/ContractInfo";
 
-import keys from "../../config/keys";
+import index from "../../config";
 import { requestTmapAPIRouteInfo } from "../../util/tmap";
-import { averageInstance, cacheOrderInstance, locationInstance } from "../../Maria/Commands";
+import { averageInstance, cacheOrderInstance, locationInstance } from "../../maria/commands";
+import { AverageOfCostAttributes, CacheMatchedOrder, Order, initModels } from "../../maria/models/init-models";
+import sequelizeConnector from "../../maria/connector/sequelize-connector";
 
 // 설정
-initModels(SequelizeConnector);
+initModels(sequelizeConnector);
 
 const caver = new Caver(process.env.KLAYTN_BAOBAB_PROVIDER);
 
@@ -30,11 +24,11 @@ const quicker_drvr_contract = caver.contract.create(
   QUICKER_DLVR_PROXY_ADDRESS,
 );
 
-if (keys.tmap.apiKey === undefined) {
+if (index.tmap.apiKey === undefined) {
   throw new Error('tmap api .env 확인 필요')
 }
 
-const appKey = keys.tmap.apiKey
+const appKey = index.tmap.apiKey
 
 const startDate = new Date();
 startDate.setMonth(startDate.getMonth() - 1);

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { orderController } from "../Controllers";
+import { orderController } from "../controllers";
 import OrderFailImage from "./order-fail-image";
 import OrderCompleteImage from "./order-complete-image";
 
@@ -21,4 +21,4 @@ router.use("/image/complete", OrderCompleteImage);
 // PATCH /order
 router.patch("/", orderController.updateOrder);
 
-export = router;
+export default router;

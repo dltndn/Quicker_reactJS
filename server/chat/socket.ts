@@ -7,7 +7,7 @@ import {
   VQUICKER_TOKEN_ADDRESS_KLAYTN,
   VQUICKER_TOKEN_ABI_KLAYTN
 } from "../klaytnApi/ContractInfo";
-import { messageInstance } from "../Mongo/Command";
+import { messageInstance } from "../mongo/command";
 
 const env = process.env;
 const chainId = 1001; // klaytn baobab network

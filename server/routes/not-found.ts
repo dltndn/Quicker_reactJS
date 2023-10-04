@@ -9,4 +9,4 @@ router.all("/", (req, res, next) => {
     next(error)
 })
 
-export = router;
+export default router;
