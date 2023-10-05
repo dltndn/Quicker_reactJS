@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { useDeliveredComponent } from "../components/executeComponents/DeliveredItem";
 import { useParams } from "react-router-dom";
 import { useConnWalletInfo } from "../App";
+import Lottie from "lottie-react";
+import CheckAni from "../Lottie/CheckAni.json";
 
 export default function QR() {
     const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
@@ -79,7 +81,7 @@ export default function QR() {
         <>
          <CameraContainer>
             {hasScanResult
-                ? <div>스캔이 완료됐습니다.</div>
+                ? <Lottie animationData={CheckAni}/>
                 :<div id="reader" style={{width: "100%", height: "100%"}} />
             }
             </CameraContainer>

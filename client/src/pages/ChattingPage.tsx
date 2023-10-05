@@ -17,7 +17,7 @@ const nochat = require("../image/nochat.png");
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #efefef !important;
+    background-color: #ffffff !important;
     height: 100%;
   }
 `;

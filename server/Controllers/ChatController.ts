@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import MessageModel from "../Mongo/Schemas/Message";
 import connectMongo from "../Mongo/Connector";
 import { findRecentMessage } from "../service/Room";
-
 export default {
   getRecentMessageInfo: async (req: Request, res: Response, next: NextFunction) => {
     try {

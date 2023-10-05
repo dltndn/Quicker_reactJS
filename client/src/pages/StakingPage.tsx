@@ -19,6 +19,7 @@ import Stacking from "../Lottie/Stacking.json";
 import StackingGo from "../Lottie/Stackinggo.json";
 import receiveQuicker from "../Lottie/receiveQuicker.json";
 import Lottie from "lottie-react";
+import DeskAni from "../Lottie/DeskAni.json";
 import Decimal from "decimal.js";
 import SuspenseComponent from "../components/SuspenseComponent";
 import BottomConfirmBtn from "../components/bottomconfirmBtn";
@@ -427,6 +428,7 @@ const StakingToken = ({
             <StakingTxSm1>
               추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
             </StakingTxSm1>
+            <Lottie animationData={DeskAni}/>
           </Margin>
 
           {showConfirm && (

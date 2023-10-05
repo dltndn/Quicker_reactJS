@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import DeleteOrder from "../Maria/Commands/DeleteOrder";
-
 export default {
   deleteAssociateOrderProcess: async (req: Request, res: Response) => {
     try {
@@ -12,7 +11,6 @@ export default {
       res.send(error);
     }
   },
-
   deleteAssociateOrdersProcess: async (req: Request, res: Response) => {
     try {
       let startNumber = parseInt(req.body.startNumber);

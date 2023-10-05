@@ -15,7 +15,7 @@ type OrderProps = {
 
   return (
     <>
-      {/* {isLoading && <div>loading...</div>} */}
+
       {objData === undefined ? (<div>데이터 없음</div>):(<div>Result: <TemplateOrder data={objData} /></div>)}
     </>
   );
