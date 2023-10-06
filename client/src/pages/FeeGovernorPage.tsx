@@ -17,6 +17,12 @@ import { ApexOptions } from "apexcharts";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
 import choice from "../Lottie/Choice.json";
+import { FeeGovenorPageStyle } from "../StyleCollection";
+
+const { Receivetx, ReciDiv1, Div0, Sc0, Sc1, Sc1_1, Div1, Div1_1, Flex1, Flex2, Tx1, Tx1_1, 
+  Tx1_2, Tx2, Tx3, Tx3color, Tx1color, PercDiv1, PercSp1, PercSp2, PercDiv2, PercentTx4_2,
+PercentTx4_3, PercentTx4_4, VtTx, ButtonWrapper, BtWp_1, SaveButton, SaveButton_1, LoadButton, HideDiv,
+HideDiv_1, LotDiv, Hr, QuickerTx_1, Input, Lb1, Margin_1} = new FeeGovenorPageStyle()
 
 interface UseFeeGovernorType {
   title: string;
@@ -42,281 +48,6 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 `;
-const Quickertxsm = styled.div`
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-  margin: 12px 0 12px 0;
-  color: #6c6c6c;
-`;
-
-const Receivetx = styled(Quickertxsm)`
-  font-size: 16px;
-`;
-const ReciDiv1 = styled.div`
-  text-align: center;
-`;
-const VotingSc = styled.section`
-  margin: 8px 16px 16px 16px;
-  padding: 20px;
-  border-radius: 5px;
-  border: solid;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-  box-shadow: 0px 3px 0px #bebebe;
-`;
-
-const Sc3 = styled.section`
-  margin: 0px 16px 16px 16px;
-  padding: 16px;
-  border-radius: 5px;
-  border: none;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-`;
-
-const Box = styled.section`
-  margin: 8px 16px 16px 16px;
-  padding: 20px;
-  border-radius: 5px;
-  border: solid;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-  box-shadow: 0px 3px 0px #bebebe;
-`;
-
-const Sc3_1 = styled(Sc3)`
-  margin: 16px 16px 0px 16px;
-  padding: 16px;
-  border-radius: 5px;
-  border: none;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-`;
-
-const Flex1 = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-
-const Flex2 = styled.div`
-  margin: 40px 0 40px 0;
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-  align-items: center;
-
-`
-const Sc2 = styled.section`
-  flex: 1 1 40;
-  width: 45%;
-  height: 150px;
-  margin: 16px 8px 16px 16px;
-  padding: 16px;
-  border-radius: 5px;
-  border: none;
-  border-width: 1px;
-  border-color: #d9d9d9;
-  background-color: #ffffff;
-`;
-
-const Sc2_1 = styled(Sc2)`
-  margin: 16px 16px 16px 8px;
-  background-color: #54E1FF;
-`;
-
-const Tx1 = styled.span`
-  color: #000;
-  font-size: 14px;
-  font-weight: bold;
-`
-const Tx1color = styled(Tx1)`
-color: #FFF;
-`
-const Tx1_1 = styled(Tx1)`
-  font-size: 16px;
-`
-const Tx1_2 = styled.div`
-  color: #000;
-  font-weight: bold;
-  padding-top: 16px;
-  font-size: 14px;
-`
-const Tx2 = styled.div`
-  color: #000;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  padding-top: 30px;
-`
-const Tx3= styled.span`
-  color: #747474;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-`
-const TxRadio= styled.span`
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-`
-
-const Tx3color = styled(Tx3)`
-color: #FFF;
-`
-const PercentTx1 = styled.div`
-  margin: 12px 0 0px 0px;
-  padding: 6px 0 6px 0px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #6c6c6c;
-`;
-const PercentTx2 = styled.span`
-  font-size: 22px;
-  font-weight: bold;
-  color: #ff0a0a;
-`;
-const PercentTx3 = styled.span`
-  font-size: 10px;
-  font-weight: bold;
-  color: #000000;
-`;
-
-const PercentTx4_1 = styled.div`
-  font-size: 14px;
-  color: #000;
-  font-weight: bold;
-  margin: 16px 16px 0px 0px;
-`;
-
-const VtTx = styled.span`
-  font-size: 16px;
-  color: #000;
-  font-weight: bold;
-  margin: 16px 0px 0px 0px;
-`;
-
-const PercentTx4_2 = styled.span`
-  font-size: 14px;
-  font-weight: bold;
-  color: #F00;
-  padding-left: 8px;
-`;
-const PercentTx4_3 = styled(PercentTx4_2)`
-  color: #747474;
-`
-const PercentTx4_4 = styled(PercentTx4_2)`
-color: #0047FF;
-`
-const ButtonWrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  padding: 16px 0;
-  background-color: #efefef;
-`;
-
-const BtWp_1 = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-    padding: 16px 0;
-  justify-content: center;
-  background-color: #efefef;
-`
-
-const SaveButton = styled.button`
-  width: 45%;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-const SaveButton_1 = styled(SaveButton)`
-  width: 90%;
-`;
-
-const LoadButton = styled.button`
-  width: 45%;
-  background-color: #17a2b8;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #117a8b;
-  }
-`;
-const HideDiv = styled.div`
-  height: 3.9rem;
-`;
-const HideDiv_1 = styled.div`
-  height: 5.0rem;
-`;
-const LotDiv = styled.div`
-  position: absolute;
-  width: 100px;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-const Hr = styled.hr`
-  margin-top: 16px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  height: 0.063rem;
-  border: 0;
-  background: #e6e6e6;
-`;
-
-const QuickerTx = styled.div`
-  display: flex;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-const QuickerTx_1 = styled(QuickerTx)`
-  margin: 10px;
-`;
-
-const Input = styled.input`
-  display: flex;
-  margin: 0px 0px 0px 0px;
-`;
-
-const Lb1 = styled.label`
-  display: flex;
-  justify-content: center; /* 수평 가운데 정렬 */
-  align-items: center; /* 수직 가운데 정렬 */
-  flex-direction: column;
-`;
-
-const Margin_1 = styled.section`
-  position: fixed;
-  bottom: 0.5rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`
 
 const FeeGovernorPage = () => {
   const { pageState, setPageState, title, setTitle, roundInfo, setRoundInfo } =
@@ -466,44 +197,44 @@ const Main = ({ roundInfo }: any) => {
           )}
           <></>
           <Flex1>
-          <Sc2>
+          <Sc1>
             <Tx1>보유 투표권</Tx1>
             <Tx2>
             {convertToLocale(roundInfo.userVotePower)} <Tx3>vQuicker</Tx3>
             </Tx2>
-          </Sc2>
-          <Sc2_1>
+          </Sc1>
+          <Sc1_1>
           <Tx1color>가용 투표권</Tx1color>
           <Tx2>
           {convertToLocale(roundInfo.userVoteEnable)} <Tx3color>vQuicker</Tx3color>
           </Tx2>
-          </Sc2_1>
+          </Sc1_1>
           </Flex1>
-          <Sc3>
+          <Div1>
             <Tx1_1>금주 투표 현황</Tx1_1>
-            <PercentTx1>누적 수수료<br></br>
-              <PercentTx2>{convertToLocale(roundInfo.totalIncome)}</PercentTx2>
-              <PercentTx3> KRW</PercentTx3>
-            </PercentTx1>
-            <PercentTx1>현재 투표량<br></br>
-              <PercentTx2>{convertToLocale(roundInfo.totalVotePower)}</PercentTx2>
-              <PercentTx3> vQuicker</PercentTx3>
-            </PercentTx1>
-          </Sc3>
-          <Sc3>
+            <PercDiv1>누적 수수료<br></br>
+              <PercSp1>{convertToLocale(roundInfo.totalIncome)}</PercSp1>
+              <PercSp2> KRW</PercSp2>
+            </PercDiv1>
+            <PercDiv1>현재 투표량<br></br>
+              <PercSp1>{convertToLocale(roundInfo.totalVotePower)}</PercSp1>
+              <PercSp2> vQuicker</PercSp2>
+            </PercDiv1>
+          </Div1>
+          <Div1>
             <Tx1_1>거래수수료 - {roundInfo.currentFee}%</Tx1_1>
             <StrokedGaugeExample></StrokedGaugeExample>
-            <PercentTx4_1>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercentTx4_1>
-            <PercentTx4_1>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercentTx4_1>
-            <PercentTx4_1>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercentTx4_1>
-          </Sc3>
-          <Sc3>
+            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
+          </Div1>
+          <Div1>
           <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
           <StrokedGaugeExample></StrokedGaugeExample>
-          <PercentTx4_1>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercentTx4_1>
-          <PercentTx4_1>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercentTx4_1>
-          <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
-          </Sc3>
+          <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
+          <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
+          <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+          </Div1>
           <ButtonWrapper>
           <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
           <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
@@ -600,21 +331,21 @@ const RoundDataElement = ({ ele }: RoundDataElementType) => {
 
   return (
     <><GlobalStyle/>
-      <Sc3_1>
+      <Div1_1>
             <Tx1_1>투표 - {ele.round}회차</Tx1_1>
-            <PercentTx4_1>투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3></PercentTx4_1>
-            <PercentTx4_1>수수료 수익 <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4></PercentTx4_1>
+            <PercDiv2>투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3></PercDiv2>
+            <PercDiv2>수수료 수익 <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4></PercDiv2>
             <Hr></Hr>
             <Tx1_2>거래수수료</Tx1_2>
-            <PercentTx4_1>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercentTx4_1>
-            <PercentTx4_1>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercentTx4_1>
-            <PercentTx4_1>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercentTx4_1>
+            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
             <Hr></Hr>
             <Tx1_2>배송원 보증금</Tx1_2>
-            <PercentTx4_1>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercentTx4_1>
-            <PercentTx4_1>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercentTx4_1>
-            <PercentTx4_1>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercentTx4_1>
-      </Sc3_1>
+            <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+      </Div1_1>
     </>
   );
 };
@@ -657,12 +388,12 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
     <>
       {isInfoPage ? (
         <>
-          <VotingSc>
+          <Sc0>
                   <div>
                     <Lottie animationData={choice} />
                   </div>
                   <Receivetx>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</Receivetx>
-                </VotingSc>
+                </Sc0>
                 <ReciDiv1>
                 </ReciDiv1>
                 <BottomConfirmBtn
@@ -674,7 +405,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
       ) : (
         <>
         <div>
-          <Box>
+          <Div0>
           <div>
           <QuickerTx_1>거래 수수료</QuickerTx_1>
           <Flex2>
@@ -708,10 +439,10 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
             </Lb1>
           </Flex2>
           </div>
-          </Box>
+          </Div0>
         </div>
           <div>
-          <Box>
+          <Div0>
           <VtTx>배송원 보증금</VtTx>
           <Flex2>
             <Lb1>
@@ -743,7 +474,7 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
               <VtTx>인하</VtTx>
             </Lb1>
             </Flex2>
-            </Box>
+            </Div0>
           </div>
           <Margin_1>
           <SendTxK
@@ -771,6 +502,7 @@ const ClaimRewards = () => {
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
+    roundData.userVoteEnable = roundData.userVotePower;
     setRoundInfo(roundData);
     setPageState("main")
   };

@@ -61,7 +61,6 @@ export default {
       );
       res.send(result);
     } catch (error) {
-      res.send(error);
       next(error)
     }
   },
@@ -71,7 +70,6 @@ export default {
       const result = await qkrw_token_contract.call("balanceOf", para);
       res.send(result);
     } catch (e) {
-      res.send(e);
       next(e)
     }
   },
@@ -82,7 +80,6 @@ export default {
       const result = await quicker_drvr_contract.call(funcName, para);
       res.send(result);
     } catch (e) {
-      res.send(e);
       next(e)
     }
   },
@@ -100,7 +97,6 @@ export default {
       }
       res.send(cResult);
     } catch (e) {
-      res.send(e);
       next(e)
     }
   },
@@ -113,7 +109,6 @@ export default {
       resultArr.push(Number(result.securityDepositRate))
       res.send(resultArr);
     } catch (e) {
-      res.send(e);
       next(e)
     }
   },
@@ -124,7 +119,6 @@ export default {
       res.send(result);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   getOrders: async (req: Request, res: Response, next : NextFunction) => {
@@ -138,7 +132,6 @@ export default {
       res.send(orders);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   getOrdersForState: async (req: Request, res: Response, next : NextFunction) => {
@@ -148,7 +141,6 @@ export default {
       res.send(result);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   getStakingInfo: async (req: Request, res: Response, next : NextFunction) => {
@@ -192,7 +184,6 @@ export default {
       res.send(result);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   getQtokenAllowance: async (req: Request, res: Response, next : NextFunction) => {
@@ -202,7 +193,6 @@ export default {
       res.send(allowance);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   // 특정 라운드부터 index갯수의 과거 기록 불러오기
@@ -241,7 +231,6 @@ export default {
       res.send(resultArr);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   getCurrentFeeGovernorInfo: async (req: Request, res: Response, next : NextFunction) => {
@@ -322,7 +311,6 @@ export default {
       res.send(result);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   // 가스비 대납
@@ -334,7 +322,6 @@ export default {
       res.send(txResult);
     } catch (e) {
       next(e)
-      res.send(e);
     }
   },
   // 유저가 보유하고 있는 NFT ID 조회
@@ -357,7 +344,6 @@ export default {
       res.send(hasIdList)
     } catch (e) {
       next(e)
-      res.send(e)
     }
   },
   // 유저 의뢰금 총액, 배송 의뢰금 총액
@@ -375,7 +361,6 @@ export default {
       res.send(result)
     } catch (e) {
       next(e)
-      res.send(e)
     }
   },
   // NFT 민팅 
@@ -439,7 +424,6 @@ export default {
       }
     } catch (e) {
       next(e)
-      res.send(e)
     }
   },
 };

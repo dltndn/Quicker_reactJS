@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState, useRef, lazy, Suspense } from "react";
+import React, { createElement, useEffect, useState, useRef, lazy } from "react";
 import { useNavigate } from "react-router-dom";
 import Tmap from "../components/Tmap";
 import Postcode from "../components/Postcode";
@@ -9,6 +9,8 @@ import { createGlobalStyle } from "styled-components";
 import { create } from "zustand";
 import Time from "../lib/Time";
 import { useConnWalletInfo } from "../App";
+import TmapApi from "../lib/Tmap"
+import SuspenseComponent from "../components/SuspenseComponent";
 
 interface OrderState {
   cost: number;
@@ -25,6 +27,8 @@ interface OrderState {
   setCreatedOrderNum: (newOrder: string | undefined) => void;
   errorMessage: string | undefined;
   setErrorMessage: (newData: string) => void;
+  recommendCost: string;
+  setRecommendCost: (newData: string) => void;
 }
 
 export const useOrderStore = create<OrderState>((set) => ({
@@ -43,6 +47,8 @@ export const useOrderStore = create<OrderState>((set) => ({
     set({ createdOrderNum }),
   errorMessage: undefined,
   setErrorMessage: (errorMessage: string) => set({ errorMessage }),
+  recommendCost: "",
+  setRecommendCost: (recommendCost: string) => set({ recommendCost }),
 }));
 
 interface useDivHandler {
@@ -221,7 +227,7 @@ export default function CommissionPage() {
   const arriveinputDiv = useRef<HTMLInputElement>(null);
   const { showCommissionPage, setShowCommissionPage } = useDivHandler();
 
-  const { title, setTitle, setDeadLine, showAllowance, setCost } = useOrderStore();
+  const { title, setTitle, setDeadLine, showAllowance, setCost, setRecommendCost } = useOrderStore();
   const {
     orderId,
     startAddress,
@@ -354,14 +360,13 @@ export default function CommissionPage() {
   useEffect(() => {
     setDeadlineToProp();
   }, [date, AMPM, hour, minute]);
+
   return (
     <>
       <GlobalStyle />
       <TopBarOthers title={title} redirectLogic={() => redirectionLogic()} />
       {showAllowance ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <IncreaseAllowance />
-        </Suspense>
+        <SuspenseComponent component={<IncreaseAllowance />} />
       ) : (
         <>
           <div

@@ -3,37 +3,10 @@ import { useState, useEffect } from "react";
 import { generateQRCode } from "../../utils/GenerateQr";
 import { SendTxType, SendTxDelegationType } from "../../utils/KaikasConnect";
 import { useConnWalletInfo } from "../../App";
-import styled from "styled-components";
 import Modal from "./QrModal";
+import { SendTxKStyle } from "../../StyleCollection";
 
-const LoadButton = styled.button`
-  width: 98%;
-  height: 3.125rem;
-  font-size: var(--font-md);
-  border-radius: 0.313rem;
-  border: 0;
-  outline: #efefef;
-  background-color: #17a2b8;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #117a8b;
-  }
-`;
-
-// const Container = styled.section`
-//   padding: calc(var(--padding) / 2) var(--padding);
-//   display: flex;
-//   justify-content: center;
-// `;
-
-const Img = styled.img`
-`
+const {LoadButton} = new SendTxKStyle()
 
 type SendTokenProps = {
   param: SendTxType | SendTxDelegationType;
@@ -58,7 +31,7 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       } else {
         await kConn.getTxResult(reqKey, true);
       }
-
+      successFunc();
     } catch (e) {
       console.log(e);
     }

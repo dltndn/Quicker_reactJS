@@ -1,21 +1,23 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { SetStateAction, useEffect, useRef, useState } from "react"
 import type { RoomInterface } from "./interface/RoomInterface"
 import Handler from "../../lib/Handler"
 import getName from "./getName"
-import styled from "styled-components"
 import BottomBar from "../BottomBar"
 import Time from "../../lib/Time"
 import { useConnWalletInfo } from "../../App"
+import { RoomStyle } from "../../StyleCollection";
+import { getNftImgPath } from "../../utils/CalAny"
 
-const Chatman = require('../../image/Chatman.png')
-const operator = require('../../image/operator.png')
+const {Div0, Div1, Div2, StateDiv, Sp0, Sp1, Sp2, Img0} = new RoomStyle()
 
-export default function ({ setStates, orderNum, blockchainElement, role }: RoomInterface) {
+export default function ({ setStates, orderNum, blockchainElement, role, oponentAddress }: RoomInterface) {
     const { address } = useConnWalletInfo();
     const roomComponent = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState("");
     const [opponentName, setOponentName] = useState("");
     const [time ,setTime] = useState("");
+    const [nftImgPath, setNftImgPath] = useState(getNftImgPath("404"))
 
     const getRecentMessage = async () => {
       
@@ -30,6 +32,12 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
         }
     }
 
+    const getNftImagePath = async () => {
+      const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${oponentAddress}`)
+      const path = getNftImgPath(imageId)
+      setNftImgPath(path)
+    }
+
     useEffect(() => {
         (async () => {
             if (address !== undefined) {
@@ -37,6 +45,10 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
                 getRecentMessage()
             }
         })()
+        getNftImagePath()
+        return () => {
+          setNftImgPath(getNftImgPath("404"))
+        }
     }, [])
 
     return (
@@ -51,7 +63,7 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
         >
         <Div0>
           <Div1>
-            <Img1 src={Chatman}></Img1>
+            <Img0 src={nftImgPath}></Img0>
           </Div1>
           <Div2>
             <Sp0>
@@ -67,59 +79,3 @@ export default function ({ setStates, orderNum, blockchainElement, role }: RoomI
 }
 
 
-const StateDiv = styled.span`
-  padding: 1rem 0.75rem 1rem 1rem;
-  padding: 0;
-  color: #5843f5;
-  font-weight: bold;
-  font-size: 12px;
-`;
-
-const Div0 = styled.div`
-  display: flex;
-  width: 100%;
-  height: 85px;
-  text-align: center;
-  align-items: center;
-  justify-content: space-around;
-  border-style: solid;
-  border-color: #efefef;
-  border-width: 0.5px 0px 0.5px 0px;
-`;
-
-const Div1 = styled.div`
-  padding: 5px 10px 5px 10px;
-  display: flex;
-  flex: 1 1 20%;
-`
-
-const Div2 = styled.div`
-  display: flex;
-  flex: 1 1 80%;
-  flex-flow: column;
-  justify-content: flex-start;
-  text-align: left;
-  margin: 0px 10px 0px 10px;
-
-`
-
-const Sp0 = styled.div`
-  font-size: 12px;
-  font-weight: bold;
-`
-
-const Sp1 = styled.span`
-  font-size: 8px;
-  font-weight: thin;
-  color: #929292;
-`
-
-const Sp2 = styled(Sp0)`
-  font-weight: normal;
-`
-
-const Img1 = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-left: 10px;
-`

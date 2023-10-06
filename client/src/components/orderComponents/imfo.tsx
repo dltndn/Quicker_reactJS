@@ -13,189 +13,62 @@ import { AiOutlineLogout, AiOutlineCloseSquare } from "react-icons/ai";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import GetQkrwBalance from "../getQkrwBalance";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // import Profile_settingPage from "../../pages/Profile_settingPage";
 import { useVerificationStore } from "../../App";
 import { useOrderState } from "../ShowOrders";
 import WalletConnectBtn from "../blockChainTx/WalletConnectBtn";
 import { useConnWalletInfo } from "../../App";
 import NftProfile from "../NftProfile";
+import { ImfoStyle } from "../../StyleCollection";
+import { getFeeGovernorInfo } from "../../utils/ExecuteOrderFromBlockchain";
+import { create } from "zustand";
+
+const {
+  Div0,
+  Sc0_1,
+  Sc1_1,
+  Sc2_1,
+  Sc3,
+  Sc3_1,
+  Scwal,
+  Sp0,
+  Sp1,
+  Sp2,
+  Bteye,
+  Bticon,
+  Bticonimg,
+  Hr,
+  Margin,
+  Topbt,
+  Topdiv,
+  Toptx,
+} = new ImfoStyle();
 
 const money = require("../../image/money.png");
 
 const img1 = require("../../image/ex1.jpg");
-// const img1 = "ipfs://bafybeidkcbye5ta6yvgiju6jzwacm4egov6vsvuui4f6h6p6zwxn3ayvla/"
 
-const Topdiv = styled.div`
-  display: flex;
-  padding: var(--padding);
-  color: var(--black-color);
-  height: 9.688rem;
-  align-items: center;
-`;
-
-const Topbt = styled.button`
-  border: none;
-  box-shadow: none;
-  outline: none;
-  font-size: var(--font-md);
-  background-color: #efefef;
-  margin-left: auto;
-  padding-right: 0.25rem;
-  padding-top: 0.438rem;
-`;
-
-const Topimg = styled.img`
-  width: 5rem;
-  height: 5rem;
-  margin-left: 0.5rem;
-  border-radius: 100%;
-`;
-
-const Toptx = styled.span`
-  font-size: var(--font-md);
-  font-weight: bold;
-  padding-left: 1.125rem;
-`;
-
-const Scwal = styled.section`
-  display: flex;
-  height: 3rem;
-  border: 0rem;
-  margin: 0.175rem 0.563rem;
-`;
-
-const Sc0 = styled.section`
-  display: flex;
-  margin: 0 0.563rem;
-  flex-direction: column;
-  justify-content: center;
-  height: 3rem;
-  border-radius: 0.313rem 0.313rem 0 0;
-  border: 0rem;
-  background-color: var(--white-color);
-  transition: all 0.3s ease;
-`;
-
-const Sc1 = styled(Sc0)`
-  border-radius: 0px 0px 0.313rem 0.313rem;
-  margin-bottom: 0.375rem;
-  transition: all 0.3s ease;
-`;
-
-const Sc2 = styled.section`
-  display: flex;
-  margin: 0 0.563rem;
-  flex-direction: column;
-  justify-content: center;
-  height: 3rem;
-  border: 0;
-  background-color: var(--white-color);
-  transition: all 0.3s ease;
-`;
-
-const Sc3 = styled.section`
-  display: flex;
-  margin: 0 0.563rem;
-  flex-direction: column;
-  justify-content: center;
-  height: 3rem;
-  border-radius: 0.313rem;
-  border: 0;
-  background-color: var(--white-color);
-  margin-bottom: 0.375rem;
-  transition: all 0.3s ease;
-`;
-
-const Sc3_1 = styled(Sc3)`
-  &:hover {
-  background-color: #e2e2e2;
-  border-color: #e2e2e2;
-  color: #000000;
+interface UseNftStateType {
+  imgState: string;
+  setImgState: (data: string) => void;
+  imgList: string[];
+  setImgList: (data: string[]) => void;
 }
-`
-const Sc2_1 = styled(Sc2)`
-  &:hover {
-  background-color: #e2e2e2;
-  border-color: #e2e2e2;
-  color: #000000;
-}
-`
-const Sc1_1 = styled(Sc1)`
-  &:hover {
-  background-color: #e2e2e2;
-  border-color: #e2e2e2;
-  color: #000000;
-}
-`
-const Sc0_1 = styled(Sc0)`
-  &:hover {
-  background-color: #e2e2e2;
-  border-color: #e2e2e2;
-  color: #000000;
-}
-`
 
-
-
-const Div0 = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-  margin-left: 0.75rem;
-`;
-
-const Sp0 = styled.div`
-  margin-left: auto;
-  margin-right: 0.625rem;
-`;
-
-const Sp1 = styled(Sp0)`
-  font-size: var(--font-md);
-`;
-
-const Sp2 = styled.div`
-  margin-left: 10px;
-`;
-
-const Bteye = styled.button`
-  border: none;
-  box-shadow: none;
-  outline: none;
-  background-color: var(--white-color);
-  font-size: 0.875rem;
-  margin-right: 0.75rem;
-`;
-
-const Hr = styled.hr`
-  margin-left: auto;
-  margin-right: auto;
-  width: 95%;
-  height: 0.063rem;
-  border: 0;
-  background: #e6e6e6;
-`;
-
-const Bticon = styled.button`
-  border: none;
-  background-color: var(--white-color);
-  margin-right: 0.625rem;
-`;
-
-const Bticonimg = styled.img`
-  width: 1.875rem;
-  height: 1.875rem;
-`;
-
-const Margin = styled.div`
-  height: 3.85rem;
-  width: 100%;
-`
+export const useNftState = create<UseNftStateType>((set) => ({
+  imgState: "404",
+  setImgState: (imgState: string) => set({ imgState }),
+  imgList: ["404"],
+  setImgList: (imgList: string[]) => set({ imgList }),
+}));
 
 function Imfo() {
   const navigate = useNavigate();
-  const { address, isConnected, setAddress, setIsMobile, setIsConneted } = useConnWalletInfo();
+  const [isReward, setIsReward] = useState<boolean>(false);
+
+  const { address, isConnected, setAddress, setIsMobile, setIsConneted } =
+    useConnWalletInfo();
 
   const { isMember, userName } = useVerificationStore();
   const { setOrdersObj } = useOrderState();
@@ -206,6 +79,22 @@ function Imfo() {
     setIsConneted(false);
     localStorage.setItem("kaikas_address", JSON.stringify(undefined));
   };
+
+  const isPendingReward = async () => {
+    if (address) {
+      const roundData = await getFeeGovernorInfo(address);
+      if (roundData.userRewards !== "0") {
+        setIsReward(true)
+      }
+    }
+  };
+
+  useEffect(() => {
+    isPendingReward()
+    return () => {
+      setIsReward(false)
+    }
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
@@ -231,7 +120,6 @@ function Imfo() {
         </Topdiv>
       </section>
       <Scwal>
-        {/* <Web3Button icon="hide" label="지갑연결" balance="hide" /> */}
         <WalletConnectBtn />
       </Scwal>
       <Hr></Hr>
@@ -271,23 +159,28 @@ function Imfo() {
         <Div0 onClick={() => navigate("/feeGovernor")}>
           <BsCoin></BsCoin>
           <Sp2>거래수수료 투표</Sp2>
+          {isReward && (<> 알림표시</>)}
         </Div0>
       </Sc3_1>
       <Sc0_1>
-        <Div0 onClick={() => {
-          setOrdersObj(null);
-          navigate("/orderlist");
-          }}>
+        <Div0
+          onClick={() => {
+            setOrdersObj(null);
+            navigate("/orderlist");
+          }}
+        >
           <BsFileText></BsFileText>
           <Sp2>오더 내역</Sp2>
         </Div0>
       </Sc0_1>
       <Hr></Hr>
       <Sc1_1>
-        <Div0 onClick={() => {
-          setOrdersObj(null);
-          navigate("/fulfillmentlist");
-        }}>
+        <Div0
+          onClick={() => {
+            setOrdersObj(null);
+            navigate("/fulfillmentlist");
+          }}
+        >
           <BsCheck2Circle></BsCheck2Circle>
           <Sp2>수행 내역</Sp2>
         </Div0>

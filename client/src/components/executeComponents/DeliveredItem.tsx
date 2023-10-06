@@ -5,32 +5,11 @@ import RemoteDelivery from "./RemoteDelivery";
 import styled from "styled-components";
 import { ExecutionComponentProps } from "../../pages/ExecutionPage";
 import { create } from "zustand";
+import { DelivereditemStyle } from "../../StyleCollection";
 
-const Div0 = styled.div`
-    display: flex;
-    height: 3.875rem;
-`;
+const {Div0, Div1, Btwal} = new DelivereditemStyle()
 
-const Div1 = styled.div`
-    flex: 1 1 50%;
-`;
 
-const Btwal = styled.button`
-width: 100%;
-height: 2.25rem;
-font-size: var(--font-md1);
-font-weight: bold;
-border: 0rem;
-outline: #efefef;
-background-color: #ffffff;
-padding-left: 0.625rem;
-text-align: center;
-
-&:focus {
-    border-bottom: 0.125rem solid #0070f3;
-  }
-
-`;
 
 interface DeliveredComponent {
     isFace: boolean;

@@ -3,6 +3,7 @@ export interface RoomInterface {
     orderNum: number
     role : string
     blockchainElement : any
+    oponentAddress : string
 }
 
 interface setStates {

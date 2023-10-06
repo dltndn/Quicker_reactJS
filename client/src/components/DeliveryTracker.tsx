@@ -5,6 +5,9 @@ import Handler from "../lib/Handler";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { TiArrowUpThick } from "react-icons/ti";
+import { DeliveryTrackerSytle } from "../StyleCollection";
+
+const {Bt1, Ic1} = new DeliveryTrackerSytle()
 
 interface DeliveryTrackerProps {
   //   mapDivId: string;
@@ -161,22 +164,3 @@ export default function DeliveryTracker({
     </>
   );
 }
-
-const Bt1 = styled.button`
-  border: none;
-  padding: 5px;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-  padding-left: 0.22em;
-  padding-right: 0.22em;
-  font-size: 12px;
-  border-radius: 0.213rem;
-  border: 0;
-  color: #000000;
-  background-color: #ffffff;
-`
-const Ic1 = styled.div`
-  font-size: 24px;
-  margin-bottom: 5px;
-  color: #3bd8ff;
-`

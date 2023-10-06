@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import {
   MouseEventHandler,
   ReactNode,
@@ -23,6 +24,12 @@ import { useConnWalletInfo } from "../../App";
 
 import { MessageInfo } from "./interface/MessageInfo";
 import { useNavigate } from "react-router-dom";
+import { ChatStyle } from "../../StyleCollection";
+
+import { getNftImgPath } from "../../utils/CalAny";
+
+const {Div0, Div1, Div2, Divinput, Img1, Ip1, Sc0, Bt1} = new ChatStyle()
+
 
 const Chatdot = require("../../image/Chatdot.png");
 const Chatman = require("../../image/Chatman.png");
@@ -36,14 +43,13 @@ export default function ({
   const inputbox = useRef<HTMLInputElement>(null);
 
   const [messageData, setMessageData] = useState<MessageInfo[]>([])
-  const [timeData, setTimeData] = useState<string[]>([])
   const [socketId, setSocketId] = useState<String>();
   const [opponentName, setOponentName] = useState<string>("");
   const [senderPhoneNumber, setSenderPhoneNumber] = useState();
   const [senderAddress, setSenderAddress] = useState();
   const [receiverPhoneNumber, setReceiverPhoneNumber] = useState();
   const [receiverAddress, setReceiverAddress] = useState();
-  const [parsedAddress, setParsedAddress] = useState();
+  const [nftId, setNftId] = useState<string>('404')
 
   const { address } = useConnWalletInfo();
 
@@ -131,15 +137,24 @@ export default function ({
           setSenderAddress(realDepartureAddress);
           setReceiverAddress(realDestinationAddress);
         }
+        let oponentAddress = ''
+        if (address === blockChainOrder?.client) {
+          // 계정 주인이 의뢰인 즉 상대방은 배송원
+          oponentAddress = blockChainOrder.quicker
+        } else {
+          // 계정 주인이 배송원 즉 상대방은 의뢰인
+          oponentAddress = blockChainOrder?.client
+        }
+        console.log(oponentAddress)
+        const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${oponentAddress}`)
+        console.log(imageId)
+        setNftId(imageId)
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    if (opponentName !== "") {
-      console.log(opponentName);
+    return () => {
+      setNftId('404')
     }
-  }, [opponentName]);
+  }, []);
 
   useEffect(() => {
     socket.on("connect", () => setSocketId(socket.id));
@@ -153,10 +168,6 @@ export default function ({
       console.log(socketId);
     }
   }, [socketId]);
-
-  useEffect(() => {
-    console.log(messageData)
-  }, [messageData]);
 
   const navigate = useNavigate();
 
@@ -189,7 +200,7 @@ export default function ({
       <>
       {/* address 타입 확인 필요 타입 변환 없이 string 타입으로 판별됨 */}
         {messageData.map((element: MessageInfo) => (
-          (address === element.id) ? <MyMessageTemplate message={element.message} date={element.date} /> : <OtherMessageTemplate message={element.message} date={element.date} />
+          (address === element.id) ? <MyMessageTemplate message={element.message} date={element.date} /> : <OtherMessageTemplate message={element.message} date={element.date} nftImgPath={getNftImgPath(nftId)}/>
         ))}
       </>
       <form onSubmit={sendMessage} action="">
@@ -206,109 +217,3 @@ export default function ({
   );
 }
 
-const Div0 = styled.div`
-  margin: 0px 10px 5px 10px;
-  border-style: solid;
-  border-color: #efefef;
-  border-width: 0.5px 0px 0.5px 0px;
-`;
-
-const Div1 = styled.div`
-  display: flex;
-  padding: 10px 10px 10px 10px;
-  flex-direction: column;
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const Div2 = styled.div`
-  font-size: 12px;
-  font-weight: thin;
-  color: #646464;
-  margin: 5px 0 5px 0;
-`;
-
-const Img1 = styled.img`
-  width: 4px;
-  margin: -5px 0px -5px 90px;
-`;
-
-const Img2 = styled.img`
-  width: 33px;
-  height: 33px;
-`;
-
-const Div3 = styled.div`
-  display: flex;
-  margin: 10px 10px 10px 15px;
-`;
-const DivChat = styled.div`
-  background-color: #f8f8f8;
-  border-radius: 20px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  margin: 0px 5px 0px 10px;
-  padding: 8px;
-`;
-const Divclock = styled.div`
-  display: flex;
-  align-items: flex-end;
-  font-size: 8px;
-  font-weight: thin;
-  color: #adadad;
-`;
-
-const Divdate = styled.div`
-  width: 100%;
-  margin: 10px 0 10px 0;
-  display: flex;
-  justify-content: center;
-  font-size: 8px;
-  font-weight: thin;
-  color: #adadad;
-`;
-const Div4 = styled(Div3)`
-  justify-content: flex-end;
-`;
-
-const DivChat2 = styled(DivChat)`
-  background-color: #79afff;
-  color: #ffffff;
-`;
-
-const Sc0 = styled.section`
-  position: fixed;
-  display: flex;
-  bottom: 0;
-  width: 100%;
-  height: 3.875rem;
-  background-color: var(--white-color);
-  align-items: center;
-  justify-content: space-around;
-  text-align: center;
-`;
-
-const Ip1 = styled.input`
-  border-radius: 20px;
-  border: none;
-  width: 90%;
-  background-color: #e6e6e6;
-  outline: none;
-  height: 100%;
-  color: #a0a0a0;
-  padding-left: 15px;
-`;
-
-const Bt1 = styled.button`
-  border: none;
-  background-color: #ffffff;
-  width: 30px;
-  font-size: 20px;
-  margin: 5px 10px 0 0 ;
-`
-
-const Divinput = styled.div`
-  width: 85%;
-  height: 30px;
-`

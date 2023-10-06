@@ -2,6 +2,9 @@ import { sliceAddress } from "../utils/CalAny";
 import styled, { keyframes } from "styled-components";
 import { useEffect, useState } from "react";
 import { useExplorerState } from "../pages/ExplorerPage";
+import { ExplorerTableDataStyle } from "../StyleCollection";
+
+const {Div1, Div1_2,  StateDiv} = new ExplorerTableDataStyle()
 
 interface ExplorerTableProps {
   orderNum: string;
@@ -111,39 +114,3 @@ const BlinkDiv = styled.div`
   animation: ${blinkAnimation} 1s;
 `;
 
-const Div0 = styled.div`
-  display: flex;
-  padding: 1rem 0.75rem 1rem 1.875rem;
-`;
-
-const StateDiv = styled(Div0)`
-  margin-left: auto;
-  background-color: ${(props) => props.color};
-  border-radius: 1.25rem;
-  width: 3.75rem;
-  height: 1.438rem;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: var(--white-color);
-  font-weight: bold;
-`;
-
-const Div1 = styled.div`
-  display: flex;
-  background-color: var(--white-color);
-  padding: 10px;
-`;
-
-const Dvi1_1 = styled.div`
-  display: flex;
-  flex: 1 1 20%;
-  justify-content: center;
-  font-size: var(--font-md1);
-  font-weight: bold;
-`;
-
-const Div1_2 = styled(Dvi1_1)`
-  font-size: 0.9em;
-  align-items: center;
-`;
