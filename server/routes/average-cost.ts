@@ -1,9 +1,9 @@
 import express from "express"
-import OrderController from "../Controllers/OrderController";
+import { orderController } from "../controllers";
 
 const router = express.Router();
 
 // GET /average/cost
-router.get("/cost", OrderController.getAverageCost)
+router.get("/cost", orderController.getAverageCost)
 
 export default router;

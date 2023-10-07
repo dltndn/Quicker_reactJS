@@ -5,7 +5,7 @@ import {
   User,
   initModels,
 } from "../../Maria/Models/init-models";
-import { cryptoUserInfo } from "../../util/cryptoUserInfo";
+import { cryptoUserInfo } from "../../service/cryptoUserInfo";
 import { sequelize } from "../connectors/sequelizeConnector";
 
 describe("회원가입 테스트", () => {

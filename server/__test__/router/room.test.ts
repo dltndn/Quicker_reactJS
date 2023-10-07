@@ -1,6 +1,6 @@
 import { sequelize } from "../connectors/sequelizeConnector";
 import { initModels } from "../../Maria/Models/init-models";
-import { findRoomInfoByOrderNumber } from "../../service/Room";
+import { findRoomInfoByOrderNumber } from "../../../room";
 import { findRecentMessageByOrderNumber } from "../../Mongo/Command/FindMessages";
 import { mongoConnection } from "../connectors/mongoConnector";
 

@@ -1,41 +1,30 @@
 import { Application} from "express";
 
-import { ErrorHander } from "../Controllers/Error";
-
-import AssociateOrder from "../routes/AssociateOrder";
-import CurrentLocation from "../routes/CurrentLocation";
-import Home from "../routes/Home";
-import Order from "../routes/Order";
-import Orders from "../routes/Orders";
-import Register from "../routes/Register";
-import Room from "../routes/Room";
-import User from "../routes/User";
-import Caver from "../routes/Caver"
-import averageCost from "../routes/average-cost"
-import NotFound from "../routes/NotFound"
+import { errorController } from "../controllers";
+import { Caver, associateOrder, averageCost, currentLocation, home, notFound, order, orders, register, room, user } from "../routes";
 
 const router = {
-  handle: async (app: Application) => {
+  handle: (app: Application) => {
     // 개발용 라우터
-    app.use("/", Home);
-    app.use("/AssociateOrder", AssociateOrder);
-    
+    app.use("/", home);
+    app.use("/AssociateOrder", associateOrder);
+
     // 서비스용 라우터
-    app.use("/room", Room);
-    app.use("/user", User);
-    app.use("/order", Order);
-    app.use("/orders", Orders);
-    app.use("/register", Register);
-    app.use("/current-deliver-location", CurrentLocation);
-    app.use("/average", averageCost)
+    app.use("/room", room);
+    app.use("/user", user);
+    app.use("/order", order);
+    app.use("/orders", orders);
+    app.use("/register", register);
+    app.use("/current-deliver-location", currentLocation);
+    app.use("/average", averageCost);
 
     app.use("/caver", Caver);
 
-    app.use("*", NotFound);
-    
-    app.use(ErrorHander);
+    app.use("*", notFound);
+
+    app.use(errorController.handler);
     return app;
-  },
+  }
 };
 
 export default router;
