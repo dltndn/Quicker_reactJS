@@ -25,12 +25,13 @@ import SuspenseComponent from "../components/SuspenseComponent";
 import BottomConfirmBtn from "../components/bottomconfirmBtn";
 import { StakingPageStyle } from "../StyleCollection";
 
+const StackingAni = require('../components/animation/StackingGif.gif');
 
 const {Sc0, Sc01, Sc02, Sc3, Sc4, ReciDiv1, Div0, Div1,  Div1_3, HideDiv
 , PercentDiv,ContainerDiv, Sp0, QuicPcTx, QuickerTx, QuickerTx_1,
 HeadQuickerTx, StakingTxQuicker, PercentTx1, PercentTx2, PercentTx3, StakingBt, StakingTx,
 StakingTx1, StakingTx2, StakingTx3, StakingTxSm1, StakingTxSm1_1, StakingTxSm2, StakingTxSm2_1,
-Bt1, Margin, Margin_1, Ip, Receivetx} = new StakingPageStyle()
+Bt1, Margin, Margin_1, Ip, Receivetx, Lot} = new StakingPageStyle()
 
 type StakingComponentType = {
   onClickBackBtn: () => void;
@@ -206,9 +207,9 @@ const StakingPage = () => {
                 <StakingTxSm1>
                   종료 일자<StakingTxSm2>{endDate}</StakingTxSm2>
                 </StakingTxSm1>
-                {/* <Lot>
-                  <Lottie animationData={Stacking} />
-                </Lot> */}
+                <Lot>
+                  <img src={StackingAni} />
+                </Lot>
               </Sc01>
               <Sc02>
                 <QuickerTx>보상 수령</QuickerTx>
@@ -234,9 +235,6 @@ const StakingPage = () => {
                   }}
                 >
                   <StakingTx3>스테이킹
-                    {/* <CenteredDiv>
-                      <Lottie animationData={StackingGo} />
-                    </CenteredDiv> */}
                   </StakingTx3>
                   
                 </Sc4>

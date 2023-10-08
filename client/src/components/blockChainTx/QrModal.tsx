@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { QrModalStyle } from "../../StyleCollection";
 
-const {ModalCloseButton, ModalContent, ModalImg, ModalOverlay} = new QrModalStyle()
+const { ModalContent, ModalImg, ModalOverlay } = new QrModalStyle();
 
 interface ModalProps {
   isOpen: boolean;
@@ -25,13 +25,19 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, imageUrl }) => {
     };
   }, [isOpen]);
 
+  // 모달 바깥을 클릭할 때 모달을 닫는 이벤트 핸들러
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
-  
 
   return (
-    <ModalOverlay>
+    <ModalOverlay onClick={handleOutsideClick}>
       <ModalContent>
-        <ModalCloseButton onClick={onClose}>&times;</ModalCloseButton>
+        
         <ModalImg src={imageUrl} alt="Modal Image" />
       </ModalContent>
     </ModalOverlay>

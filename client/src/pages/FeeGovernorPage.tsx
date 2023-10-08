@@ -16,13 +16,15 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from "apexcharts";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
+import Profit from "../Lottie/profitFeeGovernor.json"
 import choice from "../Lottie/Choice.json";
 import { FeeGovenorPageStyle } from "../StyleCollection";
+import { BsCaretRightFill } from "react-icons/bs";
 
-const { Receivetx, ReciDiv1, Div0, Sc0, Sc1, Sc1_1, Div1, Div1_1, Flex1, Flex2, Tx1, Tx1_1, 
+const { Receivetx, ReciDiv1,ReciDiv1_1, Div0, Sc0, Sc1, Sc3, Sc1_1, Div1, Div1_1, Flex1, Flex2, Tx1, Tx1_1, 
   Tx1_2, Tx2, Tx3, Tx3color, Tx1color, PercDiv1, PercSp1, PercSp2, PercDiv2, PercentTx4_2,
 PercentTx4_3, PercentTx4_4, VtTx, ButtonWrapper, BtWp_1, SaveButton, SaveButton_1, LoadButton, HideDiv,
-HideDiv_1, LotDiv, Hr, QuickerTx_1, Input, Lb1, Margin_1} = new FeeGovenorPageStyle()
+HideDiv_1, LotDiv, Hr, QuickerTx_1, Input, Lb1, Margin_1, Div1_2, Bt1, ChartDiv} = new FeeGovenorPageStyle()
 
 interface UseFeeGovernorType {
   title: string;
@@ -186,16 +188,24 @@ const Main = ({ roundInfo }: any) => {
       {roundInfo && (
         <div>
           {roundInfo.userRewards !== "0" && (
-            <div>
-              <div>
-                {convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!
-              </div>
-              <button onClick={() => setPageState("claimRewards")}>
-                정산받기
-              </button>
-            </div>
+            <Div1_2>
+            <Tx1color>
+              {convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!
+            </Tx1color>
+            <Bt1 onClick={() => setPageState("claimRewards")}>
+                <BsCaretRightFill></BsCaretRightFill>
+            </Bt1>
+          </Div1_2>
           )}
           <></>
+          <Div1_2>
+              <Tx1color>
+                {convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!
+              </Tx1color>
+              <Bt1 onClick={() => setPageState("claimRewards")}>
+                  <BsCaretRightFill></BsCaretRightFill>
+              </Bt1>
+            </Div1_2>
           <Flex1>
           <Sc1>
             <Tx1>보유 투표권</Tx1>
@@ -223,17 +233,48 @@ const Main = ({ roundInfo }: any) => {
           </Div1>
           <Div1>
             <Tx1_1>거래수수료 - {roundInfo.currentFee}%</Tx1_1>
-            <StrokedGaugeExample></StrokedGaugeExample>
+            <ChartDiv>
+              <div style={{ width: '100px', height: '100px' }}>
+                <svg viewBox="0 0 200 200">
+                  <circle cx="100" cy="100" r="90" fill="none" stroke="beige" strokeWidth="20" />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="90"
+                    fill="none"
+                    stroke="blue"
+                    strokeWidth="20"
+                    strokeDasharray={`${2 * Math.PI * 90 * (roundInfo.currentFee / 100)} ${2 * Math.PI * 90 * ((100 - roundInfo.currentFee)/ 100)}`}
+                    strokeDashoffset={2 * Math.PI * 90 * 0.25}
+                  />
+                </svg>
+              </div>
+            </ChartDiv>
             <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
             <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
             <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
           </Div1>
           <Div1>
-          <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
-          <StrokedGaugeExample></StrokedGaugeExample>
-          <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
-          <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
-          <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+            <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
+            <ChartDiv>
+                <div style={{ width: '100px', height: '100px' }}>
+                  <svg viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="beige" strokeWidth="20" />
+                    <circle
+                      cx="100"
+                      cy="100"
+                      r="90"
+                      fill="none"
+                      stroke="blue"
+                      strokeWidth="20"
+                      strokeDasharray={`${2 * Math.PI * 90 * (roundInfo.currentSecuDepo / 100)} ${2 * Math.PI * 90 * ((100 - roundInfo.currentSecuDepo)/ 100)}`}
+                      strokeDashoffset={2 * Math.PI * 90 * 0.25}/>
+                  </svg>
+                </div>
+              </ChartDiv>
+            <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
+            <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
+            <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
           </Div1>
           <ButtonWrapper>
           <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
@@ -509,12 +550,18 @@ const ClaimRewards = () => {
 
   return (
     <>
-      <div>animation</div>
-      <div>지난 투표한 주의 수수료 수익을 분배받아요</div>
-      <SendTxK
+              <Sc3>
+                <div>
+                  <Lottie animationData={Profit} />
+                </div>
+                <Receivetx>저번 투표한 주의 <br/><br/>수수료 수익을 분배받아요</Receivetx>
+              </Sc3>
+              <ReciDiv1_1>
+              <SendTxK
         param={GetContractParams.claimRewards()}
         successFunc={successFunc}
       />
+              </ReciDiv1_1>
     </>
   );
 };
@@ -551,42 +598,7 @@ const convertToLocale = (data: string) => {
   return Number(data).toLocaleString();
 };
 
-const StrokedGaugeExample: React.FC = () => {
-  const options = {
-    chart: {
-      type: 'donut',
-      height: 50, // 그래프의 높이 설정
-      width: 50, // 그래프의 너비 설정 (예: '300px')
-    },
-    plotOptions: {
-      radialBar: {
-        hollow: {
-          margin: 15,
-          size: "60%"
-        },
-        dataLabels: {
-          showOn: "always",
-          name: {
-            offsetY: -10,
-            show: true,
-            color: "#888",
-            fontSize: "12px"
-          },
-          value: {
-            color: "#111",
-            fontSize: "20px",
-            show: true
-          }
-        },
-      },
-    },
-    series: [100], // 데이터 값 (0부터 100 사이의 값)
-    labels: ['Stroked Gauge'],
-  } as ApexOptions;
-
-  return (
-      <ReactApexChart options={options} series={options.series} type="radialBar" />
-  );
-};
 
 export default FeeGovernorPage;
+
+
