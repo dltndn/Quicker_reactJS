@@ -9,7 +9,7 @@ interface props {
 function RequestPage({sendData} : props) {
   const { cost, setBtnContent, deadLine } = useOrderStore()
   useEffect(() => {
-    setBtnContent(cost.toString() + "원 결제하기")
+    setBtnContent(cost.toLocaleString() + "원 결제하기")
   }, [cost])
 
   return (
