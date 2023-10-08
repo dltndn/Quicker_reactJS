@@ -9,6 +9,7 @@ import { initModels } from "../maria/models/init-models";
 import { currentLocationInstance, imageInstance } from "../mongo/command";
 import connectMongo from "../mongo/connector";
 import { cryptoInstance, twilioApi } from "../service";
+import { HTTPError } from "../types/http-error";
 
 initModels(sequelizeConnector);
 export class OrderController {
@@ -55,7 +56,7 @@ export class OrderController {
   async updateOrder(req: Request, res: Response, next: NextFunction) {
     try {
       const body = req.body;
-      // @TODO : 리팩토링 보류
+      //TODO: 리팩토링 보류
       await updateOrder(body, twilioApi, cryptoInstance, config.crypto.url as string);
       res.send({ msg: "done" });
     } catch (error) {
@@ -198,7 +199,13 @@ export class OrderController {
       const averageCost = await averageInstance.findLastMonthCost(
         classifiedDistance,
       );
-      res.send({ distance: averageCost });
+      if (averageCost !== null) {
+        res.send({ distance: averageCost[classifiedDistance] });
+        return;
+      }
+      const HTTPError : HTTPError = new Error("Internal Server Error")
+      HTTPError.status = 500 
+      throw HTTPError
     } catch (error) {
       next(error);
     }

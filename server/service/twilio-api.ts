@@ -1,11 +1,11 @@
 export class TwilioApi {
   private messageTemplate = `\n[Quicker]\n\n반갑습니다, 고객님.\n고객님의 소중한 상품이 배송 예정입니다.\n\n※ 실시간 배송정보\n`;
   private client
-  private fromNumber
+  private phonenumber
 
-  constructor({accountSid , authToken , fromNumber } : {[key : string] : string}) {
-    this.client = require("twilio")(accountSid, authToken);
-    this.fromNumber = fromNumber
+  constructor({sid , token , phonenumber } : {[key : string] : string}) {
+    this.client = require("twilio")(sid, token);
+    this.phonenumber = phonenumber
   }
 
   async sendURLToReceiver (phoneNumber: string, url : string) {
@@ -20,7 +20,7 @@ export class TwilioApi {
   private async sendMessage(phoneNumber: string, url : string) {
     return await this.client.messages.create({
       body: this.messageTemplate + url,
-      from: this.fromNumber,
+      from: this.phonenumber,
       to: "+82" + phoneNumber,
     });  
   }

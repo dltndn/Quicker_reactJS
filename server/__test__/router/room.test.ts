@@ -42,7 +42,7 @@ describe("/room", () => {
     });
   
     describe("최근 메세지 정보를 데이터베이스에서 가지고 오는 서비스", () => {
-      // @TODO 값은 맞는데 테스트에서 다르다고 나온다.
+      //TODO: 값은 맞는데 테스트에서 다르다고 나온다.
       test("존재하는 오더 넘버 입력", async () => {
         const orderNumber = 2
         const expectResult = { id: '0xccff867e55e1faeaba5f7e8bbec56fbf1ea51ec7', message: '테스트' }

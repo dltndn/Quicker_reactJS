@@ -49,7 +49,7 @@ export const classifyDistance = async (query: any) => {
     | "60+KM";
   let classifiedDistance: Distance = "5KM";
   const distance: number = query.distance;
-  // @TODO : 중복제거
+  //TODO: 중복제거
   const classifyDistance = (distance: number) => {
     const listDistance = [5, 10, 15, 20, 25, 30, 40, 50, 60];
     for (const distanceUnit of listDistance) {
