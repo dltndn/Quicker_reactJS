@@ -6,13 +6,13 @@ export class CurrentLocationModel {
     const realLocationSchema = connection.model(address, RealLocationSchema);
     const realLocationModel = new realLocationSchema(location);
     await realLocationModel.save();
-    connection.destroy();
+    await connection.destroy();
   }
 
   async find (connection: Connection, address : any ) {
     const realLocationModel = connection.model(address, RealLocationSchema);
     const loaction = await realLocationModel.findOne({}).sort({ $natural: -1 });
-    connection.destroy();
+    await connection.destroy();
     return loaction;
   }
 }
