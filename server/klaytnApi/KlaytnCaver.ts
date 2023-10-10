@@ -384,9 +384,10 @@ export default {
         const result = await nft_proxy_contract.send({
           from: `${process.env.KLAYTN_DELIGATION_PUBLIC_KEY}`,
           gas: 500000
-        }, 'mint', tokenId, address, "1")
+        }, 'mint', address, tokenId, "1")
           return result.status
         } catch (e) {
+          console.log(e)
           return false
         }
     }
@@ -400,7 +401,7 @@ export default {
           // mint자격 충족 확인
           if (isMintable(tokenId, clientResult)) {
             // nft 민팅 코드
-            const mintStatus = mintToken(tokenId, address)
+            const mintStatus = await mintToken(tokenId, address)
             res.send(mintStatus)
           } else {
             res.send(false)
@@ -412,7 +413,7 @@ export default {
           // mint자격 충족 확인
           if (isMintable(tokenId, quickerResult)) {
             // nft 민팅 코드
-            const mintStatus = mintToken(tokenId, address)
+            const mintStatus = await mintToken(tokenId, address)
             res.send(mintStatus)
           } else {
             res.send(false)

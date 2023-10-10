@@ -158,7 +158,6 @@ const NftSettingPage = () => {
                       src={getNftImgPath(val)}
                       alt={`holding img ${index}`}
                     />
-                    <div>{getNftDescription(val)}</div>
                   </Set_div_mid>
                   </>
                 ))}
@@ -277,7 +276,6 @@ background-color: var(--white-color);
 const Fx1 = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 `
 const  Set_div_mid = styled.div`
   display: flex;
