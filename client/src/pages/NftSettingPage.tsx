@@ -135,8 +135,8 @@ const NftSettingPage = () => {
       />
       {isMain ? (
         <>
-          <Set_div_top>
-            <span onClick={() => setIsMain(false)}>NFT 종류 보러가기</span>
+          <Set_div_top onClick={() => setIsMain(false)}>
+            <span>NFT 종류 보러가기</span>
           </Set_div_top>
           <Topdiv>
           <Topimg src={getNftImgPath(imgState)} alt="current img" />
@@ -169,8 +169,8 @@ const NftSettingPage = () => {
         </>
       ) : (
         <>
-          <Set_div_top>
-            <span onClick={() => setIsMain(true)}>나의 NFT 목록 보러가기</span>
+          <Set_div_top onClick={() => setIsMain(true)}>
+            <span>나의 NFT 목록 보러가기</span>
           </Set_div_top>
           <PercentTx1>나의 총 의뢰금액: <PercentTx2>{Number(sumPrice.clientPriceResult).toLocaleString()}원</PercentTx2></PercentTx1>
           <PercentTx1>나의 총 배달금액: <PercentTx2>{Number(sumPrice.quickerPriceResult).toLocaleString()}원</PercentTx2></PercentTx1>

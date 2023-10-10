@@ -12,19 +12,61 @@ import {
   getRoundLogs,
 } from "../utils/ExecuteOrderFromBlockchain";
 import styled, { createGlobalStyle } from "styled-components";
-import ReactApexChart from 'react-apexcharts';
+import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import Lottie from "lottie-react";
 import mainLoaing from "../Lottie/mainLoading.json";
-import Profit from "../Lottie/profitFeeGovernor.json"
+import Profit from "../Lottie/profitFeeGovernor.json";
 import choice from "../Lottie/Choice.json";
 import { FeeGovenorPageStyle } from "../StyleCollection";
 import { BsCaretRightFill } from "react-icons/bs";
+import { PieChart } from "react-minimal-pie-chart";
 
-const { Receivetx, ReciDiv1,ReciDiv1_1, Div0, Sc0, Sc1, Sc3, Sc1_1, Div1, Div1_1, Flex1, Flex2, Tx1, Tx1_1, 
-  Tx1_2, Tx2, Tx3, Tx3color, Tx1color, PercDiv1, PercSp1, PercSp2, PercDiv2, PercentTx4_2,
-PercentTx4_3, PercentTx4_4, VtTx, ButtonWrapper, BtWp_1, SaveButton, SaveButton_1, LoadButton, HideDiv,
-HideDiv_1, LotDiv, Hr, QuickerTx_1, Input, Lb1, Margin_1, Div1_2, Bt1, ChartDiv} = new FeeGovenorPageStyle()
+const {
+  Receivetx,
+  ReciDiv1,
+  ReciDiv1_1,
+  Div0,
+  Sc0,
+  Sc1,
+  Sc3,
+  Sc1_1,
+  Div1,
+  Div1_1,
+  Flex1,
+  Flex2,
+  Tx1,
+  Tx1_1,
+  Tx1_2,
+  Tx2,
+  Tx3,
+  Tx3color,
+  Tx1color,
+  PercDiv1,
+  PercSp1,
+  PercSp2,
+  PercDiv2,
+  PercentTx4_2,
+  PercentTx4_3,
+  PercentTx4_4,
+  VtTx,
+  ButtonWrapper,
+  BtWp_1,
+  SaveButton,
+  SaveButton_1,
+  LoadButton,
+  HideDiv,
+  HideDiv_1,
+  LotDiv,
+  Hr,
+  QuickerTx_1,
+  Input,
+  Lb1,
+  Margin_1,
+  Div1_2,
+  Bt1,
+  ChartDiv,
+} = new FeeGovenorPageStyle();
 
 interface UseFeeGovernorType {
   title: string;
@@ -93,7 +135,7 @@ const FeeGovernorPage = () => {
     if (address !== undefined) {
       try {
         const roundData = await getFeeGovernorInfo(address);
-        console.log(roundData)
+        console.log(roundData);
         setRoundInfo(roundData);
         setPageState("main");
       } catch (e) {
@@ -125,10 +167,11 @@ const FeeGovernorPage = () => {
       <TopBarOthers title={title} redirectLogic={redirectLogic} />
       {
         {
-          loading:         
-          <LotDiv>
-          <Lottie animationData={mainLoaing} />
-          </LotDiv>,
+          loading: (
+            <LotDiv>
+              <Lottie animationData={mainLoaing} />
+            </LotDiv>
+          ),
           main: <Main roundInfo={roundInfo} />,
           previousResult: <PreviousResult />,
           vote: (
@@ -143,7 +186,6 @@ const FeeGovernorPage = () => {
     </>
   );
 };
-
 
 interface SharesType {
   increase: number;
@@ -184,101 +226,118 @@ const Main = ({ roundInfo }: any) => {
   }, []);
 
   return (
-    <><GlobalStyle/>
+    <>
+      <GlobalStyle />
       {roundInfo && (
         <div>
           {roundInfo.userRewards !== "0" && (
             <Div1_2>
-            <Tx1color>
-              {convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!
-            </Tx1color>
-            <Bt1 onClick={() => setPageState("claimRewards")}>
-                <BsCaretRightFill></BsCaretRightFill>
-            </Bt1>
-          </Div1_2>
-          )}
-          <></>
-          <Div1_2>
               <Tx1color>
                 {convertToLocale(roundInfo.userRewards)}KRW를 정산 받으세요!
               </Tx1color>
               <Bt1 onClick={() => setPageState("claimRewards")}>
-                  <BsCaretRightFill></BsCaretRightFill>
+                <BsCaretRightFill></BsCaretRightFill>
               </Bt1>
             </Div1_2>
+          )}
+          <></>
           <Flex1>
-          <Sc1>
-            <Tx1>보유 투표권</Tx1>
-            <Tx2>
-            {convertToLocale(roundInfo.userVotePower)} <Tx3>vQuicker</Tx3>
-            </Tx2>
-          </Sc1>
-          <Sc1_1>
-          <Tx1color>가용 투표권</Tx1color>
-          <Tx2>
-          {convertToLocale(roundInfo.userVoteEnable)} <Tx3color>vQuicker</Tx3color>
-          </Tx2>
-          </Sc1_1>
+            <Sc1>
+              <Tx1>보유 투표권</Tx1>
+              <Tx2>
+                {convertToLocale(roundInfo.userVotePower)} <Tx3>vQuicker</Tx3>
+              </Tx2>
+            </Sc1>
+            <Sc1_1>
+              <Tx1color>가용 투표권</Tx1color>
+              <Tx2>
+                {convertToLocale(roundInfo.userVoteEnable)}{" "}
+                <Tx3color>vQuicker</Tx3color>
+              </Tx2>
+            </Sc1_1>
           </Flex1>
           <Div1>
             <Tx1_1>금주 투표 현황</Tx1_1>
-            <PercDiv1>누적 수수료<br></br>
+            <PercDiv1>
+              누적 수수료<br></br>
               <PercSp1>{convertToLocale(roundInfo.totalIncome)}</PercSp1>
               <PercSp2> KRW</PercSp2>
             </PercDiv1>
-            <PercDiv1>현재 투표량<br></br>
+            <PercDiv1>
+              현재 투표량<br></br>
               <PercSp1>{convertToLocale(roundInfo.totalVotePower)}</PercSp1>
               <PercSp2> vQuicker</PercSp2>
             </PercDiv1>
           </Div1>
           <Div1>
             <Tx1_1>거래수수료 - {roundInfo.currentFee}%</Tx1_1>
-            <ChartDiv>
-              <div style={{ width: '100px', height: '100px' }}>
-                <svg viewBox="0 0 200 200">
-                  <circle cx="100" cy="100" r="90" fill="none" stroke="beige" strokeWidth="20" />
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="90"
-                    fill="none"
-                    stroke="blue"
-                    strokeWidth="20"
-                    strokeDasharray={`${2 * Math.PI * 90 * (roundInfo.currentFee / 100)} ${2 * Math.PI * 90 * ((100 - roundInfo.currentFee)/ 100)}`}
-                    strokeDashoffset={2 * Math.PI * 90 * 0.25}
-                  />
-                </svg>
-              </div>
-            </ChartDiv>
-            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
-            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
-            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
+            <PieChart
+              data={[
+                { title: "인상", value: feeShares.increase, color: "#F00" },
+                { title: "동결", value: feeShares.freeze, color: "#747474" },
+                { title: "인하", value: feeShares.decrease, color: "#0047FF" },
+              ]}
+              lineWidth={20}
+              label={({ dataEntry }) =>
+                dataEntry.percentage !== 0 && `${dataEntry.title}`
+              }
+              labelPosition={70}
+              labelStyle={{
+                fontSize: "0.3em",
+                fontFamily: "sans-serif",
+              }}
+              startAngle={180}
+             lengthAngle={180}
+             viewBoxSize={[100, 50]}
+            />
+            <PercDiv2>
+              인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2>
+            </PercDiv2>
+            <PercDiv2>
+              동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3>
+            </PercDiv2>
+            <PercDiv2>
+              인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4>
+            </PercDiv2>
           </Div1>
           <Div1>
             <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
-            <ChartDiv>
-                <div style={{ width: '100px', height: '100px' }}>
-                  <svg viewBox="0 0 200 200">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="beige" strokeWidth="20" />
-                    <circle
-                      cx="100"
-                      cy="100"
-                      r="90"
-                      fill="none"
-                      stroke="blue"
-                      strokeWidth="20"
-                      strokeDasharray={`${2 * Math.PI * 90 * (roundInfo.currentSecuDepo / 100)} ${2 * Math.PI * 90 * ((100 - roundInfo.currentSecuDepo)/ 100)}`}
-                      strokeDashoffset={2 * Math.PI * 90 * 0.25}/>
-                  </svg>
-                </div>
-              </ChartDiv>
-            <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
-            <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
-            <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+            <PieChart
+              data={[
+                { title: "인상", value: feeShares.increase, color: "#F00" },
+                { title: "동결", value: feeShares.freeze, color: "#747474" },
+                { title: "인하", value: feeShares.decrease, color: "#0047FF" },
+              ]}
+              lineWidth={20}
+              label={({ dataEntry }) =>
+                dataEntry.percentage !== 0 && `${dataEntry.title}`
+              }
+              labelPosition={70}
+              labelStyle={{
+                fontSize: "0.3em",
+                fontFamily: "sans-serif",
+              }}
+              startAngle={180}
+             lengthAngle={180}
+             viewBoxSize={[100, 50]}
+            />
+            <PercDiv2>
+              인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2>
+            </PercDiv2>
+            <PercDiv2>
+              동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3>
+            </PercDiv2>
+            <PercDiv2>
+              인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4>
+            </PercDiv2>
           </Div1>
           <ButtonWrapper>
-          <LoadButton onClick={() => setPageState("previousResult")}>투표기록</LoadButton>
-          <SaveButton onClick={() => setPageState("vote")}>투표하기</SaveButton>
+            <LoadButton onClick={() => setPageState("previousResult")}>
+              투표기록
+            </LoadButton>
+            <SaveButton onClick={() => setPageState("vote")}>
+              투표하기
+            </SaveButton>
           </ButtonWrapper>
           <HideDiv></HideDiv>
         </div>
@@ -335,9 +394,9 @@ const PreviousResult = () => {
     <>
       {/* <div>라운드</div><div>정보</div> */}
       {roundLogArr.length === 0 ? (
-                  <LotDiv>
-                  <Lottie animationData={mainLoaing} />
-                  </LotDiv>
+        <LotDiv>
+          <Lottie animationData={mainLoaing} />
+        </LotDiv>
       ) : (
         <div>
           {roundLogArr.map((ele: RoundLogType, index: number) => (
@@ -345,7 +404,9 @@ const PreviousResult = () => {
           ))}
           <HideDiv_1></HideDiv_1>
           <BtWp_1>
-          <SaveButton_1 onClick={async () => await addRoundLogData()}>더보기</SaveButton_1>
+            <SaveButton_1 onClick={async () => await addRoundLogData()}>
+              더보기
+            </SaveButton_1>
           </BtWp_1>
         </div>
       )}
@@ -366,26 +427,46 @@ const RoundDataElement = ({ ele }: RoundDataElementType) => {
   };
   const totalVotePower = convertToLocale(calVotePower(ele.treasuryFee));
   // @ts-ignore
-  const feeShares = calculateShares(ele.treasuryFee[0], ele.treasuryFee[1], ele.treasuryFee[2]);
+  const feeShares = calculateShares(ele.treasuryFee[0], ele.treasuryFee[1], ele.treasuryFee[2]
+  );
   // @ts-ignore
-  const secuDepoShares = calculateShares(ele.securityDepositFee[0], ele.securityDepositFee[1], ele.securityDepositFee[2]);
+  const secuDepoShares = calculateShares(ele.securityDepositFee[0], ele.securityDepositFee[1], ele.securityDepositFee[2]
+  );
 
   return (
-    <><GlobalStyle/>
+    <>
+      <GlobalStyle />
       <Div1_1>
-            <Tx1_1>투표 - {ele.round}회차</Tx1_1>
-            <PercDiv2>투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3></PercDiv2>
-            <PercDiv2>수수료 수익 <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4></PercDiv2>
-            <Hr></Hr>
-            <Tx1_2>거래수수료</Tx1_2>
-            <PercDiv2>인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2></PercDiv2>
-            <PercDiv2>동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3></PercDiv2>
-            <PercDiv2>인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4></PercDiv2>
-            <Hr></Hr>
-            <Tx1_2>배송원 보증금</Tx1_2>
-            <PercDiv2>인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2></PercDiv2>
-            <PercDiv2>동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3></PercDiv2>
-            <PercDiv2>인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4></PercDiv2>
+        <Tx1_1>투표 - {ele.round}회차</Tx1_1>
+        <PercDiv2>
+          투표량 <PercentTx4_3>{totalVotePower} vQuicker</PercentTx4_3>
+        </PercDiv2>
+        <PercDiv2>
+          수수료 수익{" "}
+          <PercentTx4_4>{convertToLocale(ele.totalIncome)} krw</PercentTx4_4>
+        </PercDiv2>
+        <Hr></Hr>
+        <Tx1_2>거래수수료</Tx1_2>
+        <PercDiv2>
+          인상 <PercentTx4_2>{feeShares.increase}%</PercentTx4_2>
+        </PercDiv2>
+        <PercDiv2>
+          동결 <PercentTx4_3>{feeShares.freeze}%</PercentTx4_3>
+        </PercDiv2>
+        <PercDiv2>
+          인하 <PercentTx4_4>{feeShares.decrease}%</PercentTx4_4>
+        </PercDiv2>
+        <Hr></Hr>
+        <Tx1_2>배송원 보증금</Tx1_2>
+        <PercDiv2>
+          인상 <PercentTx4_2>{secuDepoShares.increase}%</PercentTx4_2>
+        </PercDiv2>
+        <PercDiv2>
+          동결 <PercentTx4_3>{secuDepoShares.freeze}%</PercentTx4_3>
+        </PercDiv2>
+        <PercDiv2>
+          인하 <PercentTx4_4>{secuDepoShares.decrease}%</PercentTx4_4>
+        </PercDiv2>
       </Div1_1>
     </>
   );
@@ -411,7 +492,9 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 
   const onClick = () => {
     if (userVoteEnable === "0") {
-      alert("가용 투표권이 없습니다.\n 분배받을 수수료 수익이 있다면 정산받으세요.");
+      alert(
+        "가용 투표권이 없습니다.\n 분배받을 수수료 수익이 있다면 정산받으세요."
+      );
     } else {
       setIsInfoPage(false);
     }
@@ -430,105 +513,104 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
       {isInfoPage ? (
         <>
           <Sc0>
-                  <div>
-                    <Lottie animationData={choice} />
-                  </div>
-                  <Receivetx>가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.</Receivetx>
-                </Sc0>
-                <ReciDiv1>
-                </ReciDiv1>
-                <BottomConfirmBtn
-                            content={"다음"}
-                            confirmLogic={onClick}
-                            isDisabled={false}
-                          />
-                </>
+            <div>
+              <Lottie animationData={choice} />
+            </div>
+            <Receivetx>
+              가용 투표권은 {convertToLocale(userVoteEnable)} vQuicker 입니다.
+            </Receivetx>
+          </Sc0>
+          <ReciDiv1></ReciDiv1>
+          <BottomConfirmBtn
+            content={"다음"}
+            confirmLogic={onClick}
+            isDisabled={false}
+          />
+        </>
       ) : (
         <>
-        <div>
-          <Div0>
           <div>
-          <QuickerTx_1>거래 수수료</QuickerTx_1>
-          <Flex2>
-            <Lb1>
-              <Input
-                type="radio"
-                name="feeType"
-                value={"0"}
-                onChange={setFeeIndexState}
-              />
-              <VtTx>인상</VtTx>
-            </Lb1>
-            <Lb1>
-              <Input
-                type="radio"
-                name="feeType"
-                value={"1"}
-                onChange={setFeeIndexState}
-                defaultChecked
-              />
-              <VtTx>동결</VtTx>
-            </Lb1>
-            <Lb1>
-              <Input
-                type="radio"
-                name="feeType"
-                value={"2"}
-                onChange={setFeeIndexState}
-              />
-              <VtTx>인하</VtTx>
-            </Lb1>
-          </Flex2>
+            <Div0>
+              <div>
+                <QuickerTx_1>거래 수수료</QuickerTx_1>
+                <Flex2>
+                  <Lb1>
+                    <Input
+                      type="radio"
+                      name="feeType"
+                      value={"0"}
+                      onChange={setFeeIndexState}
+                    />
+                    <VtTx>인상</VtTx>
+                  </Lb1>
+                  <Lb1>
+                    <Input
+                      type="radio"
+                      name="feeType"
+                      value={"1"}
+                      onChange={setFeeIndexState}
+                      defaultChecked
+                    />
+                    <VtTx>동결</VtTx>
+                  </Lb1>
+                  <Lb1>
+                    <Input
+                      type="radio"
+                      name="feeType"
+                      value={"2"}
+                      onChange={setFeeIndexState}
+                    />
+                    <VtTx>인하</VtTx>
+                  </Lb1>
+                </Flex2>
+              </div>
+            </Div0>
           </div>
-          </Div0>
-        </div>
           <div>
-          <Div0>
-          <VtTx>배송원 보증금</VtTx>
-          <Flex2>
-            <Lb1>
-              <Input
-                type="radio"
-                name="secuType"
-                value={"0"}
-                onChange={setSecuIndexState}
-              />
-              <VtTx>인상</VtTx>
-            </Lb1>
-            <Lb1>
-              <Input
-                type="radio"
-                name="secuType"
-                value={"1"}
-                onChange={setSecuIndexState}
-                defaultChecked
-              />
-              <VtTx>동결</VtTx>
-            </Lb1>
-            <Lb1>
-              <Input
-                type="radio"
-                name="secuType"
-                value={"2"}
-                onChange={setSecuIndexState}
-              />
-              <VtTx>인하</VtTx>
-            </Lb1>
-            </Flex2>
+            <Div0>
+              <VtTx>배송원 보증금</VtTx>
+              <Flex2>
+                <Lb1>
+                  <Input
+                    type="radio"
+                    name="secuType"
+                    value={"0"}
+                    onChange={setSecuIndexState}
+                  />
+                  <VtTx>인상</VtTx>
+                </Lb1>
+                <Lb1>
+                  <Input
+                    type="radio"
+                    name="secuType"
+                    value={"1"}
+                    onChange={setSecuIndexState}
+                    defaultChecked
+                  />
+                  <VtTx>동결</VtTx>
+                </Lb1>
+                <Lb1>
+                  <Input
+                    type="radio"
+                    name="secuType"
+                    value={"2"}
+                    onChange={setSecuIndexState}
+                  />
+                  <VtTx>인하</VtTx>
+                </Lb1>
+              </Flex2>
             </Div0>
           </div>
           <Margin_1>
-          <SendTxK
-            param={GetContractParams.castVote(
-              feeIndex,
-              secuIndex,
-              userVoteEnable
-            )}
-            successFunc={successFunc}
-          />
+            <SendTxK
+              param={GetContractParams.castVote(
+                feeIndex,
+                secuIndex,
+                userVoteEnable
+              )}
+              successFunc={successFunc}
+            />
           </Margin_1>
-  
-
         </>
       )}
     </>
@@ -538,30 +620,34 @@ const Vote = ({ userVoteEnable, successFunc }: VoteType) => {
 // 수수료 수익 정산 화면
 const ClaimRewards = () => {
   const { setPageState, roundInfo, setRoundInfo } = useFeeGovernor();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const successFunc = () => {
     let roundData = roundInfo;
     roundData.userRewards = "0";
     roundData.userVoteEnable = roundData.userVotePower;
     setRoundInfo(roundData);
-    setPageState("main")
+    setPageState("main");
   };
 
   return (
     <>
-              <Sc3>
-                <div>
-                  <Lottie animationData={Profit} />
-                </div>
-                <Receivetx>저번 투표한 주의 <br/><br/>수수료 수익을 분배받아요</Receivetx>
-              </Sc3>
-              <ReciDiv1_1>
-              <SendTxK
-        param={GetContractParams.claimRewards()}
-        successFunc={successFunc}
-      />
-              </ReciDiv1_1>
+      <Sc3>
+        <div>
+          <Lottie animationData={Profit} />
+        </div>
+        <Receivetx>
+          지난 투표 주차의 <br />
+          <br />
+          수수료 수익을 분배받아요
+        </Receivetx>
+      </Sc3>
+      <ReciDiv1_1>
+        <SendTxK
+          param={GetContractParams.claimRewards()}
+          successFunc={successFunc}
+        />
+      </ReciDiv1_1>
     </>
   );
 };
@@ -598,7 +684,4 @@ const convertToLocale = (data: string) => {
   return Number(data).toLocaleString();
 };
 
-
 export default FeeGovernorPage;
-
-
