@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 import { create } from "zustand";
 import TopBarOthers from "../components/topBarOthers";
 import { useNavigate } from "react-router-dom";
@@ -234,16 +234,34 @@ border-radius: 100%;
 background-color: #ffffff;
 `;
 
+const moveGradient = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+`;
+
 const  Set_div_top = styled.div`
 display: flex;
 justify-content: center;
 font-size: 16px;
 font-weight: bold;
 padding: 10px;
+margin: 10px;
 border-radius: 0.313rem;
-border: 0rem;
+border: 1px solid;
+border-color: #d3d3d3;
 background-color: var(--white-color);
+color: #ffffff;
+background: linear-gradient(to right, #34d0ff, #95ffca, #a9efff, #34d0ff);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  animation: ${moveGradient} 10s linear infinite; /* 애니메이션 적용 */
 `;
+
+
 
 const  Set_div = styled.div`
 display: flex;

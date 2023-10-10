@@ -6,10 +6,13 @@ import GetQkrwBalance from '../getQkrwBalance';
 import CreateNewOrder from '../createNewOrder';
 import { useConnWalletInfo } from '../../App';
 import { ReqStyle } from "../../StyleCollection";
+import Lottie from "lottie-react";
+import QuestionMark from "../../Lottie/QuestionMark.json"
+import Modal from "../blockChainTx/QrModal";
 
 const {Div0, Div1, Div2, Img, ImgWrapper, Imgdiv, InputDiv, Ip, CheckIcon, Checkbox
 , Container, SelectInput, Sp0, Sp1, Sp2, Box, Boxlimit, Boxtrans, Btam, Btdiv, Bticonimg
-, Btul, ReqFont, Leftli, Sp4, ReqFont1 } = new ReqStyle()
+, Btul, ReqFont, Leftli, Sp4, ReqFont1, DivLottie} = new ReqStyle()
 
 
 const Ipval = styled.input`
@@ -71,6 +74,17 @@ function Req({data}: {data: object}) {
     const { cost, setCost, deadLine, errorMessage, recommendCost } = useOrderStore()
     const {isChecked, setIsChecked, startAddress, arriveAddress, setAMPM, setLength, setWidth, setHeight, setDate, setHour, setMinute, setDetails, weight,  setWeight } = useOrderDataStore();
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
       const handleImgClick = (transport: Transport) => {
         let changeIsChecked = () => {
             return ({
@@ -112,6 +126,10 @@ function Req({data}: {data: object}) {
         <Boxtrans>
             <div>
                 <ReqFont>운송수단 (1개 이상 선택)</ReqFont>
+                <DivLottie onClick={openModal}><Lottie animationData={QuestionMark}/></DivLottie>
+                {isModalOpen && (
+                <Modal isOpen={isModalOpen} onClose={closeModal} imageUrl={require('../../image/QuickerMenu1.png')} />
+                )}
             </div>
             <Div0>
                 <Div1>
