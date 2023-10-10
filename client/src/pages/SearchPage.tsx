@@ -73,11 +73,10 @@ const appendTransportation = (element: any) => {
   // @ts-ignore
   for (let key in element.Transportation) {
     // @ts-ignore
-    if (element.Transportation[key] === true) {
+    if (element.Transportation[key] === 1) {
       transportations.push(key);
     }
   }
-
   return transportations;
 };
 

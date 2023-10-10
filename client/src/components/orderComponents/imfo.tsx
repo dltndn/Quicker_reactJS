@@ -23,6 +23,8 @@ import NftProfile from "../NftProfile";
 import { ImfoStyle } from "../../StyleCollection";
 import { getFeeGovernorInfo } from "../../utils/ExecuteOrderFromBlockchain";
 import { create } from "zustand";
+import Lottie from "lottie-react";
+import ExclamationMark from "../../Lottie/ExclamationMark.json"
 
 const {
   Div0,
@@ -159,7 +161,7 @@ function Imfo() {
         <Div0 onClick={() => navigate("/feeGovernor")}>
           <BsCoin></BsCoin>
           <Sp2>거래수수료 투표</Sp2>
-          {isReward && (<> 알림표시</>)}
+          {isReward && (<> <DivLottie><Lottie animationData={ExclamationMark}/></DivLottie> </>)}
         </Div0>
       </Sc3_1>
       <Sc0_1>
@@ -234,3 +236,8 @@ function Imfo() {
 }
 
 export default Imfo;
+
+
+const DivLottie = styled.div`
+  margin-top: 5px;
+`

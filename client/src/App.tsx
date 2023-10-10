@@ -2,8 +2,11 @@ import { Buffer } from "buffer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { lazy, Suspense, useEffect } from "react";
 import { create } from "zustand";
+import Lottie from "lottie-react";
+import LoadingAni from "./Lottie/mainLoading.json";
 import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
+import styled from "styled-components";
 
 Buffer.from("anything", "base64");
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -205,7 +208,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<LotDiv><Lottie animationData={LoadingAni}/></LotDiv>}>
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/signUp" element={<SignUpPage />} />
@@ -247,3 +250,12 @@ function App() {
 //temp
 
 export default App;
+
+
+const LotDiv = styled.div`
+  position: absolute;
+  width: 100px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;

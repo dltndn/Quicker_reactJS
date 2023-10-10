@@ -17,7 +17,7 @@ const nochat = require("../image/nochat.png");
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #efefef !important;
+    background-color: #ffffff !important;
     height: 100%;
   }
 `;
@@ -105,7 +105,7 @@ function ChattingPage() {
             phoneNumbers={{ receiver: "수취인 번호", sender: "발송인 번호" }}
           />
         ) : combinedBlockChainData !== undefined ? (
-          combinedBlockChainData.map((blockchainElement: any) => {
+          combinedBlockChainData.map((blockchainElement: any, index) => {
             let role = ""
             let oponentAddress = ""
             console.log(blockchainElement)
@@ -130,6 +130,7 @@ function ChattingPage() {
                 role={role}
                 blockchainElement={blockchainElement}
                 oponentAddress={oponentAddress}
+                key={index}
               ></Room>
             );
           })

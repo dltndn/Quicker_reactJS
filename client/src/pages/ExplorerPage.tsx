@@ -201,7 +201,7 @@ export default function ExplorerPage() {
             <ReqFont>수수료 현황</ReqFont>
           </div>
           <Div_Base>
-            <Div_1>플랫폼</Div_1>
+            <Div_1>커뮤니티</Div_1>
             <Div_1>보험</Div_1>
             <Div_1>보증금</Div_1>
           </Div_Base>
@@ -224,7 +224,7 @@ export default function ExplorerPage() {
             <Sp1>{isBlinkCo ? (<BlinkDiv>{contractBal}원</BlinkDiv>):(<>{contractBal}원</>)}</Sp1>
           </Div0>
           <Div0>
-            <span>플랫폼</span>
+            <span>커뮤니티</span>
             <span>({sliceAddress(PLATFORM_ADDRESS)})</span>
             
             <Sp1>{isBlinkPI ? (<BlinkDiv>{platformBal}원</BlinkDiv>):(<>{platformBal}원</>)}</Sp1>

@@ -69,10 +69,10 @@ const SendTxK = ({ param, successFunc }: SendTokenProps) => {
       {isMobile === null ? (<>로그아웃 상태입니다</>):(
         <>
           {isMobile ? (
-            <LoadButton onClick={mobileConnect}>서명</LoadButton>
+            <LoadButton onClick={mobileConnect}>블록체인 지갑으로 이동</LoadButton>
           ) : (
             <>
-            <LoadButton onClick={qrConnect}>서명</LoadButton>
+            <LoadButton onClick={qrConnect}>블록체인 지갑으로 이동</LoadButton>
 
             {showQr && (
         

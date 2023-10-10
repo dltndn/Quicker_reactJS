@@ -1,4 +1,13 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const moveGradient = keyframes`
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+`;
 
 export class ExplorerPageStyle {
   Div_Base = styled.div`
@@ -89,6 +98,12 @@ Div1 = styled.div`
 
 export class FeeGovenorPageStyle {
 
+ChartDiv = styled.div`
+  position: absolute;
+  margin-left: auto;
+  right: 40px;
+`
+
  Receivetx = styled.div`
    font-size: 12px;
   font-weight: bold;
@@ -102,6 +117,13 @@ export class FeeGovenorPageStyle {
   text-align: center;
 `;
 
+ReciDiv1_1 = styled.div`
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+`;
+
 Sc0 = styled.section`
   margin: 8px 16px 16px 16px;
   padding: 20px;
@@ -112,6 +134,18 @@ Sc0 = styled.section`
   background-color: #ffffff;
   box-shadow: 0px 3px 0px #bebebe;
 `;
+
+Sc3 = styled.section`
+  margin: 8px 16px 16px 16px;
+  padding: 20px;
+  border-radius: 5px;
+  border: solid;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 0px #bebebe;
+`;
+
 
 Div0 = styled.div`
   margin: 8px 16px 16px 16px;
@@ -129,6 +163,25 @@ Div1 = styled(this.Div0)`
   padding: 16px;
   border: none;
   box-shadow: none;
+`;
+
+Div1_2 = styled(this.Div0)`
+  margin: 16px 16px 0px 16px;
+  padding: 16px;
+  border: none;
+  box-shadow: none;
+  background: linear-gradient(to right, #34d0ff, #95ffca, #a9efff, #34d0ff);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  animation: ${moveGradient} 10s linear infinite; /* 애니메이션 적용 */
+`;
+
+Bt1 = styled.span`
+  position: absolute;
+  margin-right: 30px;
+  right: 0;
+  margin-top: 2px;
+  color: #ffffff;
 `;
 
 Div1_1 = styled(this.Div1)`
@@ -168,11 +221,23 @@ Div1_1 = styled(this.Div1)`
   margin: 16px 16px 16px 8px;
   background-color: #54E1FF;
 `
-
-Tx1 = styled.span`
+Tx2 = styled.div`
   color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 30px;
+`
+Tx3= styled.span`
+  color: #747474;
   font-size: 14px;
   font-weight: bold;
+  text-align: center;
+ `
+Tx1 = styled.span`
+color: #000;
+font-size: 14px;
+font-weight: bold;
 `
 
  Tx1color = styled(this.Tx1)`
@@ -187,16 +252,6 @@ Tx1_2 = styled(this.Tx1)`
   padding-top: 16px;
 `
 
-Tx2 = styled(this.Tx1)`
-  font-size: 20px;
-  text-align: center;
-  padding-top: 30px;
-`
-
-Tx3= styled(this.Tx1)`
-  color: #747474;
-  text-align: center;
-`
 
 Tx3color = styled(this.Tx3)`
   color: #FFF;
@@ -391,6 +446,14 @@ text-align: center;
 
 export class StakingPageStyle {
 
+Lot = styled.div`
+  position: absolute;
+  margin-right: 67px;
+  right: 0;
+  top: 320px;
+  width: 100px;
+`;
+
 Sc3 = styled.section`
   margin: 8px 16px 16px 16px;
   padding: 20px;
@@ -403,6 +466,9 @@ Sc3 = styled.section`
 `;
 
 ReciDiv1 = styled.div`
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
   text-align: center;
 `;
 
@@ -611,7 +677,6 @@ StakingTx2 = styled.div`
   font-weight: bold;
 `;
 StakingTx3 = styled(this.StakingTx2)`
-  line-height: normal;
   color: #44d9fb;
 `;
 HideDiv = styled.div`
@@ -664,25 +729,17 @@ ModalOverlay = styled.div`
   justify-content: center;
   z-index: 1000;
 `;
+
 ModalContent = styled.div`
   background-color: #fff;
-  padding: 20px;
+  padding: 10px;
   border-radius: 5px;
   max-width: 80%;
   text-align: center;
 `;
-ModalCloseButton = styled.button`
-  position: absolute;
-    margin-top: -10px;
-    margin-left: 160px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-`;
 ModalImg = styled.img`
   max-width: 100%;
-  max-height: 80vh;
+  max-height: 90%;
   object-fit: contain;
 `;
 }
@@ -1055,7 +1112,6 @@ Div2 = styled.div`
   padding-top: 10px;
 `
 }
-
 
 export class FailedOrderConfirmStyle {
 
@@ -2218,7 +2274,32 @@ export class ReqStyle {
   font-size: 1rem;
   font-weight: bold;
   margin-left: 0.313rem;
+  text-align: left;
 `;
+
+DivLottie = styled.div`
+position: absolute;
+margin-right: 20px;
+right: 0;
+width: 20px;
+height: 20px;
+top: 70px;
+`;
+
+ReqFont1 = styled.div`
+display: flex;
+justify-content: space-between;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 0.313rem;
+  text-align: left;
+`;
+
+Sp4 = styled.div`
+display: flex;
+justify-content: flex-end;
+color: red;
+`
 
  InputDiv = styled.div`
   margin-top: 0.625rem;
@@ -3323,6 +3404,24 @@ export class ShowOrdersStyle {
   font-size: var(--font-small);
   font-weight: bold;
   margin-left: 0.75rem;
+`;
+
+Div3 = styled.div`
+  justify-content: center;
+  text-align: center;
+`
+
+Img = styled.img`
+  margin-top: 30%;
+  margin-left: 10%;
+  height: 140px;
+  width: 140px;
+`;
+
+Div1 = styled.div`
+  margin-top: 20px;
+  font-size: var(--font-micro);
+  color: #828282;
 `;
 
  Sp0 = styled.span`
