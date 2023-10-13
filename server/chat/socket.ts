@@ -8,21 +8,26 @@ const main = (server: any) => {
       methods: ["GET", "POST"],
       credentials: true,
     },
+    connectionStateRecovery: {}
   });
   try {
-    // 임의의 채팅방 이름
-    let roomName = "";
     // 이벤트 설정
-    io.on("connect", async (socket: any) => {
+    io.on("connect", (socket) => {
+      // 임의의 채팅방 이름
+      let roomName = "";
       // 이벤트 관리
       socket.on("joinRoom", async (receiveRoomName: receiveRoomName) => {
         roomName = receiveRoomName.roomName;
-        console.log("접속 방 이름 : ", receiveRoomName);
         socket.join(roomName);
         // db 내용 불러옴
-        const messages = await messageInstance.find(roomName.toString());
-        if (messages !== undefined) {
-          socket.emit("loadMessage", messages);
+        try{
+          const messages = await messageInstance.find(roomName.toString());
+          if (messages !== undefined) {
+            socket.emit("loadMessage", messages);
+          }
+        } catch (error) {
+          console.log(error) 
+          throw error
         }
       });
       socket.on("sendMessage", (receiveMessage: Message, done: Function) => {
@@ -33,14 +38,17 @@ const main = (server: any) => {
           message: receiveMessage.data,
           date: new Date().toISOString(),
         });
-        console.log("현재 접속 방 정보 : ", roomName);
-        console.log("수신 메세지 : ", receiveMessage.data);
-        messageInstance.create({
-          id: receiveMessage.sender,
-          roomName: roomName,
-          receiveMessage: receiveMessage.data,
-        });
-        done();
+        try {
+          messageInstance.create({
+            id: receiveMessage.sender,
+            roomName: roomName,
+            receiveMessage: receiveMessage.data,
+          });
+          done();  
+        } catch (error) {
+          console.log(error) 
+          throw error
+        }
       });
     });
   } catch (error) {
