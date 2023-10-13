@@ -55,21 +55,25 @@ export default function ({
 
   // 이벤트 처리
   const addMessage = (messageInfo: MessageInfo) => {
-    console.log(messageInfo);
     setMessageData((prevMessageData) => [...prevMessageData, messageInfo]);
   };
 
-  // 메세지를 보내는 이벤트를 발생시킬때 DB에서 데이터를 가지고 오도록?
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    socket.emit("sendMessage", { data: inputbox.current!.value, sender: address }, () => {
-      const message = inputbox.current!.value
-      const id =  "" + address
-      const date = new Date().toISOString()
-      addMessage({id, date, message});
-        inputbox.current!.value = "";
+
+    const message = inputbox.current?.value
+    if (message === undefined || message.trim() === "") {
+      inputbox.current!.value = "";
+      return;
+    }
+    
+    socket.emit("sendMessage", { data: message, sender: address }, () => {
+        const id =  "" + address
+        const date = new Date().toISOString()
+        addMessage({id, date, message});
       }
     );
+    inputbox.current!.value = "";
   };
 
   const joinRoom = (roomId: number) => {
@@ -77,15 +81,7 @@ export default function ({
   };
 
   const loadMessages = (messages: MessageInfo[]) => {
-    for (let index = 0; index < messages.length; index++) {
-      const element = messages[index];
-  
-      const id = element.id
-      const message = element.message
-      const date = element.date
-  
-      addMessage({id, message, date});
-    }
+    setMessageData(messages);
   };
 
   const getRealLocation = async (location: any) => {
@@ -97,7 +93,7 @@ export default function ({
 
   useEffect(() => {
     (async () => {
-      if (roomName !== undefined && address !== undefined) {
+      if (roomName && address !== undefined ) {
         joinRoom(roomName);
         const blockChainOrder = await getOrder(String(roomName));
         getName({
@@ -111,14 +107,12 @@ export default function ({
         console.log(roomInfo)
 
         if (
-          roomInfo.Recipient.PHONE !== undefined &&
-          roomInfo.Recipient.PHONE !== null
+          roomInfo.Recipient.PHONE && roomInfo.Recipient.PHONE !== undefined || null
         ) {
           setReceiverPhoneNumber(roomInfo.Recipient.PHONE);
         }
         if (
-          roomInfo.Sender.PHONE !== undefined &&
-          roomInfo.Sender.PHONE !== null
+          roomInfo.Sender.PHONE && roomInfo.Sender.PHONE !== undefined || null
         ) {
           setSenderPhoneNumber(roomInfo.Sender.PHONE);
         }
