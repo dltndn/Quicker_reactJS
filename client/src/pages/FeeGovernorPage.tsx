@@ -304,9 +304,9 @@ const Main = ({ roundInfo }: any) => {
             <Tx1_1>배송원 보증금 - {roundInfo.currentSecuDepo}%</Tx1_1>
             <PieChart
               data={[
-                { title: "인상", value: feeShares.increase, color: "#F00" },
-                { title: "동결", value: feeShares.freeze, color: "#747474" },
-                { title: "인하", value: feeShares.decrease, color: "#0047FF" },
+                { title: "인상", value: secuDepoShares.increase, color: "#F00" },
+                { title: "동결", value: secuDepoShares.freeze, color: "#747474" },
+                { title: "인하", value: secuDepoShares.decrease, color: "#0047FF" },
               ]}
               lineWidth={20}
               label={({ dataEntry }) =>

@@ -119,7 +119,7 @@ function Search_Detail() {
                       isUsingCurrent={true}
                     />
                     <br />
-                    <Div1_2>{order.dep_detail}(출발지)</Div1_2>
+                    <Div1_2>{order.dep_detail}(픽업지)</Div1_2>
                   </Div1_1>
                 </Div1>
                 <Div2>
@@ -136,7 +136,7 @@ function Search_Detail() {
                       isUsingCurrent={false}
                     />
                     <br />
-                    <Div1_2>{order.des_detail}(도착지)</Div1_2>
+                    <Div1_2>{order.des_detail}(배송지)</Div1_2>
                   </Div1_1>
                 </Div2>
                 <Div3>
