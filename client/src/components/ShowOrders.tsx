@@ -172,17 +172,13 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     const intLisBlockChainId = changeToIntDataInBlockChainId(dataInBlockChain);
     try {
       let orderListInDB: any;
-      console.log(intLisBlockChainId)
       orderListInDB = await Handler.get(
         process.env.REACT_APP_SERVER_URL + "orders/detail?" + "orderIds=" + intLisBlockChainId.toString()
       );
-      console.log(orderListInDB)
       // @ts-ignore
       for (const [index, BlockChainElement] of dataInBlockChain.entries()) {
         for (const orderListInDBElement of orderListInDB) {
           if (parseInt(BlockChainElement.orderNum) === orderListInDBElement.id) {
-            console.log(orderListInDBElement);
-            console.log(dataInBlockChain);
             await conbineDBBlockChain(
               orderListInDBElement,
               dataInBlockChain,
@@ -244,11 +240,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   }, [ordersObj]);
 
   useEffect(() => {
-    getOrderListFromBlochain();
-  }, [isClient]);
-
-  useEffect(() => {
-    console.log("refreshOrder: " + refreshOrder);
     if (refreshOrder) {
       getOrderListFromBlochain();
       setRefreshOrder(false);
@@ -257,7 +248,6 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   useEffect(() => {
     getOrderListFromBlochain();
-    console.log("getOrderListFromBlochain 실행");
   }, [clientOrderNums, quickerOrderNums]);
 
   return (
