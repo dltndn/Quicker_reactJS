@@ -15,6 +15,9 @@ import { UseUserOrderState } from "../App";
 import { useConnWalletInfo } from "../App";
 import { ShowOrdersStyle } from "../StyleCollection";
 import money from "../image/money.png";
+import { getCommissionRate } from "../utils/ExecuteOrderFromBlockchain";
+import Lottie from "lottie-react";
+import mainLoading from "../Lottie/mainLoading.json"
 
 const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg,
 Div1, Div3, Img} = new ShowOrdersStyle()
@@ -120,6 +123,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   const [isEmptyOrder, setIsEmptyOrder] = useState<boolean>(false);
   const [reversedOrders, setReversedOrders] = useState<object[]>([]);
   const [newOrder, setNewOrder] = useState<object | null>(null);
+  const [commissionRate, setCommissionRate] = useState<string[]>([])
 
   const {
     setOrder,
@@ -136,6 +140,10 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     setIsModalOpen(true);
     setOrder(order);
   };
+
+  const init = async () => {
+    setCommissionRate(await getCommissionRate())
+  }
 
   // 현재 연결된 지갑 주소의 오더 내역 번호 array값 불러오기
   const getOrderListFromBlochain = async () => {
@@ -219,6 +227,10 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
   };
 
   useEffect(() => {
+    init()
+  }, [])
+
+  useEffect(() => {
     if (reloadOrderNum !== undefined) {
       getNewOrderObj(reloadOrderNum);
     }
@@ -268,7 +280,8 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
           </Sc1>
         </>
       )}
-      {ordersObj === null ? (
+      {commissionRate.length !== 0 ? (<>
+        {ordersObj === null ? (
         isEmptyOrder ? (
           <Div3>
           <Div1>
@@ -292,11 +305,12 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
                 : alert("db정보 없음");
             }}
           >
-            <OrderBox orderObj={value} isClient={isClient} />
+            <OrderBox orderObj={value} isClient={isClient} commissionRate={commissionRate}/>
           </Sc0>
         ))
       )}
-      <OrderModal isClient={isClient} />
+      <OrderModal isClient={isClient} commissionRate={commissionRate} />
+      </>):(<Lottie animationData={mainLoading} />)}
     </>
   );
 }

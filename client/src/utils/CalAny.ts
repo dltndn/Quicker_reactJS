@@ -1,53 +1,35 @@
-import axios from "axios"
-const platformFeeRate = 0.02
-const insuranceFeeRate = 0.02
-const securityDepositRate = 0.1
 
-const getCommissionRate = async () => {
-    try {
-        const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
-        return data.data
-      } catch (e) {
-        console.log(e)
-        return null
-      }
-}
-
-export const calQuickerIncomeNum = async(orderPrice: number): Promise<number> => {
+export const calQuickerIncomeNum = (orderPrice: number, commissionRate: string[]): number => {
     if (orderPrice === 0) {
         return 0
     }
-    const commissionRate = await getCommissionRate()
     const platformFee = orderPrice * Number(commissionRate[0]) / 1000
     const insuranceFee = orderPrice * Number(commissionRate[1]) / 1000
     let result = orderPrice - platformFee - insuranceFee
     return Math.floor(result)
 }
 
-export const calSecurityDepositNum =async(orderPrice: number): Promise<number> => {
+export const calSecurityDepositNum = (orderPrice: number, commissionRate: string[]): number => {
     if (orderPrice === 0) {
         return 0
     }
-    const commissionRate = await getCommissionRate()
     let result = orderPrice * Number(commissionRate[2]) / 1000
     return Math.floor(result)
 }
 
-export const calQuickerIncome = async(orderPrice: number): Promise<string> => {
+export const calQuickerIncome = (orderPrice: number, commissionRate: string[]): string => {
     if (orderPrice === 0) {
         return "0"
     }
-    const commissionRate = await getCommissionRate()
     const platformFee = orderPrice * Number(commissionRate[0]) / 1000
     const insuranceFee = orderPrice * Number(commissionRate[1]) / 1000
     let result = orderPrice - platformFee - insuranceFee
     return Math.floor(result).toLocaleString()
 }
-export const calSecurityDeposit = async(orderPrice: number): Promise<string> => {
+export const calSecurityDeposit = (orderPrice: number, commissionRate: string[]): string => {
     if (orderPrice === 0) {
         return "0"
     }
-    const commissionRate = await getCommissionRate()
     let result = orderPrice * Number(commissionRate[2]) / 1000
     return Math.floor(result).toLocaleString()
 }

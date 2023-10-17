@@ -22,9 +22,10 @@ Spsc2, StateDiv} = new OrderBoxStyle()
 interface OrderBoxProps {
   orderObj: any;
   isClient: boolean;
+  commissionRate: string[];
 }
 
-export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
+export function OrderBox({ orderObj, isClient, commissionRate }: OrderBoxProps) {
   const [incomeData, setIncomeData] = useState<string | null>(null)
   
   useEffect(() => {
@@ -37,7 +38,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
           } else {
             orderPriceNum = extractNumber(orderObj.orderPrice);
           }
-          setIncomeData(await calQuickerIncome(orderPriceNum)) 
+          setIncomeData(calQuickerIncome(orderPriceNum, commissionRate)) 
         }
       }
     }
@@ -57,7 +58,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               <Div0>
                 <Sp0>접수중</Sp0>
                 <Sp1>{formatedDate(orderObj.createdTime)}</Sp1>
-                <ViewState orderObj={orderObj} isClient={isClient} />
+                <ViewState orderObj={orderObj} isClient={isClient} commissionRate={commissionRate} />
               </Div0>
               <Div1>
                 <Sp2>출발지</Sp2>
@@ -85,7 +86,7 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
               <Div0>
                 <Sp0>도보</Sp0>
                 <Sp1>{formatedDateYMD(orderObj?.matchedTime)}</Sp1>
-                <ViewState orderObj={orderObj} isClient={isClient} />
+                <ViewState orderObj={orderObj} isClient={isClient} commissionRate={commissionRate} />
               </Div0>
               <Div1>
                 <Sp2>
@@ -130,9 +131,10 @@ export function OrderBox({ orderObj, isClient }: OrderBoxProps) {
 
 interface OrderModalProps {
   isClient: boolean;
+  commissionRate: string[];
 }
 
-export function OrderModal({ isClient }: OrderModalProps) {
+export function OrderModal({ isClient, commissionRate }: OrderModalProps) {
   const { address } = useConnWalletInfo();
   const { order } = useOrderState() as any;
   const { setOrder, isModalOpen, setIsModalOpen } = useOrderState();
@@ -151,13 +153,15 @@ export function OrderModal({ isClient }: OrderModalProps) {
         } else {
           orderPriceNum = extractNumber(order.orderPrice);
         }
-        setIncomeData(await calQuickerIncome(orderPriceNum)) 
+        setIncomeData(calQuickerIncome(orderPriceNum, commissionRate)) 
       }
     }
   }
 
   useEffect(() => {
-    getIncome()
+    if (order) {
+      getIncome()
+    }
   }, [order])  
 
   const modalStyle: CSSProperties = {
@@ -215,7 +219,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
                 <>
                   <Order_Div>
                     <Order_Span_md_bold>주문 상세</Order_Span_md_bold>
-                    <ViewState orderObj={order} isClient={true} />
+                    <ViewState orderObj={order} isClient={true} commissionRate={commissionRate}/>
                   </Order_Div>
                   <Order_Div_detail>
                     <Order_Span_md1_grey>수락 시간</Order_Span_md1_grey>
@@ -423,7 +427,7 @@ export function OrderModal({ isClient }: OrderModalProps) {
   );
 }
 
-const ViewState = ({ orderObj, isClient }: OrderBoxProps) => {
+const ViewState = ({ orderObj, isClient, commissionRate }: OrderBoxProps) => {
   switch (orderObj?.state) {
     case "created":
       return <StateDiv color="#9d9d9d">대기</StateDiv>;
