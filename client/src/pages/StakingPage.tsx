@@ -387,7 +387,7 @@ const StakingToken = ({
           <ContainerDiv>
             <StakingTxSm1_1>
               보유<StakingTxSm2>{quickerBalance}</StakingTxSm2>
-              <StakingBt>max</StakingBt>
+              <StakingBt onClick={() => setInputAmount(quickerBalance)}>max</StakingBt>
             </StakingTxSm1_1>
             <StakingTxSm2_1>{alertMessage}</StakingTxSm2_1>
           </ContainerDiv>
@@ -424,7 +424,7 @@ const StakingToken = ({
               스테이킹 종료 일시<StakingTxSm2>{endTime}</StakingTxSm2>
             </StakingTxSm1>
             <StakingTxSm1>
-              추가 투표권<StakingTxSm2>{voteAmount} Quicker</StakingTxSm2>
+              추가 투표권<StakingTxSm2>{voteAmount} vQuicker</StakingTxSm2>
             </StakingTxSm1>
             <Lottie animationData={DeskAni}/>
           </Margin>
