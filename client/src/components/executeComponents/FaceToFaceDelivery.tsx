@@ -33,7 +33,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
               if (!(await checkIsDelivering(address))) {
                   sdta.sendIsDelivering(false)
               }
-              navigate("/")
+              console.log("deliveredRogic")
           } catch(e) {
               console.log(e)
           }
@@ -50,7 +50,7 @@ export default function FaceToFaceDelivery({ orderNum }: ExecutionComponentProps
         <QR />
     </Div0>
     <Div0><Sp0>수취인의 QR 코드를 확인해주세요.</Sp0></Div0>
-        {orderNum && <Mg0><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/></Mg0>}
+        {orderNum && <Mg0><SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => {await deliveredRogic(); navigate("/")}}/></Mg0>}
     </>
   );
 };
