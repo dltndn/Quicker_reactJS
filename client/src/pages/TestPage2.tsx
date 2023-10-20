@@ -121,10 +121,12 @@ const getAddress = async () => {
 
 const allowanceTest = async () => {
   try {
-    const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
-    console.log(data.data)
-  } catch (e) {
-    console.log(e)
+    for (let i=0; i<50; ++i) {
+      const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
+      console.log(data)
+    }
+  } catch (e: any) {
+    console.log(e.response.status)
   }
 }
 
