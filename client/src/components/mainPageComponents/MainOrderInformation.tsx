@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import {
   getOrderList,
   getOrders,
+  MANY_REQUEST_ERROR
 } from "../../utils/ExecuteOrderFromBlockchain";
 import Kakao from "../../lib/Kakao";
 import { formatedDate } from "../../utils/ConvertTimestampToDate";
@@ -41,14 +42,19 @@ export default function MainOrderInformation() {
     const obj = { orderNum: "-1" };
     try {
       const orderList = await getOrderList(address, isClient);
-      if (orderList?.length === 0) {
-        return obj;
-      }
-      const result = await getOrders(orderList);
-      const reversedResult = result.slice().reverse();
-      for (const order of reversedResult) {
-        if (order.state === "matched") {
-          return order;
+      if (orderList === MANY_REQUEST_ERROR) {
+        alert('MANY_REQUEST_ERROR')
+        navigate('/')
+      } else {
+        if (orderList?.length === 0) {
+          return obj;
+        }
+        const result = await getOrders(orderList);
+        const reversedResult = result.slice().reverse();
+        for (const order of reversedResult) {
+          if (order.state === "matched") {
+            return order;
+          }
         }
       }
       return obj;

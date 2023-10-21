@@ -1,10 +1,11 @@
-import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { create } from "zustand";
 import {
   getOrderList,
   getOrders,
   getOrder,
+  getCommissionRate,
+  MANY_REQUEST_ERROR
 } from "../utils/ExecuteOrderFromBlockchain";
 import GetQkrwBalance from "./getQkrwBalance";
 import Handler from "../lib/Handler";
@@ -15,9 +16,9 @@ import { UseUserOrderState } from "../App";
 import { useConnWalletInfo } from "../App";
 import { ShowOrdersStyle } from "../StyleCollection";
 import money from "../image/money.png";
-import { getCommissionRate } from "../utils/ExecuteOrderFromBlockchain";
 import Lottie from "lottie-react";
 import mainLoading from "../Lottie/mainLoading.json"
+import { useNavigate } from "react-router-dom";
 
 const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg,
 Div1, Div3, Img} = new ShowOrdersStyle()
@@ -141,8 +142,15 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
     setOrder(order);
   };
 
+  const navigate = useNavigate()
+
   const init = async () => {
-    setCommissionRate(await getCommissionRate())
+    const commissionResult = await getCommissionRate()
+    if (commissionResult === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
+    setCommissionRate(commissionResult)
   }
 
   // 현재 연결된 지갑 주소의 오더 내역 번호 array값 불러오기
@@ -203,7 +211,10 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   const reloadOrderBoxLogic = async (orderNum: string) => {
     const orderNumList = await getOrderList(address, isClient);
-    if (orderNumList) {
+    if (orderNumList === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    } else if (orderNumList) {
       getOrderObj(orderNumList);
     }
     setNewOrder(null);
@@ -211,12 +222,22 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
 
   const getNewOrderObj = async (orderNum: string) => {
     const originOrder = await getOrder(orderNum);
+    if (originOrder === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
     const intervalId = setInterval(async () => {
       let newOrder = await getOrder(orderNum);
+      if (newOrder === MANY_REQUEST_ERROR) {
+        alert('MANY_REQUEST_ERROR')
+        navigate('/')
+      }
       if (newOrder !== null && originOrder !== null) {
         // 서명 거부시 인터벌 탈출기능 추가
+        // @ts-ignore
         if (newOrder.state !== originOrder.state) {
           console.log("새 오더 탐색 완료");
+          // @ts-ignore
           setNewOrder(newOrder);
           clearInterval(intervalId);
         } else {
