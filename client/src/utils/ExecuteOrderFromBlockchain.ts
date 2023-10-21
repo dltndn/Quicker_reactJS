@@ -10,6 +10,9 @@ export const getOrdersForLatest = async (amount: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrdersForLatest`, {
       amount,
     });
+    if (data.status === 204) {
+      return []
+    }
     data.data.forEach((element: any) => result.push(TemplateOrder(element)));
     return result;
   } catch (e) {
@@ -22,6 +25,9 @@ export const getOrdersForLatest = async (amount: string) => {
 export const getCommissionRate = async () => {
   try {
     const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: number[]
   } catch (e) {
     return null;
@@ -34,6 +40,9 @@ export const getQkrwBalance = async (address: string | undefined) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQkrwBalance`, {
       owner: address,
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: number
   } catch (e) {
     return null;
@@ -46,6 +55,9 @@ export const getAllowance = async (address: string | undefined) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getAllowance`, {
       owner: address,
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: number
   } catch (e) {
     return null;
@@ -59,6 +71,9 @@ export const getOrders = async (orderNumList: string[]) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrders`, {
       orderNumList,
     });
+    if (data.status === 204) {
+      return []
+    }
     data.data.map((value: any) => orderList.push(TemplateOrder(value)));
     return orderList; // type: object[]
   } catch (e) {
@@ -73,6 +88,9 @@ export const getOrder = async (orderNum: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
       orderNum,
     });
+    if (data.status === 204) {
+      return null
+    }
     return TemplateOrder(data.data); // type: object
   } catch (e) {
     return null;
@@ -85,6 +103,9 @@ export const getOrderRawData = async (orderNum: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrder`, {
       orderNum,
     });
+    if (data.status === 204) {
+      return null
+    }
     return TemplateOrderRaw(data.data); // type: object
   } catch (e) {
     return null;
@@ -111,6 +132,9 @@ export const getOrderList = async (
       owner: address, 
       funcName: functionName
     });
+    if (data.status === 204) {
+      return []
+    }
     dataRes = data.data; // type: number
   } catch(e) {
     console.log(e)
@@ -170,6 +194,9 @@ export const getOrdersForState = async (_state: number) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getOrdersForState`, {
       stateNum: _state, 
     });
+    if (data.status === 204) {
+      dataRes = []
+    }
     dataRes = data.data; // type: number
   } catch(e) {
     console.log(e)
@@ -186,6 +213,9 @@ export const getStakingInfo = async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getStakingInfo`, {
       address, 
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: json
   } catch (e) {
     console.log(e)
@@ -199,6 +229,9 @@ export const getQtokenAllowance =async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getQtokenAllowance`, {
       address, 
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: string
   } catch (e) {
     console.log(e)
@@ -212,6 +245,9 @@ export const getFeeGovernorInfo = async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/getCurrentFeeGovernorInfo`, {
       address, 
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: json
   } catch (e) {
     console.log(e)
@@ -235,6 +271,9 @@ export const getRoundLogs = async (index: string, startRound: string | undefined
         index
       });
     }
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: json
   } catch (e) {
     console.log(e)
@@ -249,6 +288,9 @@ export const hasNftIdList = async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/hasNftIdList`, {
       address,
     });
+    if (data.status === 204) {
+      return []
+    }
     return data.data; // type: string[]
   } catch (e) {
     console.log(e)
@@ -264,6 +306,9 @@ export const mintNft = async (address: string, tokenId: string) => {
       address,
       tokenId
     });
+    if (data.status === 204) {
+      return false
+    }
     return data.data; // type: boolean
   } catch (e) {
     console.log(e)
@@ -278,6 +323,9 @@ export const sumOrderPrice = async (address: string) => {
     const data = await axios.post(`${env.REACT_APP_SERVER_URL}caver/sumOrderPrice`, {
       address,
     });
+    if (data.status === 204) {
+      return null
+    }
     return data.data; // type: object
   } catch (e) {
     console.log(e)

@@ -2,6 +2,7 @@ import { Application} from "express";
 
 import { errorController } from "../controllers";
 import { Caver, associateOrder, averageCost, currentLocation, home, notFound, order, orders, register, room, user } from "../routes";
+import { caverLimiter } from "./middlewares";
 
 const router = {
   handle: (app: Application) => {
@@ -18,7 +19,7 @@ const router = {
     app.use("/current-deliver-location", currentLocation);
     app.use("/average", averageCost);
 
-    app.use("/caver", Caver);
+    app.use("/caver", caverLimiter, Caver);
 
     app.use("*", notFound);
 

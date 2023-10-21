@@ -17,6 +17,7 @@ import {
 } from "../utils/CalAny";
 import { useConnWalletInfo } from "../App";
 import SuspenseComponent from "../components/SuspenseComponent";
+import { getCommissionRate } from "../utils/ExecuteOrderFromBlockchain";
 
 export interface OrderObj {
   orderNum: string;
@@ -91,14 +92,18 @@ function SearchPage() {
     useSearchState();
   const requestListContainer = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
   const [tmap, setTmap] = useState<any>();
   const [userLocation, setUserLocation] = useState({});
-
   const [requestListContents, setRequestListContents] = useState([]);
-
   const [mockData, setMockData] = useState<OrderObj[]>([]);
+  const [commissionRate, setCommissionRate] = useState<string[]>([])
 
   const SearchDetail = lazy(() => import("../components/Search_Detail"))
+
+  const init = async () => {
+    setCommissionRate(await getCommissionRate())
+  }
 
   const changeToData = (dataArray: Array<OrderObj>) => {
     requestListContents.forEach((element) => {
@@ -119,8 +124,8 @@ function SearchPage() {
             } else {
               orderPriceNum = extractNumber(orderPrice);
             }
-            const income = await calQuickerIncome(orderPriceNum);
-            const securityDeposit = await calSecurityDeposit(orderPriceNum);
+            const income = calQuickerIncome(orderPriceNum, commissionRate);
+            const securityDeposit = calSecurityDeposit(orderPriceNum, commissionRate);
   
             // @ts-ignore
             let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
@@ -189,6 +194,10 @@ function SearchPage() {
   };
 
   useEffect(() => {
+    init()
+  }, [])
+
+  useEffect(() => {
     setTmap(new Map("TMapSearch", "51em"));
     Geolocation.getCurrentLocation(setUserLocation);
 
@@ -216,9 +225,11 @@ function SearchPage() {
         // @ts-ignore
         tmap.createMarker(element.Departure.Y, element.Departure.X, 0);
       });
-      changeToData(mockData);
+      if (commissionRate.length !== 0) {
+        changeToData(mockData);
+      }
     }
-  }, [requestListContents]);
+  }, [requestListContents, commissionRate]);
 
   useEffect(() => {
     //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고
