@@ -8,7 +8,7 @@ import Handler from "../lib/Handler";
 import Search from "../components/Search";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
-import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrder, getCommissionRate, MANY_REQUEST_ERROR } from "../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../utils/ConvertTimestampToDate";
 import {
   calQuickerIncome,
@@ -17,7 +17,6 @@ import {
 } from "../utils/CalAny";
 import { useConnWalletInfo } from "../App";
 import SuspenseComponent from "../components/SuspenseComponent";
-import { getCommissionRate } from "../utils/ExecuteOrderFromBlockchain";
 
 export interface OrderObj {
   orderNum: string;
@@ -81,11 +80,6 @@ const appendTransportation = (element: any) => {
   return transportations;
 };
 
-const getOrderFromBlochchain = async (orderNum: string) => {
-  const orderObj = await getOrder(orderNum);
-  return orderObj;
-};
-
 function SearchPage() {
   const { address } = useConnWalletInfo();
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } =
@@ -102,8 +96,22 @@ function SearchPage() {
   const SearchDetail = lazy(() => import("../components/Search_Detail"))
 
   const init = async () => {
-    setCommissionRate(await getCommissionRate())
+    const commissionResult = await getCommissionRate()
+    if (commissionResult === MANY_REQUEST_ERROR)  {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
+    setCommissionRate(commissionResult)
   }
+
+  const getOrderFromBlochchain = async (orderNum: string) => {
+    const orderObj = await getOrder(orderNum);
+    if (orderObj === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
+    return orderObj;
+  };
 
   const changeToData = (dataArray: Array<OrderObj>) => {
     requestListContents.forEach((element) => {
@@ -113,10 +121,13 @@ function SearchPage() {
         // @ts-ignore
         const orderFromBlockchain = await getOrderFromBlochchain(element.id);
         if (orderFromBlockchain !== null) {
+          // @ts-ignore
           if (orderFromBlockchain.state === "created") {
             const deadLine = formatedDate(
+              // @ts-ignore
               orderFromBlockchain.limitedTime
             );
+            // @ts-ignore
             let orderPrice = orderFromBlockchain.orderPrice;
             let orderPriceNum: number;
             if (orderPrice === null) {

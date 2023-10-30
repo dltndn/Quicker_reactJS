@@ -45,9 +45,9 @@ function Search({ clickOrder }: Props) {
             <Div0_1>자동차</Div0_1>
           </Div0>
           <Div1>
-            <Dvi1_1>픽업지까지</Dvi1_1>
-            <Dvi1_1>픽업지</Dvi1_1>
-            <Dvi1_1>배송지</Dvi1_1>
+            <Dvi1_1>출발지까지</Dvi1_1>
+            <Dvi1_1>출발지</Dvi1_1>
+            <Dvi1_1>도착지</Dvi1_1>
             <Dvi1_1>수익</Dvi1_1>
           </Div1>
 

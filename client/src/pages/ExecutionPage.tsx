@@ -7,7 +7,7 @@ import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
 import SuspenseComponent from "../components/SuspenseComponent";
-import { getCommissionRate } from "../utils/ExecuteOrderFromBlockchain";
+import { getCommissionRate, MANY_REQUEST_ERROR } from "../utils/ExecuteOrderFromBlockchain";
 
 interface ExecutionState {
   title: string;
@@ -46,7 +46,13 @@ export default function ExecutionPage() {
   const twelveHoursToSec = 12 * 60 * 60
 
   const init = async() => {
-    setCommissionRate(await getCommissionRate())
+    const commissionResult = await getCommissionRate()
+    if (commissionResult === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    } else {
+      setCommissionRate(commissionResult)
+    }
   }
 
   const isClientConfirmBefore = (order: any) => {

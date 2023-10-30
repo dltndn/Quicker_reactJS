@@ -9,7 +9,7 @@ import {
 import { socket } from "./socket";
 import { ChatInterface } from "./interface/ChatInterface";
 import getName from "./getName";
-import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import { getOrder, MANY_REQUEST_ERROR } from "../../utils/ExecuteOrderFromBlockchain";
 import Kakao from "../../lib/Kakao";
 import Handler from "../../lib/Handler";
 import { BsChatLeftDots, BsTelephone, BsStickies } from "react-icons/bs";
@@ -96,53 +96,60 @@ export default function ({
       if (roomName && address !== undefined ) {
         joinRoom(roomName);
         const blockChainOrder = await getOrder(String(roomName));
-        getName({
-          blockchainElement: blockChainOrder,
-          address: address,
-          setState: setOponentName,
-        });
-        const roomInfo = await Handler.get(
-          process.env.REACT_APP_SERVER_URL + `room/?orderNum=${roomName}`
-        );
-        console.log(roomInfo)
-
-        if (
-          roomInfo.Recipient.PHONE && roomInfo.Recipient.PHONE !== undefined || null
-        ) {
-          setReceiverPhoneNumber(roomInfo.Recipient.PHONE);
-        }
-        if (
-          roomInfo.Sender.PHONE && roomInfo.Sender.PHONE !== undefined || null
-        ) {
-          setSenderPhoneNumber(roomInfo.Sender.PHONE);
-        }
-        if (
-          roomInfo.Recipient.Destination !== undefined &&
-          roomInfo.Recipient.Destination !== null &&
-          roomInfo.Sender.Departure !== undefined &&
-          roomInfo.Sender.Departure !== null
-        ) {
-          const realDepartureAddress = await getRealLocation(
-            roomInfo.Sender.Departure
-          );
-          const realDestinationAddress = await getRealLocation(
-            roomInfo.Recipient.Destination
-          );
-          setSenderAddress(realDepartureAddress);
-          setReceiverAddress(realDestinationAddress);
-        }
-        let oponentAddress = ''
-        if (address === blockChainOrder?.client) {
-          // 계정 주인이 의뢰인 즉 상대방은 배송원
-          oponentAddress = blockChainOrder.quicker
+        if (blockChainOrder === MANY_REQUEST_ERROR) {
+          alert('MANY_REQUEST_ERROR')
+          navigate('/')
         } else {
-          // 계정 주인이 배송원 즉 상대방은 의뢰인
-          oponentAddress = blockChainOrder?.client
+          getName({
+            blockchainElement: blockChainOrder,
+            address: address,
+            setState: setOponentName,
+          });
+          const roomInfo = await Handler.get(
+            process.env.REACT_APP_SERVER_URL + `room/?orderNum=${roomName}`
+          );
+          console.log(roomInfo)
+  
+          if (
+            roomInfo.Recipient.PHONE !== undefined &&
+            roomInfo.Recipient.PHONE !== null
+          ) {
+            setReceiverPhoneNumber(roomInfo.Recipient.PHONE);
+          }
+          if (
+            roomInfo.Sender.PHONE !== undefined &&
+            roomInfo.Sender.PHONE !== null
+          ) {
+            setSenderPhoneNumber(roomInfo.Sender.PHONE);
+          }
+          if (
+            roomInfo.Recipient.Destination !== undefined &&
+            roomInfo.Recipient.Destination !== null &&
+            roomInfo.Sender.Departure !== undefined &&
+            roomInfo.Sender.Departure !== null
+          ) {
+            const realDepartureAddress = await getRealLocation(
+              roomInfo.Sender.Departure
+            );
+            const realDestinationAddress = await getRealLocation(
+              roomInfo.Recipient.Destination
+            );
+            setSenderAddress(realDepartureAddress);
+            setReceiverAddress(realDestinationAddress);
+          }
+          let oponentAddress = ''
+          if (address === blockChainOrder?.client) {
+            // 계정 주인이 의뢰인 즉 상대방은 배송원
+            oponentAddress = blockChainOrder.quicker
+          } else {
+            // 계정 주인이 배송원 즉 상대방은 의뢰인
+            oponentAddress = blockChainOrder?.client
+          }
+          console.log(oponentAddress)
+          const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${oponentAddress}`)
+          console.log(imageId)
+          setNftId(imageId)
         }
-        console.log(oponentAddress)
-        const { imageId } = await Handler.get(`${process.env.REACT_APP_SERVER_URL}user/image/id/?walletAddress=${oponentAddress}`)
-        console.log(imageId)
-        setNftId(imageId)
       }
     })();
     return () => {

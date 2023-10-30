@@ -4,7 +4,7 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { create } from "zustand";
 import Lottie from "lottie-react";
 import LoadingAni from "./Lottie/mainLoading.json";
-import { getOrderList } from "./utils/ExecuteOrderFromBlockchain";
+import { getOrderList, MANY_REQUEST_ERROR } from "./utils/ExecuteOrderFromBlockchain";
 import Handler from "./lib/Handler";
 import styled from "styled-components";
 
@@ -113,8 +113,13 @@ function App() {
   const getAndSetOrders = async (address: string | undefined) => {
     const clientOrderNumsArr = await getOrderList(address, true);
     const quickerOrderNumsArr = await getOrderList(address, false);
-    setClientOrderNums(clientOrderNumsArr);
-    setQuickerOrderNums(quickerOrderNumsArr);
+    if (clientOrderNumsArr === MANY_REQUEST_ERROR || quickerOrderNumsArr === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      window.location.reload()
+    } else {
+      setClientOrderNums(clientOrderNumsArr);
+      setQuickerOrderNums(quickerOrderNumsArr);
+    }
   };
 
   // useContractEvent({

@@ -2,6 +2,7 @@ import { getDateFromTimestamp } from "./ConvertTimestampToDate";
 import axios from "axios";
 
 const env = process.env;
+export const MANY_REQUEST_ERROR = "MANY_REQUEST_ERROR"
 
 // 최신순 오더 배열 반환(delivery)
 export const getOrdersForLatest = async (amount: string) => {
@@ -26,7 +27,7 @@ export const getCommissionRate = async () => {
   try {
     const data = await axios.get(`${env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
     if (data.status === 204) {
-      return null
+      return MANY_REQUEST_ERROR
     }
     return data.data; // type: number[]
   } catch (e) {
@@ -89,7 +90,7 @@ export const getOrder = async (orderNum: string) => {
       orderNum,
     });
     if (data.status === 204) {
-      return null
+      return MANY_REQUEST_ERROR
     }
     return TemplateOrder(data.data); // type: object
   } catch (e) {
@@ -133,7 +134,7 @@ export const getOrderList = async (
       funcName: functionName
     });
     if (data.status === 204) {
-      return []
+      return MANY_REQUEST_ERROR
     }
     dataRes = data.data; // type: number
   } catch(e) {
@@ -152,6 +153,9 @@ export const getLastClientOrder = async (address: string | undefined) => {
   }
   try {
     const orderList = await getOrderList(address, true);
+    if (orderList === MANY_REQUEST_ERROR) {
+      return MANY_REQUEST_ERROR
+    }
     if (orderList.length === 0) {
       return undefined;
     }
@@ -165,11 +169,15 @@ export const getLastClientOrder = async (address: string | undefined) => {
 
 // 배송원 배송 여부 확인(delivery)
 export const checkIsDelivering = async (address: string | undefined) => {
-  let orderNumArr: string[] | undefined;
+  let orderNumArr: string[] | string | undefined;
   try {
     orderNumArr = await getOrderList(address, false);
+    if (orderNumArr === MANY_REQUEST_ERROR) {
+      return MANY_REQUEST_ERROR
+    }
     if (orderNumArr) {
       if (orderNumArr?.length !== 0) {
+        // @ts-ignore
         const orderArr: any[] = await getOrders(orderNumArr);
         return orderArr.some((element: any) => element.state === "matched");
       }
