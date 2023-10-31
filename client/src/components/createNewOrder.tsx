@@ -173,12 +173,11 @@ export default function CreateNewOrder({
         />
       ) : (
         <>
+        <Margin_1></Margin_1>
         <SendTxK
           param={GetContractParams.CreateOrder(_orderPrice, _deadline)}
           successFunc={async () => {setIsSuccess(true); await getCreatedOrderNum()}}
-          
         />
-                <Margin_1></Margin_1>
         </>
       )}
     </>
