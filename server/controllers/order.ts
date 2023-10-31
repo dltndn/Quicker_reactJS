@@ -8,7 +8,7 @@ import sequelizeConnector from "../maria/connector/sequelize-connector";
 import { initModels } from "../maria/models/init-models";
 import { currentLocationInstance, imageInstance } from "../mongo/command";
 import connectMongo from "../mongo/connector";
-import { cryptoInstance, twilioApi } from "../service";
+import { cryptoInstance, nhnApi } from "../service";
 import { HTTPError } from "../types/http-error";
 
 initModels(sequelizeConnector);
@@ -57,7 +57,7 @@ export class OrderController {
     try {
       const body = req.body;
       //TODO: 리팩토링 보류
-      await updateOrder(body, twilioApi, cryptoInstance, config.crypto.url as string);
+      await updateOrder(body, nhnApi, cryptoInstance, config.crypto.url as string);
       res.send({ msg: "done" });
     } catch (error) {
       console.error(error);
