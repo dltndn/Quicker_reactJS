@@ -29,6 +29,7 @@ import axios from "axios";
 
 // socket test
 import { socket } from "../components/chatComponents/socket";
+import { useNavigate } from "react-router-dom";
 
 var QRCode = require('qrcode')
 
@@ -44,6 +45,8 @@ export default function TestPage2() {
   const [txHash, setTxHash] = useState<string>("")
 
   const { address } = useConnWalletInfo()
+
+  const navigate = useNavigate()
 
   const handleClick = (_orderNum: string) => {
     setOrderNum(_orderNum);
@@ -121,10 +124,15 @@ const getAddress = async () => {
 
 const allowanceTest = async () => {
   try {
-    const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
-    console.log(data.data)
-  } catch (e) {
-    console.log(e)
+    for (let i=0; i<50; ++i) {
+      const data = await axios.get(`${process.env.REACT_APP_SERVER_URL}caver/getCommissionRate`);
+      if (data.status === 204) {
+        alert('MANY_REQUEST_ERROR')
+        navigate('/')
+      }
+    }
+  } catch (e: any) {
+    console.log(e.response.status)
   }
 }
 

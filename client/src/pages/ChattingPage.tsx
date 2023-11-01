@@ -4,9 +4,7 @@ import BottomBar from "../components/BottomBar";
 import { useNavigate } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 import {
-  getOrderList,
-  getOrders,
-  getOrdersForState,
+  getOrdersForState
 } from "../utils/ExecuteOrderFromBlockchain";
 import Room from "../components/chatComponents/Room";
 import Chat from "../components/chatComponents/Chat";

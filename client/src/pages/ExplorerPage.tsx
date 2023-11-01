@@ -8,6 +8,7 @@ import {
   getQkrwBalance,
   getCommissionRate,
   getOrdersForLatest,
+  MANY_REQUEST_ERROR
 } from "../utils/ExecuteOrderFromBlockchain";
 import { changeBalanceToForm, sliceAddress } from "../utils/CalAny";
 import ExplorerTableData from "../components/ExplorerTableData";
@@ -74,6 +75,10 @@ export default function ExplorerPage() {
     let arr: string[] = [];
     try {
       const result: any = await getCommissionRate();
+      if (result === MANY_REQUEST_ERROR) {
+        alert('MANY_REQUEST_ERROR')
+        navigate('/')
+      }
       for (const element of result) {
         arr.push(formatCommissionRate(element));
       }

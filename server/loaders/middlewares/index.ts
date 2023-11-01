@@ -1,5 +1,6 @@
 import { CronJob } from "cron";
 import { Folder } from "./folder";
+import { caverLimiter } from "./limiter"
 
 const folder = new Folder()
 const cronJob = new CronJob(
@@ -13,4 +14,5 @@ const cronJob = new CronJob(
 export {
     folder,
     cronJob,
+    caverLimiter
 }

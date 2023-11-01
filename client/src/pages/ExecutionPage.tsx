@@ -7,6 +7,7 @@ import { LoadingExecution } from "../components/LoadingAnimation";
 import { getOrderRawData } from "../utils/ExecuteOrderFromBlockchain";
 import { calQuickerIncomeNum, calSecurityDepositNum } from "../utils/CalAny";
 import SuspenseComponent from "../components/SuspenseComponent";
+import { getCommissionRate, MANY_REQUEST_ERROR } from "../utils/ExecuteOrderFromBlockchain";
 
 interface ExecutionState {
   title: string;
@@ -33,6 +34,8 @@ export default function ExecutionPage() {
   const navigate = useNavigate()
   const { title, showComponent, setShowComponent} = useExecutionState()
 
+  const [commisstionRate, setCommissionRate] = useState<string[]>([])
+
   const ReceivingItem = lazy(() => import("../components/executeComponents/ReceivingItem"))
   const DeliveredItem = lazy(() => import("../components/executeComponents/DeliveredItem"))
   const CompletedDelivery = lazy(() => import("../components/executeComponents/CompletedDelivery"))
@@ -41,6 +44,16 @@ export default function ExecutionPage() {
 
   const currentTime = Math.floor(Date.now() / 1000)
   const twelveHoursToSec = 12 * 60 * 60
+
+  const init = async() => {
+    const commissionResult = await getCommissionRate()
+    if (commissionResult === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    } else {
+      setCommissionRate(commissionResult)
+    }
+  }
 
   const isClientConfirmBefore = (order: any) => {
     if (order.state === "1" && Number(order.deliveredTime) !== 0)
@@ -90,9 +103,9 @@ export default function ExecutionPage() {
           if (Number(blockchainOrder.deliveredTime) > Number(blockchainOrder.limitedTime)) {
             securityDeposit = 0
           } else {
-            securityDeposit = await calSecurityDepositNum(Number(blockchainOrder.orderPrice))
+            securityDeposit = calSecurityDepositNum(Number(blockchainOrder.orderPrice), commisstionRate)
           }
-          const income = await calQuickerIncomeNum(Number(blockchainOrder.orderPrice))
+          const income = calQuickerIncomeNum(Number(blockchainOrder.orderPrice), commisstionRate)
           if(Number(blockchainOrder.securityDeposit) === 0) {
             isReceived = true
           }
@@ -121,10 +134,14 @@ export default function ExecutionPage() {
 
   useEffect(() => {
     setShowComponent(<LoadingExecution />)
-
-    setComponentLogic()
+    init()
   }, [])
 
+  useEffect(() => {
+    if (commisstionRate.length !== 0) {
+      setComponentLogic()
+    }
+  }, [commisstionRate])
   return (
     <>
       <GlobalStyle />

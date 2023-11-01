@@ -87,7 +87,8 @@ const StakingPage = () => {
     if (rewardRate === "") {
       setRewardRate("-");
     } else {
-      setRewardRate(rewardRate);
+      const converted = Math.round(Number(rewardRate) * 100) / 100
+      setRewardRate(converted.toString());
     }
     setRewardsAmount(floorDecimals(pendingRewards, 7));
     setUserQuickerBal(floorDecimals(userQuickerBal, 0));

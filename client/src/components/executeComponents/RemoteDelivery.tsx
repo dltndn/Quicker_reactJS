@@ -61,7 +61,6 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
   };
 
   const deliveredRogic = async () => {
-    console.log("delivered")
     if (orderNum !== undefined) {
       const sdta = new SendDataToAndroid(address);
       try {
@@ -71,7 +70,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
         }
         // 배송원 사진 업로드 로직 작성
         await postImage();
-        navigate("/")
+        console.log("deliveredRogic")
       } catch (e) {
         console.log(e);
       }
@@ -112,7 +111,7 @@ export default function RemoteDelivery({ orderNum }: ExecutionComponentProps) {
       </Div0>
       {orderNum && 
       <Mg0>
-      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => await deliveredRogic()}/> </Mg0>}
+      <SendTxK param={GetContractParams.DeliveredOrder(orderNum)} successFunc={async() => {await deliveredRogic(); navigate('/')}}/> </Mg0>}
     </>
   );
 }

@@ -8,7 +8,7 @@ import Handler from "../lib/Handler";
 import Search from "../components/Search";
 import { create } from "zustand";
 import Kakao from "../lib/Kakao";
-import { getOrder } from "../utils/ExecuteOrderFromBlockchain";
+import { getOrder, getCommissionRate, MANY_REQUEST_ERROR } from "../utils/ExecuteOrderFromBlockchain";
 import { formatedDate } from "../utils/ConvertTimestampToDate";
 import {
   calQuickerIncome,
@@ -80,25 +80,38 @@ const appendTransportation = (element: any) => {
   return transportations;
 };
 
-const getOrderFromBlochchain = async (orderNum: string) => {
-  const orderObj = await getOrder(orderNum);
-  return orderObj;
-};
-
 function SearchPage() {
   const { address } = useConnWalletInfo();
   const { isDetail, setIsDetail, topBarTitle, setOrders, setShowOrder } =
     useSearchState();
   const requestListContainer = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
   const [tmap, setTmap] = useState<any>();
   const [userLocation, setUserLocation] = useState({});
-
   const [requestListContents, setRequestListContents] = useState([]);
-
   const [mockData, setMockData] = useState<OrderObj[]>([]);
+  const [commissionRate, setCommissionRate] = useState<string[]>([])
 
   const SearchDetail = lazy(() => import("../components/Search_Detail"))
+
+  const init = async () => {
+    const commissionResult = await getCommissionRate()
+    if (commissionResult === MANY_REQUEST_ERROR)  {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
+    setCommissionRate(commissionResult)
+  }
+
+  const getOrderFromBlochchain = async (orderNum: string) => {
+    const orderObj = await getOrder(orderNum);
+    if (orderObj === MANY_REQUEST_ERROR) {
+      alert('MANY_REQUEST_ERROR')
+      navigate('/')
+    }
+    return orderObj;
+  };
 
   const changeToData = (dataArray: Array<OrderObj>) => {
     requestListContents.forEach((element) => {
@@ -108,10 +121,13 @@ function SearchPage() {
         // @ts-ignore
         const orderFromBlockchain = await getOrderFromBlochchain(element.id);
         if (orderFromBlockchain !== null) {
+          // @ts-ignore
           if (orderFromBlockchain.state === "created") {
             const deadLine = formatedDate(
+              // @ts-ignore
               orderFromBlockchain.limitedTime
             );
+            // @ts-ignore
             let orderPrice = orderFromBlockchain.orderPrice;
             let orderPriceNum: number;
             if (orderPrice === null) {
@@ -119,8 +135,8 @@ function SearchPage() {
             } else {
               orderPriceNum = extractNumber(orderPrice);
             }
-            const income = await calQuickerIncome(orderPriceNum);
-            const securityDeposit = await calSecurityDeposit(orderPriceNum);
+            const income = calQuickerIncome(orderPriceNum, commissionRate);
+            const securityDeposit = calSecurityDeposit(orderPriceNum, commissionRate);
   
             // @ts-ignore
             let departure = await Kakao.reverseGeoCording(element.Departure.Y, element.Departure.X);
@@ -189,6 +205,10 @@ function SearchPage() {
   };
 
   useEffect(() => {
+    init()
+  }, [])
+
+  useEffect(() => {
     setTmap(new Map("TMapSearch", "51em"));
     Geolocation.getCurrentLocation(setUserLocation);
 
@@ -216,9 +236,11 @@ function SearchPage() {
         // @ts-ignore
         tmap.createMarker(element.Departure.Y, element.Departure.X, 0);
       });
-      changeToData(mockData);
+      if (commissionRate.length !== 0) {
+        changeToData(mockData);
+      }
     }
-  }, [requestListContents]);
+  }, [requestListContents, commissionRate]);
 
   useEffect(() => {
     //order 객체 형태로 할당하기 오더내용(array) 형태 -> mockData 참고

@@ -3,12 +3,13 @@ import { useClientConfirmState } from "../../pages/ClientConfirmPage";
 import { useEffect, useState } from "react";
 import DeliveryTracker from "../DeliveryTracker";
 import { create } from "zustand";
-import { getOrder } from "../../utils/ExecuteOrderFromBlockchain";
+import { getOrder, MANY_REQUEST_ERROR } from "../../utils/ExecuteOrderFromBlockchain";
 import Lottie from "lottie-react";
 import lodingAni from '../../Lottie/lodingAni.json';
 import styled from "styled-components";
 import finduser from "../../Lottie/81378-find-user-location.json";
 import { DeliveryStatusStyle } from "../../StyleCollection";
+import { useNavigate } from "react-router-dom";
 
 const {Div0, Div1, Div2, Pin1, Posst} = new DeliveryStatusStyle()
 
@@ -39,9 +40,15 @@ export default function DeliveryStatus({orderNum, deadline}: DeliveryStatusProps
   const { setCoordiX, setCoordiY } = useQuickerLocationState();
   const [orderData, setOrderData] = useState<any>({});
 
+  const navigate = useNavigate()
+
   const initalizeOrderData = async (orderNum: string | undefined) => {
     if (orderNum !== undefined) {
       const orderData = await getOrder(orderNum)
+      if (orderData === MANY_REQUEST_ERROR) {
+        alert('MANY_REQUEST_ERROR')
+        navigate('/')
+      }
       setOrderData(orderData)
     }
   }
