@@ -1,5 +1,7 @@
 import { Server } from "socket.io";
 import { messageInstance } from "../mongo/command";
+import {createAdapter} from "@socket.io/cluster-adapter"
+import { setupWorker } from"@socket.io/sticky";
 
 const main = (server: any) => {
   const io = new Server(server, {
@@ -8,11 +10,19 @@ const main = (server: any) => {
       methods: ["GET", "POST"],
       credentials: true,
     },
+    transports: ["websocket"],
     connectionStateRecovery: {}
   });
+
+  io.adapter(createAdapter());
+  setupWorker(io);
+
   try {
+
     // 이벤트 설정
     io.on("connect", (socket) => {
+      console.log(`connect ${socket.id}`);
+      console.log("접속 : " + socket.id)
       // 임의의 채팅방 이름
       let roomName = "";
       // 이벤트 관리
