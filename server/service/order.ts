@@ -1,8 +1,8 @@
 import { Crypto } from "./cryto";
 import { cacheOrderInstance, orderInstance, roomInstance, userInstance } from "../maria/commands";
-import { TwilioApi } from "./twilio-api";
+import { NHNAPI } from "./nhn-api";
 
-export const updateOrder = async (body: any, twilioApi : TwilioApi, cryptoInstance : Crypto, cryptoKey : string) => {
+export const updateOrder = async (body: any, nhnApi : NHNAPI, cryptoInstance : Crypto, cryptoKey : string) => {
   const userWalletAddress = body.userWalletAddress;
   const orderId = body.orderId;
 
@@ -32,7 +32,9 @@ export const updateOrder = async (body: any, twilioApi : TwilioApi, cryptoInstan
 
   const url = process.env.CLIENT_SERVER_DOMAIN + "receipient/?key=" + encryptedUrl;
 
-  await twilioApi.sendURLToReceiver(receiverPhoneNumber.PHONE, url);
+  const messageBody = nhnApi.generateIncludeUrlBody(url, receiverPhoneNumber.PHONE)
+
+  await nhnApi.sendMessage(messageBody)
 };
 
 export const classifyDistance = async (query: any) => {

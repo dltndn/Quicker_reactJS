@@ -13,6 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "@slack/web-api": "^6.9.0",
+    "@socket.io/cluster-adapter": "^0.2.2",
+    "@socket.io/pm2": "^5.3.0",
+    "@socket.io/sticky": "^1.0.4",
     "axios": "^1.4.0",
     "caver-js": "^1.10.2",
     "chalk": "^4.1.2",
@@ -30,7 +33,6 @@
     "mysql2": "^3.6.0",
     "node-fetch": "^2.7.0",
     "nodemailer": "^6.9.3",
-    "pm2": "^5.3.0",
     "sequelize": "^6.32.1",
     "sequelize-auto": "^0.8.8",
     "socket.io": "^4.6.1",

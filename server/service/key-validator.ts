@@ -3,7 +3,7 @@ import chalk from "chalk";
 type Object = {[t : string] : string | undefined}
 
 export class KeyChecker {
-  checkObject(object: Object) {
+  public checkObject(object: Object) {
     for (const key in object) {
       this.isObjectValueUndefined(key, object);
     }

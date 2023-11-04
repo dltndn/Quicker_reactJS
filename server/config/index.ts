@@ -26,12 +26,6 @@ export default {
       https: process.env.HTTPS_LOCAL_SERVER_PORT,
     },
   },
-  twilio: {
-    sid: process.env.TWILIO_ACCOUNT_SID,
-    token: process.env.TWILIO_AUTH_TOKEN,
-    phonenumber: process.env.TWILIO_PHONE_NUMBER,
-    testphoneNumber: process.env.PHONE_NUMBER1,
-  },
   clientdomain: process.env.CLIENT_SERVER_DOMAIN,
   test: {
     USER_WALLET: process.env.USER_WALLET,
@@ -53,5 +47,9 @@ export default {
     accessKey : process.env.ACCESSKEY,
     secretKey : process.env.SECRETKEY,
     serviceId : process.env.SERVICEID,
+    fromNumber : process.env.FROMNUMBER,
+    whiteList1 : process.env.WHITELIST1,
+    whiteList2 : process.env.WHITELIST2,
+    whiteList3 : process.env.WHITELIST3,
   }
 };

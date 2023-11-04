@@ -1,47 +1,43 @@
-const SocketIo = require("socket.io");
-
-import Caver from "caver-js";
-import {
-  QUICKER_DLVR_PROXY_ADDRESS,
-  QUICKER_DLVR_PROXY_ABI,
-  VQUICKER_TOKEN_ADDRESS_KLAYTN,
-  VQUICKER_TOKEN_ABI_KLAYTN
-} from "../klaytnApi/ContractInfo";
+import { Server } from "socket.io";
 import { messageInstance } from "../mongo/command";
-
-const env = process.env;
-const chainId = 1001; // klaytn baobab network
-
-const WS_URL = `wss://${env.KLAYTN_ACCESSKEY_ID}:${env.KLAYTN_SECRET_KEY}@node-api.klaytnapi.com/v1/ws/open?chain-id=${chainId}`;
-// const caver = new Caver.providers.WebsocketProvider(WS_URL, { reconnect: { auto: true } });
-const caver = new Caver(WS_URL)
-// @ts-ignore
-const quicker_dlvry_contract = caver.contract.create(QUICKER_DLVR_PROXY_ABI, QUICKER_DLVR_PROXY_ADDRESS);
-// @ts-ignore
-const vQuicker_token_contract = caver.contract.create(VQUICKER_TOKEN_ABI_KLAYTN, VQUICKER_TOKEN_ADDRESS_KLAYTN)
+import {createAdapter} from "@socket.io/cluster-adapter"
+import { setupWorker } from"@socket.io/sticky";
 
 const main = (server: any) => {
-  const io = SocketIo(server, {
+  const io = new Server(server, {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
       credentials: true,
     },
+    transports: ["websocket"],
+    connectionStateRecovery: {}
   });
+
+  io.adapter(createAdapter());
+  setupWorker(io);
+
   try {
-    // 임의의 채팅방 이름
-    let roomName = "";
+
     // 이벤트 설정
-    io.on("connect", async (socket: any) => {
+    io.on("connect", (socket) => {
+      console.log(`connect ${socket.id}`);
+      console.log("접속 : " + socket.id)
+      // 임의의 채팅방 이름
+      let roomName = "";
       // 이벤트 관리
       socket.on("joinRoom", async (receiveRoomName: receiveRoomName) => {
         roomName = receiveRoomName.roomName;
-        console.log("접속 방 이름 : ", receiveRoomName);
         socket.join(roomName);
         // db 내용 불러옴
-        const messages = await messageInstance.find(roomName.toString());
-        if (messages !== undefined) {
-          socket.emit("loadMessage", messages);
+        try{
+          const messages = await messageInstance.find(roomName.toString());
+          if (messages !== undefined) {
+            socket.emit("loadMessage", messages);
+          }
+        } catch (error) {
+          console.log(error) 
+          throw error
         }
       });
       socket.on("sendMessage", (receiveMessage: Message, done: Function) => {
@@ -52,61 +48,18 @@ const main = (server: any) => {
           message: receiveMessage.data,
           date: new Date().toISOString(),
         });
-        console.log("현재 접속 방 정보 : ", roomName);
-        console.log("수신 메세지 : ", receiveMessage.data);
-        messageInstance.create({
-          id: receiveMessage.sender,
-          roomName: roomName,
-          receiveMessage: receiveMessage.data,
-        });
-        done();
+        try {
+          messageInstance.create({
+            id: receiveMessage.sender,
+            roomName: roomName,
+            receiveMessage: receiveMessage.data,
+          });
+          done();  
+        } catch (error) {
+          console.log(error) 
+          throw error
+        }
       });
-
-      // Klaytn 블록체인 이벤트 리스너
-
-      // const subscriptionId = await quicker_dlvry_contract.events
-      //   .allEvents()
-      //   .on("data", function (event: any) {
-      //     switch(event.event) {
-      //       case "OrderCreated" :
-      //         console.log("orderNum: ", event.returnValues.orderNum)
-      //         break;
-      //       case "OrderResult" :
-      //         console.log("result: ", event.returnValues.result)
-      //         break;
-      //       case "DepositedFee" :
-      //         console.log("result: ", event.returnValues.result)
-      //         break;
-      //       case "ChangedBalance" :
-      //         console.log("result: ", event.returnValues.result)
-      //         break;
-      //       case "AcceptedOrderNumber" :
-      //         console.log("orderNum: ", event.returnValues.orderNum)
-      //         break;
-      //       case "deliveredOrderNumber" :
-      //         console.log("orderNum: ", event.returnValues.orderNum)
-      //         break;
-      //       case "completedOrderNumber" :
-      //         console.log("orderNum: ", event.returnValues.orderNum)
-      //         break;
-      //     }
-      //   })
-      //   .on("error", function (error: any) {
-      //     console.error("Event error:", error);
-      //     // 에러 처리 로직을 작성합니다.
-      //   });
-
-      const subscriptionId2 = await vQuicker_token_contract.events
-        .allEvents()
-        .on("data", function(event: any) {
-          console.log("vQuicker_token_contract event")
-          console.log(event)
-        })
-        .on("error", (err: any) => {
-          console.log(err)
-        })
-
-      // e
     });
   } catch (error) {
     console.error(error);

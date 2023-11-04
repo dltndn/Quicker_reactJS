@@ -26,7 +26,7 @@ export class MessageModel {
       const conn = await connectMongo("chat");
       const messageModel = conn.model(roomName, MessageSchema);
       const messages = await messageModel.find();
-      conn.destroy();
+      await conn.destroy();
       return messages;
     } catch (error) {
       console.error(error);
@@ -40,6 +40,7 @@ export class MessageModel {
       .findOne()
       .select(["-_id", "-__v", "-roomName"])
       .sort({ $natural: -1 });
+    await connection.destroy();
     return recentMessage;
   }
 }
