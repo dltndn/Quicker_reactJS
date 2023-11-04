@@ -19,6 +19,7 @@ import money from "../image/money.png";
 import Lottie from "lottie-react";
 import mainLoading from "../Lottie/mainLoading.json"
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const {Div0, Divimg, Divwallet, Sc0, Sc1, SelectInput, Sp0, Spwallet, LoadingImg, Bticon, Bticonimg,
 Div1, Div3, Img} = new ShowOrdersStyle()
@@ -331,7 +332,7 @@ export default function ShowOrders({ isClient }: ShowOrderProps) {
         ))
       )}
       <OrderModal isClient={isClient} commissionRate={commissionRate} />
-      </>):(<Lottie animationData={mainLoading} />)}
+      </>):(<LotDiv><Lottie animationData={mainLoading} /></LotDiv>)}
     </>
   );
 }
@@ -369,3 +370,11 @@ const SelectionTags = () => {
     </>
   );
 };
+
+const  LotDiv = styled.div`
+position: absolute;
+width: 100px;
+top: 45%;
+left: 50%;
+transform: translate(-50%, -50%);
+`;
