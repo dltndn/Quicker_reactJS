@@ -1,7 +1,5 @@
 import { Server } from "socket.io";
 import { messageInstance } from "../mongo/command";
-import {createAdapter} from "@socket.io/cluster-adapter"
-import { setupWorker } from"@socket.io/sticky";
 
 const main = (server: any) => {
   const io = new Server(server, {
@@ -9,13 +7,8 @@ const main = (server: any) => {
       origin: "*",
       methods: ["GET", "POST"],
       credentials: true,
-    },
-    transports: ["websocket"],
-    connectionStateRecovery: {}
+    }
   });
-
-  io.adapter(createAdapter());
-  setupWorker(io);
 
   try {
 

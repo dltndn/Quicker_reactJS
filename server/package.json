@@ -13,9 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@slack/web-api": "^6.9.0",
-    "@socket.io/cluster-adapter": "^0.2.2",
-    "@socket.io/pm2": "^5.3.0",
-    "@socket.io/sticky": "^1.0.4",
     "axios": "^1.4.0",
     "caver-js": "^1.10.2",
     "chalk": "^4.1.2",
