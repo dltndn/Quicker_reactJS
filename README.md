@@ -54,10 +54,9 @@
 
 
 ## 시연 화면
-|기능|링크|
-|--|--|
-|v1.0|(https://www.youtube.com/@Quicker-Youtube/featured)
-|작업중|...|
+|링크|
+|--|
+|(https://www.youtube.com/@Quicker-Youtube/featured)
 
 ---
 안드로이드 코드는 [여기](https://github.com/dltndn/Quicker_android_part)에서 확인 가능합니다.
